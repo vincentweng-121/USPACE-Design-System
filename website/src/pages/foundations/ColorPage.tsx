@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import SectionTitle from '../components/SectionTitle';
-import { paletteGroups, semanticGroups } from '../tokens/colors';
+import SectionTitle from '../../components/SectionTitle';
+import { paletteGroups, semanticGroups } from '../../tokens/colors';
 
 function ColorSwatch({ name, hex }: { name: string; hex: string }) {
   const [copied, setCopied] = useState(false);
@@ -45,12 +45,16 @@ function SemanticRow({ name, light, dark }: { name: string; light: string; dark:
   );
 }
 
-export default function ColorsPage() {
+export default function ColorPage() {
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 8 }}>Colors</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 40 }}>
-        USPACE 色票系統。點擊色塊可複製色碼。
+      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Color</h1>
+      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
+        USPACE 色票系統。所有色值集中於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>uspace_palette.dart</code>，
+        語意 Token 定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>uspace_colors_extension.dart</code>。
+      </p>
+      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
+        點擊色塊可複製色碼。語意 Token 同時提供 Light / Dark 兩組配色。
       </p>
 
       <SectionTitle>Core Palette</SectionTitle>
@@ -75,6 +79,18 @@ export default function ColorsPage() {
             {group.tokens.map(t => <SemanticRow key={t.name} name={t.name} light={t.light} dark={t.dark} />)}
           </div>
         ))}
+      </div>
+
+      <div style={{ marginTop: 48 }}>
+        <SectionTitle>Usage Guidelines</SectionTitle>
+        <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+          <ul style={{ paddingLeft: 20 }}>
+            <li>所有 hex 值集中在 <code style={{ color: 'var(--accent)' }}>uspace_palette.dart</code>，不在其他檔案直接寫 hex</li>
+            <li>帶透明度的色票使用具名常量，例如 <code style={{ color: 'var(--accent)' }}>transparentBlack50</code></li>
+            <li>文字（Text）使用 <code style={{ color: 'var(--accent)' }}>text*</code> Token，圖示（Icon）使用 <code style={{ color: 'var(--accent)' }}>content*</code> Token</li>
+            <li>同一 component 在不同 level/size/state 可能套用不同 Token，需逐一查 Figma 確認</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

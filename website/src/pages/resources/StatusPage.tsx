@@ -1,18 +1,12 @@
-import SectionTitle from '../components/SectionTitle';
+import SectionTitle from '../../components/SectionTitle';
 
 type Status = 'PUBLISHED' | 'DRAFT' | 'TODO';
 
-interface Item {
-  name: string;
-  version: string;
-  status: Status;
-  date: string;
-  note: string;
-}
+interface Item { name: string; version: string; status: Status; date: string; note: string; }
 
 const sections: { title: string; items: Item[] }[] = [
   {
-    title: 'Styles',
+    title: 'Foundations',
     items: [
       { name: 'uspace_palette.dart', version: 'v1.1.0', status: 'DRAFT', date: '2026-05-12', note: 'hex 修正 + 新增透明度色票' },
       { name: 'uspace_colors_extension.dart', version: 'v2.0.0', status: 'DRAFT', date: '2026-05-12', note: 'BREAKING：全量同步 Figma Variables' },
@@ -42,16 +36,13 @@ const sections: { title: string; items: Item[] }[] = [
 
 function StatusBadge({ status }: { status: Status }) {
   const map: Record<Status, { bg: string; color: string; label: string }> = {
-    PUBLISHED: { bg: 'rgba(167,209,0,0.15)', color: '#A7D100', label: '✅ PUBLISHED' },
-    DRAFT: { bg: 'rgba(209,175,101,0.15)', color: '#D1AF65', label: '📝 DRAFT' },
-    TODO: { bg: 'rgba(152,152,159,0.15)', color: '#98989F', label: '🔲 TODO' },
+    PUBLISHED: { bg: 'rgba(167,209,0,0.15)', color: '#A7D100', label: 'PUBLISHED' },
+    DRAFT: { bg: 'rgba(209,175,101,0.15)', color: '#D1AF65', label: 'DRAFT' },
+    TODO: { bg: 'rgba(152,152,159,0.15)', color: '#98989F', label: 'TODO' },
   };
   const s = map[status];
   return (
-    <span style={{
-      fontSize: 12, padding: '2px 10px', borderRadius: 100,
-      background: s.bg, color: s.color, whiteSpace: 'nowrap',
-    }}>
+    <span style={{ fontSize: 12, padding: '2px 10px', borderRadius: 100, background: s.bg, color: s.color, whiteSpace: 'nowrap' }}>
       {s.label}
     </span>
   );
@@ -65,12 +56,11 @@ export default function StatusPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 8 }}>Status</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Status</h1>
       <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 32 }}>
         各元件開發進度總覽。最後更新：2026-05-12
       </p>
 
-      {/* Summary */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 40, flexWrap: 'wrap' }}>
         {[
           { label: 'Published', count: published, color: '#A7D100' },
@@ -96,21 +86,14 @@ export default function StatusPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
                   {['File', 'Version', 'Status', 'Updated', 'Note'].map(h => (
-                    <th key={h} style={{
-                      textAlign: 'left', padding: '8px 12px',
-                      color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11,
-                    }}>
-                      {h}
-                    </th>
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {section.items.map(item => (
                   <tr key={item.name} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                    <td style={{ padding: '10px 12px' }}>
-                      <code style={{ color: 'var(--accent)', fontSize: 12 }}>{item.name}</code>
-                    </td>
+                    <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{item.name}</code></td>
                     <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{item.version}</td>
                     <td style={{ padding: '10px 12px' }}><StatusBadge status={item.status} /></td>
                     <td style={{ padding: '10px 12px', color: 'var(--text-tertiary)' }}>{item.date}</td>
