@@ -9,19 +9,18 @@ function ColorSwatch({ name, hex }: { name: string; hex: string }) {
   return (
     <div
       onClick={() => { navigator.clipboard.writeText(hex); setCopied(true); setTimeout(() => setCopied(false), 1200); }}
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: 'pointer', minWidth: 0 }}
     >
       <div style={{
         width: '100%', aspectRatio: '1', borderRadius: 10, background: hex,
         border: '1px solid var(--border-divider)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 11, color: isLight ? '#323237' : '#fff',
-        transition: 'transform 0.1s',
       }}>
         {copied ? 'Copied!' : ''}
       </div>
-      <div style={{ fontSize: 12, marginTop: 6, color: 'var(--text-primary)' }}>{name}</div>
-      <div style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>{hex}</div>
+      <div style={{ fontSize: 11, marginTop: 6, color: 'var(--text-primary)', wordBreak: 'break-all' }}>{name}</div>
+      <div style={{ fontSize: 10, color: 'var(--text-tertiary)', wordBreak: 'break-all' }}>{hex}</div>
     </div>
   );
 }
@@ -29,15 +28,19 @@ function ColorSwatch({ name, hex }: { name: string; hex: string }) {
 function SemanticRow({ name, light, dark }: { name: string; light: string; dark: string }) {
   return (
     <div style={{
-      display: 'grid', gridTemplateColumns: '200px 48px 120px 48px 120px',
-      alignItems: 'center', gap: 12, padding: '8px 0',
+      display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+      gap: '8px 16px', padding: '10px 0',
       borderBottom: '1px solid var(--border-divider)',
     }}>
-      <span style={{ fontSize: 13 }}>{name}</span>
-      <div style={{ width: 32, height: 32, borderRadius: 6, background: light, border: '1px solid var(--border-divider)' }} />
-      <span style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>{light}</span>
-      <div style={{ width: 32, height: 32, borderRadius: 6, background: dark, border: '1px solid var(--border-divider)' }} />
-      <span style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>{dark}</span>
+      <span style={{ fontSize: 13, minWidth: 160, flex: '1 0 160px' }}>{name}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ width: 28, height: 28, borderRadius: 6, background: light, border: '1px solid var(--border-divider)', flexShrink: 0 }} />
+        <span style={{ fontSize: 11, color: 'var(--text-tertiary)', minWidth: 70 }}>Light</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ width: 28, height: 28, borderRadius: 6, background: dark, border: '1px solid var(--border-divider)', flexShrink: 0 }} />
+        <span style={{ fontSize: 11, color: 'var(--text-tertiary)', minWidth: 70 }}>Dark</span>
+      </div>
     </div>
   );
 }
@@ -56,7 +59,7 @@ export default function ColorsPage() {
           <h3 style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 16 }}>{group.name}</h3>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(72px, 1fr))',
             gap: 12,
           }}>
             {group.colors.map(c => <ColorSwatch key={c.name} name={c.name} hex={c.hex} />)}
@@ -66,17 +69,6 @@ export default function ColorsPage() {
 
       <div style={{ marginTop: 48 }}>
         <SectionTitle>Semantic Tokens</SectionTitle>
-        <div style={{
-          display: 'grid', gridTemplateColumns: '200px 48px 120px 48px 120px',
-          gap: 12, padding: '8px 0', marginBottom: 8,
-          fontSize: 11, color: 'var(--text-tertiary)', fontWeight: 500,
-        }}>
-          <span>Token</span>
-          <span>Light</span>
-          <span />
-          <span>Dark</span>
-          <span />
-        </div>
         {semanticGroups.map(group => (
           <div key={group.name} style={{ marginBottom: 32 }}>
             <h3 style={{ fontSize: 13, color: 'var(--accent)', marginBottom: 8, marginTop: 16 }}>{group.name}</h3>

@@ -15,7 +15,7 @@ function ButtonDemo() {
   return (
     <div>
       <h3 style={{ fontSize: 16, color: 'var(--text-secondary)', marginBottom: 16 }}>Regular Size</h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 360 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: '100%' }}>
         {levels.map(l => (
           <button key={l.name} style={{
             padding: '12px 24px', borderRadius: 100, border: 'none',
@@ -51,7 +51,7 @@ function ButtonDemo() {
         backgroundImage: 'linear-gradient(#000,#000), linear-gradient(to right, #777777, #D9D9D9)',
         backgroundOrigin: 'border-box', backgroundClip: 'padding-box, border-box',
         color: '#777777', fontSize: 16, fontWeight: 400, cursor: 'pointer',
-        width: '100%', maxWidth: 360, fontFamily: 'inherit',
+        width: '100%', maxWidth: '100%', fontFamily: 'inherit',
       }}>
         Customized Button
       </button>
@@ -130,7 +130,7 @@ function HeaderDemo() {
       <div style={{
         background: active === 'FullPage' ? '#000' : 'var(--page-secondary)',
         borderRadius: active === 'FullPage' ? 0 : active === 'Floating' ? '24px 24px 0 0' : '20px 20px 0 0',
-        padding: 0, maxWidth: 375,
+        padding: 0, maxWidth: '100%', width: 375,
         border: '1px solid var(--border-divider)',
         overflow: 'hidden',
       }}>
@@ -210,7 +210,7 @@ function ListDemo() {
   const [selected, setSelected] = useState(false);
 
   return (
-    <div style={{ maxWidth: 400 }}>
+    <div style={{ maxWidth: '100%' }}>
       {/* Heading */}
       <div style={{ padding: '32px 0 8px', fontSize: 14, color: 'var(--text-secondary)' }}>
         Section Heading
@@ -322,7 +322,7 @@ export default function ComponentsPage() {
 
       <div style={{
         background: 'var(--page-secondary)', borderRadius: 16,
-        border: '1px solid var(--border-divider)', padding: 32,
+        border: '1px solid var(--border-divider)', padding: 'clamp(16px, 4vw, 32px)',
       }}>
         <SectionTitle>{tab}</SectionTitle>
         {tab === 'Button' && <ButtonDemo />}

@@ -12,20 +12,20 @@ export default function TypographyPage() {
       {typographyStyles.map(family => (
         <div key={family.family} style={{ marginBottom: 56 }}>
           <SectionTitle>{family.family}</SectionTitle>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             {family.styles.map(s => (
               <div
                 key={s.name}
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '160px 1fr 200px',
+                  display: 'flex',
+                  flexWrap: 'wrap',
                   alignItems: 'baseline',
                   padding: '16px 0',
                   borderBottom: '1px solid var(--border-divider)',
-                  gap: 16,
+                  gap: '8px 24px',
                 }}
               >
-                <div>
+                <div style={{ minWidth: 140, flexShrink: 0 }}>
                   <div style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'monospace' }}>{s.name}</div>
                   <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginTop: 4 }}>
                     {s.size}px / {s.lineHeight}px / {weightLabel(s.weight)}
@@ -35,23 +35,26 @@ export default function TypographyPage() {
                   )}
                 </div>
                 <div style={{
+                  flex: '1 1 200px',
                   fontFamily: family.family === 'PingFang TC'
                     ? '"PingFang TC", -apple-system, sans-serif'
                     : '"SF Pro", -apple-system, sans-serif',
-                  fontSize: s.size,
+                  fontSize: Math.min(s.size, 26),
                   lineHeight: `${s.lineHeight}px`,
                   fontWeight: s.weight,
                   color: 'var(--text-primary)',
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   textOverflow: 'ellipsis',
+                  minWidth: 0,
                 }}>
                   {family.family === 'PingFang TC' ? 'USPACE 智慧停車' : 'USPACE Smart Parking'}
                 </div>
                 <div style={{
-                  fontSize: 11, color: 'var(--text-tertiary)', fontFamily: 'monospace', textAlign: 'right',
+                  fontSize: 11, color: 'var(--text-tertiary)', fontFamily: 'monospace',
+                  whiteSpace: 'nowrap', flexShrink: 0,
                 }}>
-                  height: {s.lineHeight}/{s.size} = {(s.lineHeight / s.size).toFixed(2)}
+                  {s.lineHeight}/{s.size} = {(s.lineHeight / s.size).toFixed(2)}
                 </div>
               </div>
             ))}

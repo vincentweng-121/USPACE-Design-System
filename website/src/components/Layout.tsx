@@ -18,29 +18,21 @@ export default function Layout() {
       {/* Mobile toggle */}
       <button
         onClick={() => setOpen(!open)}
-        style={{
-          position: 'fixed', top: 16, left: 16, zIndex: 100,
-          background: 'var(--grey800)', border: 'none', color: 'var(--text-primary)',
-          width: 40, height: 40, borderRadius: 8, cursor: 'pointer',
-          display: 'none',
-          fontSize: 20,
-        }}
         className="mobile-toggle"
       >
         {open ? '✕' : '☰'}
       </button>
 
+      {/* Mobile backdrop */}
+      {open && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <nav
-        style={{
-          width: 240, minHeight: '100vh', background: 'var(--page-secondary)',
-          borderRight: '1px solid var(--border-divider)',
-          padding: '32px 0', display: 'flex', flexDirection: 'column',
-          position: 'fixed', left: open ? 0 : undefined, top: 0, bottom: 0,
-          zIndex: 50, overflowY: 'auto',
-        }}
-        className={`sidebar ${open ? 'sidebar-open' : ''}`}
-      >
+      <nav className={`sidebar ${open ? 'sidebar-open' : ''}`}>
         <div style={{ padding: '0 24px', marginBottom: 40 }}>
           <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)', letterSpacing: 1 }}>
             USPACE
@@ -76,16 +68,80 @@ export default function Layout() {
       </nav>
 
       {/* Main */}
-      <main style={{ flex: 1, marginLeft: 240, padding: '48px 48px 80px' }}>
+      <main className="main-content">
         <Outlet />
       </main>
 
       <style>{`
+        .sidebar {
+          width: 240px;
+          min-height: 100vh;
+          background: var(--page-secondary);
+          border-right: 1px solid var(--border-divider);
+          padding: 32px 0;
+          display: flex;
+          flex-direction: column;
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 50;
+          overflow-y: auto;
+        }
+        .main-content {
+          flex: 1;
+          margin-left: 240px;
+          padding: 48px 48px 80px;
+          min-width: 0;
+          overflow-x: hidden;
+        }
+        .mobile-toggle {
+          display: none;
+          position: fixed;
+          top: 16px;
+          left: 16px;
+          z-index: 100;
+          background: var(--grey800);
+          border: none;
+          color: var(--text-primary);
+          width: 40px;
+          height: 40px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 20px;
+        }
+        .sidebar-backdrop {
+          display: none;
+        }
+
+        @media (max-width: 1024px) {
+          .main-content {
+            padding: 48px 32px 80px;
+          }
+        }
+
         @media (max-width: 768px) {
-          .mobile-toggle { display: block !important; }
-          .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
-          .sidebar-open { transform: translateX(0) !important; }
-          main { margin-left: 0 !important; padding: 24px 16px 80px !important; }
+          .mobile-toggle {
+            display: block;
+          }
+          .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.25s ease;
+          }
+          .sidebar-open {
+            transform: translateX(0);
+          }
+          .sidebar-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            background: rgba(0,0,0,0.5);
+          }
+          .main-content {
+            margin-left: 0;
+            padding: 72px 16px 80px;
+          }
         }
       `}</style>
     </div>

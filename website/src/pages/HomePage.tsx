@@ -30,7 +30,7 @@ export default function HomePage() {
       </div>
 
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260, 1fr))',
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
         gap: 16,
       }}>
         {cards.map(({ to, title, desc, accent }) => (

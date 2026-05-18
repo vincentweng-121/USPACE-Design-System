@@ -71,14 +71,14 @@ export default function StatusPage() {
       </p>
 
       {/* Summary */}
-      <div style={{ display: 'flex', gap: 16, marginBottom: 40 }}>
+      <div style={{ display: 'flex', gap: 16, marginBottom: 40, flexWrap: 'wrap' }}>
         {[
           { label: 'Published', count: published, color: '#A7D100' },
           { label: 'Draft', count: draft, color: '#D1AF65' },
           { label: 'Todo', count: todo, color: '#98989F' },
         ].map(s => (
           <div key={s.label} style={{
-            flex: 1, padding: 20, borderRadius: 12,
+            flex: '1 1 100px', padding: 20, borderRadius: 12, minWidth: 100,
             background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
             textAlign: 'center',
           }}>
@@ -92,7 +92,7 @@ export default function StatusPage() {
         <div key={section.title} style={{ marginBottom: 40 }}>
           <SectionTitle>{section.title}</SectionTitle>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
                   {['File', 'Version', 'Status', 'Updated', 'Note'].map(h => (
