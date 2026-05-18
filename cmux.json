@@ -1,0 +1,22 @@
+{
+  "workspace": "USPACE Design System",
+  "tabs": [
+    {
+      "name": "Skill 專案",
+      "commands": ["cd ~/Desktop/figma-skill-loop"],
+      "focus": true,
+      "notes": "figma-skill-loop 主工作區，在這裡下 Claude Code 指令"
+    },
+    {
+      "name": "Flutter Preview",
+      "commands": ["lsof -ti :8080 | xargs kill -9 2>/dev/null; cd ~/Desktop/uspace_preview && flutter build web && cd build/web && python3 -m http.server 8080"],
+      "notes": "每次 Claude 改完程式碼後執行此指令，然後重新整理瀏覽器"
+    },
+    {
+      "name": "瀏覽器",
+      "type": "browser",
+      "url": "http://localhost:8080",
+      "notes": "Flutter web 預覽，固定 http://localhost:8080"
+    }
+  ]
+}
