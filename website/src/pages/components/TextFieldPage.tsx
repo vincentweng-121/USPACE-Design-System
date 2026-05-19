@@ -1,71 +1,83 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import SectionTitle from '../../components/SectionTitle';
 
 type Status = 'Default' | 'Active' | 'Typing' | 'Complete' | 'Disabled' | 'Error' | 'Error-Active' | 'Incomplete' | 'Non-editable';
 
 const allStatuses: Status[] = ['Default', 'Active', 'Typing', 'Complete', 'Disabled', 'Error', 'Error-Active', 'Incomplete', 'Non-editable'];
 
-interface StatusConfig {
-  placeholder: string;
-  value: string;
-  label: string;
-  hint: string;
-  hintError: boolean;
-  showButton: boolean;
-  showClear: boolean;
-  showError: boolean;
-  border: string;
-  disabled: boolean;
-  textColor: string;
+const canType = (s: Status) => !['Disabled', 'Non-editable'].includes(s);
+
+function getBorder(status: Status): string {
+  if (status === 'Active' || status === 'Typing') return '2px solid var(--input-border-active)';
+  if (status === 'Error-Active') return '2px solid var(--input-border-error)';
+  return '1px solid var(--border-divider)';
 }
 
-function getConfig(status: Status): StatusConfig {
-  const base = {
-    placeholder: 'Placeholder',
-    value: '',
-    label: 'Label',
-    hint: 'Hint message',
-    hintError: false,
-    showButton: false,
-    showClear: false,
-    showError: false,
-    border: '1px solid var(--border-divider)',
-    disabled: false,
-    textColor: 'var(--text-primary)',
+function TextFieldPlayground({ status, onStatusChange }: { status: Status; onStatusChange: (s: Status) => void }) {
+  const [text, setText] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const prevStatus = useRef(status);
+
+  // Reset text when switching to a status that shouldn't have text
+  useEffect(() => {
+    if (status === 'Default' || status === 'Active') setText('');
+    if (status === 'Disabled') setText('');
+    if (status === 'Non-editable') setText('Read-only text');
+    if (status === 'Error') setText('Error input');
+    if (status === 'Error-Active') setText('Error input');
+    if (status === 'Incomplete') setText('Partial');
+
+    // Auto-focus on editable states
+    if (canType(status) && inputRef.current) {
+      if (['Active', 'Typing', 'Error-Active'].includes(status)) {
+        inputRef.current.focus();
+      }
+    }
+    prevStatus.current = status;
+  }, [status]);
+
+  const isDisabled = status === 'Disabled';
+  const isReadonly = status === 'Non-editable';
+  const isError = status === 'Error' || status === 'Error-Active';
+  const showClear = (status === 'Typing' || status === 'Complete') && text.length > 0;
+  const showErrorIcon = isError;
+  const showButton = status === 'Incomplete';
+  const handleInput = (val: string) => {
+    setText(val);
+    // Auto-transition: if user starts typing in Active, switch to Typing
+    if (status === 'Active' && val.length > 0) onStatusChange('Typing');
+    // If user clears all text in Typing, go back to Active
+    if (status === 'Typing' && val.length === 0) onStatusChange('Active');
   };
 
-  switch (status) {
-    case 'Default':
-      return { ...base };
-    case 'Active':
-      return { ...base, border: '2px solid var(--input-border-active)' };
-    case 'Typing':
-      return { ...base, value: 'Input text', border: '2px solid var(--input-border-active)', showClear: true };
-    case 'Complete':
-      return { ...base, value: 'Completed text', showClear: true };
-    case 'Disabled':
-      return { ...base, textColor: '#D9D9D9', disabled: true };
-    case 'Error':
-      return { ...base, value: 'Error input', showError: true, hint: 'Error message', hintError: true };
-    case 'Error-Active':
-      return { ...base, value: 'Error input', border: '2px solid var(--input-border-error)', showError: true, hint: 'Error message', hintError: true };
-    case 'Incomplete':
-      return { ...base, value: 'Partial', showButton: true };
-    case 'Non-editable':
-      return { ...base, value: 'Read-only text', textColor: '#D9D9D9', disabled: true };
-  }
-}
+  const handleClear = () => {
+    setText('');
+    if (status === 'Complete') onStatusChange('Active');
+    if (status === 'Typing') onStatusChange('Active');
+    inputRef.current?.focus();
+  };
 
-function TextFieldDemo({ status }: { status: Status }) {
-  const c = getConfig(status);
+  const handleFocus = () => {
+    if (status === 'Default') onStatusChange('Active');
+    if (status === 'Complete') onStatusChange('Typing');
+    if (status === 'Error') onStatusChange('Error-Active');
+  };
+
+  const handleBlur = () => {
+    if (status === 'Active') onStatusChange('Default');
+    if (status === 'Typing' && text.length > 0) onStatusChange('Complete');
+    if (status === 'Typing' && text.length === 0) onStatusChange('Default');
+    if (status === 'Error-Active') onStatusChange('Error');
+  };
 
   return (
-    <div style={{ marginBottom: 24 }}>
-      <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>{status}</div>
-
+    <div>
       {/* Label */}
-      <div style={{ fontSize: 12, color: 'var(--text-primary)', marginBottom: 4, lineHeight: '16px', fontFamily: '"PingFang TC", sans-serif' }}>
-        {c.label}
+      <div style={{
+        fontSize: 12, color: 'var(--text-primary)', marginBottom: 4,
+        lineHeight: '16px', fontFamily: '"PingFang TC", sans-serif',
+      }}>
+        Label
       </div>
 
       {/* Input Container */}
@@ -73,80 +85,114 @@ function TextFieldDemo({ status }: { status: Status }) {
         height: 48,
         borderRadius: 1000,
         background: 'var(--input-bg)',
-        border: c.border,
+        border: getBorder(status),
         display: 'flex',
         alignItems: 'center',
         paddingLeft: 20,
-        paddingRight: c.showButton ? 4 : 20,
-        opacity: c.disabled ? 0.6 : 1,
+        paddingRight: showButton ? 4 : 16,
+        opacity: isDisabled ? 0.5 : 1,
+        transition: 'border 0.15s',
       }}>
-        {/* Input text / placeholder */}
-        <div style={{
-          flex: 1,
-          fontSize: 14,
-          lineHeight: '20px',
-          color: c.value ? c.textColor : 'var(--input-text-placeholder)',
-          fontFamily: '"PingFang TC", sans-serif',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-        }}>
-          {c.value || c.placeholder}
-        </div>
+        {/* Real input — flex: 1, min-width: 0 to shrink properly */}
+        <input
+          ref={inputRef}
+          value={text}
+          onChange={e => handleInput(e.target.value)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          disabled={isDisabled || isReadonly}
+          placeholder="Placeholder"
+          style={{
+            flex: 1,
+            minWidth: 0,
+            fontSize: 14,
+            lineHeight: '20px',
+            color: (isDisabled || isReadonly) ? '#D9D9D9' : 'var(--text-primary)',
+            fontFamily: '"PingFang TC", sans-serif',
+            background: 'transparent',
+            border: 'none',
+            outline: 'none',
+            padding: 0,
+            cursor: (isDisabled || isReadonly) ? 'not-allowed' : 'text',
+          }}
+        />
 
         {/* Error icon */}
-        {c.showError && (
-          <span style={{ fontSize: 20, color: '#FF4A20', marginLeft: 8, lineHeight: 1 }}>&#9888;</span>
+        {showErrorIcon && (
+          <span style={{
+            fontSize: 18, color: '#FF4A20', flexShrink: 0,
+            marginLeft: 8, lineHeight: 1, display: 'flex', alignItems: 'center',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="2"/>
+              <line x1="10" y1="5.5" x2="10" y2="11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <circle cx="10" cy="14" r="1.2" fill="currentColor"/>
+            </svg>
+          </span>
         )}
 
         {/* Clear icon */}
-        {c.showClear && (
-          <span style={{ fontSize: 20, color: 'var(--text-secondary)', marginLeft: 8, cursor: 'pointer', lineHeight: 1 }}>&#10005;</span>
+        {showClear && (
+          <span
+            onMouseDown={e => { e.preventDefault(); handleClear(); }}
+            style={{
+              fontSize: 18, color: 'var(--text-secondary)', flexShrink: 0,
+              marginLeft: 8, cursor: 'pointer', lineHeight: 1,
+              display: 'flex', alignItems: 'center',
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.15"/>
+              <line x1="7" y1="7" x2="13" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="13" y1="7" x2="7" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </span>
         )}
 
         {/* Action button */}
-        {c.showButton && (
+        {showButton && (
           <button style={{
             marginLeft: 8,
             padding: '8px 24px',
             borderRadius: 100,
             border: 'none',
-            background: '#606060',
-            color: '#FFFFFF',
+            background: 'var(--grey800)',
+            color: '#fff',
             fontSize: 14,
-            cursor: c.disabled ? 'not-allowed' : 'pointer',
+            cursor: 'pointer',
             fontFamily: 'inherit',
             flexShrink: 0,
+            whiteSpace: 'nowrap',
           }}>
             Action
           </button>
         )}
-
-        {/* Typing cursor indicator */}
-        {status === 'Typing' && (
-          <div style={{
-            width: 2,
-            height: 24,
-            background: 'var(--accent)',
-            marginLeft: -4,
-            marginRight: 4,
-            animation: 'blink 1s step-end infinite',
-          }} />
-        )}
       </div>
 
       {/* Hint */}
-      {c.hint && (
-        <div style={{
-          fontSize: 14,
-          lineHeight: '16px',
-          color: c.hintError ? '#F40000' : 'var(--text-secondary)',
-          marginTop: 4,
-          fontFamily: '"SF Pro", "SF Pro Text", -apple-system, sans-serif',
-        }}>
-          {c.hint}
-        </div>
-      )}
+      <div style={{
+        fontSize: 14,
+        lineHeight: '16px',
+        color: isError ? 'var(--input-text-error)' : 'var(--text-secondary)',
+        marginTop: 4,
+        fontFamily: '"SF Pro", "SF Pro Text", -apple-system, sans-serif',
+        minHeight: 16,
+      }}>
+        {isError ? 'Error message' : 'Hint message'}
+      </div>
+
+      {/* Current state indicator */}
+      <div style={{
+        marginTop: 16, padding: '8px 12px', borderRadius: 8,
+        background: 'var(--page-primary)', border: '1px solid var(--border-divider)',
+        fontSize: 12, color: 'var(--text-tertiary)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      }}>
+        <span>Current: <strong style={{ color: 'var(--text-primary)' }}>{status}</strong></span>
+        <span style={{ color: 'var(--text-tertiary)' }}>
+          {canType(status) ? 'Editable' : 'Read-only'}
+        </span>
+      </div>
     </div>
   );
 }
@@ -156,8 +202,6 @@ export default function TextFieldPage() {
 
   return (
     <div>
-      <style>{`@keyframes blink { 50% { opacity: 0; } }`}</style>
-
       <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Text Field</h1>
       <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
         定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>text_field.dart</code>。
@@ -168,15 +212,16 @@ export default function TextFieldPage() {
         Active 與 Typing 狀態帶 2px 邊框（<code style={{ color: 'var(--accent)' }}>inputBorderActive</code>）。
       </p>
 
-      {/* Status Switcher */}
-      <SectionTitle>Interactive Demo</SectionTitle>
+      {/* Playground */}
+      <SectionTitle>Playground</SectionTitle>
       <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
         {allStatuses.map(s => (
           <button key={s} onClick={() => setActiveStatus(s)} style={{
             padding: '6px 16px', borderRadius: 100, border: 'none',
-            background: activeStatus === s ? 'var(--accent)' : 'var(--grey800)',
+            background: activeStatus === s ? 'var(--accent)' : 'var(--border-divider)',
             color: activeStatus === s ? '#000' : 'var(--text-secondary)',
             fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+            transition: 'all 0.12s',
           }}>
             {s}
           </button>
@@ -184,28 +229,11 @@ export default function TextFieldPage() {
       </div>
 
       <div style={{
-        padding: 'clamp(16px, 4vw, 32px)', borderRadius: 16,
+        padding: 'clamp(20px, 4vw, 32px)', borderRadius: 16,
         background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-        marginBottom: 40, maxWidth: 400,
+        marginBottom: 40, maxWidth: 420,
       }}>
-        <TextFieldDemo status={activeStatus} />
-      </div>
-
-      {/* All States Gallery */}
-      <SectionTitle>All States</SectionTitle>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-        gap: 24, marginBottom: 40,
-      }}>
-        {allStatuses.map(s => (
-          <div key={s} style={{
-            padding: 20, borderRadius: 12,
-            background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-          }}>
-            <TextFieldDemo status={s} />
-          </div>
-        ))}
+        <TextFieldPlayground status={activeStatus} onStatusChange={setActiveStatus} />
       </div>
 
       {/* Token Mapping */}
@@ -250,7 +278,7 @@ export default function TextFieldPage() {
         <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>
             <li><strong>Container</strong>: height 48px, borderRadius 1000 (StadiumBorder)</li>
-            <li><strong>Padding</strong>: left 20px, right 20px (without button) / 4px (with button)</li>
+            <li><strong>Padding</strong>: left 20px, right 16px (without button) / 4px (with button)</li>
             <li><strong>Label</strong>: PingFang TC 12px/16px Regular, <code style={{ color: 'var(--accent)' }}>inputText</code></li>
             <li><strong>Input</strong>: PingFang TC 14px/20px Regular, <code style={{ color: 'var(--accent)' }}>inputText</code></li>
             <li><strong>Hint</strong>: SF Pro 14px/16px Regular, <code style={{ color: 'var(--accent)' }}>textSecondary</code></li>
