@@ -32,7 +32,7 @@ const nav: NavSection[] = [
       { to: '/components/header', label: 'Header' },
       { to: '/components/list', label: 'List' },
       { to: '/components/bottom-bar', label: 'Bottom Bar' },
-      { to: '/components/tab-bar', label: 'Tab Bar' },
+      { to: '/components/tab', label: 'Tab' },
       { to: '/components/text-field', label: 'Text Field' },
       { to: '/components/dropdown-menu', label: 'Dropdown Menu' },
       { to: '/components/divider', label: 'Divider' },
@@ -55,7 +55,7 @@ const nav: NavSection[] = [
 
 const comingSoon = new Set([
   '/foundations/spacing', '/foundations/radius', '/foundations/elevation', '/foundations/iconography',
-  '/components/floating-button', '/components/bottom-bar', '/components/tab-bar',
+  '/components/floating-button', '/components/bottom-bar',
   '/components/divider',
   '/patterns',
 ]);

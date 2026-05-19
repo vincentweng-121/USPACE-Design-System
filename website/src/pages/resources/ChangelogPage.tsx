@@ -1,5 +1,24 @@
 const versions = [
   {
+    version: 'v2.3.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'tab.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceTab widget（5 types × 2 states）',
+          'Types: Tab_icon / Tab_Graphic / Tab / Filter / Input',
+          'Tab/TabIcon/TabGraphic: actionTertiaryBg → contentPrimary (active)',
+          'Filter: actionTertiaryBg → actionPrimaryBg (active)',
+          'Input: actionOutlineBg + borderDivider + Close icon',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.2.0',
     date: '2026-05-19',
     breaking: false,

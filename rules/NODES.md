@@ -2,27 +2,30 @@
 > 每輪開始前手動更新。只列當次要讀的節點，不多不少。
 
 ## 當次任務
-任務描述：從 Figma 讀取 DropdownMenu component，產出 dropdown_menu.dart
-目標檔案：dropdown_menu.dart
+任務描述：從 Figma 讀取 Tab component，產出 tab.dart
+目標檔案：tab.dart
 
 ## 指定 Node ID
 | 名稱 | Node ID | 說明 |
 |------|---------|------|
-| DropdownMenu | 2141:11030 | DropdownMenu component set (5 states) |
+| Tab | 972:7985 | Tab component set (5 types × 2 states) |
 
 ## Component 結構（已確認）
-- Status: Default / Complete / Selecting / Incomplete / Error
-- Properties: hint, input, label, placeholder, showHint, status
-- Trigger: height 48px, borderRadius 1000 (StadiumBorder), padding horizontal 20px
-- Trailing: 16px ChevronDown icon, contentSecondary
-- Label: PingFang TC 12px/16px Regular, inputText token, padding horizontal 8px
-- Input: PingFang TC 14px/20px Regular, inputText token
-- Placeholder: PingFang TC 14px/20px Regular, inputTextPlaceholder token
-- Hint (normal): SF Pro 14px/16px Regular, textSecondary token
-- Hint (error): SF Pro 14px/16px Regular, inputTextError token
-- Panel (Selecting): bg inputBgDefault, borderRadius 20px, padding 16px 20px, gap 8px
-- Panel items: PingFang TC 14px/20px, inputText
-- Scrollbar: 4px wide, track pagePrimary, thumb borderDivider
+- Type: Tab_icon / Tab_Graphic / Tab / Filter / Input
+- State: Default / Active
+- Properties: icon, icon1 (bool), label, product, staus, type
+- Tab/TabIcon/TabGraphic: h=38, rounded=32, labelM (14px/20px)
+  - Default: actionTertiaryBg + actionTertiaryContent
+  - Active: contentPrimary + textInverse
+- TabIcon: leading 20px icon, pl=12 pr=16 gap=4
+- TabGraphic: leading 31.5px graphic, pl=8 pr=16
+- Tab: px=16
+- Filter: h=32, rounded=1000, labelS (12px/16px), maxWidth=132
+  - Default: actionTertiaryBg + actionTertiaryContent
+  - Active: actionPrimaryBg + textInverse
+- Input: rounded=1000, py=8 pl=12 pr=8, labelS (12px/16px), maxWidth=132
+  - Default only: actionOutlineBg + actionOutlineContent + borderDivider border
+  - Trailing: 16px Close icon
 
 ## 本輪不在範圍
 - 不動任何現有 styles/ 檔案
