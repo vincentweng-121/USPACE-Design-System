@@ -11,6 +11,7 @@ import ListPage from './pages/components/ListPage';
 import ChangelogPage from './pages/resources/ChangelogPage';
 import StatusPage from './pages/resources/StatusPage';
 import TextFieldPage from './pages/components/TextFieldPage';
+import DropdownMenuPage from './pages/components/DropdownMenuPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import './styles/global.css';
 
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="components/bottom-bar" element={<ComingSoonPage title="Bottom Bar" />} />
           <Route path="components/tab-bar" element={<ComingSoonPage title="Tab Bar" />} />
           <Route path="components/text-field" element={<TextFieldPage />} />
+          <Route path="components/dropdown-menu" element={<DropdownMenuPage />} />
           <Route path="components/divider" element={<ComingSoonPage title="Divider" />} />
 
           {/* Patterns */}

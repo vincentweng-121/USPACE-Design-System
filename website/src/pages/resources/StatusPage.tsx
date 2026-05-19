@@ -28,6 +28,7 @@ const sections: { title: string; items: Item[] }[] = [
       { name: 'icon.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
       { name: 'navigation.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
       { name: 'text_field.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '9 states + trailing button' },
+      { name: 'dropdown_menu.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '5 states + dropdown panel' },
       { name: 'tab_bar.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
       { name: 'divider.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
     ],

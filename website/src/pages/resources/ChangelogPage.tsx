@@ -1,5 +1,23 @@
 const versions = [
   {
+    version: 'v2.2.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'dropdown_menu.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceDropdownMenu widget（5 states）',
+          'Status: Default / Complete / Selecting / Incomplete / Error',
+          '下拉面板 borderRadius 20px，可捲動，scrollbar 4px',
+          'Token: inputBgDefault / inputText / inputTextPlaceholder / inputTextError / textSecondary / contentSecondary',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.1.0',
     date: '2026-05-19',
     breaking: false,

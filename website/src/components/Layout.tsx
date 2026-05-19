@@ -34,6 +34,7 @@ const nav: NavSection[] = [
       { to: '/components/bottom-bar', label: 'Bottom Bar' },
       { to: '/components/tab-bar', label: 'Tab Bar' },
       { to: '/components/text-field', label: 'Text Field' },
+      { to: '/components/dropdown-menu', label: 'Dropdown Menu' },
       { to: '/components/divider', label: 'Divider' },
     ],
   },

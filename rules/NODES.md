@@ -2,25 +2,27 @@
 > 每輪開始前手動更新。只列當次要讀的節點，不多不少。
 
 ## 當次任務
-任務描述：從 Figma 讀取 TextField component，產出 text_field.dart
-目標檔案：text_field.dart
+任務描述：從 Figma 讀取 DropdownMenu component，產出 dropdown_menu.dart
+目標檔案：dropdown_menu.dart
 
 ## 指定 Node ID
 | 名稱 | Node ID | 說明 |
 |------|---------|------|
-| TextField | 40:3307 | TextField component set (9 states) |
+| DropdownMenu | 2141:11030 | DropdownMenu component set (5 states) |
 
 ## Component 結構（已確認）
-- Status: Default / Active / Typing / Complete / Disabled / Error / Error-Active / Incomplete / Non-editable
-- Properties: button (bool), hint, input, label, placeholder, showButton, showHint, showLabel, status
-- Layout: height 48px, borderRadius 1000 (StadiumBorder), paddingLeft 20px
-- Label: PingFang TC 12px/16px Regular, inputText token
+- Status: Default / Complete / Selecting / Incomplete / Error
+- Properties: hint, input, label, placeholder, showHint, status
+- Trigger: height 48px, borderRadius 1000 (StadiumBorder), padding horizontal 20px
+- Trailing: 16px ChevronDown icon, contentSecondary
+- Label: PingFang TC 12px/16px Regular, inputText token, padding horizontal 8px
 - Input: PingFang TC 14px/20px Regular, inputText token
-- Hint: SF Pro 14px/16px Regular, textSecondary / inputTextError token
-- Cursor: 2px wide, 24px tall, contentAccent
-- Active/Typing border: 2px inputBorderActive
-- Error-Active border: 2px inputBorderError
-- Function area: Error icon (20px), Clear icon (20px), USpaceButton (Small/Primary)
+- Placeholder: PingFang TC 14px/20px Regular, inputTextPlaceholder token
+- Hint (normal): SF Pro 14px/16px Regular, textSecondary token
+- Hint (error): SF Pro 14px/16px Regular, inputTextError token
+- Panel (Selecting): bg inputBgDefault, borderRadius 20px, padding 16px 20px, gap 8px
+- Panel items: PingFang TC 14px/20px, inputText
+- Scrollbar: 4px wide, track pagePrimary, thumb borderDivider
 
 ## 本輪不在範圍
 - 不動任何現有 styles/ 檔案

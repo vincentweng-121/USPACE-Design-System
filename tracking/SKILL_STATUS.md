@@ -201,6 +201,18 @@
 
 ---
 
+### Dropdown Menu
+
+#### 已完成
+| 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
+|------|---------|------|---------|------|
+| dropdown_menu.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | 5 states, dropdown panel, Figma node 2141:11030 |
+
+#### 待處理
+（尚無）
+
+---
+
 ### Divider
 
 #### 已完成
