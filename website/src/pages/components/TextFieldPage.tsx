@@ -72,7 +72,7 @@ function TextFieldDemo({ status }: { status: Status }) {
       <div style={{
         height: 48,
         borderRadius: 1000,
-        background: 'var(--input-bg, #1A1A1A)',
+        background: 'var(--input-bg)',
         border: c.border,
         display: 'flex',
         alignItems: 'center',
@@ -85,7 +85,7 @@ function TextFieldDemo({ status }: { status: Status }) {
           flex: 1,
           fontSize: 14,
           lineHeight: '20px',
-          color: c.value ? c.textColor : '#D9D9D9',
+          color: c.value ? c.textColor : 'var(--input-text-placeholder)',
           fontFamily: '"PingFang TC", sans-serif',
           overflow: 'hidden',
           textOverflow: 'ellipsis',

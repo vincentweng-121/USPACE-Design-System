@@ -16,6 +16,11 @@
   --section-secondary: #1A1A1A;
   --grey700: #606060;
   --grey800: #323237;
+  --input-bg: #323237;
+  --input-border-active: #C3F400;
+  --input-border-error: #F40000;
+  --input-text-placeholder: #98989F;
+  --input-text-error: #F40000;
 }
 
 html, body, #root {
