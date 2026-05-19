@@ -25,6 +25,7 @@ const sections = [
       { to: '/components/dropdown-menu', label: 'Dropdown Menu', ready: true },
       { to: '/components/tab', label: 'Tab', ready: true },
       { to: '/components/chip', label: 'Chip', ready: true },
+      { to: '/components/text-area', label: 'Text Area', ready: true },
     ],
     accent: '#00F158',
   },

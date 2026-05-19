@@ -1,5 +1,23 @@
 const versions = [
   {
+    version: 'v2.7.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'text_area.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceTextArea：多行文字輸入元件（8 states）',
+          'Height 144px, borderRadius 20px, padding 20/16',
+          'Error 邊框為 inputBorderActive（綠色），非紅色',
+          '來源：Figma node 634:8456',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.6.0',
     date: '2026-05-19',
     breaking: false,

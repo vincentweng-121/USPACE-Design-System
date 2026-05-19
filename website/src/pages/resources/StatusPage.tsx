@@ -31,6 +31,7 @@ const sections: { title: string; items: Item[] }[] = [
       { name: 'dropdown_menu.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '5 states + dropdown panel' },
       { name: 'tab.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '5 types × 2 states' },
       { name: 'chip.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '4 levels × 2 sizes' },
+      { name: 'text_area.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '8 states, multiline 144px' },
       { name: 'divider.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
     ],
   },
