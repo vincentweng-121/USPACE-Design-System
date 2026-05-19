@@ -1,205 +1,323 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import SectionTitle from '../../components/SectionTitle';
 
-type Status = 'Default' | 'Active' | 'Typing' | 'Complete' | 'Disabled' | 'Error' | 'Error-Active' | 'Incomplete' | 'Non-editable';
+// ── Types ──────────────────────────────────────────────────
+type Availability = 'editable' | 'disabled' | 'non-editable';
+type Validation = 'normal' | 'error';
+type InternalState = 'idle' | 'focused' | 'hasText' | 'focusedWithText';
 
-const allStatuses: Status[] = ['Default', 'Active', 'Typing', 'Complete', 'Disabled', 'Error', 'Error-Active', 'Incomplete', 'Non-editable'];
+// ── Derived Figma status from 3 dimensions ─────────────────
+function deriveStatus(
+  availability: Availability,
+  validation: Validation,
+  showButton: boolean,
+  internal: InternalState,
+): string {
+  if (availability === 'disabled') return 'Disabled';
+  if (availability === 'non-editable') return 'Non-editable';
 
-const canType = (s: Status) => !['Disabled', 'Non-editable'].includes(s);
+  if (validation === 'error') {
+    if (internal === 'focused' || internal === 'focusedWithText') return 'Error-Active';
+    return 'Error';
+  }
 
-function getBorder(status: Status): string {
+  // normal validation
+  if (showButton) {
+    if (internal === 'focused') return 'Active';
+    if (internal === 'focusedWithText') return 'Typing';
+    if (internal === 'hasText') return 'Incomplete';
+    return 'Incomplete';
+  }
+
+  switch (internal) {
+    case 'idle': return 'Default';
+    case 'focused': return 'Active';
+    case 'focusedWithText': return 'Typing';
+    case 'hasText': return 'Complete';
+  }
+}
+
+// ── Border logic ───────────────────────────────────────────
+function getBorder(status: string): string {
   if (status === 'Active' || status === 'Typing') return '2px solid var(--input-border-active)';
   if (status === 'Error-Active') return '2px solid var(--input-border-error)';
   return '1px solid var(--border-divider)';
 }
 
-function TextFieldPlayground({ status, onStatusChange }: { status: Status; onStatusChange: (s: Status) => void }) {
+// ── Toggle component ───────────────────────────────────────
+function Toggle({ value, onChange, labelOn, labelOff, disabled }: {
+  value: boolean; onChange: (v: boolean) => void;
+  labelOn: string; labelOff: string; disabled?: boolean;
+}) {
+  return (
+    <div style={{
+      display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
+      border: '1px solid var(--border-divider)',
+      opacity: disabled ? 0.35 : 1, pointerEvents: disabled ? 'none' : 'auto',
+    }}>
+      {[false, true].map(v => (
+        <button key={String(v)} onClick={() => onChange(v)} style={{
+          padding: '6px 16px', border: 'none', fontSize: 12, cursor: 'pointer',
+          fontFamily: 'inherit', transition: 'all 0.12s',
+          background: value === v ? 'var(--accent)' : 'var(--page-primary)',
+          color: value === v ? '#000' : 'var(--text-secondary)',
+          fontWeight: value === v ? 600 : 400,
+        }}>
+          {v ? labelOn : labelOff}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ── Segmented control ──────────────────────────────────────
+function Segmented<T extends string>({ value, onChange, options }: {
+  value: T; onChange: (v: T) => void;
+  options: { value: T; label: string }[];
+}) {
+  return (
+    <div style={{
+      display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
+      border: '1px solid var(--border-divider)',
+    }}>
+      {options.map(opt => (
+        <button key={opt.value} onClick={() => onChange(opt.value)} style={{
+          padding: '6px 16px', border: 'none', fontSize: 12, cursor: 'pointer',
+          fontFamily: 'inherit', transition: 'all 0.12s',
+          background: value === opt.value ? 'var(--accent)' : 'var(--page-primary)',
+          color: value === opt.value ? '#000' : 'var(--text-secondary)',
+          fontWeight: value === opt.value ? 600 : 400,
+        }}>
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ── Playground ─────────────────────────────────────────────
+function TextFieldPlayground() {
+  const [availability, setAvailability] = useState<Availability>('editable');
+  const [validation, setValidation] = useState<Validation>('normal');
+  const [showButton, setShowButton] = useState(false);
   const [text, setText] = useState('');
+  const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const prevStatus = useRef(status);
 
-  // Reset text when switching to a status that shouldn't have text
+  const isInteractive = availability === 'editable';
+
+  // Derive internal state from focus + text
+  const internal: InternalState =
+    focused && text.length > 0 ? 'focusedWithText' :
+    focused ? 'focused' :
+    text.length > 0 ? 'hasText' : 'idle';
+
+  const status = deriveStatus(availability, validation, showButton, internal);
+
+  // Reset text when switching availability
   useEffect(() => {
-    if (status === 'Default' || status === 'Active') setText('');
-    if (status === 'Disabled') setText('');
-    if (status === 'Non-editable') setText('Read-only text');
-    if (status === 'Error') setText('Error input');
-    if (status === 'Error-Active') setText('Error input');
-    if (status === 'Incomplete') setText('Partial');
+    if (availability === 'disabled') { setText(''); setFocused(false); }
+    if (availability === 'non-editable') { setText('Read-only text'); setFocused(false); }
+  }, [availability]);
 
-    // Auto-focus on editable states
-    if (canType(status) && inputRef.current) {
-      if (['Active', 'Typing', 'Error-Active'].includes(status)) {
-        inputRef.current.focus();
-      }
+  // Prefill text for error mode
+  useEffect(() => {
+    if (validation === 'error' && availability === 'editable' && text === '') {
+      setText('Error input');
     }
-    prevStatus.current = status;
-  }, [status]);
+  }, [validation, availability]);
 
-  const isDisabled = status === 'Disabled';
-  const isReadonly = status === 'Non-editable';
-  const isError = status === 'Error' || status === 'Error-Active';
-  const showClear = (status === 'Typing' || status === 'Complete') && text.length > 0;
+  const isDisabled = availability === 'disabled';
+  const isReadonly = availability === 'non-editable';
+  const isError = validation === 'error' && isInteractive;
+  const showClear = isInteractive && !isError && text.length > 0 && (focused || internal === 'hasText');
   const showErrorIcon = isError;
-  const showButton = status === 'Incomplete';
-  const handleInput = (val: string) => {
-    setText(val);
-    // Auto-transition: if user starts typing in Active, switch to Typing
-    if (status === 'Active' && val.length > 0) onStatusChange('Typing');
-    // If user clears all text in Typing, go back to Active
-    if (status === 'Typing' && val.length === 0) onStatusChange('Active');
-  };
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setText('');
-    if (status === 'Complete') onStatusChange('Active');
-    if (status === 'Typing') onStatusChange('Active');
     inputRef.current?.focus();
-  };
-
-  const handleFocus = () => {
-    if (status === 'Default') onStatusChange('Active');
-    if (status === 'Complete') onStatusChange('Typing');
-    if (status === 'Error') onStatusChange('Error-Active');
-  };
-
-  const handleBlur = () => {
-    if (status === 'Active') onStatusChange('Default');
-    if (status === 'Typing' && text.length > 0) onStatusChange('Complete');
-    if (status === 'Typing' && text.length === 0) onStatusChange('Default');
-    if (status === 'Error-Active') onStatusChange('Error');
-  };
+  }, []);
 
   return (
     <div>
-      {/* Label */}
+      {/* ── Controls ── */}
       <div style={{
-        fontSize: 12, color: 'var(--text-primary)', marginBottom: 4,
-        lineHeight: '16px', fontFamily: '"PingFang TC", sans-serif',
+        display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24,
       }}>
-        Label
+        {/* Availability */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 64 }}>Availability</span>
+          <Segmented
+            value={availability}
+            onChange={setAvailability}
+            options={[
+              { value: 'editable', label: 'Editable' },
+              { value: 'disabled', label: 'Disabled' },
+              { value: 'non-editable', label: 'Non-editable' },
+            ]}
+          />
+        </div>
+
+        {/* Validation */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 64 }}>Validation</span>
+          <Toggle
+            value={validation === 'error'}
+            onChange={v => setValidation(v ? 'error' : 'normal')}
+            labelOff="Normal"
+            labelOn="Error"
+            disabled={!isInteractive}
+          />
+        </div>
+
+        {/* Button */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 64 }}>Trailing</span>
+          <Toggle
+            value={showButton}
+            onChange={setShowButton}
+            labelOff="No Button"
+            labelOn="Button"
+            disabled={!isInteractive}
+          />
+        </div>
       </div>
 
-      {/* Input Container */}
+      {/* ── TextField ── */}
       <div style={{
-        height: 48,
-        borderRadius: 1000,
-        background: 'var(--input-bg)',
-        border: getBorder(status),
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: 20,
-        paddingRight: showButton ? 4 : 16,
-        opacity: isDisabled ? 0.5 : 1,
-        transition: 'border 0.15s',
+        padding: '24px 20px', borderRadius: 16,
+        background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
       }}>
-        {/* Real input — flex: 1, min-width: 0 to shrink properly */}
-        <input
-          ref={inputRef}
-          value={text}
-          onChange={e => handleInput(e.target.value)}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={isDisabled || isReadonly}
-          placeholder="Placeholder"
-          style={{
-            flex: 1,
-            minWidth: 0,
-            fontSize: 14,
-            lineHeight: '20px',
-            color: (isDisabled || isReadonly) ? '#D9D9D9' : 'var(--text-primary)',
-            fontFamily: '"PingFang TC", sans-serif',
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            padding: 0,
-            cursor: (isDisabled || isReadonly) ? 'not-allowed' : 'text',
-          }}
-        />
+        {/* Label */}
+        <div style={{
+          fontSize: 12, color: 'var(--text-primary)', marginBottom: 4,
+          lineHeight: '16px', fontFamily: '"PingFang TC", sans-serif',
+        }}>
+          Label
+        </div>
 
-        {/* Error icon */}
-        {showErrorIcon && (
-          <span style={{
-            fontSize: 18, color: '#FF4A20', flexShrink: 0,
-            marginLeft: 8, lineHeight: 1, display: 'flex', alignItems: 'center',
-          }}>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="2"/>
-              <line x1="10" y1="5.5" x2="10" y2="11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="10" cy="14" r="1.2" fill="currentColor"/>
-            </svg>
-          </span>
-        )}
-
-        {/* Clear icon */}
-        {showClear && (
-          <span
-            onMouseDown={e => { e.preventDefault(); handleClear(); }}
+        {/* Input Container */}
+        <div style={{
+          height: 48,
+          borderRadius: 1000,
+          background: 'var(--input-bg)',
+          border: getBorder(status),
+          display: 'flex',
+          alignItems: 'center',
+          paddingLeft: 20,
+          paddingRight: showButton ? 4 : 16,
+          opacity: isDisabled ? 0.5 : 1,
+          transition: 'border 0.15s',
+        }}>
+          <input
+            ref={inputRef}
+            value={text}
+            onChange={e => setText(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            disabled={isDisabled || isReadonly}
+            placeholder="Placeholder"
             style={{
-              fontSize: 18, color: 'var(--text-secondary)', flexShrink: 0,
-              marginLeft: 8, cursor: 'pointer', lineHeight: 1,
-              display: 'flex', alignItems: 'center',
+              flex: 1,
+              minWidth: 0,
+              fontSize: 14,
+              lineHeight: '20px',
+              color: (isDisabled || isReadonly) ? 'var(--input-text-placeholder)' : 'var(--text-primary)',
+              fontFamily: '"PingFang TC", sans-serif',
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              padding: 0,
+              cursor: (isDisabled || isReadonly) ? 'not-allowed' : 'text',
             }}
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.15"/>
-              <line x1="7" y1="7" x2="13" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              <line x1="13" y1="7" x2="7" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          </span>
-        )}
+          />
 
-        {/* Action button */}
-        {showButton && (
-          <button style={{
-            marginLeft: 8,
-            padding: '8px 24px',
-            borderRadius: 100,
-            border: 'none',
-            background: 'var(--grey800)',
-            color: '#fff',
-            fontSize: 14,
-            cursor: 'pointer',
-            fontFamily: 'inherit',
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
-          }}>
-            Action
-          </button>
-        )}
+          {/* Error icon */}
+          {showErrorIcon && (
+            <span style={{
+              color: '#FF4A20', flexShrink: 0,
+              marginLeft: 8, display: 'flex', alignItems: 'center',
+            }}>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="2"/>
+                <line x1="10" y1="5.5" x2="10" y2="11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="10" cy="14" r="1.2" fill="currentColor"/>
+              </svg>
+            </span>
+          )}
+
+          {/* Clear icon */}
+          {showClear && (
+            <span
+              onMouseDown={e => { e.preventDefault(); handleClear(); }}
+              style={{
+                color: 'var(--text-secondary)', flexShrink: 0,
+                marginLeft: 8, cursor: 'pointer',
+                display: 'flex', alignItems: 'center',
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.15"/>
+                <line x1="7" y1="7" x2="13" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="13" y1="7" x2="7" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </span>
+          )}
+
+          {/* Action button */}
+          {showButton && isInteractive && (
+            <button style={{
+              marginLeft: 8,
+              padding: '8px 24px',
+              borderRadius: 100,
+              border: 'none',
+              background: 'var(--grey800)',
+              color: '#fff',
+              fontSize: 14,
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
+            }}>
+              Action
+            </button>
+          )}
+        </div>
+
+        {/* Hint */}
+        <div style={{
+          fontSize: 14,
+          lineHeight: '16px',
+          color: isError ? 'var(--input-text-error)' : 'var(--text-secondary)',
+          marginTop: 4,
+          fontFamily: '"SF Pro", "SF Pro Text", -apple-system, sans-serif',
+          minHeight: 16,
+        }}>
+          {isError ? 'Error message' : 'Hint message'}
+        </div>
       </div>
 
-      {/* Hint */}
+      {/* ── State indicator ── */}
       <div style={{
-        fontSize: 14,
-        lineHeight: '16px',
-        color: isError ? 'var(--input-text-error)' : 'var(--text-secondary)',
-        marginTop: 4,
-        fontFamily: '"SF Pro", "SF Pro Text", -apple-system, sans-serif',
-        minHeight: 16,
-      }}>
-        {isError ? 'Error message' : 'Hint message'}
-      </div>
-
-      {/* Current state indicator */}
-      <div style={{
-        marginTop: 16, padding: '8px 12px', borderRadius: 8,
-        background: 'var(--page-primary)', border: '1px solid var(--border-divider)',
+        marginTop: 12, padding: '10px 16px', borderRadius: 8,
+        background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
         fontSize: 12, color: 'var(--text-tertiary)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        flexWrap: 'wrap', gap: 8,
       }}>
-        <span>Current: <strong style={{ color: 'var(--text-primary)' }}>{status}</strong></span>
-        <span style={{ color: 'var(--text-tertiary)' }}>
-          {canType(status) ? 'Editable' : 'Read-only'}
+        <span>
+          Figma Status: <strong style={{ color: 'var(--text-primary)', fontSize: 13 }}>{status}</strong>
+        </span>
+        <span style={{ fontFamily: 'monospace', fontSize: 11 }}>
+          {availability} / {validation} / {showButton ? 'button' : 'no-button'}
         </span>
       </div>
     </div>
   );
 }
 
+// ── Page ───────────────────────────────────────────────────
 export default function TextFieldPage() {
-  const [activeStatus, setActiveStatus] = useState<Status>('Default');
-
   return (
     <div>
       <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Text Field</h1>
@@ -208,32 +326,13 @@ export default function TextFieldPage() {
         支援 9 種狀態，可嵌入 USpaceButton (Small/Primary) 作為 trailing action。
       </p>
       <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        Figma node: 40:3307。輸入框高度 48px，圓角 StadiumBorder (1000)。
-        Active 與 Typing 狀態帶 2px 邊框（<code style={{ color: 'var(--accent)' }}>inputBorderActive</code>）。
+        Figma node: 40:3307。透過下方三個維度的組合 + 實際操作（點擊、輸入、失焦），
+        可觸發所有 9 種 Figma 狀態。
       </p>
 
-      {/* Playground */}
       <SectionTitle>Playground</SectionTitle>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-        {allStatuses.map(s => (
-          <button key={s} onClick={() => setActiveStatus(s)} style={{
-            padding: '6px 16px', borderRadius: 100, border: 'none',
-            background: activeStatus === s ? 'var(--accent)' : 'var(--border-divider)',
-            color: activeStatus === s ? '#000' : 'var(--text-secondary)',
-            fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
-            transition: 'all 0.12s',
-          }}>
-            {s}
-          </button>
-        ))}
-      </div>
-
-      <div style={{
-        padding: 'clamp(20px, 4vw, 32px)', borderRadius: 16,
-        background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-        marginBottom: 40, maxWidth: 420,
-      }}>
-        <TextFieldPlayground status={activeStatus} onStatusChange={setActiveStatus} />
+      <div style={{ maxWidth: 480, marginBottom: 48 }}>
+        <TextFieldPlayground />
       </div>
 
       {/* Token Mapping */}
@@ -291,35 +390,36 @@ export default function TextFieldPage() {
         </div>
       </div>
 
-      {/* Status Descriptions */}
+      {/* Status Mapping */}
       <div style={{ marginTop: 40 }}>
-        <SectionTitle>Status Descriptions</SectionTitle>
+        <SectionTitle>Dimension → Status Mapping</SectionTitle>
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                {['Status', 'Border', 'Function Area', 'Description'].map(h => (
+                {['Availability', 'Validation', 'Button', 'Interaction', 'Figma Status'].map(h => (
                   <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {[
-                ['Default', 'None', 'None', 'Initial empty state'],
-                ['Active', 'inputBorderActive 2px', 'None', 'Focused, no input yet'],
-                ['Typing', 'inputBorderActive 2px', 'Clear icon', 'User is typing, cursor visible'],
-                ['Complete', 'None', 'Clear icon', 'Input completed, unfocused'],
-                ['Disabled', 'None', 'None', 'Non-interactive, dimmed'],
-                ['Error', 'None', 'Error icon', 'Validation failed, unfocused'],
-                ['Error-Active', 'inputBorderError 2px', 'Error icon', 'Validation failed, focused'],
-                ['Incomplete', 'None', 'Button', 'Partial input with action button'],
-                ['Non-editable', 'None', 'None', 'Read-only display'],
-              ].map(([status, border, func, desc]) => (
-                <tr key={status} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                  <td style={{ padding: '10px 12px', fontWeight: 500 }}>{status}</td>
-                  <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{border}</code></td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{func}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{desc}</td>
+                ['Editable', 'Normal', 'Off', 'Idle', 'Default'],
+                ['Editable', 'Normal', 'Off', 'Focused', 'Active'],
+                ['Editable', 'Normal', 'Off', 'Typing', 'Typing'],
+                ['Editable', 'Normal', 'Off', 'Blur w/ text', 'Complete'],
+                ['Editable', 'Normal', 'On', 'Has text', 'Incomplete'],
+                ['Editable', 'Error', 'Off', 'Idle', 'Error'],
+                ['Editable', 'Error', 'Off', 'Focused', 'Error-Active'],
+                ['Disabled', '—', '—', '—', 'Disabled'],
+                ['Non-editable', '—', '—', '—', 'Non-editable'],
+              ].map(([avail, valid, btn, interaction, figma], i) => (
+                <tr key={i} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  <td style={{ padding: '10px 12px' }}>{avail}</td>
+                  <td style={{ padding: '10px 12px', color: valid === 'Error' ? 'var(--input-text-error)' : 'var(--text-secondary)' }}>{valid}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{btn}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{interaction}</td>
+                  <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{figma}</code></td>
                 </tr>
               ))}
             </tbody>
