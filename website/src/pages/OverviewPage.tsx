@@ -24,6 +24,7 @@ const sections = [
       { to: '/components/text-field', label: 'Text Field', ready: true },
       { to: '/components/dropdown-menu', label: 'Dropdown Menu', ready: true },
       { to: '/components/tab', label: 'Tab', ready: true },
+      { to: '/components/chip', label: 'Chip', ready: true },
     ],
     accent: '#00F158',
   },
@@ -64,7 +65,7 @@ export default function OverviewPage() {
         {[
           { label: 'Color Tokens', value: '60+', color: '#C3F400' },
           { label: 'Typography Styles', value: '24', color: '#00F158' },
-          { label: 'Components', value: '8', color: '#00EEB7' },
+          { label: 'Components', value: '9', color: '#00EEB7' },
         ].map(s => (
           <div key={s.label} style={{
             padding: '16px 24px', borderRadius: 12,

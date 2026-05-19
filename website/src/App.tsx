@@ -13,6 +13,7 @@ import StatusPage from './pages/resources/StatusPage';
 import TextFieldPage from './pages/components/TextFieldPage';
 import DropdownMenuPage from './pages/components/DropdownMenuPage';
 import TabPage from './pages/components/TabPage';
+import ChipPage from './pages/components/ChipPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import './styles/global.css';
 
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="components/tab" element={<TabPage />} />
           <Route path="components/text-field" element={<TextFieldPage />} />
           <Route path="components/dropdown-menu" element={<DropdownMenuPage />} />
+          <Route path="components/chip" element={<ChipPage />} />
           <Route path="components/divider" element={<ComingSoonPage title="Divider" />} />
 
           {/* Patterns */}

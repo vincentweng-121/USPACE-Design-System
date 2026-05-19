@@ -1,5 +1,23 @@
 const versions = [
   {
+    version: 'v2.4.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'chip.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceChip widget（4 levels × 2 sizes）',
+          'Levels: Accent / Primary / Secondary / Outline',
+          'Outline: neonLime200 border + gradient text (ShaderMask)',
+          'Small size: 10px/14px Semibold (displayXXS inline)',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.3.0',
     date: '2026-05-19',
     breaking: false,
