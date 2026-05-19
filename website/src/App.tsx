@@ -10,6 +10,7 @@ import HeaderPage from './pages/components/HeaderPage';
 import ListPage from './pages/components/ListPage';
 import ChangelogPage from './pages/resources/ChangelogPage';
 import StatusPage from './pages/resources/StatusPage';
+import TextFieldPage from './pages/components/TextFieldPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import './styles/global.css';
 
@@ -37,7 +38,7 @@ export default function App() {
           <Route path="components/list" element={<ListPage />} />
           <Route path="components/bottom-bar" element={<ComingSoonPage title="Bottom Bar" />} />
           <Route path="components/tab-bar" element={<ComingSoonPage title="Tab Bar" />} />
-          <Route path="components/text-field" element={<ComingSoonPage title="Text Field" />} />
+          <Route path="components/text-field" element={<TextFieldPage />} />
           <Route path="components/divider" element={<ComingSoonPage title="Divider" />} />
 
           {/* Patterns */}

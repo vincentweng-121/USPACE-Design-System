@@ -1,5 +1,24 @@
 const versions = [
   {
+    version: 'v2.1.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'text_field.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceTextField widget（9 states）',
+          'Status: Default / Active / Typing / Complete / Disabled / Error / Error-Active / Incomplete / Non-editable',
+          '支援 trailing USpaceButton (Small/Primary)',
+          'Token: inputBgDefault / inputBorderActive / inputBorderError / inputText / inputTextPlaceholder / inputTextDisabled / inputTextError',
+          'Cursor: contentAccent, 2px × 24px',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.0.0',
     date: '2026-05-12',
     breaking: true,

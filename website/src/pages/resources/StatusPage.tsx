@@ -27,7 +27,7 @@ const sections: { title: string; items: Item[] }[] = [
       { name: 'bottom_bar.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
       { name: 'icon.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
       { name: 'navigation.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
-      { name: 'text_field.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
+      { name: 'text_field.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '9 states + trailing button' },
       { name: 'tab_bar.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
       { name: 'divider.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },
     ],
@@ -58,7 +58,7 @@ export default function StatusPage() {
     <div>
       <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Status</h1>
       <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 32 }}>
-        各元件開發進度總覽。最後更新：2026-05-12
+        各元件開發進度總覽。最後更新：2026-05-19
       </p>
 
       <div style={{ display: 'flex', gap: 16, marginBottom: 40, flexWrap: 'wrap' }}>
