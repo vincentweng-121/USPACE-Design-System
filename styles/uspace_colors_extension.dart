@@ -157,10 +157,42 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   final Color projectUspaceWhite;
 
   // ─── Gradient tokens (static, not theme-switchable) ──
-  static const actionCustomizedBorder = LinearGradient(
+
+  /// Silver Linear: 90deg, grey600 → grey200
+  /// 同 actionCustomizedBorder
+  static const silverLinear = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [USpacePalette.grey600, USpacePalette.grey200],
+  );
+
+  static const actionCustomizedBorder = silverLinear;
+
+  /// Lime Linear: 262deg, neonLime200 → neonLime700
+  /// CSS: linear-gradient(261.99deg, #00EEB7 -7.69%, #B4E002 89.23%)
+  static const limeLinear = LinearGradient(
+    begin: Alignment(0.99, -0.14),
+    end: Alignment(-0.99, 0.14),
+    colors: [USpacePalette.neonLime200, USpacePalette.neonLime700],
+    stops: [0.0, 0.89],
+  );
+
+  /// BottomBar Gray 1B: 180deg, grey50 @0%→100% opacity
+  /// CSS: linear-gradient(180deg, rgba(248,248,248,0) 31.1%, #F8F8F8 55.84%)
+  static const bottomBarGray1B = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0x00F8F8F8), USpacePalette.grey50],
+    stops: [0.311, 0.558],
+  );
+
+  /// BottomBar Gray 2B: 180deg, grey50 @0%→100% opacity
+  /// CSS: linear-gradient(180deg, rgba(248,248,248,0) 0%, #F8F8F8 38.44%)
+  static const bottomBarGray2B = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0x00F8F8F8), USpacePalette.grey50],
+    stops: [0.0, 0.384],
   );
 
   // ─── Light Theme ────────────────────────────────

@@ -1,5 +1,29 @@
 const versions = [
   {
+    version: 'v2.8.2',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'uspace_palette.dart',
+        subVersion: 'v1.3.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 neonLime700 (#B4E002)',
+        ],
+      },
+      {
+        file: 'uspace_colors_extension.dart',
+        subVersion: 'v2.2.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 4 個漸層：silverLinear / limeLinear / bottomBarGray1B / bottomBarGray2B',
+          'actionCustomizedBorder 改為 silverLinear 的別名',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.8.1',
     date: '2026-05-19',
     breaking: false,

@@ -8,8 +8,8 @@ const sections: { title: string; items: Item[] }[] = [
   {
     title: 'Foundations',
     items: [
-      { name: 'uspace_palette.dart', version: 'v1.2.0', status: 'PUBLISHED', date: '2026-05-19', note: '新增 transparentWhite5' },
-      { name: 'uspace_colors_extension.dart', version: 'v2.1.0', status: 'PUBLISHED', date: '2026-05-19', note: 'Dark pageMask + actionFabContent 修正' },
+      { name: 'uspace_palette.dart', version: 'v1.3.0', status: 'PUBLISHED', date: '2026-05-19', note: '新增 neonLime700 + transparentWhite5' },
+      { name: 'uspace_colors_extension.dart', version: 'v2.2.0', status: 'PUBLISHED', date: '2026-05-19', note: '4 gradients + Dark token 修正' },
       { name: 'typography_extension.dart', version: 'v1.1.0', status: 'PUBLISHED', date: '2026-04-15', note: 'SF Pro 補入' },
       { name: 'glass_extension.dart', version: '-', status: 'DRAFT', date: '2026-04-16', note: '模糊值待確認' },
       { name: 'spacing_extension.dart', version: 'v1.0.0', status: 'PUBLISHED', date: '2026-05-19', note: 'Margin + 11 Spacer tokens' },

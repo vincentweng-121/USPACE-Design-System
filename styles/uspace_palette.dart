@@ -31,6 +31,7 @@ abstract class USpacePalette {
   static const neonLime200 = Color(0xFF00EEB7);
   static const neonLime400 = Color(0xFF00F158);
   static const neonLime600 = Color(0xFFC3F400);
+  static const neonLime700 = Color(0xFFB4E002);
   static const neonLime800 = Color(0xFFA7D100);
   static const neonLime900 = Color(0xFF74AA5A);
 
