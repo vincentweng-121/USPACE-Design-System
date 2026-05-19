@@ -1,6 +1,26 @@
 import { useState } from 'react';
 import SectionTitle from '../../components/SectionTitle';
 
+function MiniToggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <div
+      onClick={() => onChange(!value)}
+      style={{
+        width: 64, height: 24, borderRadius: 27, padding: 2,
+        background: value ? '#C3F400' : '#D9D9D9',
+        display: 'flex', alignItems: 'center',
+        justifyContent: value ? 'flex-end' : 'flex-start',
+        cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0,
+      }}
+    >
+      <div style={{
+        width: 34, height: 20, borderRadius: 27,
+        background: '#FFFFFF', transition: 'all 0.2s',
+      }} />
+    </div>
+  );
+}
+
 export default function ListPage() {
   const [toggled, setToggled] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -30,35 +50,29 @@ export default function ListPage() {
 
         {/* Toggle item */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border-divider)' }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey800)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>⚙</div>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey200)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, color: 'var(--text-secondary)' }}>⚙</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 18, color: 'var(--text-primary)' }}>Setting Item</div>
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>trailing: toggle</div>
           </div>
-          <div onClick={() => setToggled(!toggled)} style={{
-            width: 51, height: 31, borderRadius: 16, flexShrink: 0,
-            background: toggled ? '#A7D100' : '#D9D9D9',
-            position: 'relative', cursor: 'pointer', transition: 'background 0.2s',
-          }}>
-            <div style={{ width: 27, height: 27, borderRadius: '50%', background: '#fff', position: 'absolute', top: 2, left: toggled ? 22 : 2, transition: 'left 0.2s' }} />
-          </div>
+          <MiniToggle value={toggled} onChange={setToggled} />
         </div>
 
         {/* Button item */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border-divider)' }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey800)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>★</div>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey200)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, color: 'var(--text-secondary)' }}>★</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 18, color: 'var(--text-primary)' }}>Action Item</div>
           </div>
           <button style={{
             padding: '8px 24px', borderRadius: 100, border: 'none', flexShrink: 0,
-            background: '#323237', color: '#606060', fontSize: 14, cursor: 'pointer', fontFamily: 'inherit',
+            background: '#323237', color: '#D9D9D9', fontSize: 14, cursor: 'pointer', fontFamily: 'inherit',
           }}>Action</button>
         </div>
 
         {/* Value item */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border-divider)' }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey800)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>📍</div>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey200)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, color: 'var(--text-secondary)' }}>📍</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 18, color: 'var(--text-primary)' }}>Value Item</div>
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>trailing: value</div>
@@ -68,12 +82,12 @@ export default function ListPage() {
 
         {/* Selectable item */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border-divider)' }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey800)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>◎</div>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--grey200)', marginRight: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, color: 'var(--text-secondary)' }}>◎</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 18, color: 'var(--text-primary)' }}>Selectable</div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-            <span style={{ padding: '1px 12px', borderRadius: 100, background: 'var(--grey800)', fontSize: 14 }}>Tag</span>
+            <span style={{ padding: '1px 12px', borderRadius: 100, background: 'var(--grey100)', fontSize: 14, color: 'var(--text-primary)' }}>Tag</span>
             <div onClick={() => setSelected(!selected)} style={{
               width: 28, height: 28, borderRadius: '50%',
               border: selected ? 'none' : '2px solid var(--text-secondary)',
@@ -102,7 +116,7 @@ export default function ListPage() {
             {[
               ['none', '無 trailing 元件'],
               ['button', 'Small USpaceButton'],
-              ['toggle', 'USpaceToggle switch'],
+              ['toggle', 'USpaceToggle switch (64×24 pill)'],
               ['value', 'bodyS textSecondary 文字'],
               ['selectable', 'Tag label + Checkbox（28px circle）'],
             ].map(([type, desc]) => (

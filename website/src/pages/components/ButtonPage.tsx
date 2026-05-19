@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import SectionTitle from '../../components/SectionTitle';
 
-const levels = [
-  { name: 'Accent', bg: '#606060', text: '#C3F400', desc: 'actionPrimaryBg + actionPrimaryContentAccent' },
-  { name: 'Charging', bg: '#606060', text: '#00F158', desc: 'actionPrimaryBg + actionPrimaryContentCharging' },
-  { name: 'Primary', bg: '#606060', text: '#FFFFFF', desc: 'actionPrimaryBg + actionPrimaryContent' },
-  { name: 'Secondary', bg: '#323237', text: '#FFFFFF', desc: 'actionSecondaryBg + actionSecondaryContent' },
+type Level = 'Accent' | 'Charging' | 'Primary' | 'Secondary' | 'Customized';
+
+const levels: { name: Level; bg: string; text: string; tokenBg: string; tokenText: string }[] = [
+  { name: 'Accent', bg: '#323237', text: '#C3F400', tokenBg: 'actionPrimaryBg', tokenText: 'actionPrimaryContentAccent' },
+  { name: 'Charging', bg: '#323237', text: '#00F158', tokenBg: 'actionPrimaryBg', tokenText: 'actionPrimaryContentCharging' },
+  { name: 'Primary', bg: '#323237', text: '#D9D9D9', tokenBg: 'actionPrimaryBg', tokenText: 'actionPrimaryContent' },
+  { name: 'Secondary', bg: '#B4B4B4', text: '#323237', tokenBg: 'actionSecondaryBg', tokenText: 'actionSecondaryContent' },
+  { name: 'Customized', bg: '', text: '', tokenBg: 'transparent', tokenText: 'actionTertiaryContent' },
 ];
 
 export default function ButtonPage() {
-  const [activeLevel, setActiveLevel] = useState('Accent');
+  const [activeLevel, setActiveLevel] = useState<Level>('Accent');
+  const current = levels.find(l => l.name === activeLevel)!;
 
   return (
     <div>
@@ -25,17 +29,26 @@ export default function ButtonPage() {
 
       {/* Levels */}
       <SectionTitle>Levels</SectionTitle>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-        {[...levels, { name: 'Customized', bg: '', text: '', desc: '' }].map(l => (
-          <button key={l.name} onClick={() => setActiveLevel(l.name)} style={{
-            padding: '6px 16px', borderRadius: 100, border: 'none',
-            background: activeLevel === l.name ? 'var(--accent)' : 'var(--grey800)',
-            color: activeLevel === l.name ? '#000' : 'var(--text-secondary)',
-            fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 48 }}>Level</span>
+          <div style={{
+            display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
+            border: '1px solid var(--border-divider)',
           }}>
-            {l.name}
-          </button>
-        ))}
+            {levels.map(l => (
+              <button key={l.name} onClick={() => setActiveLevel(l.name)} style={{
+                padding: '6px 12px', border: 'none', fontSize: 11, cursor: 'pointer',
+                fontFamily: 'inherit', transition: 'all 0.12s',
+                background: activeLevel === l.name ? 'var(--accent)' : 'var(--page-primary)',
+                color: activeLevel === l.name ? '#000' : 'var(--text-secondary)',
+                fontWeight: activeLevel === l.name ? 600 : 400,
+              }}>
+                {l.name}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div style={{
@@ -50,8 +63,7 @@ export default function ButtonPage() {
               <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>Regular</div>
               <button style={{
                 padding: '12px 24px', borderRadius: 100, border: 'none', width: '100%', maxWidth: 320,
-                background: levels.find(l => l.name === activeLevel)!.bg,
-                color: levels.find(l => l.name === activeLevel)!.text,
+                background: current.bg, color: current.text,
                 fontSize: 16, fontWeight: 400, cursor: 'pointer', fontFamily: 'inherit',
               }}>
                 {activeLevel} Button
@@ -62,8 +74,7 @@ export default function ButtonPage() {
               <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>Small</div>
               <button style={{
                 padding: '8px 24px', borderRadius: 100, border: 'none',
-                background: levels.find(l => l.name === activeLevel)!.bg,
-                color: levels.find(l => l.name === activeLevel)!.text,
+                background: current.bg, color: current.text,
                 fontSize: 16, fontWeight: 400, cursor: 'pointer', fontFamily: 'inherit',
               }}>
                 {activeLevel}
@@ -74,7 +85,7 @@ export default function ButtonPage() {
               <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>Disabled</div>
               <button style={{
                 padding: '12px 24px', borderRadius: 100, border: 'none', width: '100%', maxWidth: 320,
-                background: '#fff', color: '#fff', opacity: 0.3,
+                background: '#EEEEEE', color: '#D9D9D9',
                 fontSize: 16, fontWeight: 400, cursor: 'not-allowed', fontFamily: 'inherit',
               }}>
                 Disabled
@@ -113,19 +124,10 @@ export default function ButtonPage() {
             {levels.map(l => (
               <tr key={l.name} style={{ borderBottom: '1px solid var(--border-divider)' }}>
                 <td style={{ padding: '10px 12px', fontWeight: 500 }}>{l.name}</td>
-                <td style={{ padding: '10px 12px' }}>
-                  <code style={{ color: 'var(--accent)', fontSize: 12 }}>{l.desc.split(' + ')[0]}</code>
-                </td>
-                <td style={{ padding: '10px 12px' }}>
-                  <code style={{ color: 'var(--accent)', fontSize: 12 }}>{l.desc.split(' + ')[1]}</code>
-                </td>
+                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{l.tokenBg}</code></td>
+                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{l.tokenText}</code></td>
               </tr>
             ))}
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              <td style={{ padding: '10px 12px', fontWeight: 500 }}>Customized</td>
-              <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>transparent</code></td>
-              <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>actionTertiaryContent</code></td>
-            </tr>
             <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
               <td style={{ padding: '10px 12px', fontWeight: 500 }}>Disabled</td>
               <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>actionDisabledBg</code></td>

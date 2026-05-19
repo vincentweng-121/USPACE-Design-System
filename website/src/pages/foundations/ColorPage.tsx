@@ -59,7 +59,7 @@ export default function ColorPage() {
 
       <SectionTitle>Core Palette</SectionTitle>
       {paletteGroups.map(group => (
-        <div key={group.name} style={{ marginBottom: 40 }}>
+        <div key={group.name} style={{ marginBottom: 48 }}>
           <h3 style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 16 }}>{group.name}</h3>
           <div style={{
             display: 'grid',
@@ -71,7 +71,7 @@ export default function ColorPage() {
         </div>
       ))}
 
-      <div style={{ marginTop: 48 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Semantic Tokens</SectionTitle>
         {semanticGroups.map(group => (
           <div key={group.name} style={{ marginBottom: 32 }}>
@@ -81,7 +81,7 @@ export default function ColorPage() {
         ))}
       </div>
 
-      <div style={{ marginTop: 48 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Usage Guidelines</SectionTitle>
         <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>

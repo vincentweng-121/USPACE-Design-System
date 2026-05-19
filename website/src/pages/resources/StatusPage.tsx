@@ -81,7 +81,7 @@ export default function StatusPage() {
       </div>
 
       {sections.map(section => (
-        <div key={section.title} style={{ marginBottom: 40 }}>
+        <div key={section.title} style={{ marginBottom: 56 }}>
           <SectionTitle>{section.title}</SectionTitle>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>

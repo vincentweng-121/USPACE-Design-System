@@ -17,18 +17,27 @@ export default function HeaderPage() {
         Figma nodes: 1327:17998 (FullPage), 1327:18205 (Floating), 1327:18962 (Modal)
       </p>
 
-      <SectionTitle>Interactive Demo</SectionTitle>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-        {types.map(t => (
-          <button key={t} onClick={() => setActive(t)} style={{
-            padding: '6px 16px', borderRadius: 100, border: 'none',
-            background: active === t ? 'var(--accent)' : 'var(--grey800)',
-            color: active === t ? '#000' : 'var(--text-secondary)',
-            fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+      <SectionTitle>Playground</SectionTitle>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 48 }}>Type</span>
+          <div style={{
+            display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
+            border: '1px solid var(--border-divider)',
           }}>
-            {t}
-          </button>
-        ))}
+            {types.map(t => (
+              <button key={t} onClick={() => setActive(t)} style={{
+                padding: '6px 12px', border: 'none', fontSize: 11, cursor: 'pointer',
+                fontFamily: 'inherit', transition: 'all 0.12s',
+                background: active === t ? 'var(--accent)' : 'var(--page-primary)',
+                color: active === t ? '#000' : 'var(--text-secondary)',
+                fontWeight: active === t ? 600 : 400,
+              }}>
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div style={{
@@ -44,24 +53,24 @@ export default function HeaderPage() {
         }}>
           {active === 'Floating' && (
             <div style={{ padding: '8px 0', display: 'flex', justifyContent: 'center' }}>
-              <div style={{ width: 40, height: 4, borderRadius: 100, background: 'rgba(50,50,55,0.15)' }} />
+              <div style={{ width: 40, height: 4, borderRadius: 100, background: 'rgba(255,255,255,0.15)' }} />
             </div>
           )}
           {active === 'Modal' && <div style={{ height: 16 }} />}
           <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 24, color: 'var(--text-primary)' }}>&#8249;</span>
-            <span style={{ fontSize: 24, color: 'var(--text-primary)' }}>&#x2715;</span>
+            <span style={{ fontSize: 24, color: '#fff' }}>&#8249;</span>
+            <span style={{ fontSize: 24, color: '#fff' }}>&#x2715;</span>
           </div>
           <div style={{ padding: '0 16px 24px' }}>
             <div style={{
               fontSize: active === 'FullPage' ? 26 : 22, fontWeight: 400,
-              color: 'var(--text-primary)',
+              color: '#fff',
               textAlign: active === 'FullPage' ? 'left' : 'center',
             }}>
               {active === 'FullPage' ? 'Page Title' : active === 'Floating' ? 'Sheet Title' : 'Modal Title'}
             </div>
             <div style={{
-              fontSize: 14, color: 'var(--text-secondary)', marginTop: 8,
+              fontSize: 14, color: 'rgba(255,255,255,0.6)', marginTop: 8,
               textAlign: active === 'FullPage' ? 'left' : 'center',
             }}>
               Subtitle text here

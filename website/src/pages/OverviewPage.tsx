@@ -60,7 +60,7 @@ export default function OverviewPage() {
 
       {/* Quick Stats */}
       <div style={{
-        display: 'flex', gap: 12, marginBottom: 48, flexWrap: 'wrap',
+        display: 'flex', gap: 12, marginBottom: 56, flexWrap: 'wrap',
       }}>
         {[
           { label: 'Color Tokens', value: '60+', color: '#C3F400' },
@@ -80,7 +80,7 @@ export default function OverviewPage() {
 
       {/* Sections */}
       {sections.map(section => (
-        <div key={section.title} style={{ marginBottom: 48 }}>
+        <div key={section.title} style={{ marginBottom: 56 }}>
           <div style={{ marginBottom: 16 }}>
             <h2 style={{ fontSize: 18, fontWeight: 500, color: 'var(--text-primary)', marginBottom: 4 }}>
               {section.title}

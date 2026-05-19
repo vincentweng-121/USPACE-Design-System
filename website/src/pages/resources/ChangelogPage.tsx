@@ -172,7 +172,7 @@ export default function ChangelogPage() {
 
       <div style={{ position: 'relative', paddingLeft: 24, borderLeft: '2px solid var(--border-divider)' }}>
         {versions.map(v => (
-          <div key={v.version} style={{ marginBottom: 48, position: 'relative' }}>
+          <div key={v.version} style={{ marginBottom: 56, position: 'relative' }}>
             <div style={{
               position: 'absolute', left: -31, top: 4,
               width: 12, height: 12, borderRadius: '50%',

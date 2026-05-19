@@ -7,7 +7,7 @@ export default function GlassPage() {
       <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
         USPACE 使用半透明毛玻璃效果作為浮動元件的視覺語言。
       </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
+      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 48, lineHeight: 1.6 }}>
         定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>glass_extension.dart</code>。
         渲染策略依平台不同：iOS 26+ 預計使用 Liquid Glass，其餘平台使用 BackdropFilter + Gaussian blur。
       </p>
@@ -15,7 +15,7 @@ export default function GlassPage() {
       <SectionTitle>Specs</SectionTitle>
       <div style={{
         display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: 16, marginBottom: 40,
+        gap: 16, marginBottom: 48,
       }}>
         {[
           { label: 'Fill Color', value: 'rgba(255, 255, 255, 0.20)', code: 'Color(0x33FFFFFF)' },
@@ -36,7 +36,7 @@ export default function GlassPage() {
       <div style={{
         position: 'relative', height: 240, borderRadius: 16, overflow: 'hidden',
         background: 'linear-gradient(135deg, #1A1A1A 0%, #323237 40%, #606060 100%)',
-        marginBottom: 40,
+        marginBottom: 48,
       }}>
         {/* Single floating button */}
         <div style={{
