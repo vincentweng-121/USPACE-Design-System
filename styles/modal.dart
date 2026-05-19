@@ -72,7 +72,7 @@ class USpaceModal extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(20), // Number/20
+        top: Radius.circular(USpaceRadius.medium), // Number/20
       ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
@@ -80,7 +80,7 @@ class USpaceModal extends StatelessWidget {
           decoration: BoxDecoration(
             color: colors.pagePopup,
             borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(20),
+              top: Radius.circular(USpaceRadius.medium),
             ),
             boxShadow: const [
               BoxShadow(
@@ -103,7 +103,7 @@ class USpaceModal extends StatelessWidget {
 
               // ── Content ──
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.margin),
                 child: child,
               ),
 
@@ -116,7 +116,7 @@ class USpaceModal extends StatelessWidget {
                   typo: typo,
                 )
               else
-                const SizedBox(height: 16), // Home Indicator spacing
+                const SizedBox(height: USpaceSpacing.spacer16), // Home Indicator spacing
             ],
           ),
         ),
@@ -144,11 +144,11 @@ class _ModalHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.margin),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 16), // TopSpacing
+          const SizedBox(height: USpaceSpacing.spacer16), // TopSpacing
 
           // ActionBar: no left, close on right
           Row(
@@ -170,14 +170,14 @@ class _ModalHeader extends StatelessWidget {
             width: double.infinity,
             child: Text(
               title,
-              style: typo.displayL.copyWith(color: colors.textPrimary),
+              style: typo.displayM.copyWith(color: colors.textPrimary),
               textAlign: TextAlign.center,
             ),
           ),
 
           // Paragraph
           if (paragraph != null) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: USpaceSpacing.spacer12),
             SizedBox(
               width: double.infinity,
               child: Text(
@@ -188,7 +188,7 @@ class _ModalHeader extends StatelessWidget {
             ),
           ],
 
-          const SizedBox(height: 16), // gap before content
+          const SizedBox(height: USpaceSpacing.spacer16), // gap before content
         ],
       ),
     );
@@ -214,7 +214,7 @@ class _ModalBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: const EdgeInsets.fromLTRB(USpaceSpacing.margin, USpaceSpacing.margin, USpaceSpacing.margin, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -227,7 +227,7 @@ class _ModalBottomBar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: colors.actionPrimaryBg,
-                  borderRadius: BorderRadius.circular(1000), // Number/Full
+                  borderRadius: BorderRadius.circular(USpaceRadius.full), // Number/Full
                 ),
                 child: Text(
                   label,
@@ -342,7 +342,7 @@ class USpaceModalImageSection extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             color: colors.pagePrimary,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(USpaceRadius.medium),
           ),
           child: imageWidget,
         ),

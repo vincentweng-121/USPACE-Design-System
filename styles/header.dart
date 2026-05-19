@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'uspace_colors_extension.dart';
 import 'uspace_palette.dart';
 import 'typography_extension.dart';
+import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ─── Enums ────────────────────────────────────────────────────
 
@@ -262,7 +264,7 @@ class USpacePageTitle extends StatelessWidget {
 
   Widget _buildModal(USpaceColorsExtension colors, AppTypographyExtension typo) {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(USpaceRadius.medium)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -439,8 +441,8 @@ class _GrabBarSpacing extends StatelessWidget {
           width: 40,
           height: 4,
           decoration: BoxDecoration(
-            color: USpacePalette.transparentGrey80015,
-            borderRadius: BorderRadius.circular(100),
+            color: colors.contentTertiary,
+            borderRadius: BorderRadius.circular(USpaceRadius.full),
           ),
         ),
       ),

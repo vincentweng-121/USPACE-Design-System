@@ -6,6 +6,8 @@ import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'glass_extension.dart';
+import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ── Button Level ─────────────────────────────────────────────
 enum USpaceButtonLevel {
@@ -178,7 +180,7 @@ class _CustomizedButton extends StatelessWidget {
       child: _GradientBorderContainer(
         gradient: USpaceColorsExtension.actionCustomizedBorder,
         borderWidth: 3,
-        borderRadius: 100,
+        borderRadius: USpaceRadius.full,
         child: Padding(
           padding: padding,
           child: Row(
@@ -315,7 +317,7 @@ class _GlassCircle extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(USpaceRadius.full),
         child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: isLG ? USpaceGlass.blurSigma : USpaceGlass.blurSigma,
@@ -328,7 +330,7 @@ class _GlassCircle extends StatelessWidget {
               color: extraOverlay
                   ? const Color(0x55FFFFFF) // ~rgba(255,255,255,0.33) 近似雙層
                   : USpaceGlass.fillColor,
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(USpaceRadius.full),
             ),
             child: SizedBox(width: 28, height: 28, child: child),
           ),
@@ -402,7 +404,7 @@ class _USpaceFloatingButtonBarState extends State<USpaceFloatingButtonBar> {
     final isLG = _isLiquidGlass();
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(100),
+      borderRadius: BorderRadius.circular(USpaceRadius.full),
       child: BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: isLG ? USpaceGlass.blurSigma : USpaceGlass.blurSigma,
@@ -411,7 +413,7 @@ class _USpaceFloatingButtonBarState extends State<USpaceFloatingButtonBar> {
         child: Container(
           decoration: BoxDecoration(
             color: USpaceGlass.fillColor,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(USpaceRadius.full),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -454,7 +456,7 @@ class _FloatingBarItem extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: isActive ? USpaceGlass.fillColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(USpaceRadius.full),
         ),
         child: SizedBox(width: 28, height: 28, child: icon),
       ),
@@ -516,8 +518,8 @@ class USpaceScaleDownOrderButton extends StatelessWidget {
           horizontal: isSingle ? 16 : 24,
         ),
         decoration: BoxDecoration(
-          color: USpacePalette.uspaceBlack,
-          borderRadius: BorderRadius.circular(1000),
+          color: colors.projectUspaceBlack,
+          borderRadius: BorderRadius.circular(USpaceRadius.full),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

@@ -3,6 +3,8 @@ import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'button.dart';
 import 'toggle.dart';
+import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ── Trailing type ─────────────────────────────────────────────
 enum USpaceListTrailing { none, button, toggle, value, selectable }
@@ -143,7 +145,7 @@ class USpaceListItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
               decoration: BoxDecoration(
                 color: colors.actionTertiaryBg,
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(USpaceRadius.full),
               ),
               child: Text(tagLabel!, style: typo.labelM.copyWith(color: colors.textPrimary)),
             ),

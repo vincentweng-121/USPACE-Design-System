@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
+import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ── DropdownMenu Status ───────────────────────────────────────
 enum USpaceDropdownMenuStatus {
@@ -141,7 +143,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: colors.inputBgDefault,
-                borderRadius: BorderRadius.circular(1000),
+                borderRadius: BorderRadius.circular(USpaceRadius.full),
               ),
               child: Row(
                 children: [
@@ -202,7 +204,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
       width: triggerSize.width,
       child: Material(
         color: colors.inputBgDefault,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(USpaceRadius.medium),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 200),
           child: Scrollbar(

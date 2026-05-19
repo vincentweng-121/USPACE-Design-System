@@ -3,6 +3,8 @@ import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'button.dart';
+import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ── TextField Status ──────────────────────────────────────────
 enum USpaceTextFieldStatus {
@@ -164,7 +166,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
           height: 48,
           decoration: BoxDecoration(
             color: colors.inputBgDefault,
-            borderRadius: BorderRadius.circular(1000),
+            borderRadius: BorderRadius.circular(USpaceRadius.full),
             border: _hasBorder
                 ? Border.all(
                     color: _borderColor(colors),

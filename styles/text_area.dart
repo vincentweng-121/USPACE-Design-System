@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
+import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ── TextArea Status ──────────────────────────────────────────
 enum USpaceTextAreaStatus {
@@ -132,7 +134,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
     return colors.inputText;
   }
 
-  TextStyle _inputStyle(USpaceTypographyExtension typo) {
+  TextStyle _inputStyle(AppTypographyExtension typo) {
     // Complete / Disabled use labelL (16px/24px)
     if (widget.status == USpaceTextAreaStatus.complete ||
         widget.status == USpaceTextAreaStatus.disabled) {
@@ -178,7 +180,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
           height: 144,
           decoration: BoxDecoration(
             color: colors.inputBgDefault,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(USpaceRadius.medium),
             border: _hasBorder
                 ? Border.all(
                     color: colors.inputBorderActive,

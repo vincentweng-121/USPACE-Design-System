@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
+import 'radius_extension.dart';
 
 // ── Tab Type ──────────────────────────────────────────────────
 enum USpaceTabType {
@@ -194,7 +195,7 @@ class USpaceTab extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(1000),
+        borderRadius: BorderRadius.circular(USpaceRadius.full),
       ),
       alignment: Alignment.center,
       child: ConstrainedBox(
@@ -216,7 +217,7 @@ class USpaceTab extends StatelessWidget {
       padding: const EdgeInsets.only(left: 12, right: 8, top: 8, bottom: 8),
       decoration: BoxDecoration(
         color: colors.actionOutlineBg,
-        borderRadius: BorderRadius.circular(1000),
+        borderRadius: BorderRadius.circular(USpaceRadius.full),
         border: Border.all(color: colors.borderDivider),
       ),
       child: Row(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'uspace_colors_extension.dart';
 import 'uspace_palette.dart';
 import 'typography_extension.dart';
+import 'radius_extension.dart';
 
 // ── Chip Level ─────────────────────────────────────────────
 enum USpaceChipLevel {
@@ -54,8 +55,7 @@ enum USpaceChipSize {
 /// ⚠️ Chip 為純展示標籤，不可點擊、不接受 onTap。
 /// 若需要可點擊的 chip 行為，請使用 USpaceTab (filter / input type)。
 ///
-/// ⚠️ 注意：Outline gradient text 的終點色 #B4E002 不在 palette 中，
-/// 目前以 neonLime800 (#A7D100) 近似。若需精確值，需先新增到 palette。
+/// Outline gradient text: neonLime200 (#00EEB7) → neonLime700 (#B4E002)。
 class USpaceChip extends StatelessWidget {
   const USpaceChip({
     super.key,
@@ -78,12 +78,10 @@ class USpaceChip extends StatelessWidget {
   final Widget? leadingIcon;
 
   // ── Outline gradient: neonLime200 → neonLime800 ──
-  // 注意：Figma 原始值為 #00EEB7 → #B4E002，
-  // #B4E002 不在 palette，以 neonLime800 近似。
   static const _outlineTextGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [USpacePalette.neonLime200, USpacePalette.neonLime800],
+    colors: [USpacePalette.neonLime200, USpacePalette.neonLime700],
   );
 
   @override
@@ -96,7 +94,7 @@ class USpaceChip extends StatelessWidget {
       padding: _padding,
       decoration: BoxDecoration(
         color: level != USpaceChipLevel.outline ? _bgColor(colors) : null,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(USpaceRadius.full),
         border: level == USpaceChipLevel.outline
             ? Border.all(color: USpacePalette.neonLime200)
             : null,
