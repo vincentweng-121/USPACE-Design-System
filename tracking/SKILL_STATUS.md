@@ -108,12 +108,12 @@
 ### Toggle
 
 #### 已完成
-（尚無）
-
-#### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| toggle.dart | v1.0.0 | 📝 DRAFT | 2026-04-16 | 來源：Figma MCP |
+| toggle.dart | v2.0.0 | ✅ PUBLISHED | 2026-05-19 | 重寫：自訂實作取代 Flutter Switch，64×24 track + 34×20 pill thumb，支援 Enable/Disable |
+
+#### 待處理
+（尚無）
 
 ---
 

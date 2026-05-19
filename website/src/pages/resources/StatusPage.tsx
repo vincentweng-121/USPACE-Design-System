@@ -21,7 +21,7 @@ const sections: { title: string; items: Item[] }[] = [
     title: 'Components',
     items: [
       { name: 'button.dart', version: 'v1.2.0', status: 'PUBLISHED', date: '2026-04-16', note: 'Regular + Small + Floating' },
-      { name: 'toggle.dart', version: 'v1.0.0', status: 'DRAFT', date: '2026-04-16', note: '' },
+      { name: 'toggle.dart', version: 'v2.0.0', status: 'PUBLISHED', date: '2026-05-19', note: '重寫：自訂 64×24 toggle + Disable state' },
       { name: 'header.dart', version: 'v1.0.1', status: 'PUBLISHED', date: '2026-04-17', note: 'FullPage / Floating / Modal' },
       { name: 'list.dart', version: 'v1.0.0', status: 'DRAFT', date: '2026-04-16', note: '' },
       { name: 'bottom_bar.dart', version: '-', status: 'TODO', date: '-', note: '尚未開始' },

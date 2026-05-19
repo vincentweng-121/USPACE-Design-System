@@ -1,5 +1,24 @@
 const versions = [
   {
+    version: 'v2.5.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'toggle.dart',
+        subVersion: 'v2.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '重寫 USpaceToggle：自訂實作取代 Flutter Switch',
+          'Track: 64×24, rounded=27, padding=2',
+          'Thumb: 34×20 pill shape (非圓形)',
+          'ON: actionPrimaryContentAccent, OFF: actionPrimaryContent',
+          'Disable: ON → opacity 0.25, OFF → actionDisabledBg',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.4.0',
     date: '2026-05-19',
     breaking: false,
