@@ -51,6 +51,9 @@ enum USpaceChipSize {
 ///     - with icon: pl=6 pr=8 gap=2, icon 20px
 ///     - without icon: px=8
 ///
+/// ⚠️ Chip 為純展示標籤，不可點擊、不接受 onTap。
+/// 若需要可點擊的 chip 行為，請使用 USpaceTab (filter / input type)。
+///
 /// ⚠️ 注意：Outline gradient text 的終點色 #B4E002 不在 palette 中，
 /// 目前以 neonLime800 (#A7D100) 近似。若需精確值，需先新增到 palette。
 class USpaceChip extends StatelessWidget {
@@ -60,7 +63,6 @@ class USpaceChip extends StatelessWidget {
     this.level = USpaceChipLevel.accent,
     this.size = USpaceChipSize.regular,
     this.leadingIcon,
-    this.onTap,
   });
 
   /// 顯示文字
@@ -74,9 +76,6 @@ class USpaceChip extends StatelessWidget {
 
   /// 前置圖示 widget（建議 20×20）
   final Widget? leadingIcon;
-
-  /// 點擊回呼
-  final VoidCallback? onTap;
 
   // ── Outline gradient: neonLime200 → neonLime800 ──
   // 注意：Figma 原始值為 #00EEB7 → #B4E002，
@@ -92,35 +91,33 @@ class USpaceChip extends StatelessWidget {
     final colors = context.uColors;
     final typo = context.typography;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: _padding,
-        decoration: BoxDecoration(
-          color: level != USpaceChipLevel.outline ? _bgColor(colors) : null,
-          borderRadius: BorderRadius.circular(100),
-          border: level == USpaceChipLevel.outline
-              ? Border.all(color: USpacePalette.neonLime200)
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (leadingIcon != null) ...[
-              IconTheme(
-                data: IconThemeData(
-                  color: _iconColor(colors),
-                  size: 20,
-                ),
-                child: leadingIcon!,
+    // Chip 為純展示標籤，不包裹 GestureDetector
+    return Container(
+      padding: _padding,
+      decoration: BoxDecoration(
+        color: level != USpaceChipLevel.outline ? _bgColor(colors) : null,
+        borderRadius: BorderRadius.circular(100),
+        border: level == USpaceChipLevel.outline
+            ? Border.all(color: USpacePalette.neonLime200)
+            : null,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (leadingIcon != null) ...[
+            IconTheme(
+              data: IconThemeData(
+                color: _iconColor(colors),
+                size: 20,
               ),
-              const SizedBox(width: 2),
-            ],
-            level == USpaceChipLevel.outline
-                ? _buildGradientText(typo)
-                : Text(label, style: _textStyle(colors, typo)),
+              child: leadingIcon!,
+            ),
+            const SizedBox(width: 2),
           ],
-        ),
+          level == USpaceChipLevel.outline
+              ? _buildGradientText(typo)
+              : Text(label, style: _textStyle(colors, typo)),
+        ],
       ),
     );
   }

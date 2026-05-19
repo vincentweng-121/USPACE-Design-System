@@ -100,7 +100,7 @@ export default function HeaderPage() {
         </table>
       </div>
 
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Left Section Functions</SectionTitle>
         <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>

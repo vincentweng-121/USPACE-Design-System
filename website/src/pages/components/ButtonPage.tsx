@@ -136,7 +136,7 @@ export default function ButtonPage() {
       </div>
 
       {/* Size Spec */}
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Size Specs</SectionTitle>
         <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>

@@ -331,7 +331,7 @@ export default function TextFieldPage() {
       </p>
 
       <SectionTitle>Playground</SectionTitle>
-      <div style={{ maxWidth: 480, marginBottom: 48 }}>
+      <div style={{ maxWidth: 480, marginBottom: 140 }}>
         <TextFieldPlayground />
       </div>
 
@@ -372,7 +372,7 @@ export default function TextFieldPage() {
       </div>
 
       {/* Layout Specs */}
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Layout Specs</SectionTitle>
         <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>
@@ -391,7 +391,7 @@ export default function TextFieldPage() {
       </div>
 
       {/* Status Mapping */}
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Dimension → Status Mapping</SectionTitle>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>

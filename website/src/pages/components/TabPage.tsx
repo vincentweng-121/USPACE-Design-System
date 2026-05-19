@@ -202,7 +202,7 @@ export default function TabPage() {
       </p>
 
       <SectionTitle>Playground</SectionTitle>
-      <div style={{ maxWidth: 560, marginBottom: 48 }}>
+      <div style={{ maxWidth: 560, marginBottom: 140 }}>
         <TabPlayground />
       </div>
 
@@ -237,7 +237,7 @@ export default function TabPage() {
       </div>
 
       {/* Layout Specs */}
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Layout Specs</SectionTitle>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
@@ -271,7 +271,7 @@ export default function TabPage() {
       </div>
 
       {/* Extra notes */}
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Notes</SectionTitle>
         <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>

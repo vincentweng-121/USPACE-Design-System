@@ -74,11 +74,11 @@ export default function Layout() {
       {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} />}
 
       <nav className={`sidebar ${open ? 'sidebar-open' : ''}`}>
-        <div style={{ padding: '0 20px', marginBottom: 32 }}>
-          <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)', letterSpacing: 1 }}>
+        <div style={{ padding: '0 24px', marginBottom: 32 }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)', letterSpacing: 1 }}>
             USPACE
           </div>
-          <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginTop: 2 }}>
+          <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 2 }}>
             Design System
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function Layout() {
             <div key={si} style={{ marginBottom: section.title ? 8 : 0 }}>
               {section.title && (
                 <div style={{
-                  padding: '16px 20px 6px',
+                  padding: '16px 24px 6px',
                   fontSize: 11, fontWeight: 600, color: 'var(--text-tertiary)',
                   textTransform: 'uppercase', letterSpacing: 0.8,
                 }}>
@@ -103,16 +103,9 @@ export default function Layout() {
                     key={to}
                     to={to}
                     onClick={() => setOpen(false)}
-                    style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '7px 20px',
-                      fontSize: 13,
-                      color: isActive ? 'var(--accent)' : isSoon ? 'var(--text-tertiary)' : 'var(--text-secondary)',
-                      background: isActive ? 'rgba(195,244,0,0.08)' : 'transparent',
-                      borderLeft: isActive ? '3px solid var(--accent)' : '3px solid transparent',
-                      transition: 'all 0.12s',
-                      opacity: isSoon ? 0.5 : 1,
-                    }}
+                    className="nav-item"
+                    data-active={isActive || undefined}
+                    data-soon={isSoon || undefined}
                   >
                     {label}
                     {isSoon && (
@@ -130,18 +123,20 @@ export default function Layout() {
           ))}
         </div>
 
-        <div style={{ padding: '16px 20px', fontSize: 11, color: 'var(--text-tertiary)', borderTop: '1px solid var(--border-divider)' }}>
+        <div style={{ padding: '16px 24px', fontSize: 11, color: 'var(--text-tertiary)', borderTop: '1px solid var(--border-divider)' }}>
           v2.4.0
         </div>
       </nav>
 
       <main className="main-content">
-        <Outlet />
+        <div className="main-inner">
+          <Outlet />
+        </div>
       </main>
 
       <style>{`
         .sidebar {
-          width: 220px;
+          width: 260px;
           min-height: 100vh;
           background: var(--page-secondary);
           border-right: 1px solid var(--border-divider);
@@ -153,14 +148,52 @@ export default function Layout() {
           z-index: 50;
           overflow-y: auto;
         }
+
+        .nav-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 8px 24px;
+          font-size: 14px;
+          color: var(--text-secondary);
+          background: transparent;
+          border-left: 3px solid transparent;
+          transition: all 0.12s;
+          text-decoration: none;
+        }
+        .nav-item:hover {
+          background: rgba(195,244,0,0.06);
+          color: var(--text-primary);
+        }
+        .nav-item[data-active] {
+          color: var(--text-primary);
+          background: var(--section-accent);
+          border-left-color: var(--accent);
+          font-weight: 500;
+        }
+        .nav-item[data-soon] {
+          opacity: 0.5;
+          color: var(--text-tertiary);
+        }
+        .nav-item[data-soon]:hover {
+          color: var(--text-tertiary);
+          background: transparent;
+        }
+
         .main-content {
           flex: 1;
-          margin-left: 220px;
-          padding: 48px 48px 80px;
+          margin-left: 260px;
           min-width: 0;
           overflow-x: hidden;
-          max-width: 960px;
+          display: flex;
+          justify-content: center;
         }
+        .main-inner {
+          width: 100%;
+          max-width: 860px;
+          padding: 48px 48px 80px;
+        }
+
         .mobile-toggle {
           display: none;
           position: fixed;
@@ -173,7 +206,7 @@ export default function Layout() {
         .sidebar-backdrop { display: none; }
 
         @media (max-width: 1024px) {
-          .main-content { padding: 48px 32px 80px; }
+          .main-inner { padding: 48px 32px 80px; }
         }
         @media (max-width: 768px) {
           .mobile-toggle { display: block; }
@@ -183,7 +216,8 @@ export default function Layout() {
             display: block; position: fixed; inset: 0;
             z-index: 40; background: rgba(0,0,0,0.5);
           }
-          .main-content { margin-left: 0; padding: 72px 16px 80px; }
+          .main-content { margin-left: 0; }
+          .main-inner { padding: 72px 16px 80px; }
         }
       `}</style>
     </div>

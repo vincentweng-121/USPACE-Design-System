@@ -24,7 +24,7 @@ function getChipStyle(level: ChipLevel, size: ChipSize, hasIcon: boolean): React
     borderRadius: 100,
     fontFamily: '"PingFang TC", sans-serif',
     whiteSpace: 'nowrap',
-    cursor: 'pointer',
+    cursor: 'default',
     transition: 'all 0.15s',
     fontSize: isRegular ? 14 : 10,
     lineHeight: isRegular ? '20px' : '14px',
@@ -192,11 +192,11 @@ export default function ChipPage() {
         4 levels × 2 sizes，可選前置圖示。
       </p>
       <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        Figma node: 1327:19329。Outline 層級使用漸層文字（neonLime200 → #B4E002）。
+        Figma node: 1327:19329。Chip 為純展示標籤（不可點擊），Outline 層級使用漸層文字（neonLime200 → #B4E002）。
       </p>
 
       <SectionTitle>Playground</SectionTitle>
-      <div style={{ maxWidth: 560, marginBottom: 48 }}>
+      <div style={{ maxWidth: 560, marginBottom: 140 }}>
         <ChipPlayground />
       </div>
 
@@ -230,7 +230,7 @@ export default function ChipPage() {
       </div>
 
       {/* Layout Specs */}
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Layout Specs</SectionTitle>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
@@ -261,10 +261,11 @@ export default function ChipPage() {
       </div>
 
       {/* Notes */}
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 120 }}>
         <SectionTitle>Notes</SectionTitle>
         <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>
+            <li><strong>Non-interactive</strong>: Chip 為純展示標籤，不可點擊。若需可互動 chip，請使用 <code style={{ color: 'var(--accent)' }}>USpaceTab</code>（filter / input type）</li>
             <li><strong>Outline</strong>: 文字使用 ShaderMask 漸層（neonLime200 → neonLime800），border 為 neonLime200</li>
             <li><strong>Small</strong>: 字體 10px/14px Semibold（displayXXS），typography extension 中尚無此定義，chip.dart 內 inline 定義</li>
             <li><strong>Leading icon</strong>: 20×20，Outline 時 icon 色為 neonLime200，其餘為 contentPrimary</li>

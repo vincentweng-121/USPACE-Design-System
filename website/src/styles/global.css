@@ -25,6 +25,7 @@
   --input-border-error: #F40000;
   --input-text-placeholder: #D9D9D9;
   --input-text-error: #F40000;
+  --section-accent: #C3F400;
 }
 
 html, body, #root {
