@@ -1,5 +1,30 @@
 const versions = [
   {
+    version: 'v2.6.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'spacing_extension.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceSpacing：margin (20px) + 11 spacer tokens (2-56px)',
+          '來源：Figma Variables Mode 1.tokens.json',
+        ],
+      },
+      {
+        file: 'radius_extension.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceRadius：small (8) / medium (20) / full (1000)',
+          '來源：Figma Variables Mode 1.tokens.json (Number group)',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.5.0',
     date: '2026-05-19',
     breaking: false,

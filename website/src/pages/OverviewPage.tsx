@@ -8,7 +8,7 @@ const sections = [
       { to: '/foundations/color', label: 'Color', ready: true },
       { to: '/foundations/typography', label: 'Typography', ready: true },
       { to: '/foundations/glass', label: 'Glass', ready: true },
-      { to: '/foundations/spacing', label: 'Spacing', ready: false },
+      { to: '/foundations/spacing', label: 'Spacing & Radius', ready: true },
       { to: '/foundations/elevation', label: 'Elevation', ready: false },
     ],
     accent: '#C3F400',

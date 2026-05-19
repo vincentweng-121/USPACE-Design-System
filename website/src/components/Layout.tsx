@@ -17,8 +17,7 @@ const nav: NavSection[] = [
       { to: '/foundations/color', label: 'Color' },
       { to: '/foundations/typography', label: 'Typography' },
       { to: '/foundations/glass', label: 'Glass / Materials' },
-      { to: '/foundations/spacing', label: 'Spacing' },
-      { to: '/foundations/radius', label: 'Radius' },
+      { to: '/foundations/spacing', label: 'Spacing & Radius' },
       { to: '/foundations/elevation', label: 'Elevation' },
       { to: '/foundations/iconography', label: 'Iconography' },
     ],
@@ -55,7 +54,7 @@ const nav: NavSection[] = [
 ];
 
 const comingSoon = new Set([
-  '/foundations/spacing', '/foundations/radius', '/foundations/elevation', '/foundations/iconography',
+  '/foundations/elevation', '/foundations/iconography',
   '/components/floating-button', '/components/bottom-bar',
   '/components/divider',
   '/patterns',

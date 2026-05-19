@@ -49,24 +49,24 @@
 ### Spacing
 
 #### 已完成
-（尚無）
-
-#### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| spacing_extension.dart | - | 🔲 待處理 | - | 尚未開始 |
+| spacing_extension.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | Margin (20px) + 11 Spacer tokens (2-56px) |
+
+#### 待處理
+（尚無）
 
 ---
 
 ### Radius
 
 #### 已完成
-（尚無）
-
-#### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| radius_extension.dart | - | 🔲 待處理 | - | 尚未開始 |
+| radius_extension.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | Small (8) / Medium (20) / Full (1000) |
+
+#### 待處理
+（尚無）
 
 ---
 

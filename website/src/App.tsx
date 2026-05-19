@@ -4,6 +4,7 @@ import OverviewPage from './pages/OverviewPage';
 import ColorPage from './pages/foundations/ColorPage';
 import TypographyPage from './pages/foundations/TypographyPage';
 import GlassPage from './pages/foundations/GlassPage';
+import SpacingPage from './pages/foundations/SpacingPage';
 import ButtonPage from './pages/components/ButtonPage';
 import TogglePage from './pages/components/TogglePage';
 import HeaderPage from './pages/components/HeaderPage';
@@ -28,8 +29,8 @@ export default function App() {
           <Route path="foundations/color" element={<ColorPage />} />
           <Route path="foundations/typography" element={<TypographyPage />} />
           <Route path="foundations/glass" element={<GlassPage />} />
-          <Route path="foundations/spacing" element={<ComingSoonPage title="Spacing" />} />
-          <Route path="foundations/radius" element={<ComingSoonPage title="Radius" />} />
+          <Route path="foundations/spacing" element={<SpacingPage />} />
+          <Route path="foundations/radius" element={<Navigate to="/foundations/spacing" replace />} />
           <Route path="foundations/elevation" element={<ComingSoonPage title="Elevation" />} />
           <Route path="foundations/iconography" element={<ComingSoonPage title="Iconography" />} />
 
