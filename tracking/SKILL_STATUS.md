@@ -237,6 +237,18 @@
 
 ---
 
+### Modal
+
+#### 已完成
+| 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
+|------|---------|------|---------|------|
+| modal.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | 4 categories (List/TextArea/Image/Null), glass effect, Figma node 2237:3211 |
+
+#### 待處理
+（尚無）
+
+---
+
 ### Divider
 
 #### 已完成

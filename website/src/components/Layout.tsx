@@ -36,6 +36,7 @@ const nav: NavSection[] = [
       { to: '/components/dropdown-menu', label: 'Dropdown Menu' },
       { to: '/components/chip', label: 'Chip' },
       { to: '/components/text-area', label: 'Text Area' },
+      { to: '/components/modal', label: 'Modal' },
       { to: '/components/divider', label: 'Divider' },
     ],
   },
@@ -124,7 +125,7 @@ export default function Layout() {
         </div>
 
         <div style={{ padding: '16px 24px', fontSize: 11, color: 'var(--text-tertiary)', borderTop: '1px solid var(--border-divider)' }}>
-          v2.7.0
+          v2.8.0
         </div>
       </nav>
 

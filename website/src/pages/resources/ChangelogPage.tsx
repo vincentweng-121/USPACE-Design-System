@@ -1,5 +1,24 @@
 const versions = [
   {
+    version: 'v2.8.0',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'modal.dart',
+        subVersion: 'v1.0.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 USpaceModal：底部彈出式 Modal（4 categories）',
+          'Categories: List Item / Text Area / Image / Null',
+          'pagePopup + backdrop blur 15px + shadow',
+          '含 USpaceModalListItem, USpaceModalImageSection helpers',
+          '來源：Figma node 2237:3211',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.7.0',
     date: '2026-05-19',
     breaking: false,

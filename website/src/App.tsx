@@ -16,6 +16,7 @@ import DropdownMenuPage from './pages/components/DropdownMenuPage';
 import TabPage from './pages/components/TabPage';
 import ChipPage from './pages/components/ChipPage';
 import TextAreaPage from './pages/components/TextAreaPage';
+import ModalPage from './pages/components/ModalPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import './styles/global.css';
 
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="components/dropdown-menu" element={<DropdownMenuPage />} />
           <Route path="components/chip" element={<ChipPage />} />
           <Route path="components/text-area" element={<TextAreaPage />} />
+          <Route path="components/modal" element={<ModalPage />} />
           <Route path="components/divider" element={<ComingSoonPage title="Divider" />} />
 
           {/* Patterns */}

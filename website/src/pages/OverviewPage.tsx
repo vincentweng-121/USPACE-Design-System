@@ -26,6 +26,7 @@ const sections = [
       { to: '/components/tab', label: 'Tab', ready: true },
       { to: '/components/chip', label: 'Chip', ready: true },
       { to: '/components/text-area', label: 'Text Area', ready: true },
+      { to: '/components/modal', label: 'Modal', ready: true },
     ],
     accent: '#00F158',
   },
