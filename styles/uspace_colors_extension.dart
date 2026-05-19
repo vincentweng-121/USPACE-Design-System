@@ -264,7 +264,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     // Background
     pagePrimary:      USpacePalette.black,
     pageSecondary:    USpacePalette.grey900,
-    pageMask:         USpacePalette.transparentBlack40,
+    pageMask:         USpacePalette.transparentWhite5,
     pagePopup:        USpacePalette.transparentWhite10,
     sectionPrimary:   USpacePalette.black,
     sectionSecondary: USpacePalette.grey900,
@@ -286,7 +286,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     actionOutlineBg:              USpacePalette.grey800,
     actionOutlineContent:         USpacePalette.white,
     actionFabBg:                  USpacePalette.transparentWhite10,
-    actionFabContent:             USpacePalette.white,
+    actionFabContent:             USpacePalette.grey500,
     actionFabSelected:            USpacePalette.white,
     actionFabOpacityBg:           USpacePalette.white,
     actionGraphicBg:              USpacePalette.white,

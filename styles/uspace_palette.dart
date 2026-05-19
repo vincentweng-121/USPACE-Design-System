@@ -18,6 +18,7 @@ abstract class USpacePalette {
   // ─── Transparent ────────────────────────────────
   static const transparentBlack40   = Color(0x66000000); // black @ 40%
   static const transparentBlack50   = Color(0x80000000); // black @ 50%
+  static const transparentWhite5    = Color(0x0DFFFFFF); // white @ 5%
   static const transparentWhite10   = Color(0x1AFFFFFF); // white @ 10%
   static const transparentWhite50   = Color(0x80FFFFFF); // white @ 50%
   static const transparentWhite70   = Color(0xB3FFFFFF); // white @ 70%

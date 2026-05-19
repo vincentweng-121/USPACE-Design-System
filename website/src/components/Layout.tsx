@@ -125,7 +125,7 @@ export default function Layout() {
         </div>
 
         <div style={{ padding: '16px 24px', fontSize: 11, color: 'var(--text-tertiary)', borderTop: '1px solid var(--border-divider)' }}>
-          v2.8.0
+          v2.8.1
         </div>
       </nav>
 

@@ -1,5 +1,29 @@
 const versions = [
   {
+    version: 'v2.8.1',
+    date: '2026-05-19',
+    breaking: false,
+    changes: [
+      {
+        file: 'uspace_palette.dart',
+        subVersion: 'v1.2.0',
+        status: 'PUBLISHED',
+        items: [
+          '新增 transparentWhite5 (White @5%)',
+        ],
+      },
+      {
+        file: 'uspace_colors_extension.dart',
+        subVersion: 'v2.1.0',
+        status: 'PUBLISHED',
+        items: [
+          'Dark pageMask: transparentBlack40 → transparentWhite5',
+          'Dark actionFabContent: white → grey500',
+        ],
+      },
+    ],
+  },
+  {
     version: 'v2.8.0',
     date: '2026-05-19',
     breaking: false,
