@@ -29,7 +29,7 @@ function getConfig(status: Status): StatusConfig {
     showButton: false,
     showClear: false,
     showError: false,
-    border: 'none',
+    border: '1px solid var(--border-divider)',
     disabled: false,
     textColor: 'var(--text-primary)',
   };
@@ -38,9 +38,9 @@ function getConfig(status: Status): StatusConfig {
     case 'Default':
       return { ...base };
     case 'Active':
-      return { ...base, border: '2px solid var(--accent)' };
+      return { ...base, border: '2px solid var(--input-border-active)' };
     case 'Typing':
-      return { ...base, value: 'Input text', border: '2px solid var(--accent)', showClear: true };
+      return { ...base, value: 'Input text', border: '2px solid var(--input-border-active)', showClear: true };
     case 'Complete':
       return { ...base, value: 'Completed text', showClear: true };
     case 'Disabled':
@@ -48,7 +48,7 @@ function getConfig(status: Status): StatusConfig {
     case 'Error':
       return { ...base, value: 'Error input', showError: true, hint: 'Error message', hintError: true };
     case 'Error-Active':
-      return { ...base, value: 'Error input', border: '2px solid #F40000', showError: true, hint: 'Error message', hintError: true };
+      return { ...base, value: 'Error input', border: '2px solid var(--input-border-error)', showError: true, hint: 'Error message', hintError: true };
     case 'Incomplete':
       return { ...base, value: 'Partial', showButton: true };
     case 'Non-editable':

@@ -48,48 +48,48 @@ export const palette = {
   red500: '#F40000',
 } as const;
 
-// ─── Semantic Tokens (Dark theme — site default) ──────────
+// ─── Semantic Tokens (Light theme — site default) ──────────
 export const semantic = {
   // Content
   contentAccent: palette.neonLime600,
-  contentPrimary: palette.white,
-  contentSecondary: palette.grey100,
-  contentTertiary: palette.grey800,
-  contentDisabled: palette.grey500,
+  contentPrimary: palette.grey800,
+  contentSecondary: palette.grey600,
+  contentTertiary: 'rgba(50,50,55,0.15)',
+  contentDisabled: palette.grey400,
   contentError: palette.red400,
-  contentInverse: palette.grey800,
+  contentInverse: palette.white,
 
   // Text
-  textAccent: palette.neonLime600,
-  textPrimary: palette.white,
-  textSecondary: palette.grey200,
-  textTertiary: palette.grey500,
-  textDisabled: palette.grey500,
+  textAccent: palette.neonLime800,
+  textPrimary: palette.grey800,
+  textSecondary: palette.grey600,
+  textTertiary: palette.grey400,
+  textDisabled: palette.grey400,
   textError: palette.red500,
-  textInverse: palette.grey800,
-  textWarning: palette.white,
+  textInverse: palette.white,
+  textWarning: palette.red300,
 
   // Background
-  pagePrimary: palette.black,
-  pageSecondary: palette.grey900,
-  sectionPrimary: palette.black,
-  sectionSecondary: palette.grey900,
+  pagePrimary: palette.white,
+  pageSecondary: palette.grey50,
+  sectionPrimary: palette.white,
+  sectionSecondary: palette.grey50,
   sectionAccent: palette.neonLime600,
 
   // Border
-  borderDivider: palette.grey800,
+  borderDivider: palette.grey100,
 
   // Action
-  actionPrimaryBg: palette.grey700,
+  actionPrimaryBg: palette.grey800,
   actionPrimaryContentAccent: palette.neonLime600,
   actionPrimaryContentCharging: palette.neonLime400,
-  actionPrimaryContent: palette.white,
-  actionSecondaryBg: palette.grey800,
-  actionSecondaryContent: palette.white,
-  actionTertiaryBg: palette.grey800,
-  actionTertiaryContent: palette.grey600,
-  actionDisabledBg: palette.white,
-  actionDisabledContent: palette.white,
+  actionPrimaryContent: palette.grey200,
+  actionSecondaryBg: palette.grey300,
+  actionSecondaryContent: palette.grey800,
+  actionTertiaryBg: palette.grey100,
+  actionTertiaryContent: palette.grey800,
+  actionDisabledBg: palette.grey100,
+  actionDisabledContent: palette.grey200,
 } as const;
 
 // ─── Palette groups for display ───────────────────────────

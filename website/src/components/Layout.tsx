@@ -55,7 +55,7 @@ const nav: NavSection[] = [
 const comingSoon = new Set([
   '/foundations/spacing', '/foundations/radius', '/foundations/elevation', '/foundations/iconography',
   '/components/floating-button', '/components/bottom-bar', '/components/tab-bar',
-  '/components/text-field', '/components/divider',
+  '/components/divider',
   '/patterns',
 ]);
 
@@ -116,7 +116,7 @@ export default function Layout() {
                     {isSoon && (
                       <span style={{
                         fontSize: 9, padding: '1px 6px', borderRadius: 100,
-                        background: 'var(--grey800)', color: 'var(--text-tertiary)',
+                        background: 'var(--grey100)', color: 'var(--text-tertiary)',
                       }}>
                         SOON
                       </span>
@@ -129,7 +129,7 @@ export default function Layout() {
         </div>
 
         <div style={{ padding: '16px 20px', fontSize: 11, color: 'var(--text-tertiary)', borderTop: '1px solid var(--border-divider)' }}>
-          v2.0.0
+          v2.1.0
         </div>
       </nav>
 
@@ -163,8 +163,8 @@ export default function Layout() {
           display: none;
           position: fixed;
           top: 16px; left: 16px; z-index: 100;
-          background: var(--grey800);
-          border: none; color: var(--text-primary);
+          background: var(--page-secondary);
+          border: 1px solid var(--border-divider); color: var(--text-primary);
           width: 40px; height: 40px; border-radius: 8px;
           cursor: pointer; font-size: 20px;
         }

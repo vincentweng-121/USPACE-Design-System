@@ -5,21 +5,25 @@
 }
 
 :root {
-  --page-primary: #000000;
-  --page-secondary: #1A1A1A;
-  --text-primary: #FFFFFF;
-  --text-secondary: #D9D9D9;
-  --text-tertiary: #98989F;
-  --accent: #C3F400;
-  --accent-dim: #A7D100;
-  --border-divider: #323237;
-  --section-secondary: #1A1A1A;
+  /* Light theme — mapped from USpaceColorsExtension.light */
+  --page-primary: #FFFFFF;
+  --page-secondary: #F8F8F8;
+  --text-primary: #323237;
+  --text-secondary: #777777;
+  --text-tertiary: #A6A6A6;
+  --accent: #A7D100;
+  --accent-bg: #C3F400;
+  --accent-dim: #74AA5A;
+  --border-divider: #EEEEEE;
+  --section-secondary: #F8F8F8;
+  --grey100: #EEEEEE;
+  --grey200: #D9D9D9;
   --grey700: #606060;
   --grey800: #323237;
-  --input-bg: #323237;
+  --input-bg: #FFFFFF;
   --input-border-active: #C3F400;
   --input-border-error: #F40000;
-  --input-text-placeholder: #98989F;
+  --input-text-placeholder: #D9D9D9;
   --input-text-error: #F40000;
 }
 
@@ -44,6 +48,6 @@ a {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--grey700);
+  background: var(--grey200);
   border-radius: 3px;
 }

@@ -21,7 +21,7 @@ const sections = [
       { to: '/components/toggle', label: 'Toggle', ready: true },
       { to: '/components/header', label: 'Header', ready: true },
       { to: '/components/list', label: 'List', ready: true },
-      { to: '/components/text-field', label: 'Text Field', ready: false },
+      { to: '/components/text-field', label: 'Text Field', ready: true },
     ],
     accent: '#00F158',
   },
