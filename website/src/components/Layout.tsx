@@ -162,7 +162,7 @@ export default function Layout() {
           text-decoration: none;
         }
         .nav-item:hover {
-          background: rgba(195,244,0,0.06);
+          background: rgba(195,244,0,0.18);
           color: var(--text-primary);
         }
         .nav-item[data-active] {
