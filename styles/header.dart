@@ -168,10 +168,10 @@ class USpacePageTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (showStatusBar) _StatusBarPlaceholder(colors: colors),
-          const SizedBox(height: 16), // TopSpacing: pt=8 + pb=12 (Figma h=16)
+          const SizedBox(height: USpaceSpacing.spacer16), // TopSpacing: pt=8 + pb=12 (Figma h=16)
           _buildActionBar(colors, typo),
           if (!titleInLeft && showTitle) ...[
-            const SizedBox(height: 8), // ActionBar → Title gap
+            const SizedBox(height: USpaceSpacing.spacer8), // ActionBar → Title gap
             _buildFullPageTitleBlock(colors, typo),
           ],
         ],
@@ -189,14 +189,14 @@ class USpacePageTitle extends StatelessWidget {
           style: typo.headingL.copyWith(color: colors.textPrimary),
         ),
         if (showSubtitle && subtitle != null) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: USpaceSpacing.spacer8),
           Text(
             subtitle!,
             style: typo.bodyM.copyWith(color: colors.textSecondary),
           ),
         ],
         if (showParagraph && paragraph != null) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: USpaceSpacing.spacer16),
           Text(
             paragraph!,
             style: typo.bodyS.copyWith(color: colors.textSecondary),
@@ -226,7 +226,7 @@ class USpacePageTitle extends StatelessWidget {
 
   Widget _buildFloatingCenterTitleBlock(USpaceColorsExtension colors, AppTypographyExtension typo) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16), // px=16（Figma Title block）
+      padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer16), // px=16（Figma Title block）
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -237,7 +237,7 @@ class USpacePageTitle extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (showSubtitle && subtitle != null) ...[
-            const SizedBox(height: 4), // pt=4（Figma）
+            const SizedBox(height: USpaceSpacing.spacer4), // pt=4（Figma）
             Text(
               subtitle!,
               style: typo.bodyS.copyWith(color: colors.textSecondary),
@@ -245,9 +245,9 @@ class USpacePageTitle extends StatelessWidget {
             ),
           ],
           if (showInfo && info != null) ...[
-            const SizedBox(height: 4), // pt=4（Figma）
+            const SizedBox(height: USpaceSpacing.spacer4), // pt=4（Figma）
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8), // px=8（Figma Accent Info）
+              padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer8), // px=8（Figma Accent Info）
               child: Text(
                 info!,
                 style: typo.headingM.copyWith(color: colors.textPrimary),
@@ -269,7 +269,7 @@ class USpacePageTitle extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 16), // TopSpacing（Figma h=16，無 GrabBar）
+          const SizedBox(height: USpaceSpacing.spacer16), // TopSpacing（Figma h=16，無 GrabBar）
           _buildActionBar(colors, typo),
           if (showTitle) _buildModalTitleBlock(colors, typo),
         ],
@@ -288,7 +288,7 @@ class USpacePageTitle extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         if (showParagraph && paragraph != null) ...[
-          const SizedBox(height: 12), // pt=12（Figma Modal paragraph）
+          const SizedBox(height: USpaceSpacing.spacer12), // pt=12（Figma Modal paragraph）
           Text(
             paragraph!,
             style: typo.bodyM.copyWith(color: colors.textSecondary),
@@ -400,7 +400,7 @@ class _StatusBarPlaceholder extends StatelessWidget {
     return SizedBox(
       height: 44,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -435,11 +435,11 @@ class _GrabBarSpacing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 20,
+      height: USpaceSpacing.spacer20,
       child: Center(
         child: Container(
           width: 40,
-          height: 4,
+          height: USpaceSpacing.spacer4,
           decoration: BoxDecoration(
             color: colors.contentTertiary,
             borderRadius: BorderRadius.circular(USpaceRadius.full),

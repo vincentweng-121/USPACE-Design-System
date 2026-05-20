@@ -124,7 +124,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
         // ── Label ──
         if (widget.label != null)
           Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
+            padding: const EdgeInsets.only(left: USpaceSpacing.spacer8, right: USpaceSpacing.spacer8, bottom: USpaceSpacing.spacer4),
             child: Text(
               widget.label!,
               style: typo.bodyS.copyWith(color: colors.inputText),
@@ -140,7 +140,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
             onTap: _toggle,
             child: Container(
               height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.margin),
               decoration: BoxDecoration(
                 color: colors.inputBgDefault,
                 borderRadius: BorderRadius.circular(USpaceRadius.full),
@@ -161,7 +161,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
                       maxLines: 1,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: USpaceSpacing.spacer8),
                   Icon(
                     Icons.keyboard_arrow_down,
                     size: 16,
@@ -176,7 +176,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
         // ── Hint ──
         if (widget.showHint && widget.hint != null || _isError)
           Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
+            padding: const EdgeInsets.only(left: USpaceSpacing.spacer8, right: USpaceSpacing.spacer8, top: USpaceSpacing.spacer4),
             child: Text(
               _isError ? (widget.hint ?? 'Hint') : widget.hint!,
               style: typo.sfCaptionS.copyWith(
@@ -200,7 +200,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
 
     return Positioned(
       left: offset.dx,
-      top: offset.dy + triggerSize.height + 4,
+      top: offset.dy + triggerSize.height + USpaceSpacing.spacer4,
       width: triggerSize.width,
       child: Material(
         color: colors.inputBgDefault,
@@ -211,12 +211,12 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
             thumbVisibility: true,
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 16,
+                horizontal: USpaceSpacing.margin,
+                vertical: USpaceSpacing.spacer16,
               ),
               shrinkWrap: true,
               itemCount: widget.items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              separatorBuilder: (_, __) => const SizedBox(height: USpaceSpacing.spacer8),
               itemBuilder: (context, index) {
                 final item = widget.items[index];
                 return GestureDetector(

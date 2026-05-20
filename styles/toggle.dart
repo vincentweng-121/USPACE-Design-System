@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'uspace_colors_extension.dart';
+import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 /// USPACE Design System Toggle Switch
 ///
@@ -58,10 +60,10 @@ class USpaceToggle extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           width: 64,
           height: 24,
-          padding: const EdgeInsets.all(2),
+          padding: const EdgeInsets.all(USpaceSpacing.spacer2),
           decoration: BoxDecoration(
             color: trackColor,
-            borderRadius: BorderRadius.circular(27),
+            borderRadius: BorderRadius.circular(USpaceRadius.full),
           ),
           alignment: value ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
@@ -69,7 +71,7 @@ class USpaceToggle extends StatelessWidget {
             height: 20,
             decoration: BoxDecoration(
               color: colors.contentInverse,
-              borderRadius: BorderRadius.circular(27),
+              borderRadius: BorderRadius.circular(USpaceRadius.full),
             ),
           ),
         ),

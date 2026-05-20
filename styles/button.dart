@@ -73,8 +73,8 @@ class USpaceButton extends StatelessWidget {
 
     final isSmall = size == USpaceButtonSize.small;
     final padding = isSmall
-        ? const EdgeInsets.symmetric(vertical: 8, horizontal: 24)
-        : const EdgeInsets.symmetric(vertical: 12);
+        ? const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer8, horizontal: USpaceSpacing.spacer24)
+        : const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer12);
 
     final button = Material(
       color: bgColor,
@@ -93,7 +93,7 @@ class USpaceButton extends StatelessWidget {
                   data: IconThemeData(color: iconColor, size: 24),
                   child: icon!,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: USpaceSpacing.spacer8),
               ],
               Text(
                 label,
@@ -172,8 +172,8 @@ class _CustomizedButton extends StatelessWidget {
 
     final isSmall = size == USpaceButtonSize.small;
     final padding = isSmall
-        ? const EdgeInsets.symmetric(vertical: 8, horizontal: 24)
-        : const EdgeInsets.symmetric(vertical: 12);
+        ? const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer8, horizontal: USpaceSpacing.spacer24)
+        : const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer12);
 
     final inner = GestureDetector(
       onTap: onPressed,
@@ -192,7 +192,7 @@ class _CustomizedButton extends StatelessWidget {
                   data: IconThemeData(color: iconColor, size: 24),
                   child: icon!,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: USpaceSpacing.spacer8),
               ],
               Text(
                 label,
@@ -324,7 +324,7 @@ class _GlassCircle extends StatelessWidget {
             sigmaY: isLG ? USpaceGlass.blurSigma : USpaceGlass.blurSigma,
           ),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(USpaceSpacing.spacer8),
             decoration: BoxDecoration(
               // extraOverlay: 雙層疊加效果（fillColor 疊在 bar 的 fillColor 上）
               color: extraOverlay
@@ -419,7 +419,7 @@ class _USpaceFloatingButtonBarState extends State<USpaceFloatingButtonBar> {
             mainAxisSize: MainAxisSize.min,
             children: [
               for (var i = 0; i < widget.icons.length; i++) ...[
-                if (i > 0) const SizedBox(height: 2),
+                if (i > 0) const SizedBox(height: USpaceSpacing.spacer2),
                 _FloatingBarItem(
                   icon: widget.icons[i],
                   isActive: i == _activeIndex,
@@ -453,7 +453,7 @@ class _FloatingBarItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(USpaceSpacing.spacer8),
         decoration: BoxDecoration(
           color: isActive ? USpaceGlass.fillColor : Colors.transparent,
           borderRadius: BorderRadius.circular(USpaceRadius.full),
@@ -515,7 +515,7 @@ class USpaceScaleDownOrderButton extends StatelessWidget {
         width: isSingle ? 140.0 : null,
         padding: EdgeInsets.symmetric(
           vertical: 6,
-          horizontal: isSingle ? 16 : 24,
+          horizontal: isSingle ? USpaceSpacing.spacer16 : USpaceSpacing.spacer24,
         ),
         decoration: BoxDecoration(
           color: colors.projectUspaceBlack,
@@ -525,7 +525,7 @@ class USpaceScaleDownOrderButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(width: 28, height: 28, child: icon),
-            const SizedBox(width: 8),
+            const SizedBox(width: USpaceSpacing.spacer8),
             if (isSingle)
               Text(
                 time,
@@ -540,7 +540,7 @@ class USpaceScaleDownOrderButton extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: USpaceSpacing.spacer8),
               Text(
                 '$count',
                 style: typo.bodyL.copyWith(color: colors.textInverse),

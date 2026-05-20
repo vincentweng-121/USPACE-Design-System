@@ -3,6 +3,7 @@ import 'uspace_colors_extension.dart';
 import 'uspace_palette.dart';
 import 'typography_extension.dart';
 import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ── Chip Level ─────────────────────────────────────────────
 enum USpaceChipLevel {
@@ -110,7 +111,7 @@ class USpaceChip extends StatelessWidget {
               ),
               child: leadingIcon!,
             ),
-            const SizedBox(width: 2),
+            const SizedBox(width: USpaceSpacing.spacer2),
           ],
           level == USpaceChipLevel.outline
               ? _buildGradientText(typo)
@@ -125,12 +126,12 @@ class USpaceChip extends StatelessWidget {
     switch (size) {
       case USpaceChipSize.regular:
         return hasIcon
-            ? const EdgeInsets.only(left: 8, right: 12, top: 1, bottom: 1)
-            : const EdgeInsets.symmetric(horizontal: 12, vertical: 1);
+            ? const EdgeInsets.only(left: USpaceSpacing.spacer8, right: USpaceSpacing.spacer12, top: 1, bottom: 1)
+            : const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer12, vertical: 1);
       case USpaceChipSize.small:
         return hasIcon
-            ? const EdgeInsets.only(left: 6, right: 8, top: 1, bottom: 1)
-            : const EdgeInsets.symmetric(horizontal: 8, vertical: 1);
+            ? const EdgeInsets.only(left: 6, right: USpaceSpacing.spacer8, top: 1, bottom: 1)
+            : const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer8, vertical: 1);
     }
   }
 

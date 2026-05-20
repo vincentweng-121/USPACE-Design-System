@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'radius_extension.dart';
+import 'spacing_extension.dart';
 
 // ── Tab Type ──────────────────────────────────────────────────
 enum USpaceTabType {
@@ -111,7 +112,7 @@ class USpaceTab extends StatelessWidget {
 
     return Container(
       height: 38,
-      padding: const EdgeInsets.only(left: 12, right: 16),
+      padding: const EdgeInsets.only(left: USpaceSpacing.spacer12, right: USpaceSpacing.spacer16),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(32),
@@ -124,7 +125,7 @@ class USpaceTab extends StatelessWidget {
               data: IconThemeData(color: textColor, size: 20),
               child: icon!,
             ),
-          const SizedBox(width: 4),
+          const SizedBox(width: USpaceSpacing.spacer4),
           Text(
             label,
             style: typo.labelM.copyWith(color: textColor),
@@ -141,7 +142,7 @@ class USpaceTab extends StatelessWidget {
 
     return Container(
       height: 38,
-      padding: const EdgeInsets.only(left: 8, right: 16),
+      padding: const EdgeInsets.only(left: USpaceSpacing.spacer8, right: USpaceSpacing.spacer16),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(32),
@@ -171,7 +172,7 @@ class USpaceTab extends StatelessWidget {
 
     return Container(
       height: 38,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer16),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(32),
@@ -192,7 +193,7 @@ class USpaceTab extends StatelessWidget {
 
     return Container(
       height: 32,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer12),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(USpaceRadius.full),
@@ -214,7 +215,7 @@ class USpaceTab extends StatelessWidget {
   // ── Input: label + close, rounded=1000, outline ──
   Widget _buildInput(USpaceColorsExtension colors, dynamic typo) {
     return Container(
-      padding: const EdgeInsets.only(left: 12, right: 8, top: 8, bottom: 8),
+      padding: const EdgeInsets.only(left: USpaceSpacing.spacer12, right: USpaceSpacing.spacer8, top: USpaceSpacing.spacer8, bottom: USpaceSpacing.spacer8),
       decoration: BoxDecoration(
         color: colors.actionOutlineBg,
         borderRadius: BorderRadius.circular(USpaceRadius.full),
@@ -232,7 +233,7 @@ class USpaceTab extends StatelessWidget {
               maxLines: 1,
             ),
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: USpaceSpacing.spacer4),
           GestureDetector(
             onTap: onClose,
             child: Icon(

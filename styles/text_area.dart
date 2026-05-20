@@ -162,7 +162,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
         // ── Label ──
         if (widget.showLabel && widget.label != null) ...[
           Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.only(left: USpaceSpacing.spacer8),
             child: Text(
               widget.label!,
               style: typo.labelS.copyWith(
@@ -172,7 +172,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: USpaceSpacing.spacer4),
         ],
 
         // ── Input Container ──
@@ -188,7 +188,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
                   )
                 : null,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.margin, vertical: USpaceSpacing.spacer16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -221,7 +221,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
 
               // ── Delete icon ──
               if (_showDeleteIcon) ...[
-                const SizedBox(width: 8),
+                const SizedBox(width: USpaceSpacing.spacer8),
                 GestureDetector(
                   onTap: _isDisabled ? null : () => _controller.clear(),
                   child: Icon(
@@ -237,7 +237,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
 
         // ── Hint ──
         if (widget.showHint && widget.hint != null) ...[
-          const SizedBox(height: 4),
+          const SizedBox(height: USpaceSpacing.spacer4),
           Row(
             children: [
               if (_isError || _isIncomplete) ...[
@@ -246,7 +246,7 @@ class _USpaceTextAreaState extends State<USpaceTextArea> {
                   size: 12,
                   color: colors.inputTextError,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: USpaceSpacing.spacer4),
               ],
               Flexible(
                 child: Text(

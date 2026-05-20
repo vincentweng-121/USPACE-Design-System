@@ -158,7 +158,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
             widget.label!,
             style: typo.bodyS.copyWith(color: colors.inputText),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: USpaceSpacing.spacer4),
         ],
 
         // ── Input Container ──
@@ -176,7 +176,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
           ),
           child: Row(
             children: [
-              const SizedBox(width: 20),
+              const SizedBox(width: USpaceSpacing.margin),
 
               // ── Input ──
               Expanded(
@@ -208,7 +208,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
                   size: 20,
                   color: colors.contentError,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: USpaceSpacing.spacer8),
               ],
 
               if (widget.status == USpaceTextFieldStatus.complete ||
@@ -221,7 +221,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
                     color: colors.contentSecondary,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: USpaceSpacing.spacer8),
               ],
 
               if (widget.showButton) ...[
@@ -231,9 +231,9 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
                   size: USpaceButtonSize.small,
                   onPressed: _isDisabled ? null : widget.onButtonPressed,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: USpaceSpacing.spacer4),
               ] else ...[
-                const SizedBox(width: 20),
+                const SizedBox(width: USpaceSpacing.margin),
               ],
             ],
           ),
@@ -241,7 +241,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
 
         // ── Hint ──
         if (widget.hint != null) ...[
-          const SizedBox(height: 4),
+          const SizedBox(height: USpaceSpacing.spacer4),
           Text(
             widget.hint!,
             style: typo.sfBodyS.copyWith(color: _hintColor(colors)),

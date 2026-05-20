@@ -27,7 +27,7 @@ class USpaceListHeading extends StatelessWidget {
     final typo   = context.typography;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 32, bottom: 8),
+      padding: const EdgeInsets.only(top: USpaceSpacing.spacer32, bottom: USpaceSpacing.spacer8),
       child: Row(
         children: [
           Expanded(
@@ -104,11 +104,11 @@ class USpaceListItem extends StatelessWidget {
       children: [
         Text(title, style: typo.bodyL.copyWith(color: colors.textPrimary)),
         if (subtitle != null) ...[
-          const SizedBox(height: 4),
+          const SizedBox(height: USpaceSpacing.spacer4),
           Text(subtitle!, style: typo.bodyS.copyWith(color: colors.textSecondary)),
         ],
         for (final hint in hints) ...[
-          const SizedBox(height: 4),
+          const SizedBox(height: USpaceSpacing.spacer4),
           Text(hint, style: typo.captionS.copyWith(color: colors.textSecondary)),
         ],
       ],
@@ -142,14 +142,14 @@ class USpaceListItem extends StatelessWidget {
         children: [
           if (tagLabel != null) ...[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+              padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer12, vertical: 1),
               decoration: BoxDecoration(
                 color: colors.actionTertiaryBg,
                 borderRadius: BorderRadius.circular(USpaceRadius.full),
               ),
               child: Text(tagLabel!, style: typo.labelM.copyWith(color: colors.textPrimary)),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: USpaceSpacing.spacer8),
           ],
           GestureDetector(
             onTap: onSelectChanged != null ? () => onSelectChanged!(!isSelected) : null,
@@ -176,17 +176,17 @@ class USpaceListItem extends StatelessWidget {
         InkWell(
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 12),
+                  padding: const EdgeInsets.only(right: USpaceSpacing.spacer12),
                   child: leading,
                 ),
                 Expanded(child: _buildContent(colors, typo)),
                 if (trailing != USpaceListTrailing.none) ...[
-                  const SizedBox(width: 20),
+                  const SizedBox(width: USpaceSpacing.margin),
                   _buildTrailing(context, colors, typo),
                 ],
               ],

@@ -224,7 +224,7 @@ class _ModalBottomBar extends StatelessWidget {
             child: GestureDetector(
               onTap: onPressed,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer12),
                 decoration: BoxDecoration(
                   color: colors.actionPrimaryBg,
                   borderRadius: BorderRadius.circular(USpaceRadius.full), // Number/Full
@@ -241,7 +241,7 @@ class _ModalBottomBar extends StatelessWidget {
           ),
 
           // Home Indicator spacing
-          const SizedBox(height: 20),
+          const SizedBox(height: USpaceSpacing.margin),
         ],
       ),
     );
@@ -285,12 +285,12 @@ class USpaceModalListItem extends StatelessWidget {
           if (showTopDivider)
             Divider(height: 1, thickness: 1, color: colors.borderDivider),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer16),
             child: Row(
               children: [
                 if (leading != null) ...[
                   leading!,
-                  const SizedBox(width: 12),
+                  const SizedBox(width: USpaceSpacing.spacer12),
                 ],
                 Expanded(
                   child: Text(
@@ -299,7 +299,7 @@ class USpaceModalListItem extends StatelessWidget {
                   ),
                 ),
                 if (trailing != null) ...[
-                  const SizedBox(width: 20),
+                  const SizedBox(width: USpaceSpacing.margin),
                   trailing!,
                 ],
               ],
@@ -349,7 +349,7 @@ class USpaceModalImageSection extends StatelessWidget {
 
         // Notice text
         if (showNotice && noticeText != null) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: USpaceSpacing.spacer8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -358,7 +358,7 @@ class USpaceModalImageSection extends StatelessWidget {
                 size: 16,
                 color: colors.contentSecondary,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: USpaceSpacing.spacer8),
               Expanded(
                 child: Text(
                   noticeText!,
