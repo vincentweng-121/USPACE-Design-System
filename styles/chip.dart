@@ -96,6 +96,7 @@ class USpaceChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: level != USpaceChipLevel.outline ? _bgColor(colors) : null,
         borderRadius: BorderRadius.circular(USpaceRadius.full),
+        // Outline chip border 直接使用 palette（品牌漸層色，無對應 semantic token）
         border: level == USpaceChipLevel.outline
             ? Border.all(color: USpacePalette.neonLime200)
             : null,
@@ -121,6 +122,7 @@ class USpaceChip extends StatelessWidget {
     );
   }
 
+  // Figma 元件特定值：vertical 1px、small left 6px 無對應 spacing token
   EdgeInsets get _padding {
     final hasIcon = leadingIcon != null;
     switch (size) {
@@ -149,7 +151,7 @@ class USpaceChip extends StatelessWidget {
   }
 
   Color _iconColor(USpaceColorsExtension colors) {
-    // Icon 使用 content token
+    // Outline chip icon 直接使用 palette（品牌漸層色，無對應 semantic token）
     return level == USpaceChipLevel.outline
         ? USpacePalette.neonLime200
         : colors.contentPrimary;

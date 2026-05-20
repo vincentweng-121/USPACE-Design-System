@@ -1,5 +1,5 @@
 # Skill status
-> 最後更新：2026-05-19
+> 最後更新：2026-05-20
 
 ---
 
@@ -92,6 +92,7 @@
 | button.dart | v1.1.0 | ✅ PUBLISHED | 2026-04-15 | 基本 USpaceButton（accent/charging/primary/secondary/customized） |
 | button.dart（Small size） | v1.2.0 | ✅ PUBLISHED | 2026-04-16 | USpaceButtonSize enum；small padding/hug content |
 | button.dart（Square / Floating） | v1.0.0 | ✅ PUBLISHED | 2026-04-16 | USpaceFloatingButton + USpaceFloatingButtonBar |
+| button.dart（寫死值註解） | v1.2.1 | ✅ PUBLISHED | 2026-05-20 | ScaleDownOrder vertical:6 / dot 6×6 / GlassCircle overlay 色值加註解 |
 
 #### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
@@ -134,7 +135,7 @@
 #### 已完成
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| header.dart | v1.0.1 | ✅ PUBLISHED | 2026-04-17 | 同步更新 transparentGrey80015 引用 |
+| header.dart | v2.0.0 | ✅ PUBLISHED | 2026-05-20 | ⚠️ BREAKING：Figma 全量同步；token 修正（GrabBar/LeftTitle/Modal）；新增 Scrolling/Breadcrumb/RightFunction |
 
 #### 待處理
 （尚無）
@@ -194,7 +195,7 @@
 #### 已完成
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| tab.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | 5 types × 2 states, Figma node 972:7985 |
+| tab.dart | v1.0.1 | ✅ PUBLISHED | 2026-05-20 | 修正 BorderRadius.circular(32) → USpaceRadius.full (1000) |
 
 #### 待處理
 （尚無）
@@ -206,7 +207,7 @@
 #### 已完成
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| chip.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | 4 levels × 2 sizes, Figma node 1327:19329 |
+| chip.dart | v1.0.1 | ✅ PUBLISHED | 2026-05-20 | 寫死值加註解（vertical:1 / left:6 / outline palette 引用） |
 
 #### 待處理
 （尚無）
@@ -242,7 +243,7 @@
 #### 已完成
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| modal.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | 4 categories (List/TextArea/Image/Null), glass effect, Figma node 2237:3211 |
+| modal.dart | v1.0.1 | ✅ PUBLISHED | 2026-05-20 | 修正 blur 寫死 15 → USpaceGlass.blurSigma (10.0) |
 
 #### 待處理
 （尚無）
@@ -274,6 +275,18 @@
 ---
 
 ## 版本紀錄
+### v2.1.0 | 2026-05-20
+- header.dart v2.0.0：⚠️ BREAKING CHANGE — Figma 全量同步（node 1395:8937 / 964:9246 / 961:9111）
+  - Token 修正：GrabBar contentTertiary → borderDivider；LeftTitle headingM → displayM；ProfileTitle w700 → w600；Modal title headingM → displayM；Modal paragraph bodyM → bodyS
+  - FloatingPage 圓角：寫死 24 → `_modalRadius` 常量（Figma --modal-radius）
+  - 新增 USpaceHeaderStatus enum（defaultStatus / scrolling）
+  - 新增 USpaceHeaderRightFunction enum（icon24 / icon32 / textButton）
+  - 新增：showGrabBar / showBreadcrumb / showParkingTitle / showRightInfo
+- tab.dart v1.0.1：BorderRadius.circular(32) → USpaceRadius.full (1000)
+- modal.dart v1.0.1：blur 寫死 15 → USpaceGlass.blurSigma (10.0)
+- button.dart v1.2.1：寫死值加註解（ScaleDownOrder vertical:6 / dot 6×6 / GlassCircle overlay 色值）
+- chip.dart v1.0.1：寫死值加註解（vertical:1 / left:6 / outline palette 引用）
+
 ### v2.0.0 | 2026-05-12
 - uspace_palette.dart v1.1.0：neonLime800/grey100 hex 修正；新增 red300 + 7 透明度色票
 - uspace_colors_extension.dart v2.0.0：⚠️ BREAKING CHANGE

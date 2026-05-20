@@ -115,7 +115,7 @@ class USpaceTab extends StatelessWidget {
       padding: const EdgeInsets.only(left: USpaceSpacing.spacer12, right: USpaceSpacing.spacer16),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(USpaceRadius.full),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -145,7 +145,7 @@ class USpaceTab extends StatelessWidget {
       padding: const EdgeInsets.only(left: USpaceSpacing.spacer8, right: USpaceSpacing.spacer16),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(USpaceRadius.full),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -175,7 +175,7 @@ class USpaceTab extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer16),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(USpaceRadius.full),
       ),
       alignment: Alignment.center,
       child: Text(

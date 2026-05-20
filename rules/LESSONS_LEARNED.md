@@ -3,9 +3,7 @@
 
 ## 不可違反的規則
 - **Sidebar 子項目規則**：Component 頁面若包含多種分類（例如 List Menu / Order History / Payment），**必須**拆成獨立子頁面，在 sidebar 以 `_ExpandableSubGroup` 呈現子項（同 Button 的做法）。路由 ID 格式：`<component>-<variant>`（例如 `list-menu`、`list-order`）。**禁止**將多種分類塞進同一頁。
-- 每次在 `figma-skill-loop/styles/` 新增 `.dart` 檔案，必須同步在 `uspace_preview/lib/` 建立對應 symlink：
-  `ln -s /Users/macpro-121/Desktop/figma-skill-loop/styles/<filename>.dart ~/Desktop/uspace_preview/lib/<filename>.dart`
-  新增後立即執行 build 驗證，不得遺漏。
+- 所有 component / style 的 source of truth 為 `styles/` 目錄。
 - 所有 hex 值集中在 uspace_palette.dart，不在其他檔案直接寫 hex
 - 唯一例外：帶透明度的色票用具名常量，例如 transparentBlack50 = Color(0x80000000)
 - 發現 Figma 有新色票時，列出來通知使用者，不自行新增到 palette

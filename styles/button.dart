@@ -327,8 +327,9 @@ class _GlassCircle extends StatelessWidget {
             padding: const EdgeInsets.all(USpaceSpacing.spacer8),
             decoration: BoxDecoration(
               // extraOverlay: 雙層疊加效果（fillColor 疊在 bar 的 fillColor 上）
+              // 0x55FFFFFF ≈ rgba(255,255,255,0.33)，為 fillColor 雙層疊加近似值，無獨立 palette token
               color: extraOverlay
-                  ? const Color(0x55FFFFFF) // ~rgba(255,255,255,0.33) 近似雙層
+                  ? const Color(0x55FFFFFF)
                   : USpaceGlass.fillColor,
               borderRadius: BorderRadius.circular(USpaceRadius.full),
             ),
@@ -514,7 +515,7 @@ class USpaceScaleDownOrderButton extends StatelessWidget {
       child: Container(
         width: isSingle ? 140.0 : null,
         padding: EdgeInsets.symmetric(
-          vertical: 6,
+          vertical: 6, // Figma 元件特定值，無對應 spacing token（介於 spacer4 與 spacer8 之間）
           horizontal: isSingle ? USpaceSpacing.spacer16 : USpaceSpacing.spacer24,
         ),
         decoration: BoxDecoration(
@@ -533,7 +534,7 @@ class USpaceScaleDownOrderButton extends StatelessWidget {
               )
             else ...[
               Container(
-                width: 6,
+                width: 6, // Figma dot indicator 固定尺寸，非 spacing token
                 height: 6,
                 decoration: BoxDecoration(
                   color: colors.textInverse,

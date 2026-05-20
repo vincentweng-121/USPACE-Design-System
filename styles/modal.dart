@@ -4,6 +4,7 @@ import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'spacing_extension.dart';
+import 'glass_extension.dart';
 import 'radius_extension.dart';
 
 // ── Modal Category ──────────────────────────────────────────
@@ -75,7 +76,7 @@ class USpaceModal extends StatelessWidget {
         top: Radius.circular(USpaceRadius.medium), // Number/20
       ),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        filter: ImageFilter.blur(sigmaX: USpaceGlass.blurSigma, sigmaY: USpaceGlass.blurSigma),
         child: Container(
           decoration: BoxDecoration(
             color: colors.pagePopup,

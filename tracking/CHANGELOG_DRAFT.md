@@ -6,6 +6,70 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
+### 2026-05-20 | header.dart | Figma 全量同步 + Token 修正
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+變更：
+
+#### Token 修正
+- GrabBar 顏色：contentTertiary → borderDivider（Figma --border/divider）
+- LeftSection title 字體：headingM (22px Regular) → displayM (18px Medium)（Figma Display/L）
+- ProfileTitle fontWeight：w700 → w600（Figma PingFang TC:Semibold）
+- Modal title 字體：headingM (22px) → displayM (18px Medium)（Figma Display/L）
+- Modal paragraph 字體：bodyM (16px) → bodyS (14px)（Figma 14px/20px）
+- FloatingPage 圓角：寫死 Radius.circular(24) → _modalRadius 常量（Figma --modal-radius = 24px）
+
+#### 新增功能
+- USpaceHeaderStatus enum（defaultStatus / scrolling）— FloatingPage 滾動時 title 移入 ActionBar
+- USpaceHeaderRightFunction enum（icon24 / icon32 / textButton）— 3 種 RightSection 樣式
+- showGrabBar — 控制 FloatingPage GrabBar 顯示
+- showBreadcrumb + firstDrawer / secondDrawer — FullPage Breadcrumb
+- showParkingTitle + parkingTitle — FloatingPage 標題上方 displayM 文字
+- showRightInfo — RightSection Info icon（icon24 模式）
+- LeftSection title / profileTitle 加 maxWidth=310（對齊 Figma）
+- ProfileTitle 加 pl=2（對齊 Figma）
+
+來源：Figma MCP，node 1395:8937 / 964:9246 / 961:9111
+
+---
+
+### 2026-05-20 | button.dart | 寫死值加註解
+狀態：PUBLISHED
+變更：
+- ScaleDownOrderButton vertical:6 — 加註解說明 Figma 元件特定值，無對應 spacing token
+- ScaleDownOrderButton dot 6×6 — 加註解說明 Figma dot indicator 固定尺寸
+- _GlassCircle extraOverlay Color(0x55FFFFFF) — 加註解說明 fillColor 雙層疊加近似值，無獨立 palette token
+來源：Token audit
+
+---
+
+### 2026-05-20 | chip.dart | 寫死值加註解
+狀態：PUBLISHED
+變更：
+- _padding vertical:1 / small left:6 — 加註解說明 Figma 元件特定值，無對應 spacing token
+- outline border USpacePalette.neonLime200 — 加註解說明品牌漸層色，無對應 semantic token
+- outline icon USpacePalette.neonLime200 — 同上
+來源：Token audit
+
+---
+
+### 2026-05-20 | tab.dart | Radius token 修正
+狀態：PUBLISHED
+變更：
+- Tab / TabIcon / TabGraphic 3 處 BorderRadius.circular(32) → BorderRadius.circular(USpaceRadius.full)
+來源：Token audit
+
+---
+
+### 2026-05-20 | modal.dart | Glass blur token 修正
+狀態：PUBLISHED
+變更：
+- BackdropFilter blur 寫死 sigmaX/Y: 15 → USpaceGlass.blurSigma (10.0)
+- 補上 glass_extension.dart import
+來源：Token audit
+
+---
+
 ### 2026-05-12 | uspace_palette.dart | Figma Variables 同步
 狀態：DRAFT
 變更：
