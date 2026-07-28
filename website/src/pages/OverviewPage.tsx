@@ -1,121 +1,215 @@
 import { Link } from 'react-router-dom';
+import { semanticGroups, paletteGroups } from '../tokens/colors';
+import { typographyStyles } from '../tokens/typography';
 
-const sections = [
+// 數字由 token 資料算出，新增 token 時自動更新
+const semanticCount = semanticGroups.reduce((n, g) => n + g.tokens.length, 0);
+const paletteCount = paletteGroups.reduce((n, g) => n + g.colors.length, 0);
+const typeCount = typographyStyles.reduce((n, f) => n + f.styles.length, 0);
+
+const benefits = [
   {
-    title: 'Foundations',
-    desc: '設計基礎原語：色票、字體、材質效果等核心定義',
-    items: [
-      { to: '/foundations/color', label: 'Color', ready: true },
-      { to: '/foundations/typography', label: 'Typography', ready: true },
-      { to: '/foundations/glass', label: 'Glass', ready: true },
-      { to: '/foundations/spacing', label: 'Spacing & Radius', ready: true },
-      { to: '/foundations/elevation', label: 'Elevation', ready: false },
-    ],
-    accent: '#C3F400',
+    title: '單一真實來源',
+    desc: '色票、字級、間距只存在 tokens/*.json 一處，Flutter 端與本站由同一份產生，不會各自漂移。',
   },
   {
-    title: 'Components',
-    desc: '可複用的 UI 元件，包含互動規格與使用指引',
-    items: [
-      { to: '/components/button', label: 'Button', ready: true },
-      { to: '/components/toggle', label: 'Toggle', ready: true },
-      { to: '/components/header', label: 'Header', ready: true },
-      { to: '/components/list', label: 'List', ready: true },
-      { to: '/components/text-field', label: 'Text Field', ready: true },
-      { to: '/components/dropdown-menu', label: 'Dropdown Menu', ready: true },
-      { to: '/components/tab', label: 'Tab', ready: true },
-      { to: '/components/chip', label: 'Chip', ready: true },
-      { to: '/components/text-area', label: 'Text Area', ready: true },
-      { to: '/components/modal', label: 'Modal', ready: true },
-    ],
-    accent: '#00F158',
+    title: '設計與工程並列',
+    desc: '每個元件都有 Design 與 Develop 兩個視角：設計規格、用法準則、程式碼範例與 API 在同一頁。',
   },
   {
-    title: 'Resources',
-    desc: '版本紀錄、開發進度追蹤',
-    items: [
-      { to: '/resources/changelog', label: 'Changelog', ready: true },
-      { to: '/resources/status', label: 'Status', ready: true },
-    ],
-    accent: '#A1BDE5',
+    title: '機器把關',
+    desc: '元件實際套用的 token 由 Flutter 測試逐項驗證，寫死色碼或跳過 token 會在 CI 被擋下。',
+  },
+  {
+    title: '亮色與暗色',
+    desc: '所有語意色都定義了兩套值，元件透過主題自動切換，不需在呼叫端判斷。',
   },
 ];
 
 export default function OverviewPage() {
   return (
-    <div>
-      {/* Hero */}
-      <div style={{ marginBottom: 56 }}>
-        <h1 style={{
-          fontSize: 'clamp(36px, 6vw, 52px)', fontWeight: 700, letterSpacing: 2,
-          background: 'linear-gradient(135deg, #C3F400 0%, #00F158 50%, #00EEB7 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          marginBottom: 12, lineHeight: 1.1,
-        }}>
-          USPACE<br />Design System
-        </h1>
-        <p style={{ fontSize: 16, color: 'var(--text-secondary)', fontWeight: 400, marginTop: 16, lineHeight: 1.7, maxWidth: 520 }}>
-          USPACE 的設計語言文件。定義色票、字體、元件規格與互動準則，
-          協助工程師與設計師建構一致的產品體驗。
-        </p>
-      </div>
+    <>
+      {/* ── 首屏：滿版影片 + 標題／副標題 ── */}
+      <HeroVideo />
 
-      {/* Quick Stats */}
-      <div style={{
-        display: 'flex', gap: 12, marginBottom: 56, flexWrap: 'wrap',
-      }}>
-        {[
-          { label: 'Color Tokens', value: '60+', color: '#C3F400' },
-          { label: 'Typography Styles', value: '24', color: '#00F158' },
-          { label: 'Components', value: '9', color: '#00EEB7' },
-        ].map(s => (
-          <div key={s.label} style={{
-            padding: '16px 24px', borderRadius: 12,
-            background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-            flex: '1 1 140px', minWidth: 140,
-          }}>
-            <div style={{ fontSize: 24, fontWeight: 600, color: s.color }}>{s.value}</div>
-            <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 4 }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Sections */}
-      {sections.map(section => (
-        <div key={section.title} style={{ marginBottom: 56 }}>
-          <div style={{ marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 500, color: 'var(--text-primary)', marginBottom: 4 }}>
-              {section.title}
-            </h2>
-            <p style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>{section.desc}</p>
-          </div>
-          <div style={{
+      {/* ── 首屏以下 ── */}
+      <div className="home-body">
+      {/* ── Stats ── */}
+      <section className="section">
+        <div
+          style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-            gap: 10,
-          }}>
-            {section.items.map(item => (
-              <Link key={item.to} to={item.to} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '12px 16px', borderRadius: 10,
-                background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-                fontSize: 13,
-                color: item.ready ? 'var(--text-primary)' : 'var(--text-tertiary)',
-                opacity: item.ready ? 1 : 0.5,
-                transition: 'border-color 0.12s',
-              }}
-              onMouseEnter={e => item.ready && (e.currentTarget.style.borderColor = section.accent)}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border-divider)')}
-              >
-                {item.label}
-                {!item.ready && (
-                  <span style={{ fontSize: 9, color: 'var(--text-tertiary)' }}>SOON</span>
-                )}
-              </Link>
-            ))}
-          </div>
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            gap: 1,
+            background: 'var(--border-divider)',
+            border: '1px solid var(--border-divider)',
+            borderRadius: 10,
+            overflow: 'hidden',
+          }}
+        >
+          <Stat value={paletteCount} label="基底色票" />
+          <Stat value={semanticCount} label="語意色 token" />
+          <Stat value={typeCount} label="字體樣式" />
+          <Stat value={10} label="元件" />
         </div>
-      ))}
+      </section>
+
+      {/* ── Benefits ── */}
+      <section className="section">
+        <h2 className="heading-lg" style={{ marginBottom: 24 }}>
+          這套系統做到的事
+        </h2>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: 12,
+          }}
+        >
+          {benefits.map((b) => (
+            <div
+              key={b.title}
+              style={{
+                padding: '20px 22px',
+                border: '1px solid var(--border-divider)',
+                borderRadius: 10,
+              }}
+            >
+              <div className="heading-sm" style={{ marginBottom: 8 }}>
+                {b.title}
+              </div>
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                {b.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Quick links ── */}
+      <section className="section">
+        <h2 className="heading-lg" style={{ marginBottom: 24 }}>
+          快速前往
+        </h2>
+        <div style={{ display: 'grid', gap: 1, background: 'var(--border-divider)', border: '1px solid var(--border-divider)', borderRadius: 10, overflow: 'hidden' }}>
+          <Row to="/styles/color" title="Color" desc={`${paletteCount} 個基底色票、${semanticCount} 個語意 token`} />
+          <Row to="/styles/typography" title="Typography" desc="PingFang TC 與 SF Pro 共兩套字體樣式" />
+          <Row to="/components/button" title="Components" desc="10 個已完成元件，含用法準則與 API" />
+          <Row to="/developing/tokens" title="Token Pipeline" desc="token 怎麼從 JSON 產生到程式碼" />
+          <Row to="/help/changelog" title="Changelog" desc="版本變更紀錄" />
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="section">
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Cta to="/designing" primary>
+            開始設計
+          </Cta>
+          <Cta to="/developing">開始開發</Cta>
+        </div>
+      </section>
+      </div>
+    </>
+  );
+}
+
+/**
+ * 首屏：影片鋪滿整個視窗，標題與副標題壓在上面。
+ *
+ * 影片自動播放、無限循環、無聲、無控制項。
+ * muted 與 playsInline 是瀏覽器允許自動播放的必要條件，
+ * 缺任一個 Safari 與 iOS 都會擋下。
+ */
+function HeroVideo() {
+  return (
+    <section className="hero-full">
+      <video
+        src={`${import.meta.env.BASE_URL}hero-loop.mp4`}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden
+      />
+
+      <div className="hero-copy">
+        <h1 className="hero-title">USPACE Design System</h1>
+        <p className="hero-sub">
+          USPACE 產品的設計語言。定義色票、字體、元件規格與互動準則，
+          讓設計師與工程師在同一份規格上工作。
+        </p>
+        <div className="hero-scroll-hint">
+          <span>向下捲動</span>
+          <span aria-hidden>↓</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Cta({ to, children, primary }: { to: string; children: React.ReactNode; primary?: boolean }) {
+  return (
+    <Link
+      to={to}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        height: 44,
+        padding: '0 22px',
+        borderRadius: 100,
+        fontSize: 15,
+        fontWeight: 600,
+        border: '1px solid var(--text-primary)',
+        background: primary ? 'var(--text-primary)' : 'transparent',
+        color: primary ? 'var(--page-primary)' : 'var(--text-primary)',
+        transition: 'opacity 0.12s',
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.82')}
+      onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function Stat({ value, label }: { value: number; label: string }) {
+  return (
+    <div style={{ padding: '22px 20px', background: 'var(--page-primary)' }}>
+      <div style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.05 }}>{value}</div>
+      <div className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: 6 }}>
+        {label}
+      </div>
     </div>
+  );
+}
+
+function Row({ to, title, desc }: { to: string; title: string; desc: string }) {
+  return (
+    <Link
+      to={to}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 16,
+        padding: '16px 20px',
+        background: 'var(--page-primary)',
+        transition: 'background 0.12s',
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--page-secondary)')}
+      onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--page-primary)')}
+    >
+      <div>
+        <div className="heading-sm">{title}</div>
+        <div className="text-sm" style={{ color: 'var(--text-secondary)', marginTop: 2 }}>
+          {desc}
+        </div>
+      </div>
+      <span aria-hidden style={{ color: 'var(--text-tertiary)', fontSize: 18 }}>
+        →
+      </span>
+    </Link>
   );
 }

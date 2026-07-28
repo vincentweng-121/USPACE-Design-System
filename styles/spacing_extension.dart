@@ -1,3 +1,7 @@
+// ⚠️ GENERATED FILE — 請勿手動編輯
+// 來源：tokens/scalars.json
+// 重新產生：npm run gen:tokens
+
 /// USPACE Design System Spacing Tokens
 ///
 /// 來源：Figma Variables — Mode 1.tokens.json
@@ -7,11 +11,10 @@
 class USpaceSpacing {
   USpaceSpacing._();
 
-  // ─── Margin ──────────────────────────────────────────────
+  // ─── Spacing ───────────────────────────────────
   /// 頁面左右邊距（Figma scope: GAP）
   static const double margin = 20;
 
-  // ─── Spacer ──────────────────────────────────────────────
   /// 2pt 間距
   static const double spacer2 = 2;
 

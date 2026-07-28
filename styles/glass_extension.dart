@@ -1,3 +1,7 @@
+// ⚠️ GENERATED FILE — 請勿手動編輯
+// 來源：tokens/scalars.json
+// 重新產生：npm run gen:tokens
+
 import 'package:flutter/material.dart';
 
 /// USpace Glass Effect Constants
@@ -11,11 +15,10 @@ import 'package:flutter/material.dart';
 class USpaceGlass {
   USpaceGlass._();
 
-  /// Glass 半透明填色
+  // ─── Glass ─────────────────────────────────────
   /// 來源：Figma rgba(255,255,255,0.2) → 0x33FFFFFF
   static const Color fillColor = Color(0x33FFFFFF);
 
-  /// 高斯模糊半徑（sigmaX & sigmaY 相同）
   /// ⚠️ TODO: 使用者待確認正確數值，目前暫定 10.0
   static const double blurSigma = 10.0;
 }

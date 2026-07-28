@@ -1,0 +1,24 @@
+{
+  "$comment": "USpaceToggle 的 value × enabled → token 對應表。",
+  "$drives": [
+    "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
+    "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
+  ],
+  "$rule": "改動元件的 token 對應時，必須同時更新這裡，否則測試會失敗。",
+  "component": "USpaceToggle",
+  "source": "styles/toggle.dart",
+  "dimensions": {
+    "value": ["on", "off"],
+    "enabled": ["enabled", "disabled"]
+  },
+  "layout": {
+    "track": { "width": 64, "height": 24 },
+    "thumb": { "width": 34, "height": 20 }
+  },
+  "variants": [
+    { "value": "on", "enabled": "enabled", "track": "actionPrimaryContentAccent", "thumb": "contentInverse", "opacity": 1.0 },
+    { "value": "on", "enabled": "disabled", "track": "actionPrimaryContentAccent", "thumb": "contentInverse", "opacity": 0.25, "note": "色彩同 enabled，以 Opacity 表示不可操作" },
+    { "value": "off", "enabled": "enabled", "track": "actionPrimaryContent", "thumb": "contentInverse", "opacity": 1.0 },
+    { "value": "off", "enabled": "disabled", "track": "actionDisabledBg", "thumb": "contentInverse", "opacity": 1.0, "note": "改換 track 色而非降透明度，以區別於 OFF+Enable" }
+  ]
+}

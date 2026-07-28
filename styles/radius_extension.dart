@@ -1,3 +1,7 @@
+// ⚠️ GENERATED FILE — 請勿手動編輯
+// 來源：tokens/scalars.json
+// 重新產生：npm run gen:tokens
+
 /// USPACE Design System Corner Radius Tokens
 ///
 /// 來源：Figma Variables — Mode 1.tokens.json (Number group)
@@ -6,7 +10,7 @@
 class USpaceRadius {
   USpaceRadius._();
 
-  // ─── Corner Radius ───────────────────────────────────────
+  // ─── Corner Radius ─────────────────────────────
   /// Small: 8px（小圓角，如 card 內元素）
   static const double small = 8;
 

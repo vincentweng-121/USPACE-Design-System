@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'spacing_extension.dart';
+import 'elevation_extension.dart';
 import 'glass_extension.dart';
 import 'radius_extension.dart';
 
@@ -83,10 +83,10 @@ class USpaceModal extends StatelessWidget {
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(USpaceRadius.medium),
             ),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Color(0x1A000000), // rgba(0,0,0,0.1)
-                blurRadius: 30,
+                color: colors.shadowDefault,
+                blurRadius: USpaceElevation.shadowBlur,
               ),
             ],
           ),

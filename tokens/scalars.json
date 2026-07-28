@@ -1,0 +1,29 @@
+{
+  "$comment": "USPACE scalar tokens — spacing / radius / glass",
+  "spacing": {
+    "margin": { "value": "20", "doc": "頁面左右邊距（Figma scope: GAP）" },
+    "spacer2": { "value": "2", "doc": "2pt 間距" },
+    "spacer4": { "value": "4", "doc": "4pt 間距" },
+    "spacer8": { "value": "8", "doc": "8pt 間距" },
+    "spacer12": { "value": "12", "doc": "12pt 間距" },
+    "spacer16": { "value": "16", "doc": "16pt 間距" },
+    "spacer20": { "value": "20", "doc": "20pt 間距" },
+    "spacer24": { "value": "24", "doc": "24pt 間距" },
+    "spacer32": { "value": "32", "doc": "32pt 間距" },
+    "spacer40": { "value": "40", "doc": "40pt 間距" },
+    "spacer48": { "value": "48", "doc": "48pt 間距" },
+    "spacer56": { "value": "56", "doc": "56pt 間距" }
+  },
+  "radius": {
+    "small": { "value": "8", "doc": "Small: 8px（小圓角，如 card 內元素）" },
+    "medium": { "value": "20", "doc": "Medium: 20px（中圓角，如 dropdown panel、popup）" },
+    "full": { "value": "1000", "doc": "Full: 1000px（完全圓角，如 button、chip、input）" }
+  },
+  "glass": {
+    "fillColor": { "value": "Color(0x33FFFFFF)", "doc": "來源：Figma rgba(255,255,255,0.2) → 0x33FFFFFF" },
+    "blurSigma": { "value": "10.0", "doc": "⚠️ TODO: 使用者待確認正確數值，目前暫定 10.0" }
+  },
+  "elevation": {
+    "shadowBlur": { "value": "30", "doc": "Modal / popup 陰影模糊半徑" }
+  }
+}

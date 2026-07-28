@@ -1,0 +1,57 @@
+{
+  "$comment": "USPACE typography tokens — fontWeight 照 Figma JSON 數值，不得依語意推斷",
+  "weights": {
+    "regular": "FontWeight.w400",
+    "medium": "FontWeight.w500",
+    "semibold": "FontWeight.w600",
+    "bold": "FontWeight.bold"
+  },
+  "themeColors": {
+    "light": { "textColor": "grey800", "textSecondaryColor": "grey600" },
+    "dark": { "textColor": "white", "textSecondaryColor": "grey200" }
+  },
+  "styles": {
+    "headingL": { "family": "PingFangTC", "fontSize": 26, "weight": "regular", "lineHeight": 34, "note": "PageTitle" },
+    "headingM": { "family": "PingFangTC", "fontSize": 22, "weight": "regular", "lineHeight": 30, "note": "ModalTitle" },
+    "bodyL": { "family": "PingFangTC", "fontSize": 18, "weight": "regular", "lineHeight": 26, "note": "" },
+    "bodyM": { "family": "PingFangTC", "fontSize": 16, "weight": "regular", "lineHeight": 24, "note": "" },
+    "bodyS": { "family": "PingFangTC", "fontSize": 14, "weight": "regular", "lineHeight": 20, "note": "" },
+    "captionS": { "family": "PingFangTC", "fontSize": 12, "weight": "regular", "lineHeight": 16, "note": "" },
+    "displayM": { "family": "PingFangTC", "fontSize": 18, "weight": "medium", "lineHeight": 26, "note": "Medium weight" },
+    "displayS": { "family": "PingFangTC", "fontSize": 14, "weight": "medium", "lineHeight": 20, "note": "Medium weight" },
+    "labelL": { "family": "PingFangTC", "fontSize": 16, "weight": "regular", "lineHeight": 24, "note": "Button" },
+    "labelM": { "family": "PingFangTC", "fontSize": 14, "weight": "regular", "lineHeight": 20, "note": "文字按鈕" },
+    "labelS": { "family": "PingFangTC", "fontSize": 12, "weight": "regular", "lineHeight": 16, "note": "" },
+    "labelXs": { "family": "PingFangTC", "fontSize": 10, "weight": "regular", "lineHeight": 14, "note": "Tab" },
+    "sfHeadingL": { "family": "SF Pro", "fontSize": 26, "weight": "regular", "lineHeight": 34, "note": "PageTitle" },
+    "sfHeadingM": { "family": "SF Pro", "fontSize": 22, "weight": "regular", "lineHeight": 30, "note": "ModalTitle" },
+    "sfBodyL": { "family": "SF Pro", "fontSize": 18, "weight": "regular", "lineHeight": 26, "note": "" },
+    "sfBodyM": { "family": "SF Pro", "fontSize": 16, "weight": "regular", "lineHeight": 24, "note": "" },
+    "sfBodyS": { "family": "SF Pro", "fontSize": 14, "weight": "regular", "lineHeight": 20, "note": "" },
+    "sfCaptionS": {
+      "family": "SF Pro",
+      "fontSize": 14,
+      "weight": "regular",
+      "lineHeight": 16,
+      "note": "fontSize=14，與 PingFang 不同"
+    },
+    "sfDisplayM": {
+      "family": "SF Pro",
+      "fontSize": 20,
+      "weight": "medium",
+      "lineHeight": 26,
+      "note": "Medium weight；fontSize=20，與 PingFang 不同"
+    },
+    "sfDisplayS": { "family": "SF Pro", "fontSize": 14, "weight": "medium", "lineHeight": 20, "note": "Medium weight" },
+    "sfLabelL": { "family": "SF Pro", "fontSize": 16, "weight": "regular", "lineHeight": 24, "note": "Button" },
+    "sfLabelM": { "family": "SF Pro", "fontSize": 14, "weight": "regular", "lineHeight": 20, "note": "文字按鈕" },
+    "sfLabelS": { "family": "SF Pro", "fontSize": 12, "weight": "regular", "lineHeight": 16, "note": "" },
+    "sfLabelXs": { "family": "SF Pro", "fontSize": 10, "weight": "regular", "lineHeight": 14, "note": "Tab" }
+  },
+  "families": {
+    "PingFangTC": { "display": "PingFang TC", "order": 0 },
+    "SF Pro": { "display": "SF Pro", "order": 1 }
+  },
+  "$note": "note 欄位同時用於 Dart 行內註解與 website 顯示，避免兩邊描述不一致",
+  "$weights": "semibold(w600) 對應 Figma PingFang TC Semibold，供元件特定樣式使用，非 typography token 的一部分"
+}

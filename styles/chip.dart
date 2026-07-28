@@ -157,7 +157,7 @@ class USpaceChip extends StatelessWidget {
         : colors.contentPrimary;
   }
 
-  TextStyle _textStyle(USpaceColorsExtension colors, dynamic typo) {
+  TextStyle _textStyle(USpaceColorsExtension colors, AppTypographyExtension typo) {
     final color = colors.textPrimary;
     switch (size) {
       case USpaceChipSize.regular:
@@ -167,19 +167,19 @@ class USpaceChip extends StatelessWidget {
         return const TextStyle(
           fontFamily: 'PingFangTC',
           fontSize: 10,
-          fontWeight: FontWeight.w600,
+          fontWeight: AppTypographyExtension.semibold,
           height: 14 / 10,
         ).copyWith(color: color);
     }
   }
 
-  Widget _buildGradientText(dynamic typo) {
+  Widget _buildGradientText(AppTypographyExtension typo) {
     final style = size == USpaceChipSize.regular
-        ? typo.labelM as TextStyle
+        ? typo.labelM
         : const TextStyle(
             fontFamily: 'PingFangTC',
             fontSize: 10,
-            fontWeight: FontWeight.w600,
+            fontWeight: AppTypographyExtension.semibold,
             height: 14 / 10,
           );
 

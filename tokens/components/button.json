@@ -1,0 +1,34 @@
+{
+  "$comment": "USpaceButton 的 level × size × state → token 對應表。",
+  "$drives": [
+    "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
+    "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
+  ],
+  "$rule": "改動元件的 token 對應時，必須同時更新這裡，否則測試會失敗。",
+  "component": "USpaceButton",
+  "source": "styles/button.dart",
+  "figmaNode": "473:10438",
+  "dimensions": {
+    "level": ["accent", "charging", "primary", "secondary", "customized"],
+    "size": ["regular", "small"],
+    "state": ["enabled", "disabled"]
+  },
+  "variants": [
+    { "level": "accent", "size": "regular", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent" },
+    { "level": "accent", "size": "small", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent" },
+    { "level": "charging", "size": "regular", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging" },
+    { "level": "charging", "size": "small", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging" },
+    { "level": "primary", "size": "regular", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent" },
+    { "level": "primary", "size": "small", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent" },
+    { "level": "secondary", "size": "regular", "state": "enabled", "bg": "actionSecondaryBg", "content": "actionSecondaryContent" },
+    { "level": "secondary", "size": "small", "state": "enabled", "bg": "actionTertiaryBg", "content": "actionSecondaryContent", "note": "small 的底色刻意與 regular 不同（Figma）" },
+    { "level": "accent", "size": "regular", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent" },
+    { "level": "primary", "size": "small", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent" },
+    { "level": "secondary", "size": "regular", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent" }
+  ],
+  "customized": {
+    "$comment": "Customized 走獨立的漸層邊框實作，底色透明，不套用上表",
+    "content": "actionTertiaryContent",
+    "border": "silverLinear"
+  }
+}

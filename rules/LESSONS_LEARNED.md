@@ -2,6 +2,8 @@
 > 每輪執行前必讀。上限 30 行，超過則將穩定規則移入 SKILL_TEMPLATE.dart。
 
 ## 不可違反的規則
+- **提交前跑 `./verify_skill.sh`**：token 同步、`dart analyze --fatal-infos`、`flutter test`、文件站建置四項全綠才提交。規則違反（裸 hex／寫死圓角／間距魔術數字／`FontWeight.wNNN`）由 `test/token_rules_test.dart` 擋下。
+- **Token 只改 JSON**：`styles/` 的 6 個 token .dart 與 `website/src/tokens/*.ts` 檔頭標有 `⚠️ GENERATED FILE`，一律不得手改。改 `tokens/*.json` 後執行 `npm run gen:tokens`；CI 會跑 `check:tokens` 擋下漂移。
 - **Sidebar 子項目規則**：Component 頁面若包含多種分類（例如 List Menu / Order History / Payment），**必須**拆成獨立子頁面，在 sidebar 以 `_ExpandableSubGroup` 呈現子項（同 Button 的做法）。路由 ID 格式：`<component>-<variant>`（例如 `list-menu`、`list-order`）。**禁止**將多種分類塞進同一頁。
 - 所有 component / style 的 source of truth 為 `styles/` 目錄。
 - 所有 hex 值集中在 uspace_palette.dart，不在其他檔案直接寫 hex
@@ -13,6 +15,9 @@
 
 ## 錯誤記錄
 <!-- [日期] 問題 → 正確做法 -->
+- [2026-07-28] `styles/` 的 4176 行 Dart 從未被任何工具編譯，改壞了要等工程師貼進 app 才發現。→ 已加 pubspec + CI；元件的 token 對應改由 `tokens/components/*.json` 定義，同時驅動 Flutter 測試與網站規格表，改一邊忘了另一邊會失敗。
+- [2026-07-28] website 的 token 是第三份手抄資料，已與 Dart 漂移（borderDivider 停在 grey100，Dart 早已是 transparentGrey8003）。→ Dart 與 website 一律由 tokens/*.json 產生，不再兩邊各自維護。
+- [2026-07-28] website 元件頁寫死色碼，導致 6 處與 Dart 不符（Customized 文字色、內嵌按鈕文字、GrabBar、Header 副標、modal blur、chip 漸層角度）。→ 頁面一律引用 `tokens/colors.ts`，且對應的 token 必須逐一查 `styles/*.dart` 該元件實際使用的值，不得由名稱推斷。
 - [2026-05-12] Figma Action 類 token 結構變更：不再區分 Text/Content，統一只有 Content。→ colors extension 的 action token 只保留 Content，不再自行拆分 Text。引用端（button.dart 等）需同步遷移。
 - [2026-04-16] component 的 level/variant 名稱≠token 名稱，且同一 level 在不同 size 可能用不同 token（e.g. small/secondary bg = `action/tertiary/bg`，regular/secondary bg = `action/secondary/bg`）。→ 每次實作 component 時，逐一查 Figma 確認每個 level×size×state 套用的 token，不做語意推斷，不確定時必須問使用者。
 - [2026-04-17] 透明度色票命名不得含底線，百分比直接拼接。正確：transparentGrey80015，錯誤：transparentGrey800_15

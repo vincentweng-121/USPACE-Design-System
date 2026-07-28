@@ -1,5 +1,40 @@
 # Skill status
-> 最後更新：2026-05-20
+> 最後更新：2026-07-28
+
+---
+
+## Infrastructure
+
+### Token 產生器
+
+#### 已完成
+| 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
+|------|---------|------|---------|------|
+| tokens/*.json | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | 單一真實來源：palette 36 / semantic 63 / gradients 5 / typography 24 / scalars 17 |
+| tools/generate-tokens.mjs | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | 產生 6 個 Dart + 3 個 TS；`npm run gen:tokens` / `check:tokens` |
+| .github/workflows/deploy.yml | v1.1.0 | ✅ PUBLISHED | 2026-07-28 | 新增 Check token drift 步驟 |
+| styles/uspace_theme.dart | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | USpaceTheme.light / .dark / extensionsFor |
+| styles/uspace_design_system.dart | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | barrel file，一行 import 取得全部 |
+| website 元件頁改吃 token | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | 12 個頁面共 50 處寫死色值改為引用 token；44 處等值、6 處校正與 Dart 的不一致 |
+| website/src/tokens/util.ts | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | withAlpha() 手寫工具，供半透明品牌色使用 |
+| pubspec.yaml + analysis_options.yaml | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | styles/ 首次可被 dart analyze 檢查；flutter_lints，No issues found |
+| .github/workflows/deploy.yml | v2.0.0 | ✅ PUBLISHED | 2026-07-28 | 拆成 flutter / web / deploy 三個 job；PR 只跑檢查 |
+| test/token_rules_test.dart | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | 6 條規則：裸 hex / 圓角 / 間距 / fontWeight / palette 直引 / GENERATED 標頭 |
+| test/component_token_test.dart | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | 27 個測試，由 tokens/components/*.json 驅動 |
+| test/header_test.dart | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | 12 個測試，USpacePageTitle 行為與 token |
+| tokens/components/*.json | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | button / toggle / chip；同時驅動 Flutter 測試與網站規格表 |
+| website/src/components/Controls.tsx | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | Segmented / Toggle / asOptions；9 處重複收斂 |
+| verify_skill.sh | v2.0.0 | ✅ PUBLISHED | 2026-07-28 | 改為執行與 CI 相同的四項檢查 |
+| header.dart 拆分 | v3.0.0 | ✅ PUBLISHED | 2026-07-28 | 662 行單檔 → 5 個 part 檔，最大 226 行；12 個 _buildXxx 方法改為獨立 widget |
+| floating 標題 bug 修正 | v2.1.0 | ✅ PUBLISHED | 2026-07-28 | titlePlace 改為只控制對齊，不再影響顯示；新增 4 個測試 |
+| elevation_extension.dart | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | 新增 shadowDefault 語意色 + shadowBlur；裸 hex allowlist 已清空 |
+| 版本號單一來源 | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | package.json → version.ts；pubspec.yaml 不一致會被擋下 |
+
+#### 待處理
+| 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
+|------|---------|------|---------|------|
+| website eslint | - | 🔲 待處理 | 2026-07-28 | 6 errors / 2 warnings，皆為既有 React hooks 問題（setState in effect），與 token 無關 |
+| 其餘元件的規格 JSON | - | 🔲 待處理 | 2026-07-28 | 目前只有 button / toggle / chip；tab / text_field / dropdown_menu / list / modal / header 尚未建立 |
 
 ---
 
@@ -12,11 +47,13 @@
 |------|---------|------|---------|------|
 | uspace_palette.dart | v1.1.0 | 📝 DRAFT | 2026-05-12 | hex 修正（neonLime800、grey100）；新增 red300 + 7 透明度色票 |
 | uspace_colors_extension.dart | v2.0.0 | 📝 DRAFT | 2026-05-12 | ⚠️ BREAKING：全量同步 Figma Variables；移除 action Text tokens；新增 Input/Chip/Project/FAB/Outline/Graphic |
+| 改由 tokens/*.json 產生 | v2.1.0 | ✅ PUBLISHED | 2026-07-28 | ⚙️ GENERATED，請勿手改；token 值零變更 |
 
 #### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
 | Dark token 完整對應 | v2.0.0 | ✅ 已完成 | 2026-05-12 | 併入 uspace_colors_extension v2.0.0 |
+| bottomBarGray1B / 2B 的 dark 值 | - | ⚠️ 待確認 | 2026-07-28 | 兩個漸層寫死 grey50（亮色值），dark 模式不正確；Figma 無對應 dark token，需設計確認後填入 gradients.json |
 
 ---
 
@@ -26,6 +63,7 @@
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
 | typography_extension.dart | v1.1.0 | ✅ PUBLISHED | 2026-04-15 | v1.0.0 ⚠️ BREAKING CHANGE；v1.1.0 SF Pro 字體樣式補入 |
+| typography_extension.dart（去重 + 產生化）| v1.2.0 | ✅ PUBLISHED | 2026-07-28 | ⚙️ GENERATED；light/dark 重複的 24 個 TextStyle 改為建構子預設值，樣式不可能漂移 |
 
 #### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
@@ -42,7 +80,7 @@
 #### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| glass_extension.dart | - | 📝 DRAFT | 2026-04-16 | 高斯模糊 sigmaX/Y 暫定值 10.0，待使用者提供正確數值 |
+| glass_extension.dart | - | 📝 DRAFT | 2026-07-28 | 高斯模糊 sigmaX/Y 暫定值 10.0，待使用者提供正確數值；⚙️ 改由 tokens/scalars.json 產生 |
 
 ---
 
@@ -51,7 +89,7 @@
 #### 已完成
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| spacing_extension.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | Margin (20px) + 11 Spacer tokens (2-56px) |
+| spacing_extension.dart | v1.0.1 | ✅ PUBLISHED | 2026-07-28 | Margin (20px) + 11 Spacer tokens (2-56px)；⚙️ 改由 tokens/scalars.json 產生 |
 
 #### 待處理
 （尚無）
@@ -63,7 +101,7 @@
 #### 已完成
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| radius_extension.dart | v1.0.0 | ✅ PUBLISHED | 2026-05-19 | Small (8) / Medium (20) / Full (1000) |
+| radius_extension.dart | v1.0.1 | ✅ PUBLISHED | 2026-07-28 | Small (8) / Medium (20) / Full (1000)；⚙️ 改由 tokens/scalars.json 產生 |
 
 #### 待處理
 （尚無）
@@ -73,12 +111,16 @@
 ### Elevation
 
 #### 已完成
-（尚無）
+| 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
+|------|---------|------|---------|------|
+| elevation_extension.dart | v1.0.0 | ✅ PUBLISHED | 2026-07-28 | shadowBlur (30)；陰影色為語意 token `shadowDefault` |
+| shadowDefault（Effect 群組）| v1.0.0 | ✅ PUBLISHED | 2026-07-28 | transparentBlack10；light / dark 相同 |
 
 #### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |
 |------|---------|------|---------|------|
-| elevation_extension.dart | - | 🔲 待處理 | - | 尚未開始 |
+| shadowDefault 的 dark 值 | - | ⚠️ 待確認 | 2026-07-28 | 目前 light / dark 同值（維持原本無主題差異的行為），Figma 無對應 dark token |
+| 完整 elevation 階層 | - | 🔲 待處理 | 2026-07-28 | 目前只有 modal 用到的一組，尚無 elevation 階層定義 |
 
 ---
 

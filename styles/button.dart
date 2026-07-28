@@ -2,7 +2,6 @@ import 'dart:io' show Platform;
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'glass_extension.dart';
@@ -299,20 +298,16 @@ class _GlassCircle extends StatelessWidget {
   const _GlassCircle({
     required this.child,
     this.onTap,
-    this.extraOverlay = false,
   });
 
   final Widget child;
   final VoidCallback? onTap;
 
-  /// true 時疊加第二層 fillColor（用於 bar 內的 active 狀態）
-  final bool extraOverlay;
-
   @override
   Widget build(BuildContext context) {
-    final isLG = _isLiquidGlass();
-
     // iOS 26+: TODO 替換為 UIVisualEffectView Liquid Glass platform view
+    //   目前 Liquid Glass 與一般平台共用同一組 blur 參數，
+    //   待 platform view 就緒後再依 _isLiquidGlass() 分流。
     // iOS < 26 / Android / Web: BackdropFilter + Gaussian blur
     return GestureDetector(
       onTap: onTap,
@@ -320,17 +315,13 @@ class _GlassCircle extends StatelessWidget {
         borderRadius: BorderRadius.circular(USpaceRadius.full),
         child: BackdropFilter(
           filter: ImageFilter.blur(
-            sigmaX: isLG ? USpaceGlass.blurSigma : USpaceGlass.blurSigma,
-            sigmaY: isLG ? USpaceGlass.blurSigma : USpaceGlass.blurSigma,
+            sigmaX: USpaceGlass.blurSigma,
+            sigmaY: USpaceGlass.blurSigma,
           ),
           child: Container(
             padding: const EdgeInsets.all(USpaceSpacing.spacer8),
             decoration: BoxDecoration(
-              // extraOverlay: 雙層疊加效果（fillColor 疊在 bar 的 fillColor 上）
-              // 0x55FFFFFF ≈ rgba(255,255,255,0.33)，為 fillColor 雙層疊加近似值，無獨立 palette token
-              color: extraOverlay
-                  ? const Color(0x55FFFFFF)
-                  : USpaceGlass.fillColor,
+              color: USpaceGlass.fillColor,
               borderRadius: BorderRadius.circular(USpaceRadius.full),
             ),
             child: SizedBox(width: 28, height: 28, child: child),

@@ -1,7 +1,9 @@
-name: Deploy to GitHub Pages
+name: CI & Deploy
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
 
 permissions:
@@ -10,17 +12,35 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  # ── Flutter：交付給工程師的 styles/ 必須編得過、測得過 ──
+  flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - name: Analyze
+        run: dart analyze --fatal-infos
+      - name: Test
+        run: flutter test
+
+  # ── Web：token 同步檢查 + 文件站建置 ──
+  web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      # 擋住「改了 styles/*.dart 或 tokens.ts 卻沒改 tokens/*.json」的漂移
+      - name: Check token drift
+        run: npm run check:tokens
       - name: Install and Build
         working-directory: website
         run: |
@@ -30,8 +50,10 @@ jobs:
         with:
           path: website/dist
 
+  # ── 兩邊都綠才部署；PR 只跑檢查不部署 ──
   deploy:
-    needs: build
+    needs: [flutter, web]
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

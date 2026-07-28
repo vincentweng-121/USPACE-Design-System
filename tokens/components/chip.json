@@ -1,0 +1,20 @@
+{
+  "$comment": "USpaceChip 的 level → token 對應表。",
+  "$drives": [
+    "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
+    "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
+  ],
+  "$rule": "改動元件的 token 對應時，必須同時更新這裡，否則測試會失敗。",
+  "component": "USpaceChip",
+  "source": "styles/chip.dart",
+  "figmaNode": "1327:19329",
+  "dimensions": {
+    "level": ["accent", "primary", "secondary", "outline"]
+  },
+  "variants": [
+    { "level": "accent", "bg": "chipBgAccent", "content": "textPrimary" },
+    { "level": "primary", "bg": "chipBgPrimary", "content": "textPrimary" },
+    { "level": "secondary", "bg": "chipBgSecondary", "content": "textPrimary" },
+    { "level": "outline", "bg": null, "content": null, "note": "透明底 + neonLime200 邊框 + 漸層文字，無對應 semantic token" }
+  ]
+}

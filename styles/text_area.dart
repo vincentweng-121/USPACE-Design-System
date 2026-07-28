@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'radius_extension.dart';

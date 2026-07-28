@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import SectionTitle from '../../components/SectionTitle';
+import PageTabs, { usePageTab } from '../../components/PageTabs';
+import PageHero from '../../components/PageHero';
+import { Segmented, Toggle } from '../../components/Controls';
 
 // ── Types ──────────────────────────────────────────────────
 type Availability = 'editable' | 'disabled' | 'non-editable';
@@ -30,57 +33,6 @@ function getBorder(status: string): string {
   if (status === 'Active' || status === 'Typing' || status === 'Error')
     return '2px solid var(--input-border-active)';
   return '1px solid var(--border-divider)';
-}
-
-// ── Segmented control ──────────────────────────────────────
-function Segmented<T extends string>({ value, onChange, options }: {
-  value: T; onChange: (v: T) => void;
-  options: { value: T; label: string }[];
-}) {
-  return (
-    <div style={{
-      display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
-      border: '1px solid var(--border-divider)',
-    }}>
-      {options.map(opt => (
-        <button key={opt.value} onClick={() => onChange(opt.value)} style={{
-          padding: '6px 16px', border: 'none', fontSize: 12, cursor: 'pointer',
-          fontFamily: 'inherit', transition: 'all 0.12s',
-          background: value === opt.value ? 'var(--accent)' : 'var(--page-primary)',
-          color: value === opt.value ? '#000' : 'var(--text-secondary)',
-          fontWeight: value === opt.value ? 600 : 400,
-        }}>
-          {opt.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// ── Toggle control ─────────────────────────────────────────
-function Toggle({ value, onChange, labelOn, labelOff, disabled }: {
-  value: boolean; onChange: (v: boolean) => void;
-  labelOn: string; labelOff: string; disabled?: boolean;
-}) {
-  return (
-    <div style={{
-      display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
-      border: '1px solid var(--border-divider)',
-      opacity: disabled ? 0.35 : 1, pointerEvents: disabled ? 'none' : 'auto',
-    }}>
-      {[false, true].map(v => (
-        <button key={String(v)} onClick={() => onChange(v)} style={{
-          padding: '6px 16px', border: 'none', fontSize: 12, cursor: 'pointer',
-          fontFamily: 'inherit', transition: 'all 0.12s',
-          background: value === v ? 'var(--accent)' : 'var(--page-primary)',
-          color: value === v ? '#000' : 'var(--text-secondary)',
-          fontWeight: value === v ? 600 : 400,
-        }}>
-          {v ? labelOn : labelOff}
-        </button>
-      ))}
-    </div>
-  );
 }
 
 // ── Playground ─────────────────────────────────────────────
@@ -169,9 +121,11 @@ function TextAreaPlayground() {
 
       {/* ── TextArea ── */}
       <div style={{
-        padding: '24px 20px', borderRadius: 16,
+        padding: '24px 20px', borderRadius: 16, width: '100%',
         background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
+        display: 'flex', flexDirection: 'column' as const, alignItems: 'center',
       }}>
+        <div style={{ width: '100%', maxWidth: 400 }}>
         {/* Label */}
         {showLabel && (
           <div style={{
@@ -260,6 +214,7 @@ function TextAreaPlayground() {
             {isError ? 'Error message' : 'Hint message'}
           </div>
         )}
+        </div>
       </div>
 
       {/* ── State indicator ── */}
@@ -271,7 +226,7 @@ function TextAreaPlayground() {
         flexWrap: 'wrap', gap: 8,
       }}>
         <span>
-          Figma Status: <strong style={{ color: 'var(--text-primary)', fontSize: 13 }}>{status}</strong>
+          Figma Status: <strong style={{ color: 'var(--text-primary)', fontSize: 14 }}>{status}</strong>
         </span>
         <span style={{ fontFamily: 'monospace', fontSize: 11 }}>
           {availability} / {validation} / label:{showLabel ? 'on' : 'off'} / hint:{showHint ? 'on' : 'off'}
@@ -283,151 +238,182 @@ function TextAreaPlayground() {
 
 // ── Page ───────────────────────────────────────────────────
 export default function TextAreaPage() {
+  const [tab, setTab] = usePageTab();
+
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Text Area</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
-        定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>text_area.dart</code>。
-        多行文字輸入元件，支援 8 種狀態。
-      </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        Figma node: 634:8456。與 TextField 的差異：高度 144px（多行）、borderRadius 20px、
-        Error 邊框為綠色（inputBorderActive）而非紅色。
-      </p>
+      <PageHero
+        title="Text Area"
+        lead="多行文字輸入元件，支援自動高度調整與字數限制，適用於留言、備註等需要較長文字輸入的場景。"
+      />
+      <PageTabs active={tab} onChange={setTab} />
 
-      <SectionTitle>Playground</SectionTitle>
-      <div style={{ maxWidth: 480, marginBottom: 140 }}>
-        <TextAreaPlayground />
-      </div>
+      {tab === 'design' && (
+        <div>
+          {/* Playground */}
+          <SectionTitle>Playground</SectionTitle>
+          <div style={{ marginBottom: 120 }}>
+            <TextAreaPlayground />
+          </div>
 
-      {/* Token Mapping */}
-      <SectionTitle>Token Mapping</SectionTitle>
-      <div style={{ overflowX: 'auto', marginBottom: 120 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              {['Property', 'Token'].map(h => (
-                <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Background', 'inputBgDefault'],
-              ['Border (active/typing/error)', 'inputBorderActive (neonLime600)'],
-              ['Input text', 'inputText (labelM 14px/20px)'],
-              ['Complete/Disabled text', 'inputText (labelL 16px/24px)'],
-              ['Placeholder', 'inputTextPlaceholder (labelM)'],
-              ['Disabled text', 'inputTextDisabled'],
-              ['Label text', 'inputText (labelS 12px/16px)'],
-              ['Hint text', 'textSecondary (labelS)'],
-              ['Error/Incomplete hint', 'inputTextError (labelS)'],
-              ['Disabled hint', 'textDisabled'],
-              ['Cursor', 'contentAccent (neonLime600)'],
-              ['Delete icon', 'contentSecondary (20px)'],
-              ['Error hint icon', 'inputTextError (12px)'],
-            ].map(([prop, token]) => (
-              <tr key={prop} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                <td style={{ padding: '10px 12px' }}>{prop}</td>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{token}</code></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          {/* UX Principle */}
+          <SectionTitle>UX Principle</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>多行文字輸入元件</strong>：用於需要較長文字的場景（備註、描述、回饋等）。</li>
+              <li><strong>與 TextField 共用設計語言但有關鍵差異</strong>：高度 144px、圓角 20px（非 Stadium）。</li>
+              <li><strong>Error 邊框為綠色（inputBorderActive），非紅色</strong>：錯誤由下方紅色 hint 文字指示，邊框僅表示 active focus。</li>
+              <li><strong>Complete 狀態字體放大（14px → 16px）</strong>：提升已填寫內容的可讀性。</li>
+              <li><strong>showLabel / showHint 為 boolean 屬性</strong>：提供彈性佈局。</li>
+            </ul>
+          </div>
 
-      {/* Layout Specs */}
-      <SectionTitle>Layout Specs</SectionTitle>
-      <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
-        <ul style={{ paddingLeft: 20 }}>
-          <li><strong>Container</strong>: height 144px, borderRadius 20px</li>
-          <li><strong>Padding</strong>: horizontal 20px, vertical 16px</li>
-          <li><strong>Label</strong>: PingFang TC 12px/16px (labelS), paddingLeft 8px, <code style={{ color: 'var(--accent)' }}>inputText</code></li>
-          <li><strong>Input (default)</strong>: PingFang TC 14px/20px (labelM), <code style={{ color: 'var(--accent)' }}>inputText</code></li>
-          <li><strong>Input (complete/disabled)</strong>: PingFang TC 16px/24px (labelL)</li>
-          <li><strong>Hint</strong>: PingFang TC 12px/16px (labelS), <code style={{ color: 'var(--accent)' }}>textSecondary</code></li>
-          <li><strong>Cursor</strong>: 2px wide, 24px tall, <code style={{ color: 'var(--accent)' }}>contentAccent</code></li>
-          <li><strong>Border (active/typing/error)</strong>: 2px, <code style={{ color: 'var(--accent)' }}>inputBorderActive</code></li>
-          <li><strong>Delete icon</strong>: 20px, shown in Error/Typing/Complete states</li>
-          <li><strong>Error hint icon</strong>: 12px prefix icon on error/incomplete hints</li>
-        </ul>
-      </div>
-
-      {/* vs TextField */}
-      <SectionTitle>TextField vs TextArea</SectionTitle>
-      <div style={{ overflowX: 'auto', marginBottom: 120 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              {['Property', 'TextField', 'TextArea'].map(h => (
-                <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Height', '48px', '144px'],
-              ['Lines', 'Single', 'Multi'],
-              ['Border radius', '1000 (Stadium)', '20px'],
-              ['Error border', 'inputBorderError (red)', 'inputBorderActive (green)'],
-              ['States', '9 (incl. Error-Active)', '8 (no Error-Active)'],
-              ['Trailing', 'USpaceButton / icons', 'Delete icon only'],
-              ['Complete text', 'labelM (14px)', 'labelL (16px)'],
-            ].map(([prop, tf, ta]) => (
-              <tr key={prop} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                <td style={{ padding: '10px 12px', fontWeight: 500 }}>{prop}</td>
-                <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{tf}</td>
-                <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{ta}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Status Mapping */}
-      <SectionTitle>Dimension → Status Mapping</SectionTitle>
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              {['Availability', 'Validation', 'Interaction', 'Figma Status'].map(h => (
-                <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Editable', 'Normal', 'Idle', 'Default'],
-              ['Editable', 'Normal', 'Focused', 'Active'],
-              ['Editable', 'Normal', 'Typing', 'Typing'],
-              ['Editable', 'Normal', 'Blur w/ text', 'Complete'],
-              ['Editable', 'Error', 'Any', 'Error'],
-              ['Disabled', '—', '—', 'Disabled'],
-              ['Non-editable', '—', '—', 'Non-editable'],
-            ].map(([avail, valid, interaction, figma], i) => (
-              <tr key={i} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                <td style={{ padding: '10px 12px' }}>{avail}</td>
-                <td style={{ padding: '10px 12px', color: valid === 'Error' ? 'var(--input-text-error)' : 'var(--text-secondary)' }}>{valid}</td>
-                <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{interaction}</td>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{figma}</code></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Notes */}
-      <div style={{ marginTop: 120 }}>
-        <SectionTitle>Notes</SectionTitle>
-        <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-          <ul style={{ paddingLeft: 20 }}>
-            <li>Figma 原始命名為 "TextAera"（typo），Dart 檔案統一使用正確拼寫 TextArea。</li>
-            <li>Error 狀態邊框為 <code style={{ color: 'var(--accent)' }}>inputBorderActive</code>（綠色），非紅色。錯誤由下方紅色 hint 文字指示。</li>
-            <li>Incomplete 狀態無邊框，但 hint 文字使用 <code style={{ color: 'var(--accent)' }}>inputTextError</code>（紅色）。</li>
-            <li>showLabel / showHint 為 boolean 屬性，控制 label 與 hint 的顯示。</li>
-          </ul>
+          {/* Interaction & States */}
+          <SectionTitle>Interaction & States</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>Default</strong>：正常可點擊狀態，顯示 placeholder 文字與 1px 邊框。</li>
+              <li><strong>Active</strong>：獲得焦點後邊框變為 2px <code>inputBorderActive</code>（綠色），顯示游標。</li>
+              <li><strong>Typing</strong>：輸入中狀態，邊框保持 2px 綠色，出現 delete icon。</li>
+              <li><strong>Complete</strong>：失去焦點且有文字，字體從 14px 放大為 16px，邊框恢復 1px。</li>
+              <li><strong>Error</strong>：驗證錯誤，邊框為 2px 綠色（非紅色），hint 文字變紅色並帶 icon。</li>
+              <li><strong>Disabled</strong>：整體 opacity 0.5，cursor not-allowed，不可互動。</li>
+              <li><strong>Non-editable</strong>：顯示唯讀內容，cursor not-allowed，但無 opacity 降低。</li>
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
+
+      {tab === 'develop' && (
+        <div>
+          {/* Token Mapping */}
+          <SectionTitle>Token Mapping</SectionTitle>
+          <div style={{ overflowX: 'auto', marginBottom: 120 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 500 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  {['Property', 'Token'].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Background', 'inputBgDefault'],
+                  ['Border (active/typing/error)', 'inputBorderActive (neonLime600)'],
+                  ['Input text', 'inputText (labelM 14px/20px)'],
+                  ['Complete/Disabled text', 'inputText (labelL 16px/24px)'],
+                  ['Placeholder', 'inputTextPlaceholder (labelM)'],
+                  ['Disabled text', 'inputTextDisabled'],
+                  ['Label text', 'inputText (labelS 12px/16px)'],
+                  ['Hint text', 'textSecondary (labelS)'],
+                  ['Error/Incomplete hint', 'inputTextError (labelS)'],
+                  ['Disabled hint', 'textDisabled'],
+                  ['Cursor', 'contentAccent (neonLime600)'],
+                  ['Delete icon', 'contentSecondary (20px)'],
+                  ['Error hint icon', 'inputTextError (12px)'],
+                ].map(([prop, token]) => (
+                  <tr key={prop} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                    <td style={{ padding: '10px 12px' }}>{prop}</td>
+                    <td style={{ padding: '10px 12px' }}><code>{token}</code></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Layout Specs */}
+          <SectionTitle>Layout Specs</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>Container</strong>: height 144px, borderRadius 20px</li>
+              <li><strong>Padding</strong>: horizontal 20px, vertical 16px</li>
+              <li><strong>Label</strong>: PingFang TC 12px/16px (labelS), paddingLeft 8px, <code>inputText</code></li>
+              <li><strong>Input (default)</strong>: PingFang TC 14px/20px (labelM), <code>inputText</code></li>
+              <li><strong>Input (complete/disabled)</strong>: PingFang TC 16px/24px (labelL)</li>
+              <li><strong>Hint</strong>: PingFang TC 12px/16px (labelS), <code>textSecondary</code></li>
+              <li><strong>Cursor</strong>: 2px wide, 24px tall, <code>contentAccent</code></li>
+              <li><strong>Border (active/typing/error)</strong>: 2px, <code>inputBorderActive</code></li>
+              <li><strong>Delete icon</strong>: 20px, shown in Error/Typing/Complete states</li>
+              <li><strong>Error hint icon</strong>: 12px prefix icon on error/incomplete hints</li>
+            </ul>
+          </div>
+
+          {/* vs TextField */}
+          <SectionTitle>TextField vs TextArea</SectionTitle>
+          <div style={{ overflowX: 'auto', marginBottom: 120 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 500 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  {['Property', 'TextField', 'TextArea'].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Height', '48px', '144px'],
+                  ['Lines', 'Single', 'Multi'],
+                  ['Border radius', '1000 (Stadium)', '20px'],
+                  ['Error border', 'inputBorderError (red)', 'inputBorderActive (green)'],
+                  ['States', '9 (incl. Error-Active)', '8 (no Error-Active)'],
+                  ['Trailing', 'USpaceButton / icons', 'Delete icon only'],
+                  ['Complete text', 'labelM (14px)', 'labelL (16px)'],
+                ].map(([prop, tf, ta]) => (
+                  <tr key={prop} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 500 }}>{prop}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{tf}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{ta}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Status Mapping */}
+          <SectionTitle>Dimension → Status Mapping</SectionTitle>
+          <div style={{ overflowX: 'auto', marginBottom: 120 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 600 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  {['Availability', 'Validation', 'Interaction', 'Figma Status'].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Editable', 'Normal', 'Idle', 'Default'],
+                  ['Editable', 'Normal', 'Focused', 'Active'],
+                  ['Editable', 'Normal', 'Typing', 'Typing'],
+                  ['Editable', 'Normal', 'Blur w/ text', 'Complete'],
+                  ['Editable', 'Error', 'Any', 'Error'],
+                  ['Disabled', '—', '—', 'Disabled'],
+                  ['Non-editable', '—', '—', 'Non-editable'],
+                ].map(([avail, valid, interaction, figma], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                    <td style={{ padding: '10px 12px' }}>{avail}</td>
+                    <td style={{ padding: '10px 12px', color: valid === 'Error' ? 'var(--input-text-error)' : 'var(--text-secondary)' }}>{valid}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{interaction}</td>
+                    <td style={{ padding: '10px 12px' }}><code>{figma}</code></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Notes */}
+          <SectionTitle>Notes</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li>Figma 原始命名為 "TextAera"（typo），Dart 檔案統一使用正確拼寫 TextArea。</li>
+              <li>Error 狀態邊框為 <code>inputBorderActive</code>（綠色），非紅色。錯誤由下方紅色 hint 文字指示。</li>
+              <li>Incomplete 狀態無邊框，但 hint 文字使用 <code>inputTextError</code>（紅色）。</li>
+              <li>showLabel / showHint 為 boolean 屬性，控制 label 與 hint 的顯示。</li>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

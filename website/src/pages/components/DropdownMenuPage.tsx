@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import SectionTitle from '../../components/SectionTitle';
+import PageTabs, { usePageTab } from '../../components/PageTabs';
+import { Segmented } from '../../components/Controls';
+import PageHero from '../../components/PageHero';
+import { semantic } from '../../tokens/colors';
 
 // ── Types ──────────────────────────────────────────────────
 type Availability = 'enabled' | 'incomplete' | 'error';
@@ -74,26 +78,16 @@ function DropdownPlayground() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 64 }}>Status</span>
-          <div style={{
-            display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
-            border: '1px solid var(--border-divider)',
-          }}>
-            {([
-              { value: 'enabled', label: 'Enabled' },
-              { value: 'incomplete', label: 'Incomplete' },
-              { value: 'error', label: 'Error' },
-            ] as { value: Availability; label: string }[]).map(opt => (
-              <button key={opt.value} onClick={() => setAvailability(opt.value)} style={{
-                padding: '6px 16px', border: 'none', fontSize: 12, cursor: 'pointer',
-                fontFamily: 'inherit', transition: 'all 0.12s',
-                background: availability === opt.value ? 'var(--accent)' : 'var(--page-primary)',
-                color: availability === opt.value ? '#000' : 'var(--text-secondary)',
-                fontWeight: availability === opt.value ? 600 : 400,
-              }}>
-                {opt.label}
-              </button>
-            ))}
-          </div>
+          <Segmented
+            compact
+            value={availability}
+            onChange={setAvailability}
+            options={[
+              { value: 'enabled' as const, label: 'Enabled' },
+              { value: 'incomplete' as const, label: 'Incomplete' },
+              { value: 'error' as const, label: 'Error' },
+            ]}
+          />
         </div>
       </div>
 
@@ -101,8 +95,9 @@ function DropdownPlayground() {
       <div
         ref={containerRef}
         style={{
-          padding: '24px 20px', borderRadius: 16,
+          padding: '24px 20px', borderRadius: 16, width: '100%',
           background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
+          display: 'flex', flexDirection: 'column' as const, alignItems: 'center',
           position: 'relative',
         }}
       >
@@ -210,7 +205,7 @@ function DropdownPlayground() {
         flexWrap: 'wrap', gap: 8,
       }}>
         <span>
-          Figma Status: <strong style={{ color: 'var(--text-primary)', fontSize: 13 }}>{status}</strong>
+          Figma Status: <strong style={{ color: 'var(--text-primary)', fontSize: 14 }}>{status}</strong>
         </span>
         <span style={{ fontFamily: 'monospace', fontSize: 11 }}>
           {availability} / {selected ? `"${selected}"` : 'none'}
@@ -222,105 +217,132 @@ function DropdownPlayground() {
 
 // ── Page ───────────────────────────────────────────────────
 export default function DropdownMenuPage() {
+  const [tab, setTab] = usePageTab();
+
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Dropdown Menu</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
-        定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>dropdown_menu.dart</code>。
-        支援 5 種狀態，下拉面板可捲動。
-      </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        Figma node: 2141:11030。觸發器高度 48px，圓角 StadiumBorder (1000)。
-        下拉面板圓角 20px，padding 16px 20px。
-      </p>
+      <PageHero
+        title="Dropdown Menu"
+        lead="下拉選單元件，支援 5 種互動狀態（Default / Active / Filled / Disabled / Error），適用於表單中的選項選擇。"
+      />
+      <PageTabs active={tab} onChange={setTab} />
 
-      <SectionTitle>Playground</SectionTitle>
-      <div style={{ maxWidth: 480, marginBottom: 140 }}>
-        <DropdownPlayground />
-      </div>
+      {tab === 'design' && (
+        <div>
+          {/* Playground */}
+          <SectionTitle>Playground</SectionTitle>
+          <div style={{ marginBottom: 120 }}>
+            <DropdownPlayground />
+          </div>
 
-      {/* Token Mapping */}
-      <SectionTitle>Token Mapping</SectionTitle>
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              {['Property', 'Token'].map(h => (
-                <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Trigger background', 'inputBgDefault (white)'],
-              ['Panel background', 'inputBgDefault (white)'],
-              ['Label text', 'inputText (bodyS 12px)'],
-              ['Input text', 'inputText (bodyM 14px)'],
-              ['Placeholder', 'inputTextPlaceholder'],
-              ['Hint (normal)', 'textSecondary (sfCaptionS 14px)'],
-              ['Hint (error)', 'inputTextError (#F40000)'],
-              ['Chevron icon', 'contentSecondary'],
-              ['Panel border radius', '20px (number/20)'],
-              ['Scrollbar track', 'pagePrimary'],
-              ['Scrollbar thumb', 'borderDivider'],
-            ].map(([prop, token]) => (
-              <tr key={prop} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                <td style={{ padding: '10px 12px' }}>{prop}</td>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{token}</code></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          {/* UX Principle */}
+          <SectionTitle>UX Principle</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>與 TextField 共用視覺語言</strong>：同高度 48px、StadiumBorder，降低使用者認知負擔。</li>
+              <li><strong>5 種狀態覆蓋完整流程</strong>：Default → Selecting → Complete / Incomplete / Error，涵蓋從未操作到選取完成或異常的所有情境。</li>
+              <li><strong>面板與觸發器的圓角層次</strong>：下拉面板使用 20px 圓角，與觸發器的 Stadium 圓角形成層次差異，視覺上區分操作區與選項區。</li>
+              <li><strong>面板可捲動</strong>：適應不同數量的選項，面板設有 maxHeight 限制並支援捲動，避免畫面被過長列表撐開。</li>
+              <li><strong>Chevron 旋轉反饋</strong>：Chevron 圖示 180° 旋轉反饋展開/收合狀態，提供即時的視覺回饋。</li>
+            </ul>
+          </div>
 
-      {/* Layout Specs */}
-      <div style={{ marginTop: 120 }}>
-        <SectionTitle>Layout Specs</SectionTitle>
-        <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-          <ul style={{ paddingLeft: 20 }}>
-            <li><strong>Trigger</strong>: height 48px, borderRadius 1000, padding horizontal 20px</li>
-            <li><strong>Label</strong>: PingFang TC 12px/16px Regular, padding horizontal 8px</li>
-            <li><strong>Input/Placeholder</strong>: PingFang TC 14px/20px Regular</li>
-            <li><strong>Hint</strong>: SF Pro 14px/16px Regular, padding horizontal 8px</li>
-            <li><strong>Chevron</strong>: 16px, contentSecondary, trailing</li>
-            <li><strong>Panel</strong>: borderRadius 20px, padding 16px 20px, gap 8px</li>
-            <li><strong>Panel items</strong>: PingFang TC 14px/20px Regular, inputText</li>
-            <li><strong>Scrollbar</strong>: 4px wide, borderRadius 1000</li>
-          </ul>
+          {/* Interaction & States */}
+          <SectionTitle>Interaction & States</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>Default</strong>：未選取狀態，顯示 Placeholder 文字，面板隱藏，Chevron 朝下。</li>
+              <li><strong>Selecting</strong>：點擊觸發器後面板展開，Chevron 旋轉 180°，選項可捲動瀏覽。點擊外部區域收合面板。</li>
+              <li><strong>Complete</strong>：已選取選項，觸發器顯示選取文字，面板隱藏，Chevron 恢復朝下。</li>
+              <li><strong>Incomplete</strong>：必填欄位未完成，觸發器顯示 Placeholder，Hint 變為紅色錯誤提示，面板隱藏。</li>
+              <li><strong>Error</strong>：輸入驗證失敗，Hint 變為紅色錯誤提示，面板隱藏。</li>
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Status Descriptions */}
-      <div style={{ marginTop: 120 }}>
-        <SectionTitle>Status Descriptions</SectionTitle>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                {['Status', 'Trigger', 'Panel', 'Hint'].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                ['Default', 'Placeholder text', 'Hidden', 'Optional (showHint)'],
-                ['Complete', 'Selected text', 'Hidden', 'Optional (showHint)'],
-                ['Selecting', 'Selected text', 'Visible, scrollable', 'Hidden'],
-                ['Incomplete', 'Placeholder text', 'Hidden', 'Error hint (red)'],
-                ['Error', 'Input text', 'Hidden', 'Error hint (red)'],
-              ].map(([status, trigger, panel, hint]) => (
-                <tr key={status} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                  <td style={{ padding: '10px 12px', fontWeight: 500 }}>{status}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{trigger}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{panel}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{hint}</td>
+      {tab === 'develop' && (
+        <div>
+          {/* Token Mapping */}
+          <SectionTitle>Token Mapping</SectionTitle>
+          <div style={{ overflowX: 'auto', marginBottom: 120 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 500 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  {['Property', 'Token'].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {[
+                  ['Trigger background', 'inputBgDefault (white)'],
+                  ['Panel background', 'inputBgDefault (white)'],
+                  ['Label text', 'inputText (bodyS 12px)'],
+                  ['Input text', 'inputText (bodyM 14px)'],
+                  ['Placeholder', 'inputTextPlaceholder'],
+                  ['Hint (normal)', 'textSecondary (sfCaptionS 14px)'],
+                  ['Hint (error)', `inputTextError (${semantic.inputTextError})`],
+                  ['Chevron icon', 'contentSecondary'],
+                  ['Panel border radius', '20px (number/20)'],
+                  ['Scrollbar track', 'pagePrimary'],
+                  ['Scrollbar thumb', 'borderDivider'],
+                ].map(([prop, token]) => (
+                  <tr key={prop} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                    <td style={{ padding: '10px 12px' }}>{prop}</td>
+                    <td style={{ padding: '10px 12px' }}><code>{token}</code></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Layout Specs */}
+          <SectionTitle>Layout Specs</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>Trigger</strong>: height 48px, borderRadius 1000, padding horizontal 20px</li>
+              <li><strong>Label</strong>: PingFang TC 12px/16px Regular, padding horizontal 8px</li>
+              <li><strong>Input/Placeholder</strong>: PingFang TC 14px/20px Regular</li>
+              <li><strong>Hint</strong>: SF Pro 14px/16px Regular, padding horizontal 8px</li>
+              <li><strong>Chevron</strong>: 16px, contentSecondary, trailing</li>
+              <li><strong>Panel</strong>: borderRadius 20px, padding 16px 20px, gap 8px</li>
+              <li><strong>Panel items</strong>: PingFang TC 14px/20px Regular, inputText</li>
+              <li><strong>Scrollbar</strong>: 4px wide, borderRadius 1000</li>
+            </ul>
+          </div>
+
+          {/* Status Descriptions */}
+          <SectionTitle>Status Descriptions</SectionTitle>
+          <div style={{ overflowX: 'auto', marginBottom: 120 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 500 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  {['Status', 'Trigger', 'Panel', 'Hint'].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Default', 'Placeholder text', 'Hidden', 'Optional (showHint)'],
+                  ['Complete', 'Selected text', 'Hidden', 'Optional (showHint)'],
+                  ['Selecting', 'Selected text', 'Visible, scrollable', 'Hidden'],
+                  ['Incomplete', 'Placeholder text', 'Hidden', 'Error hint (red)'],
+                  ['Error', 'Input text', 'Hidden', 'Error hint (red)'],
+                ].map(([status, trigger, panel, hint]) => (
+                  <tr key={status} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 500 }}>{status}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{trigger}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{panel}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{hint}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

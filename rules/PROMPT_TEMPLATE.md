@@ -6,8 +6,10 @@
 1. 讀取 LESSONS_LEARNED.md
 2. 讀取 NODES.md，確認本輪目標節點與目標檔案
 3. 透過 Figma MCP 讀取 NODES.md 指定的 Node ID
-4. 依 SKILL_TEMPLATE.dart 的規則產出或更新目標檔案
-5. 執行 ./verify_skill.sh [palette|colors|typography]
+4. 修改 tokens/*.json（⚠️ 不要直接改 styles/ 的產生檔），
+   再執行 npm run gen:tokens
+5. 執行 ./verify_skill.sh
+   （會跑 token 同步檢查、dart analyze、flutter test、文件站建置）
 6. 若 exit code 非 0，自行修正後重新執行，最多 3 次
 7. 驗證通過後將變更寫入 CHANGELOG_DRAFT.md（狀態：DRAFT）
 8. 若 LESSONS_LEARNED.md 超過 30 行，將穩定規則移入

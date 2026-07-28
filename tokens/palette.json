@@ -1,0 +1,77 @@
+{
+  "$comment": "USPACE core palette — 所有 hex 集中於此",
+  "groups": [
+    {
+      "name": "Black & White",
+      "tokens": {
+        "black": { "value": "0xFF000000" },
+        "uspaceBlack": { "value": "0xFF000000", "note": "project/uspace-black" },
+        "white": { "value": "0xFFFFFFFF" }
+      }
+    },
+    {
+      "name": "Transparent",
+      "tokens": {
+        "transparentBlack10": { "value": "0x1A000000", "note": "black @ 10%" },
+        "transparentBlack40": { "value": "0x66000000", "note": "black @ 40%" },
+        "transparentBlack50": { "value": "0x80000000", "note": "black @ 50%" },
+        "transparentWhite5": { "value": "0x0DFFFFFF", "note": "white @ 5%" },
+        "transparentWhite10": { "value": "0x1AFFFFFF", "note": "white @ 10%" },
+        "transparentWhite50": { "value": "0x80FFFFFF", "note": "white @ 50%" },
+        "transparentWhite70": { "value": "0xB3FFFFFF", "note": "white @ 70%" },
+        "transparentWhite80": { "value": "0xCCFFFFFF", "note": "white @ 80%" },
+        "transparentGrey8003": { "value": "0x08323237", "note": "grey800 @ 3%" },
+        "transparentGrey80015": { "value": "0x26323237", "note": "grey800 @ 15%" },
+        "transparentGrey20020": { "value": "0x33D9D9D9", "note": "grey200 @ 20%" }
+      }
+    },
+    {
+      "name": "NeonLime",
+      "tokens": {
+        "neonLime200": { "value": "0xFF00EEB7" },
+        "neonLime400": { "value": "0xFF00F158" },
+        "neonLime600": { "value": "0xFFC3F400" },
+        "neonLime700": { "value": "0xFFB4E002" },
+        "neonLime800": { "value": "0xFFA7D100" },
+        "neonLime900": { "value": "0xFF74AA5A" }
+      }
+    },
+    {
+      "name": "Grey",
+      "tokens": {
+        "grey50": { "value": "0xFFF8F8F8" },
+        "grey100": { "value": "0xFFEEEEEE" },
+        "grey200": { "value": "0xFFD9D9D9" },
+        "grey300": { "value": "0xFFB4B4B4" },
+        "grey400": { "value": "0xFFA6A6A6" },
+        "grey500": { "value": "0xFF98989F" },
+        "grey600": { "value": "0xFF777777" },
+        "grey700": { "value": "0xFF606060" },
+        "grey800": { "value": "0xFF323237" },
+        "grey900": { "value": "0xFF1A1A1A" }
+      }
+    },
+    {
+      "name": "Blue",
+      "tokens": {
+        "blue400": { "value": "0xFFA1BDE5" },
+        "blue600": { "value": "0xFF5948D0" },
+        "blue800": { "value": "0xFF3F5CEE" }
+      }
+    },
+    {
+      "name": "Yellow",
+      "tokens": {
+        "yellow400": { "value": "0xFFD1AF65" }
+      }
+    },
+    {
+      "name": "Red",
+      "tokens": {
+        "red300": { "value": "0xFFFF5151" },
+        "red400": { "value": "0xFFFF4A20" },
+        "red500": { "value": "0xFFF40000" }
+      }
+    }
+  ]
+}
