@@ -1,0 +1,23 @@
+{
+  "$comment": "USpaceTextArea 的 status → token 對應表。",
+  "$source": "由 styles/text_area.dart 的顏色判斷邏輯推導，尚未逐一比對 Figma node 634:8456",
+  "$confidence": "dart-derived",
+  "component": "USpaceTextArea",
+  "source": "styles/text_area.dart",
+  "figmaNode": "634:8456",
+  "dimensions": {
+    "status": ["default", "active", "typing", "complete", "incomplete", "error", "disabled", "nonEditable"]
+  },
+  "layout": { "height": 144, "borderWidth": 2, "radius": 20 },
+  "variants": [
+    { "status": "default", "bg": "inputBgDefault", "border": null, "text": "inputText", "hint": "textSecondary" },
+    { "status": "active", "bg": "inputBgDefault", "border": "inputBorderActive", "text": "inputText", "hint": "textSecondary" },
+    { "status": "typing", "bg": "inputBgDefault", "border": "inputBorderActive", "text": "inputText", "hint": "textSecondary" },
+    { "status": "complete", "bg": "inputBgDefault", "border": null, "text": "inputText", "hint": "textSecondary" },
+    { "status": "incomplete", "bg": "inputBgDefault", "border": null, "text": "inputText", "hint": "inputTextError" },
+    { "status": "error", "bg": "inputBgDefault", "border": "inputBorderActive", "text": "inputText", "hint": "inputTextError", "note": "邊框刻意仍為 inputBorderActive（綠色）而非紅色，與 TextField 不同" },
+    { "status": "disabled", "bg": "inputBgDefault", "border": null, "text": "inputTextDisabled", "hint": "textDisabled" },
+    { "status": "nonEditable", "bg": "inputBgDefault", "border": null, "text": "inputTextDisabled", "hint": "textSecondary" }
+  ],
+  "$diff": "與 TextField 的差異：高度 144（vs 48）、圓角 20（vs full）、error 邊框為綠色（vs 紅色）"
+}

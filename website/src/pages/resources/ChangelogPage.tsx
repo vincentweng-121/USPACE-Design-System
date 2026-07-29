@@ -1,7 +1,7 @@
 import PageHero from '../../components/PageHero';
 const versions = [
   {
-    version: 'v2.8.2',
+    version: 'v0.2.10',
     date: '2026-05-19',
     breaking: false,
     changes: [
@@ -15,7 +15,7 @@ const versions = [
       },
       {
         file: 'uspace_colors_extension.dart',
-        subVersion: 'v2.2.0',
+        subVersion: 'v0.2.2',
         status: 'PUBLISHED',
         items: [
           '新增 4 個漸層：silverLinear / limeLinear / bottomBarGray1B / bottomBarGray2B',
@@ -25,7 +25,7 @@ const versions = [
     ],
   },
   {
-    version: 'v2.8.1',
+    version: 'v0.2.9',
     date: '2026-05-19',
     breaking: false,
     changes: [
@@ -39,7 +39,7 @@ const versions = [
       },
       {
         file: 'uspace_colors_extension.dart',
-        subVersion: 'v2.1.0',
+        subVersion: 'v0.2.1',
         status: 'PUBLISHED',
         items: [
           'Dark pageMask: transparentBlack40 → transparentWhite5',
@@ -49,13 +49,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.8.0',
+    version: 'v0.2.8',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'modal.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceModal：底部彈出式 Modal（4 categories）',
@@ -68,13 +68,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.7.0',
+    version: 'v0.2.7',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'text_area.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceTextArea：多行文字輸入元件（8 states）',
@@ -86,13 +86,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.6.0',
+    version: 'v0.2.6',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'spacing_extension.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceSpacing：margin (20px) + 11 spacer tokens (2-56px)',
@@ -101,7 +101,7 @@ const versions = [
       },
       {
         file: 'radius_extension.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceRadius：small (8) / medium (20) / full (1000)',
@@ -111,13 +111,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.5.0',
+    version: 'v0.2.5',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'toggle.dart',
-        subVersion: 'v2.0.0',
+        subVersion: 'v0.2.0',
         status: 'PUBLISHED',
         items: [
           '重寫 USpaceToggle：自訂實作取代 Flutter Switch',
@@ -130,13 +130,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.4.0',
+    version: 'v0.2.4',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'chip.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceChip widget（4 levels × 2 sizes）',
@@ -148,13 +148,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.3.0',
+    version: 'v0.2.3',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'tab.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceTab widget（5 types × 2 states）',
@@ -167,13 +167,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.2.0',
+    version: 'v0.2.2',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'dropdown_menu.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceDropdownMenu widget（5 states）',
@@ -185,13 +185,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.1.0',
+    version: 'v0.2.1',
     date: '2026-05-19',
     breaking: false,
     changes: [
       {
         file: 'text_field.dart',
-        subVersion: 'v1.0.0',
+        subVersion: 'v0.1.0',
         status: 'PUBLISHED',
         items: [
           '新增 USpaceTextField widget（9 states）',
@@ -204,13 +204,13 @@ const versions = [
     ],
   },
   {
-    version: 'v2.0.0',
+    version: 'v0.2.0',
     date: '2026-05-12',
     breaking: true,
     changes: [
       {
         file: 'uspace_palette.dart',
-        subVersion: 'v1.1.0',
+        subVersion: 'v0.1.1',
         status: 'DRAFT',
         items: [
           'hex 修正：neonLime800、grey100',
@@ -219,7 +219,7 @@ const versions = [
       },
       {
         file: 'uspace_colors_extension.dart',
-        subVersion: 'v2.0.0',
+        subVersion: 'v0.2.0',
         status: 'DRAFT',
         items: [
           'BREAKING：全量同步 Figma Variables（Light + Dark）',
@@ -231,7 +231,7 @@ const versions = [
     ],
   },
   {
-    version: 'v1.1.1',
+    version: 'v0.1.2',
     date: '2026-04-17',
     breaking: false,
     changes: [
@@ -240,7 +240,7 @@ const versions = [
     ],
   },
   {
-    version: 'v1.1.0',
+    version: 'v0.1.1',
     date: '2026-04-15',
     breaking: false,
     changes: [
@@ -250,7 +250,7 @@ const versions = [
     ],
   },
   {
-    version: 'v1.0.0',
+    version: 'v0.1.0',
     date: '2026-04-14',
     breaking: true,
     changes: [

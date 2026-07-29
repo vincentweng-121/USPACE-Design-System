@@ -76,8 +76,7 @@ export default function StatusPage() {
           <div key={s.label} style={{
             flex: '1 1 100px', padding: 20, borderRadius: 12, minWidth: 100,
             background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-            textAlign: 'center',
-          }}>
+            textAlign: 'center' }}>
             <div style={{ fontSize: 28, fontWeight: 500, color: s.color }}>{s.count}</div>
             <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 4 }}>{s.label}</div>
           </div>
@@ -85,31 +84,33 @@ export default function StatusPage() {
       </div>
 
       {sections.map(section => (
-        <div key={section.title} style={{ marginBottom: 56 }}>
+        <section className="section" key={section.title}>
           <SectionTitle>{section.title}</SectionTitle>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, minWidth: 600 }}>
+          <div className="spec-table">
+<div>
+            <table style={{ minWidth: 600 }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                <tr>
                   {['File', 'Version', 'Status', 'Updated', 'Note'].map(h => (
-                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                    <th key={h}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {section.items.map(item => (
-                  <tr key={item.name} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                    <td style={{ padding: '10px 12px' }}><code>{item.name}</code></td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{item.version}</td>
-                    <td style={{ padding: '10px 12px' }}><StatusBadge status={item.status} /></td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text-tertiary)' }}>{item.date}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{item.note}</td>
+                  <tr key={item.name}>
+                    <td><code>{item.name}</code></td>
+                    <td>{item.version}</td>
+                    <td><StatusBadge status={item.status} /></td>
+                    <td>{item.date}</td>
+                    <td>{item.note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+</div>
           </div>
-        </div>
+        </section>
       ))}
     </div>
   );

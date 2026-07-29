@@ -1,0 +1,25 @@
+{
+  "$comment": "USpaceTab 的 type × state → token 對應表。",
+  "$source": "由 styles/tab.dart 的顏色判斷邏輯推導，尚未逐一比對 Figma node 972:7985",
+  "$confidence": "dart-derived",
+  "component": "USpaceTab",
+  "source": "styles/tab.dart",
+  "figmaNode": "972:7985",
+  "dimensions": {
+    "type": ["tabIcon", "tabGraphic", "tab", "filter", "input"],
+    "state": ["active", "inactive"]
+  },
+  "layout": { "tabHeight": 38, "filterHeight": 32, "iconSize": 20, "graphicSize": 31.5 },
+  "variants": [
+    { "type": "tabIcon", "state": "active", "bg": "contentPrimary", "content": "textInverse", "border": null },
+    { "type": "tabIcon", "state": "inactive", "bg": "actionTertiaryBg", "content": "actionTertiaryContent", "border": null },
+    { "type": "tabGraphic", "state": "active", "bg": "contentPrimary", "content": "textInverse", "border": null },
+    { "type": "tabGraphic", "state": "inactive", "bg": "actionTertiaryBg", "content": "actionTertiaryContent", "border": null },
+    { "type": "tab", "state": "active", "bg": "contentPrimary", "content": "textInverse", "border": null },
+    { "type": "tab", "state": "inactive", "bg": "actionTertiaryBg", "content": "actionTertiaryContent", "border": null },
+    { "type": "filter", "state": "active", "bg": "actionPrimaryBg", "content": "textInverse", "border": null, "note": "與其餘 type 不同，active 底色用 actionPrimaryBg" },
+    { "type": "filter", "state": "inactive", "bg": "actionTertiaryBg", "content": "actionTertiaryContent", "border": null },
+    { "type": "input", "state": "active", "bg": "actionOutlineBg", "content": "actionOutlineContent", "border": "borderDivider", "note": "input 無 active / inactive 之分，兩者相同" },
+    { "type": "input", "state": "inactive", "bg": "actionOutlineBg", "content": "actionOutlineContent", "border": "borderDivider" }
+  ]
+}

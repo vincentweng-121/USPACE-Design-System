@@ -1,0 +1,19 @@
+{
+  "$comment": "USpaceDropdownMenu 的規格檔（骨架）。",
+  "$source": "維度由 styles/dropdown_menu.dart 的 enum 取得；token 對應尚待補齊",
+  "$confidence": "skeleton",
+  "$todo": "status 已確認；token 對應尚未整理",
+  "component": "USpaceDropdownMenu",
+  "source": "styles/dropdown_menu.dart",
+  "figmaNode": "2141:11030",
+  "dimensions": {
+    "status": [
+      "default",
+      "selecting",
+      "complete",
+      "incomplete",
+      "error"
+    ]
+  },
+  "variants": []
+}

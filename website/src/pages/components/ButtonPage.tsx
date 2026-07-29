@@ -140,8 +140,7 @@ function SpecimenRow({
       style={{
         display: 'flex',
         gap: 20,
-        padding: '24px 0',
-        borderTop: n === 1 ? 'none' : '1px solid var(--border-divider)',
+        padding: n === 1 ? '8px 0 28px' : '28px 0',
       }}
     >
       <div style={{ marginTop: 2 }}>
@@ -255,7 +254,7 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              每一列展示同一個維度的所有變體，全部為實際渲染結果，非示意圖。
+              基本樣式的三個維度。互動與狀態不在此處，見下方 States。
             </p>
 
             <div
@@ -277,13 +276,8 @@ export default function ButtonPage() {
                 ))}
               </SpecimenRow>
 
-              <SpecimenRow n={3} title="State" note="disabled 同時移除點擊行為">
-                {states.map((stt) => (
-                  <ButtonPreview key={stt} label={cap(stt)} style="accent" size="small" state={stt} />
-                ))}
-              </SpecimenRow>
 
-              <SpecimenRow n={4} title="Icon" note="文字左右兩側各自獨立，可任意組合">
+              <SpecimenRow n={3} title="Icon" note="文字左右兩側各自獨立，可任意組合">
                 <ButtonPreview label="無 icon" style="accent" size="small" state="enabled" />
                 <ButtonPreview label="左側" style="accent" size="small" state="enabled" leading />
                 <ButtonPreview label="右側" style="accent" size="small" state="enabled" trailing />
@@ -432,6 +426,46 @@ export default function ButtonPage() {
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
               目前只定義 enabled 與 disabled 兩種狀態，Figma 尚無 pressed 規格。
             </p>
+
+            <div
+              style={{
+                padding: 'clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px)',
+                borderRadius: 12,
+                background: 'var(--page-secondary)',
+                border: '1px solid var(--border-divider)',
+                marginBottom: 32,
+              }}
+            >
+              {states.map((stt, i) => (
+                <div
+                  key={stt}
+                  style={{
+                    padding: i === 0 ? '8px 0 28px' : '28px 0',
+                  }}
+                >
+                  <div className="heading-sm" style={{ marginBottom: 2 }}>
+                    {cap(stt)}
+                  </div>
+                  <div
+                    className="text-sm"
+                    style={{ color: 'var(--text-tertiary)', marginBottom: 16 }}
+                  >
+                    {stt === 'enabled' ? '可點擊，各 style 呈現自身配色' : '不可點擊，所有 style 收斂為同一組 disabled 配色'}
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                    {styles.map((st) => (
+                      <ButtonPreview
+                        key={st}
+                        label={cap(st)}
+                        style={st}
+                        size="small"
+                        state={stt}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
             <SpecTable
               headers={['狀態', '外觀', '互動']}
               rows={[

@@ -516,7 +516,17 @@ function tsScalars() {
 // ─── TypeScript：元件規格（與 Flutter 測試同源）──────────────
 
 function tsComponentSpecs() {
-  const files = ['button.json', 'toggle.json', 'chip.json'];
+  const files = [
+    'button.json',
+    'toggle.json',
+    'chip.json',
+    'tab.json',
+    'text_field.json',
+    'text_area.json',
+    'list.json',
+    'modal.json',
+    'dropdown_menu.json',
+  ];
   const out = [
     '// ⚠️ GENERATED FILE — 請勿手動編輯',
     '// 來源：tokens/components/*.json',
@@ -532,6 +542,7 @@ function tsComponentSpecs() {
     '  dimensions: Record<string, string[]>;',
     '  variants: Record<string, string | number | null | undefined>[];',
     '  layout?: Record<string, number | { width: number; height: number }>;',
+    '  confidence?: string;',
     '}',
     '',
   ];
@@ -544,6 +555,8 @@ function tsComponentSpecs() {
       component: spec.component,
       source: spec.source,
       ...(spec.figmaNode ? { figmaNode: spec.figmaNode } : {}),
+      // dart-derived / skeleton 代表尚未逐一比對 Figma，頁面會據此顯示提醒
+      ...(spec.$confidence ? { confidence: spec.$confidence } : {}),
       dimensions: spec.dimensions,
       variants: spec.variants,
       ...(spec.layout ? { layout: spec.layout } : {}),

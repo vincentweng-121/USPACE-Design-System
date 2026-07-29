@@ -17,7 +17,10 @@
   --topbar-h: 60px;
   --sidebar-w: 280px;
   --toc-w: 232px;
-  --content-max: 800px;
+  --content-max: 1080px;
+  /* 長文的可讀行寬。容器變寬後，表格與展示區用滿寬，
+     但敘述文字仍要收在一行 60-70 字以內，否則視線回掃會很吃力。 */
+  --prose-max: 66ch;
 
   /* ── 中性介面色階（light）── */
   --page-primary: #FFFFFF;
@@ -138,7 +141,8 @@ body {
     'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  /* clip 而非 hidden：hidden 會產生捲動容器，讓子層的 position: sticky 失效 */
+  overflow-x: clip;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -214,6 +218,73 @@ code {
 
 .section + .section {
   margin-top: 144px;
+}
+
+/* 敘述段落與條列維持可讀行寬。max-width 只會縮不會撐，
+   因此放在窄容器（卡片、儲存格）裡時不生效。 */
+.section p,
+.section > ul,
+.section > ol {
+  max-width: var(--prose-max);
+}
+
+/* 表格儲存格內的文字由欄寬決定，不套用行寬限制 */
+.spec-table p {
+  max-width: none;
+}
+
+/* ── 規格表 ─────────────────────────────────────────────────
+   樣式參考 Material 3 文件站：圓角外框包住整張表，
+   格線只用最細的一級，最外圈不重複畫線。
+   ───────────────────────────────────────────────────────── */
+
+.spec-table {
+  border: 1px solid var(--border-divider);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.spec-table > div {
+  overflow-x: auto;
+}
+
+.spec-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.spec-table th {
+  padding: 16px 20px;
+  text-align: center;
+  font-weight: 400;
+  color: var(--text-secondary);
+  background: var(--surface-sunken);
+  border-bottom: 1px solid var(--border-divider);
+  white-space: nowrap;
+}
+
+.spec-table td {
+  padding: 16px 20px;
+  vertical-align: top;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-divider);
+}
+
+/* 第一欄為主要內容 */
+.spec-table td:first-child {
+  color: var(--text-primary);
+}
+
+/* 欄與欄之間的分隔線，最後一欄不畫 */
+.spec-table th:not(:last-child),
+.spec-table td:not(:last-child) {
+  border-right: 1px solid var(--border-divider);
+}
+
+/* 最後一列不畫底線，交給外框圓角收邊 */
+.spec-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 /* ── 捲軸 ── */

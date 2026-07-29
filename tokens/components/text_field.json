@@ -1,0 +1,24 @@
+{
+  "$comment": "USpaceTextField 的 status → token 對應表。",
+  "$source": "由 styles/text_field.dart 的顏色判斷邏輯推導，尚未逐一比對 Figma node 40:3307",
+  "$confidence": "dart-derived",
+  "component": "USpaceTextField",
+  "source": "styles/text_field.dart",
+  "figmaNode": "40:3307",
+  "dimensions": {
+    "status": ["default", "active", "typing", "complete", "incomplete", "error", "errorActive", "disabled", "nonEditable"]
+  },
+  "layout": { "height": 48, "borderWidth": 2 },
+  "variants": [
+    { "status": "default", "bg": "inputBgDefault", "border": null, "text": "inputText", "hint": "textSecondary" },
+    { "status": "active", "bg": "inputBgDefault", "border": "inputBorderActive", "text": "inputText", "hint": "textSecondary" },
+    { "status": "typing", "bg": "inputBgDefault", "border": "inputBorderActive", "text": "inputText", "hint": "textSecondary" },
+    { "status": "complete", "bg": "inputBgDefault", "border": null, "text": "inputText", "hint": "textSecondary" },
+    { "status": "incomplete", "bg": "inputBgDefault", "border": null, "text": "inputText", "hint": "inputTextError" },
+    { "status": "error", "bg": "inputBgDefault", "border": null, "text": "inputText", "hint": "inputTextError" },
+    { "status": "errorActive", "bg": "inputBgDefault", "border": "inputBorderError", "text": "inputText", "hint": "inputTextError" },
+    { "status": "disabled", "bg": "inputBgDefault", "border": null, "text": "inputTextDisabled", "hint": "textSecondary" },
+    { "status": "nonEditable", "bg": "inputBgDefault", "border": null, "text": "inputTextDisabled", "hint": "textSecondary" }
+  ],
+  "$placeholder": "placeholder 文字使用 inputTextPlaceholder，游標使用 contentAccent，錯誤 icon 使用 contentError"
+}

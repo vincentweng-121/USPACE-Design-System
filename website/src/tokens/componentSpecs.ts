@@ -12,6 +12,7 @@ export interface ComponentSpec {
   dimensions: Record<string, string[]>;
   variants: Record<string, string | number | null | undefined>[];
   layout?: Record<string, number | { width: number; height: number }>;
+  confidence?: string;
 }
 
 export const buttonSpec: ComponentSpec = {
@@ -211,4 +212,325 @@ export const chipSpec: ComponentSpec = {
   ]
 };
 
-export const componentSpecs = { button: buttonSpec, toggle: toggleSpec, chip: chipSpec };
+export const tabSpec: ComponentSpec = {
+  "component": "USpaceTab",
+  "source": "styles/tab.dart",
+  "figmaNode": "972:7985",
+  "confidence": "dart-derived",
+  "dimensions": {
+    "type": [
+      "tabIcon",
+      "tabGraphic",
+      "tab",
+      "filter",
+      "input"
+    ],
+    "state": [
+      "active",
+      "inactive"
+    ]
+  },
+  "variants": [
+    {
+      "type": "tabIcon",
+      "state": "active",
+      "bg": "contentPrimary",
+      "content": "textInverse",
+      "border": null
+    },
+    {
+      "type": "tabIcon",
+      "state": "inactive",
+      "bg": "actionTertiaryBg",
+      "content": "actionTertiaryContent",
+      "border": null
+    },
+    {
+      "type": "tabGraphic",
+      "state": "active",
+      "bg": "contentPrimary",
+      "content": "textInverse",
+      "border": null
+    },
+    {
+      "type": "tabGraphic",
+      "state": "inactive",
+      "bg": "actionTertiaryBg",
+      "content": "actionTertiaryContent",
+      "border": null
+    },
+    {
+      "type": "tab",
+      "state": "active",
+      "bg": "contentPrimary",
+      "content": "textInverse",
+      "border": null
+    },
+    {
+      "type": "tab",
+      "state": "inactive",
+      "bg": "actionTertiaryBg",
+      "content": "actionTertiaryContent",
+      "border": null
+    },
+    {
+      "type": "filter",
+      "state": "active",
+      "bg": "actionPrimaryBg",
+      "content": "textInverse",
+      "border": null,
+      "note": "與其餘 type 不同，active 底色用 actionPrimaryBg"
+    },
+    {
+      "type": "filter",
+      "state": "inactive",
+      "bg": "actionTertiaryBg",
+      "content": "actionTertiaryContent",
+      "border": null
+    },
+    {
+      "type": "input",
+      "state": "active",
+      "bg": "actionOutlineBg",
+      "content": "actionOutlineContent",
+      "border": "borderDivider",
+      "note": "input 無 active / inactive 之分，兩者相同"
+    },
+    {
+      "type": "input",
+      "state": "inactive",
+      "bg": "actionOutlineBg",
+      "content": "actionOutlineContent",
+      "border": "borderDivider"
+    }
+  ],
+  "layout": {
+    "tabHeight": 38,
+    "filterHeight": 32,
+    "iconSize": 20,
+    "graphicSize": 31.5
+  }
+};
+
+export const text_fieldSpec: ComponentSpec = {
+  "component": "USpaceTextField",
+  "source": "styles/text_field.dart",
+  "figmaNode": "40:3307",
+  "confidence": "dart-derived",
+  "dimensions": {
+    "status": [
+      "default",
+      "active",
+      "typing",
+      "complete",
+      "incomplete",
+      "error",
+      "errorActive",
+      "disabled",
+      "nonEditable"
+    ]
+  },
+  "variants": [
+    {
+      "status": "default",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "active",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "typing",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "complete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "incomplete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "inputTextError"
+    },
+    {
+      "status": "error",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "inputTextError"
+    },
+    {
+      "status": "errorActive",
+      "bg": "inputBgDefault",
+      "border": "inputBorderError",
+      "text": "inputText",
+      "hint": "inputTextError"
+    },
+    {
+      "status": "disabled",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputTextDisabled",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "nonEditable",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputTextDisabled",
+      "hint": "textSecondary"
+    }
+  ],
+  "layout": {
+    "height": 48,
+    "borderWidth": 2
+  }
+};
+
+export const text_areaSpec: ComponentSpec = {
+  "component": "USpaceTextArea",
+  "source": "styles/text_area.dart",
+  "figmaNode": "634:8456",
+  "confidence": "dart-derived",
+  "dimensions": {
+    "status": [
+      "default",
+      "active",
+      "typing",
+      "complete",
+      "incomplete",
+      "error",
+      "disabled",
+      "nonEditable"
+    ]
+  },
+  "variants": [
+    {
+      "status": "default",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "active",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "typing",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "complete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "incomplete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "inputTextError"
+    },
+    {
+      "status": "error",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "inputTextError",
+      "note": "邊框刻意仍為 inputBorderActive（綠色）而非紅色，與 TextField 不同"
+    },
+    {
+      "status": "disabled",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputTextDisabled",
+      "hint": "textDisabled"
+    },
+    {
+      "status": "nonEditable",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputTextDisabled",
+      "hint": "textSecondary"
+    }
+  ],
+  "layout": {
+    "height": 144,
+    "borderWidth": 2,
+    "radius": 20
+  }
+};
+
+export const listSpec: ComponentSpec = {
+  "component": "USpaceListItem",
+  "source": "styles/list.dart",
+  "confidence": "skeleton",
+  "dimensions": {
+    "trailing": [
+      "none",
+      "button",
+      "toggle",
+      "value",
+      "selectable"
+    ]
+  },
+  "variants": []
+};
+
+export const modalSpec: ComponentSpec = {
+  "component": "USpaceModal",
+  "source": "styles/modal.dart",
+  "figmaNode": "2237:3211",
+  "confidence": "skeleton",
+  "dimensions": {
+    "category": [
+      "listItem",
+      "textArea",
+      "image",
+      "none"
+    ]
+  },
+  "variants": []
+};
+
+export const dropdown_menuSpec: ComponentSpec = {
+  "component": "USpaceDropdownMenu",
+  "source": "styles/dropdown_menu.dart",
+  "figmaNode": "2141:11030",
+  "confidence": "skeleton",
+  "dimensions": {
+    "status": [
+      "default",
+      "selecting",
+      "complete",
+      "incomplete",
+      "error"
+    ]
+  },
+  "variants": []
+};
+
+export const componentSpecs = { button: buttonSpec, toggle: toggleSpec, chip: chipSpec, tab: tabSpec, text_field: text_fieldSpec, text_area: text_areaSpec, list: listSpec, modal: modalSpec, dropdown_menu: dropdown_menuSpec };
