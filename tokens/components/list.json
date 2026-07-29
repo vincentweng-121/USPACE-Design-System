@@ -1,0 +1,18 @@
+{
+  "$comment": "USpaceListItem 的規格檔（骨架）。",
+  "$source": "維度由 styles/list.dart 的 enum 取得；token 對應尚待補齊",
+  "$confidence": "skeleton",
+  "$todo": "trailing 型別已確認；各部位的 token 對應尚未整理",
+  "component": "USpaceListItem",
+  "source": "styles/list.dart",
+  "dimensions": {
+    "trailing": [
+      "none",
+      "button",
+      "toggle",
+      "value",
+      "selectable"
+    ]
+  },
+  "variants": []
+}

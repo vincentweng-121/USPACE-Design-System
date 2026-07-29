@@ -11,7 +11,7 @@ export default function TypographyPage() {
       />
 
       {typographyStyles.map(family => (
-        <div key={family.family} style={{ marginBottom: 120 }}>
+        <section className="section" key={family.family}>
           <SectionTitle>{family.family}</SectionTitle>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {family.styles.map(s => (
@@ -20,8 +20,7 @@ export default function TypographyPage() {
                 style={{
                   display: 'flex', flexWrap: 'wrap', alignItems: 'baseline',
                   padding: '16px 0', borderBottom: '1px solid var(--border-divider)',
-                  gap: '8px 24px',
-                }}
+                  gap: '8px 24px' }}
               >
                 <div style={{ minWidth: 140, flexShrink: 0 }}>
                   <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontFamily: 'ui-monospace, monospace' }}>{s.name}</div>
@@ -39,20 +38,18 @@ export default function TypographyPage() {
                     : '"SF Pro", -apple-system, sans-serif',
                   fontSize: Math.min(s.size, 26), lineHeight: `${s.lineHeight}px`,
                   fontWeight: s.weight, color: 'var(--text-primary)',
-                  overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', minWidth: 0,
-                }}>
+                  overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', minWidth: 0 }}>
                   {family.family === 'PingFang TC' ? 'USPACE 智慧停車' : 'USPACE Smart Parking'}
                 </div>
                 <div style={{
                   fontSize: 11, color: 'var(--text-tertiary)', fontFamily: 'monospace',
-                  whiteSpace: 'nowrap', flexShrink: 0,
-                }}>
+                  whiteSpace: 'nowrap', flexShrink: 0 }}>
                   {s.lineHeight}/{s.size} = {(s.lineHeight / s.size).toFixed(2)}
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       ))}
     </div>
   );

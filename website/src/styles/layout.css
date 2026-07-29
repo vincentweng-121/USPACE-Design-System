@@ -506,12 +506,23 @@ kbd {
 
 /* ── 響應式 ── */
 
-@media (max-width: 1280px) {
+/* 內容欄變寬後，右側目錄需要更多空間才放得下 */
+@media (max-width: 1560px) {
   .main {
     margin-right: 0;
   }
   .toc {
     display: none;
+  }
+}
+
+/* 中等寬度：縮小內容左右留白，把空間讓給內容本身 */
+@media (max-width: 1200px) {
+  .content {
+    padding: 48px 28px 160px;
+  }
+  .home-body {
+    padding: 96px 28px 160px;
   }
 }
 

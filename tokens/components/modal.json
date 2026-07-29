@@ -1,0 +1,18 @@
+{
+  "$comment": "USpaceModal 的規格檔（骨架）。",
+  "$source": "維度由 styles/modal.dart 的 enum 取得；token 對應尚待補齊",
+  "$confidence": "skeleton",
+  "$todo": "category 已確認；底色為 pagePopup、陰影為 shadowDefault，其餘部位尚未整理",
+  "component": "USpaceModal",
+  "source": "styles/modal.dart",
+  "figmaNode": "2237:3211",
+  "dimensions": {
+    "category": [
+      "listItem",
+      "textArea",
+      "image",
+      "none"
+    ]
+  },
+  "variants": []
+}

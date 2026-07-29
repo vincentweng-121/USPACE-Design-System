@@ -40,7 +40,7 @@ export default function PageHero({
       </h1>
 
       {lead && (
-        <p className="text-lg text-muted" style={{ maxWidth: '62ch' }}>
+        <p className="text-lg text-muted" style={{ maxWidth: 'var(--prose-max)' }}>
           {lead}
         </p>
       )}
@@ -50,8 +50,6 @@ export default function PageHero({
           className="text-sm"
           style={{
             marginTop: 20,
-            paddingTop: 16,
-            borderTop: '1px solid var(--border-divider)',
             color: 'var(--text-tertiary)',
             display: 'flex',
             gap: 20,

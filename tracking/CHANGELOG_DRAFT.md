@@ -6,7 +6,7 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
-### 2026-07-28 | button.dart | Figma 全量改版（v3.0.0）
+### 2026-07-28 | button.dart | Figma 全量改版（v0.3.0）
 狀態：PUBLISHED
 ⚠️ BREAKING CHANGE — 前端需全專案調整
 
@@ -71,7 +71,7 @@ Small 水平 padding spacer24、Regular 滿寬。
 
 ---
 
-### 2026-07-28 | header + 新色票 + 檔案拆分（v2.11.0）
+### 2026-07-28 | header + 新色票 + 檔案拆分（v0.2.14）
 狀態：PUBLISHED
 ⚠️ 無 BREAKING CHANGE — 元件 API 不變
 
@@ -132,7 +132,7 @@ Modal 陰影原本在 Dart 與網站兩邊各自寫死 `rgba(0,0,0,0.1)`，palet
 
 ---
 
-### 2026-07-28 | 專案品質 | 測試基礎建設（v2.10.0）
+### 2026-07-28 | 專案品質 | 測試基礎建設（v0.2.13）
 狀態：PUBLISHED
 ⚠️ 無 BREAKING CHANGE — 元件 API 與 token 值皆未變動
 
@@ -216,12 +216,12 @@ class 的方法，唯一路徑是重構成多個子 widget——這是專案裡�
 
 ---
 
-### 2026-07-28 | website | 元件頁內嵌 hex 全面改吃 token（v2.9.1）
+### 2026-07-28 | website | 元件頁內嵌 hex 全面改吃 token（v0.2.12）
 狀態：PUBLISHED
-承接同日 v2.9.0 的 token 產生器導入。
+承接同日 v0.2.11 的 token 產生器導入。
 
 #### 動機
-v2.9.0 只讓 `website/src/tokens/*.ts` 與 Dart 同源，但 12 個元件頁仍把色碼
+v0.2.11 只讓 `website/src/tokens/*.ts` 與 Dart 同源，但 12 個元件頁仍把色碼
 直接寫在 JSX 裡，改一個色票仍需手動掃過所有頁面。
 
 #### 改為引用 token 的頁面（共 50 處）
@@ -282,7 +282,7 @@ v2.9.0 只讓 `website/src/tokens/*.ts` 與 Dart 同源，但 12 個元件頁仍
 
 ---
 
-### 2026-07-28 | 專案結構 | Token 產生器導入（v2.9.0）
+### 2026-07-28 | 專案結構 | Token 產生器導入（v0.2.11）
 狀態：PUBLISHED
 ⚠️ 無 BREAKING CHANGE — 所有既有 API 與 token 值完全不變
 
