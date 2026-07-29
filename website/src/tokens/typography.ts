@@ -1,3 +1,7 @@
+// ⚠️ GENERATED FILE — 請勿手動編輯
+// 來源：tokens/typography.json
+// 重新產生：npm run gen:tokens（專案根目錄）
+
 export const typographyStyles = [
   {
     family: 'PingFang TC',
@@ -24,8 +28,8 @@ export const typographyStyles = [
       { name: 'sfBodyL', size: 18, lineHeight: 26, weight: 400, desc: '' },
       { name: 'sfBodyM', size: 16, lineHeight: 24, weight: 400, desc: '' },
       { name: 'sfBodyS', size: 14, lineHeight: 20, weight: 400, desc: '' },
-      { name: 'sfCaptionS', size: 14, lineHeight: 16, weight: 400, desc: 'fontSize=14 (differs from PingFang)' },
-      { name: 'sfDisplayM', size: 20, lineHeight: 26, weight: 500, desc: 'fontSize=20 (differs from PingFang)' },
+      { name: 'sfCaptionS', size: 14, lineHeight: 16, weight: 400, desc: 'fontSize=14，與 PingFang 不同' },
+      { name: 'sfDisplayM', size: 20, lineHeight: 26, weight: 500, desc: 'Medium weight；fontSize=20，與 PingFang 不同' },
       { name: 'sfDisplayS', size: 14, lineHeight: 20, weight: 500, desc: 'Medium weight' },
       { name: 'sfLabelL', size: 16, lineHeight: 24, weight: 400, desc: 'Button' },
       { name: 'sfLabelM', size: 14, lineHeight: 20, weight: 400, desc: '文字按鈕' },

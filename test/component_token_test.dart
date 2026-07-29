@@ -1,0 +1,283 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../styles/uspace_design_system.dart';
+
+/// 由 tokens/components/*.json 驅動的元件 token 測試。
+///
+/// 這是整條鏈路的端到端驗證：
+///   tokens/*.json → 產生的 Dart token → 元件實際套用 → 畫面上的色值
+///
+/// 目的是取代人工 audit。過去「元件有沒有正確使用 token」只能靠肉眼逐一比對
+/// Figma 與程式碼（見 rules/LESSONS_LEARNED.md 2026-04-16 的教訓），
+/// 現在改動任何一環而忘了同步，CI 就會擋下來。
+void main() {
+  // ── 從 tokens/ 解析 semantic token → 實際 Color ──
+  Map<String, dynamic> readJson(String path) =>
+      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+
+  final paletteHex = <String, String>{};
+  for (final g in readJson('tokens/palette.json')['groups'] as List) {
+    (g['tokens'] as Map<String, dynamic>).forEach((k, v) {
+      paletteHex[k] = v['value'] as String;
+    });
+  }
+
+  final semanticToPalette = <String, String>{};
+  for (final g in readJson('tokens/semantic-colors.json')['groups'] as List) {
+    (g['tokens'] as Map<String, dynamic>).forEach((k, v) {
+      semanticToPalette[k] = v['light'] as String;
+    });
+  }
+
+  Color tokenColor(String semanticName) {
+    final p = semanticToPalette[semanticName];
+    expect(p, isNotNull, reason: 'semantic-colors.json 沒有 token：$semanticName');
+    final hex = paletteHex[p];
+    expect(hex, isNotNull, reason: 'palette.json 沒有色票：$p');
+    return Color(int.parse(hex!.substring(2), radix: 16));
+  }
+
+  Future<void> pump(WidgetTester tester, Widget child) => tester.pumpWidget(
+        MaterialApp(
+          theme: USpaceTheme.light,
+          home: Scaffold(body: Center(child: child)),
+        ),
+      );
+
+  List<Map<String, dynamic>> variantsOf(String file) =>
+      (readJson('tokens/components/$file')['variants'] as List)
+          .cast<Map<String, dynamic>>();
+
+  // ── Button ──────────────────────────────────────────────
+  group('USpaceButton', () {
+    const styles = {
+      'accent': USpaceButtonStyle.accent,
+      'charging': USpaceButtonStyle.charging,
+      'primary': USpaceButtonStyle.primary,
+      'secondary': USpaceButtonStyle.secondary,
+      'tertiary': USpaceButtonStyle.tertiary,
+    };
+    const sizes = {
+      'regular': USpaceButtonSize.regular,
+      'small': USpaceButtonSize.small,
+    };
+    final layout = readJson('tokens/components/button.json')['layout'] as Map<String, dynamic>;
+
+    // 顏色不隨 size 改變，因此每個 style × state 都在兩種 size 各驗一次
+    for (final v in variantsOf('button.json')) {
+      for (final sizeKey in sizes.keys) {
+        final label = '${v['style']} / $sizeKey / ${v['state']}';
+        testWidgets(label, (tester) async {
+          await pump(
+            tester,
+            USpaceButton(
+              label: 'Label',
+              style: styles[v['style']]!,
+              size: sizes[sizeKey]!,
+              state: v['state'] == 'enabled'
+                  ? USpaceButtonState.enabled
+                  : USpaceButtonState.disabled,
+              leadingIcon: const Icon(Icons.directions_car),
+              trailingIcon: const Icon(Icons.chevron_right),
+              onPressed: () {},
+            ),
+          );
+
+          final material = tester.widget<Material>(
+            find
+                .descendant(of: find.byType(USpaceButton), matching: find.byType(Material))
+                .first,
+          );
+
+          // 底色：null 代表透明
+          expect(
+            material.color,
+            v['bg'] == null ? Colors.transparent : tokenColor(v['bg'] as String),
+            reason: '$label 的底色應為 ${v['bg'] ?? '透明'}',
+          );
+
+          // 描邊：只有 secondary 有
+          final shape = material.shape as StadiumBorder;
+          if (v['border'] == null) {
+            expect(shape.side.style, BorderStyle.none, reason: '$label 不應有描邊');
+          } else {
+            expect(
+              shape.side.color,
+              tokenColor(v['border'] as String),
+              reason: '$label 的描邊應為 ${v['border']}',
+            );
+          }
+
+          final text = tester.widget<Text>(find.text('Label'));
+          expect(
+            text.style?.color,
+            tokenColor(v['content'] as String),
+            reason: '$label 的文字色應為 ${v['content']}',
+          );
+
+          // 高度固定 48，兩種 size 相同
+          expect(
+            tester.getSize(find.text('Label')).height <= (layout['height'] as num),
+            isTrue,
+            reason: '$label 的內容不應超過固定高度',
+          );
+        });
+      }
+    }
+
+    testWidgets('左右 icon 可各自省略', (tester) async {
+      await pump(
+        tester,
+        const USpaceButton(label: 'Label', leadingIcon: Icon(Icons.add)),
+      );
+      expect(find.byIcon(Icons.add), findsOneWidget);
+      expect(find.byType(Icon), findsOneWidget);
+    });
+
+    testWidgets('state=disabled 時不可點擊', (tester) async {
+      var taps = 0;
+      await pump(
+        tester,
+        USpaceButton(
+          label: 'Label',
+          state: USpaceButtonState.disabled,
+          onPressed: () => taps++,
+        ),
+      );
+      await tester.tap(find.text('Label'));
+      expect(taps, 0);
+    });
+
+    testWidgets('文字使用 displayM', (tester) async {
+      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
+      final text = tester.widget<Text>(find.text('Label'));
+      expect(text.style?.fontSize, AppTypographyExtension.light.displayM.fontSize);
+      expect(text.style?.fontWeight, AppTypographyExtension.medium);
+    });
+  });
+
+  // ── Toggle ──────────────────────────────────────────────
+  group('USpaceToggle', () {
+    final layout = readJson('tokens/components/toggle.json')['layout'] as Map<String, dynamic>;
+    final thumbW = (layout['thumb']['width'] as num).toDouble();
+    final thumbH = (layout['thumb']['height'] as num).toDouble();
+
+    for (final v in variantsOf('toggle.json')) {
+      final label = '${v['value']} / ${v['enabled']}';
+      testWidgets(label, (tester) async {
+        await pump(
+          tester,
+          USpaceToggle(
+            value: v['value'] == 'on',
+            enabled: v['enabled'] == 'enabled',
+            onChanged: (_) {},
+          ),
+        );
+
+        final track = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
+        expect(
+          (track.decoration as BoxDecoration).color,
+          tokenColor(v['track'] as String),
+          reason: '$label 的 track 應為 ${v['track']}',
+        );
+
+        // 以 layout 尺寸定位 thumb：AnimatedContainer 內部也會自建 Container
+        final thumbFinder = find.byWidgetPredicate(
+          (w) =>
+              w is Container &&
+              w.constraints?.maxWidth == thumbW &&
+              w.constraints?.maxHeight == thumbH,
+          description: 'thumb (${thumbW.toInt()}×${thumbH.toInt()})',
+        );
+        expect(thumbFinder, findsOneWidget, reason: '$label 找不到 thumb');
+        final thumb = tester.widget<Container>(thumbFinder);
+        expect(
+          (thumb.decoration as BoxDecoration).color,
+          tokenColor(v['thumb'] as String),
+          reason: '$label 的 thumb 應為 ${v['thumb']}',
+        );
+
+        final opacity = tester.widget<Opacity>(find.byType(Opacity).first);
+        expect(opacity.opacity, v['opacity'], reason: '$label 的 opacity');
+      });
+    }
+  });
+
+  // ── Chip ────────────────────────────────────────────────
+  group('USpaceChip', () {
+    const levels = {
+      'accent': USpaceChipLevel.accent,
+      'primary': USpaceChipLevel.primary,
+      'secondary': USpaceChipLevel.secondary,
+      'outline': USpaceChipLevel.outline,
+    };
+
+    for (final v in variantsOf('chip.json')) {
+      testWidgets('${v['level']}', (tester) async {
+        await pump(tester, USpaceChip(label: 'Tag', level: levels[v['level']]!));
+
+        final container = tester.widget<Container>(
+          find.descendant(of: find.byType(USpaceChip), matching: find.byType(Container)).first,
+        );
+        final decoration = container.decoration as BoxDecoration;
+
+        if (v['bg'] == null) {
+          expect(decoration.color, isNull, reason: '${v['level']} 應為透明底');
+          expect(decoration.border, isNotNull, reason: '${v['level']} 應有邊框');
+        } else {
+          expect(
+            decoration.color,
+            tokenColor(v['bg'] as String),
+            reason: '${v['level']} 的底色應為 ${v['bg']}',
+          );
+        }
+      });
+    }
+  });
+
+  // ── 主題接線 ────────────────────────────────────────────
+  group('USpaceTheme', () {
+    testWidgets('light 主題提供兩個 ThemeExtension', (tester) async {
+      late BuildContext ctx;
+      await tester.pumpWidget(MaterialApp(
+        theme: USpaceTheme.light,
+        home: Builder(builder: (c) {
+          ctx = c;
+          return const SizedBox();
+        }),
+      ));
+      expect(ctx.uColors, same(USpaceColorsExtension.light));
+      expect(ctx.typography, same(AppTypographyExtension.light));
+    });
+
+    testWidgets('dark 主題提供 dark token', (tester) async {
+      late BuildContext ctx;
+      await tester.pumpWidget(MaterialApp(
+        theme: USpaceTheme.dark,
+        home: Builder(builder: (c) {
+          ctx = c;
+          return const SizedBox();
+        }),
+      ));
+      expect(ctx.uColors, same(USpaceColorsExtension.dark));
+      expect(ctx.typography, same(AppTypographyExtension.dark));
+    });
+
+    test('extensionsFor 依 brightness 回傳對應主題', () {
+      expect(USpaceTheme.extensionsFor(Brightness.light),
+          containsAll([USpaceColorsExtension.light, AppTypographyExtension.light]));
+      expect(USpaceTheme.extensionsFor(Brightness.dark),
+          containsAll([USpaceColorsExtension.dark, AppTypographyExtension.dark]));
+    });
+
+    test('未接主題時 context extension 回退到 light', () {
+      // uColors / typography 的 ?? fallback 行為
+      expect(USpaceColorsExtension.light.contentPrimary, isNotNull);
+      expect(AppTypographyExtension.light.bodyM.fontSize, 16);
+    });
+  });
+}

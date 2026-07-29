@@ -1,10 +1,17 @@
+// ⚠️ GENERATED FILE — 請勿手動編輯
+// 來源：tokens/semantic-colors.json、tokens/gradients.json
+// 重新產生：npm run gen:tokens
+
 import 'package:flutter/material.dart';
 import 'uspace_palette.dart';
 
 /// USPACE Semantic Color Tokens
+///
+/// 共 64 個語意色 token，light / dark 兩套主題。
+/// 取用方式：`context.uColors.contentPrimary`
 class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   const USpaceColorsExtension({
-    // ─── Content ──────────────────────────────────
+    // ─── Content ─────────────────────────────────
     required this.contentAccent,
     required this.contentPrimary,
     required this.contentSecondary,
@@ -15,7 +22,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     required this.contentInverse,
     required this.contentUC,
     required this.contentUW,
-    // ─── Text ─────────────────────────────────────
+    // ─── Text ────────────────────────────────────
     required this.textAccent,
     required this.textPrimary,
     required this.textSecondary,
@@ -25,7 +32,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     required this.textError,
     required this.textInverse,
     required this.textWarning,
-    // ─── Background ───────────────────────────────
+    // ─── Background ──────────────────────────────
     required this.pagePrimary,
     required this.pageSecondary,
     required this.pageMask,
@@ -34,9 +41,11 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     required this.sectionSecondary,
     required this.sectionAccent,
     required this.sectionError,
-    // ─── Border ───────────────────────────────────
+    // ─── Border ──────────────────────────────────
     required this.borderDivider,
-    // ─── Action ───────────────────────────────────
+    // ─── Effect ──────────────────────────────────
+    required this.shadowDefault,
+    // ─── Action ──────────────────────────────────
     required this.actionPrimaryBg,
     required this.actionPrimaryContentAccent,
     required this.actionPrimaryContentCharging,
@@ -55,7 +64,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     required this.actionFabOpacityBg,
     required this.actionGraphicBg,
     required this.actionGraphicContent,
-    // ─── Input ────────────────────────────────────
+    // ─── Input ───────────────────────────────────
     required this.inputBgDefault,
     required this.inputBorderActive,
     required this.inputBorderError,
@@ -63,11 +72,11 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     required this.inputTextError,
     required this.inputTextPlaceholder,
     required this.inputTextDisabled,
-    // ─── Chip ─────────────────────────────────────
+    // ─── Chip ────────────────────────────────────
     required this.chipBgPrimary,
     required this.chipBgSecondary,
     required this.chipBgAccent,
-    // ─── Project ──────────────────────────────────
+    // ─── Project ─────────────────────────────────
     required this.projectCharging,
     required this.projectGoldenCard,
     required this.projectBlackCard,
@@ -77,7 +86,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     required this.projectUspaceWhite,
   });
 
-  // ─── Content ──────────────────────────────────
+  // ─── Content ───────────────────────────────────
   final Color contentAccent;
   final Color contentPrimary;
   final Color contentSecondary;
@@ -89,7 +98,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   final Color contentUC;
   final Color contentUW;
 
-  // ─── Text ─────────────────────────────────────
+  // ─── Text ──────────────────────────────────────
   final Color textAccent;
   final Color textPrimary;
   final Color textSecondary;
@@ -100,7 +109,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   final Color textInverse;
   final Color textWarning;
 
-  // ─── Background ───────────────────────────────
+  // ─── Background ────────────────────────────────
   final Color pagePrimary;
   final Color pageSecondary;
   final Color pageMask;
@@ -110,10 +119,13 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   final Color sectionAccent;
   final Color sectionError;
 
-  // ─── Border ───────────────────────────────────
+  // ─── Border ────────────────────────────────────
   final Color borderDivider;
 
-  // ─── Action ───────────────────────────────────
+  // ─── Effect ────────────────────────────────────
+  final Color shadowDefault;
+
+  // ─── Action ────────────────────────────────────
   final Color actionPrimaryBg;
   final Color actionPrimaryContentAccent;
   final Color actionPrimaryContentCharging;
@@ -133,7 +145,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   final Color actionGraphicBg;
   final Color actionGraphicContent;
 
-  // ─── Input ────────────────────────────────────
+  // ─── Input ─────────────────────────────────────
   final Color inputBgDefault;
   final Color inputBorderActive;
   final Color inputBorderError;
@@ -142,12 +154,12 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   final Color inputTextPlaceholder;
   final Color inputTextDisabled;
 
-  // ─── Chip ─────────────────────────────────────
+  // ─── Chip ──────────────────────────────────────
   final Color chipBgPrimary;
   final Color chipBgSecondary;
   final Color chipBgAccent;
 
-  // ─── Project ──────────────────────────────────
+  // ─── Project ───────────────────────────────────
   final Color projectCharging;
   final Color projectGoldenCard;
   final Color projectBlackCard;
@@ -156,7 +168,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
   final Color projectUspaceBlack;
   final Color projectUspaceWhite;
 
-  // ─── Gradient tokens (static, not theme-switchable) ──
+  // ─── Gradient tokens (品牌固定，不隨主題切換) ─────────────
 
   /// Silver Linear: 90deg, grey600 → grey200
   /// 同 actionCustomizedBorder
@@ -165,8 +177,6 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     end: Alignment.centerRight,
     colors: [USpacePalette.grey600, USpacePalette.grey200],
   );
-
-  static const actionCustomizedBorder = silverLinear;
 
   /// Lime Linear: 262deg, neonLime200 → neonLime700
   /// CSS: linear-gradient(261.99deg, #00EEB7 -7.69%, #B4E002 89.23%)
@@ -179,23 +189,30 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
 
   /// BottomBar Gray 1B: 180deg, grey50 @0%→100% opacity
   /// CSS: linear-gradient(180deg, rgba(248,248,248,0) 31.1%, #F8F8F8 55.84%)
+  /// ⚠️ TODO: dark 模式無對應 Figma token，待設計確認
   static const bottomBarGray1B = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
+    // 0: grey50 @ 0%
     colors: [Color(0x00F8F8F8), USpacePalette.grey50],
     stops: [0.311, 0.558],
   );
 
   /// BottomBar Gray 2B: 180deg, grey50 @0%→100% opacity
   /// CSS: linear-gradient(180deg, rgba(248,248,248,0) 0%, #F8F8F8 38.44%)
+  /// ⚠️ TODO: dark 模式無對應 Figma token，待設計確認
   static const bottomBarGray2B = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
+    // 0: grey50 @ 0%
     colors: [Color(0x00F8F8F8), USpacePalette.grey50],
     stops: [0.0, 0.384],
   );
 
-  // ─── Light Theme ────────────────────────────────
+  /// 同 [silverLinear]
+  static const actionCustomizedBorder = silverLinear;
+
+  // ─── Light Theme ───────────────────────────────
   static const light = USpaceColorsExtension(
     // Content
     contentAccent:            USpacePalette.neonLime600,
@@ -229,6 +246,8 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     sectionError:     USpacePalette.red500,
     // Border
     borderDivider: USpacePalette.transparentGrey8003,
+    // Effect
+    shadowDefault: USpacePalette.transparentBlack10,
     // Action
     actionPrimaryBg:              USpacePalette.grey800,
     actionPrimaryContentAccent:   USpacePalette.neonLime600,
@@ -270,7 +289,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     projectUspaceWhite:  USpacePalette.white,
   );
 
-  // ─── Dark Theme ─────────────────────────────────
+  // ─── Dark Theme ────────────────────────────────
   static const dark = USpaceColorsExtension(
     // Content
     contentAccent:            USpacePalette.neonLime600,
@@ -304,6 +323,8 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     sectionError:     USpacePalette.white,
     // Border
     borderDivider: USpacePalette.grey800,
+    // Effect
+    shadowDefault: USpacePalette.transparentBlack10,
     // Action
     actionPrimaryBg:              USpacePalette.grey700,
     actionPrimaryContentAccent:   USpacePalette.neonLime600,
@@ -379,6 +400,8 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     Color? sectionError,
     // Border
     Color? borderDivider,
+    // Effect
+    Color? shadowDefault,
     // Action
     Color? actionPrimaryBg,
     Color? actionPrimaryContentAccent,
@@ -452,6 +475,8 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
       sectionError:     sectionError     ?? this.sectionError,
       // Border
       borderDivider: borderDivider ?? this.borderDivider,
+      // Effect
+      shadowDefault: shadowDefault ?? this.shadowDefault,
       // Action
       actionPrimaryBg:              actionPrimaryBg              ?? this.actionPrimaryBg,
       actionPrimaryContentAccent:   actionPrimaryContentAccent   ?? this.actionPrimaryContentAccent,
@@ -530,6 +555,8 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
       sectionError:     Color.lerp(sectionError,     other.sectionError,     t)!,
       // Border
       borderDivider: Color.lerp(borderDivider, other.borderDivider, t)!,
+      // Effect
+      shadowDefault: Color.lerp(shadowDefault, other.shadowDefault, t)!,
       // Action
       actionPrimaryBg:              Color.lerp(actionPrimaryBg,              other.actionPrimaryBg,              t)!,
       actionPrimaryContentAccent:   Color.lerp(actionPrimaryContentAccent,   other.actionPrimaryContentAccent,   t)!,

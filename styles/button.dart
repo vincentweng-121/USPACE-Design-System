@@ -2,104 +2,151 @@ import 'dart:io' show Platform;
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'glass_extension.dart';
 import 'radius_extension.dart';
 import 'spacing_extension.dart';
 
-// ── Button Level ─────────────────────────────────────────────
-enum USpaceButtonLevel {
+// ── Button Style ─────────────────────────────────────────────
+/// 對應 Figma Button component 的 style property。
+enum USpaceButtonStyle {
+  /// 實心底（actionPrimaryBg）+ accent 文字，最高行動權重
   accent,
+
+  /// 實心底 + charging 綠色文字
   charging,
+
+  /// 實心底 + 一般文字
   primary,
+
+  /// 透明底 + 2px 描邊
   secondary,
-  customized,
+
+  /// 透明底、無描邊，純文字按鈕
+  tertiary,
 }
 
 // ── Button Size ───────────────────────────────────────────────
+/// Regular 滿寬、Small 貼合內容。兩者高度皆為 48。
 enum USpaceButtonSize { regular, small }
 
+// ── Button State ──────────────────────────────────────────────
+/// Figma 的 states property。目前無 pressed 狀態。
+enum USpaceButtonState { enabled, disabled }
+
 // ── Button ───────────────────────────────────────────────────
+/// USPACE Design System Button。
+///
+/// 來源：Figma node 3611:8842（Size: Regular）/ 3611:8861（Size: Small）
+///
+/// 三個維度：style × size × state，文字左右兩側皆可放 icon。
+///
+/// Token mapping（顏色不隨 size 改變）：
+///   ┌───────────┬──────────────────────┬──────────────────────────┐
+///   │ style     │ enabled              │ disabled                 │
+///   ├───────────┼──────────────────────┼──────────────────────────┤
+///   │ accent    │ bg actionPrimaryBg   │ bg actionDisabledBg      │
+///   │           │ actionPrimaryContent │ actionDisabledContent    │
+///   │           │ Accent               │                          │
+///   │ charging  │ 同上 bg              │ 同上                     │
+///   │           │ ...ContentCharging   │                          │
+///   │ primary   │ 同上 bg              │ 同上                     │
+///   │           │ actionPrimaryContent │                          │
+///   │ secondary │ 透明 + 2px 描邊      │ 透明 + 2px 描邊          │
+///   │           │ actionSecondary-     │ actionDisabledBg 描邊    │
+///   │           │ Content（描邊同文字）│ actionDisabledContent    │
+///   │ tertiary  │ 透明、無描邊         │ 透明、無描邊             │
+///   │           │ actionTertiaryContent│ actionDisabledContent    │
+///   └───────────┴──────────────────────┴──────────────────────────┘
+///
+/// Layout：
+///   高度 48（固定）、圓角 full、icon 24px、icon 與文字間距 8
+///   Regular：滿寬
+///   Small：水平 padding 24、貼合內容
 class USpaceButton extends StatelessWidget {
   const USpaceButton({
     super.key,
     required this.label,
-    required this.level,
+    this.style = USpaceButtonStyle.accent,
     this.size = USpaceButtonSize.regular,
-    this.icon,
+    this.state = USpaceButtonState.enabled,
+    this.leadingIcon,
+    this.trailingIcon,
     this.onPressed,
   });
 
+  /// 按鈕文字
   final String label;
-  final USpaceButtonLevel level;
+
+  /// 視覺樣式
+  final USpaceButtonStyle style;
+
+  /// 尺寸
   final USpaceButtonSize size;
 
-  /// 選填。傳入時顯示 Text + Icon 版型（icon 置於文字左側）。
-  final Widget? icon;
+  /// 狀態。onPressed 為 null 時同樣視為 disabled。
+  final USpaceButtonState state;
 
-  /// null 時按鈕呈現 disabled 狀態。
+  /// 文字左側 icon（建議 24×24）
+  final Widget? leadingIcon;
+
+  /// 文字右側 icon（建議 24×24）
+  final Widget? trailingIcon;
+
+  /// 點擊回呼。null 時按鈕不可操作且呈現 disabled 外觀。
   final VoidCallback? onPressed;
 
-  bool get _isDisabled => onPressed == null;
+  bool get _isDisabled =>
+      state == USpaceButtonState.disabled || onPressed == null;
+
+  /// Figma 固定高度。文字為 displayM（行高 26），因此以固定高度置中，
+  /// 而非用垂直 padding 推算，否則會變成 50。
+  static const double _height = 48;
+  static const double _iconSize = 24;
+  static const double _borderWidth = 2;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.uColors;
-
-    if (level == USpaceButtonLevel.customized) {
-      return _CustomizedButton(
-        label: label,
-        icon: icon,
-        onPressed: onPressed,
-        colors: colors,
-        isDisabled: _isDisabled,
-        size: size,
-      );
-    }
-
-    final bgColor = _isDisabled
-        ? colors.actionDisabledBg
-        : _resolveBg(level, colors);
-
-    final textColor = _isDisabled
-        ? colors.actionDisabledContent
-        : _resolveTextColor(level, colors);
-
-    final iconColor = _isDisabled
-        ? colors.actionDisabledContent
-        : _resolveIconColor(level, colors);
-
+    final content = _contentColor(colors);
+    final border = _borderColor(colors);
     final isSmall = size == USpaceButtonSize.small;
-    final padding = isSmall
-        ? const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer8, horizontal: USpaceSpacing.spacer24)
-        : const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer12);
 
     final button = Material(
-      color: bgColor,
-      shape: const StadiumBorder(),
+      color: _backgroundColor(colors) ?? Colors.transparent,
+      shape: border == null
+          ? const StadiumBorder()
+          : StadiumBorder(
+              side: BorderSide(color: border, width: _borderWidth),
+            ),
       child: InkWell(
-        onTap: onPressed,
+        onTap: _isDisabled ? null : onPressed,
         customBorder: const StadiumBorder(),
-        child: Padding(
-          padding: padding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                IconTheme(
-                  data: IconThemeData(color: iconColor, size: 24),
-                  child: icon!,
+        child: SizedBox(
+          height: _height,
+          child: Padding(
+            padding: isSmall
+                ? const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer24)
+                : EdgeInsets.zero,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (leadingIcon != null) ...[
+                  _icon(leadingIcon!, content),
+                  const SizedBox(width: USpaceSpacing.spacer8),
+                ],
+                Text(
+                  label,
+                  style: context.typography.displayM.copyWith(color: content),
                 ),
-                const SizedBox(width: USpaceSpacing.spacer8),
+                if (trailingIcon != null) ...[
+                  const SizedBox(width: USpaceSpacing.spacer8),
+                  _icon(trailingIcon!, content),
+                ],
               ],
-              Text(
-                label,
-                style: context.typography.labelL.copyWith(color: textColor),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -109,173 +156,41 @@ class USpaceButton extends StatelessWidget {
     return SizedBox(width: double.infinity, child: button);
   }
 
-  Color _resolveBg(USpaceButtonLevel level, USpaceColorsExtension colors) {
-    return switch (level) {
-      USpaceButtonLevel.accent    => colors.actionPrimaryBg,
-      USpaceButtonLevel.charging  => colors.actionPrimaryBg,
-      USpaceButtonLevel.primary   => colors.actionPrimaryBg,
-      USpaceButtonLevel.secondary => size == USpaceButtonSize.small
-          ? colors.actionTertiaryBg
-          : colors.actionSecondaryBg,
-      USpaceButtonLevel.customized => Colors.transparent,
+  Widget _icon(Widget icon, Color color) => IconTheme(
+        data: IconThemeData(color: color, size: _iconSize),
+        child: icon,
+      );
+
+  /// secondary / tertiary 為透明底，回傳 null。
+  Color? _backgroundColor(USpaceColorsExtension colors) {
+    switch (style) {
+      case USpaceButtonStyle.secondary:
+      case USpaceButtonStyle.tertiary:
+        return null;
+      case USpaceButtonStyle.accent:
+      case USpaceButtonStyle.charging:
+      case USpaceButtonStyle.primary:
+        return _isDisabled ? colors.actionDisabledBg : colors.actionPrimaryBg;
+    }
+  }
+
+  /// 只有 secondary 有描邊。Figma 的描邊色與文字色相同，
+  /// 因此沿用 actionSecondaryContent，不另立 border token。
+  Color? _borderColor(USpaceColorsExtension colors) {
+    if (style != USpaceButtonStyle.secondary) return null;
+    return _isDisabled ? colors.actionDisabledBg : colors.actionSecondaryContent;
+  }
+
+  Color _contentColor(USpaceColorsExtension colors) {
+    if (_isDisabled) return colors.actionDisabledContent;
+    return switch (style) {
+      USpaceButtonStyle.accent => colors.actionPrimaryContentAccent,
+      USpaceButtonStyle.charging => colors.actionPrimaryContentCharging,
+      USpaceButtonStyle.primary => colors.actionPrimaryContent,
+      USpaceButtonStyle.secondary => colors.actionSecondaryContent,
+      USpaceButtonStyle.tertiary => colors.actionTertiaryContent,
     };
   }
-
-  Color _resolveTextColor(USpaceButtonLevel level, USpaceColorsExtension colors) {
-    return switch (level) {
-      USpaceButtonLevel.accent    => colors.actionPrimaryContentAccent,
-      USpaceButtonLevel.charging  => colors.actionPrimaryContentCharging,
-      USpaceButtonLevel.primary   => colors.actionPrimaryContent,
-      USpaceButtonLevel.secondary => colors.actionSecondaryContent,
-      USpaceButtonLevel.customized => colors.actionTertiaryContent,
-    };
-  }
-
-  Color _resolveIconColor(USpaceButtonLevel level, USpaceColorsExtension colors) {
-    return switch (level) {
-      USpaceButtonLevel.accent    => colors.actionPrimaryContentAccent,
-      USpaceButtonLevel.charging  => colors.actionPrimaryContentCharging,
-      USpaceButtonLevel.primary   => colors.actionPrimaryContent,
-      USpaceButtonLevel.secondary => colors.actionSecondaryContent,
-      USpaceButtonLevel.customized => colors.actionTertiaryContent,
-    };
-  }
-}
-
-// ── Customized Button（漸層邊框） ─────────────────────────────
-class _CustomizedButton extends StatelessWidget {
-  const _CustomizedButton({
-    required this.label,
-    required this.icon,
-    required this.onPressed,
-    required this.colors,
-    required this.isDisabled,
-    required this.size,
-  });
-
-  final String label;
-  final Widget? icon;
-  final VoidCallback? onPressed;
-  final USpaceColorsExtension colors;
-  final bool isDisabled;
-  final USpaceButtonSize size;
-
-  @override
-  Widget build(BuildContext context) {
-    final textColor = isDisabled
-        ? colors.actionDisabledContent
-        : colors.actionTertiaryContent;
-
-    final iconColor = isDisabled
-        ? colors.actionDisabledContent
-        : colors.actionTertiaryContent;
-
-    final isSmall = size == USpaceButtonSize.small;
-    final padding = isSmall
-        ? const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer8, horizontal: USpaceSpacing.spacer24)
-        : const EdgeInsets.symmetric(vertical: USpaceSpacing.spacer12);
-
-    final inner = GestureDetector(
-      onTap: onPressed,
-      child: _GradientBorderContainer(
-        gradient: USpaceColorsExtension.actionCustomizedBorder,
-        borderWidth: 3,
-        borderRadius: USpaceRadius.full,
-        child: Padding(
-          padding: padding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                IconTheme(
-                  data: IconThemeData(color: iconColor, size: 24),
-                  child: icon!,
-                ),
-                const SizedBox(width: USpaceSpacing.spacer8),
-              ],
-              Text(
-                label,
-                style: context.typography.labelL.copyWith(color: textColor),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    if (isSmall) return inner;
-    return SizedBox(width: double.infinity, child: inner);
-  }
-}
-
-// ── Gradient Border helper ────────────────────────────────────
-class _GradientBorderContainer extends StatelessWidget {
-  const _GradientBorderContainer({
-    required this.gradient,
-    required this.borderWidth,
-    required this.borderRadius,
-    required this.child,
-  });
-
-  final LinearGradient gradient;
-  final double borderWidth;
-  final double borderRadius;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _GradientBorderPainter(
-        gradient: gradient,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-      ),
-      child: child,
-    );
-  }
-}
-
-class _GradientBorderPainter extends CustomPainter {
-  _GradientBorderPainter({
-    required this.gradient,
-    required this.borderWidth,
-    required this.borderRadius,
-  });
-
-  final LinearGradient gradient;
-  final double borderWidth;
-  final double borderRadius;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final rrect = RRect.fromRectAndRadius(
-      rect,
-      Radius.circular(borderRadius),
-    );
-    final innerRRect = RRect.fromRectAndRadius(
-      rect.deflate(borderWidth),
-      Radius.circular(borderRadius - borderWidth),
-    );
-
-    final paint = Paint()
-      ..shader = gradient.createShader(rect)
-      ..style = PaintingStyle.fill;
-
-    final path = Path()
-      ..addRRect(rrect)
-      ..addRRect(innerRRect)
-      ..fillType = PathFillType.evenOdd;
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(_GradientBorderPainter oldDelegate) =>
-      oldDelegate.gradient != gradient ||
-      oldDelegate.borderWidth != borderWidth ||
-      oldDelegate.borderRadius != borderRadius;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -299,20 +214,16 @@ class _GlassCircle extends StatelessWidget {
   const _GlassCircle({
     required this.child,
     this.onTap,
-    this.extraOverlay = false,
   });
 
   final Widget child;
   final VoidCallback? onTap;
 
-  /// true 時疊加第二層 fillColor（用於 bar 內的 active 狀態）
-  final bool extraOverlay;
-
   @override
   Widget build(BuildContext context) {
-    final isLG = _isLiquidGlass();
-
     // iOS 26+: TODO 替換為 UIVisualEffectView Liquid Glass platform view
+    //   目前 Liquid Glass 與一般平台共用同一組 blur 參數，
+    //   待 platform view 就緒後再依 _isLiquidGlass() 分流。
     // iOS < 26 / Android / Web: BackdropFilter + Gaussian blur
     return GestureDetector(
       onTap: onTap,
@@ -320,17 +231,13 @@ class _GlassCircle extends StatelessWidget {
         borderRadius: BorderRadius.circular(USpaceRadius.full),
         child: BackdropFilter(
           filter: ImageFilter.blur(
-            sigmaX: isLG ? USpaceGlass.blurSigma : USpaceGlass.blurSigma,
-            sigmaY: isLG ? USpaceGlass.blurSigma : USpaceGlass.blurSigma,
+            sigmaX: USpaceGlass.blurSigma,
+            sigmaY: USpaceGlass.blurSigma,
           ),
           child: Container(
             padding: const EdgeInsets.all(USpaceSpacing.spacer8),
             decoration: BoxDecoration(
-              // extraOverlay: 雙層疊加效果（fillColor 疊在 bar 的 fillColor 上）
-              // 0x55FFFFFF ≈ rgba(255,255,255,0.33)，為 fillColor 雙層疊加近似值，無獨立 palette token
-              color: extraOverlay
-                  ? const Color(0x55FFFFFF)
-                  : USpaceGlass.fillColor,
+              color: USpaceGlass.fillColor,
               borderRadius: BorderRadius.circular(USpaceRadius.full),
             ),
             child: SizedBox(width: 28, height: 28, child: child),

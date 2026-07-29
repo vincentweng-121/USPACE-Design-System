@@ -1,3 +1,5 @@
+import { palette } from '../../tokens/colors';
+import PageHero from '../../components/PageHero';
 import SectionTitle from '../../components/SectionTitle';
 
 type Status = 'PUBLISHED' | 'DRAFT' | 'TODO';
@@ -60,16 +62,16 @@ export default function StatusPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Status</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 32 }}>
-        各元件開發進度總覽。最後更新：2026-05-19
-      </p>
+      <PageHero
+        title="Status"
+        lead={<>各元件開發進度總覽。最後更新：2026-05-19</>}
+      />
 
       <div style={{ display: 'flex', gap: 16, marginBottom: 40, flexWrap: 'wrap' }}>
         {[
-          { label: 'Published', count: published, color: '#A7D100' },
-          { label: 'Draft', count: draft, color: '#D1AF65' },
-          { label: 'Todo', count: todo, color: '#98989F' },
+          { label: 'Published', count: published, color: palette.neonLime800 },
+          { label: 'Draft', count: draft, color: palette.yellow400 },
+          { label: 'Todo', count: todo, color: 'var(--text-tertiary)' },
         ].map(s => (
           <div key={s.label} style={{
             flex: '1 1 100px', padding: 20, borderRadius: 12, minWidth: 100,
@@ -86,7 +88,7 @@ export default function StatusPage() {
         <div key={section.title} style={{ marginBottom: 56 }}>
           <SectionTitle>{section.title}</SectionTitle>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 600 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, minWidth: 600 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
                   {['File', 'Version', 'Status', 'Updated', 'Note'].map(h => (
@@ -97,7 +99,7 @@ export default function StatusPage() {
               <tbody>
                 {section.items.map(item => (
                   <tr key={item.name} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                    <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{item.name}</code></td>
+                    <td style={{ padding: '10px 12px' }}><code>{item.name}</code></td>
                     <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{item.version}</td>
                     <td style={{ padding: '10px 12px' }}><StatusBadge status={item.status} /></td>
                     <td style={{ padding: '10px 12px', color: 'var(--text-tertiary)' }}>{item.date}</td>

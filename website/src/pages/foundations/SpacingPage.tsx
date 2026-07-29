@@ -1,53 +1,31 @@
 import SectionTitle from '../../components/SectionTitle';
-
-const spacers = [
-  { name: 'spacer2', value: 2 },
-  { name: 'spacer4', value: 4 },
-  { name: 'spacer8', value: 8 },
-  { name: 'spacer12', value: 12 },
-  { name: 'spacer16', value: 16 },
-  { name: 'spacer20', value: 20 },
-  { name: 'spacer24', value: 24 },
-  { name: 'spacer32', value: 32 },
-  { name: 'spacer40', value: 40 },
-  { name: 'spacer48', value: 48 },
-  { name: 'spacer56', value: 56 },
-];
-
-const radii = [
-  { name: 'small', value: 8, desc: 'Card 內元素、小圓角' },
-  { name: 'medium', value: 20, desc: 'Dropdown panel、popup' },
-  { name: 'full', value: 1000, desc: 'Button、Chip、Input' },
-];
+import PageHero from '../../components/PageHero';
+import { margin, spacers, radii } from '../../tokens/scalars';
 
 export default function SpacingPage() {
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Spacing & Radius</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
-        定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>spacing_extension.dart</code> 與{' '}
-        <code style={{ color: 'var(--accent)', fontSize: 12 }}>radius_extension.dart</code>。
-      </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        來源：Figma Variables Mode 1。Spacer 用於元件間距（GAP scope），Number 用於圓角（CORNER_RADIUS scope）。
-      </p>
+      <PageHero
+        title="Spacing & Radius"
+        lead={<>定義於 <code>spacing_extension.dart</code> 與{' '} <code>radius_extension.dart</code>。 來源：Figma Variables Mode 1。Spacer 用於元件間距（GAP scope），Number 用於圓角（CORNER_RADIUS scope）。</>}
+      />
 
       {/* Margin */}
       <SectionTitle>Margin</SectionTitle>
       <div style={{
         padding: '24px 20px', borderRadius: 16,
         background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-        marginBottom: 48,
+        marginBottom: 120,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{
-            width: 20, height: 60, borderRadius: 4,
+            width: margin.value, height: 60, borderRadius: 4,
             background: 'var(--accent-bg)', opacity: 0.6,
           }} />
           <div>
-            <div style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>margin</div>
+            <div style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>{margin.name}</div>
             <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 2 }}>
-              <code style={{ color: 'var(--accent)' }}>20px</code> — 頁面左右邊距
+              <code>{margin.value}px</code> — 頁面左右邊距
             </div>
           </div>
         </div>
@@ -62,10 +40,7 @@ export default function SpacingPage() {
       }}>
         {spacers.map(s => (
           <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <code style={{
-              fontSize: 12, color: 'var(--accent)', minWidth: 80,
-              fontFamily: 'monospace',
-            }}>
+            <code>
               {s.name}
             </code>
             <div style={{
@@ -84,7 +59,7 @@ export default function SpacingPage() {
       <div style={{ marginTop: 120 }}>
         <SectionTitle>Spacer Tokens</SectionTitle>
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 400 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
                 {['Token', 'Value', 'Figma Scope'].map(h => (
@@ -94,13 +69,13 @@ export default function SpacingPage() {
             </thead>
             <tbody>
               <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>margin</code></td>
+                <td style={{ padding: '10px 12px' }}><code>margin</code></td>
                 <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>20px</td>
                 <td style={{ padding: '10px 12px', color: 'var(--text-tertiary)' }}>GAP</td>
               </tr>
               {spacers.map(s => (
                 <tr key={s.name} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                  <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{s.name}</code></td>
+                  <td style={{ padding: '10px 12px' }}><code>{s.name}</code></td>
                   <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{s.value}px</td>
                   <td style={{ padding: '10px 12px', color: 'var(--text-tertiary)' }}>GAP</td>
                 </tr>
@@ -115,7 +90,7 @@ export default function SpacingPage() {
         <SectionTitle>Corner Radius</SectionTitle>
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-          gap: 16, marginBottom: 48,
+          gap: 16, marginBottom: 120,
         }}>
           {radii.map(r => (
             <div key={r.name} style={{
@@ -128,14 +103,14 @@ export default function SpacingPage() {
                 marginBottom: 12,
               }} />
               <div style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>{r.name}</div>
-              <div style={{ fontSize: 12, color: 'var(--accent)', marginTop: 2 }}>{r.value}px</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>{r.value}px</div>
               <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginTop: 4 }}>{r.desc}</div>
             </div>
           ))}
         </div>
 
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 400 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
                 {['Token', 'Value', 'Usage'].map(h => (
@@ -146,7 +121,7 @@ export default function SpacingPage() {
             <tbody>
               {radii.map(r => (
                 <tr key={r.name} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                  <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{r.name}</code></td>
+                  <td style={{ padding: '10px 12px' }}><code>{r.name}</code></td>
                   <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{r.value}px</td>
                   <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{r.desc}</td>
                 </tr>
@@ -159,7 +134,7 @@ export default function SpacingPage() {
       {/* Notes */}
       <div style={{ marginTop: 120 }}>
         <SectionTitle>Notes</SectionTitle>
-        <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+        <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
           <ul style={{ paddingLeft: 20 }}>
             <li><strong>Margin</strong>: 頁面統一邊距 20px，Figma 中命名為 "Margine"（原始拼寫）</li>
             <li><strong>Spacer</strong>: 11 級間距階梯，從 2px 到 56px，scope = GAP</li>

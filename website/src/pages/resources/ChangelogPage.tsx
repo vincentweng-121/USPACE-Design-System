@@ -1,3 +1,4 @@
+import PageHero from '../../components/PageHero';
 const versions = [
   {
     version: 'v2.8.2',
@@ -272,13 +273,10 @@ function StatusBadge({ status }: { status: string }) {
 export default function ChangelogPage() {
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Changelog</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
-        設計系統版本變更紀錄。
-      </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        版號規則：v主版.次版.修正。主版=設計語言重大改版，次版=新增 token 或色系，修正=修正既有 token 數值。
-      </p>
+      <PageHero
+        title="Changelog"
+        lead={<>設計系統版本變更紀錄。 版號規則：v主版.次版.修正。主版=設計語言重大改版，次版=新增 token 或色系，修正=修正既有 token 數值。</>}
+      />
 
       <div style={{ position: 'relative', paddingLeft: 24, borderLeft: '2px solid var(--border-divider)' }}>
         {versions.map(v => (
@@ -291,7 +289,7 @@ export default function ChangelogPage() {
             }} />
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
               <span style={{ fontSize: 20, fontWeight: 500 }}>{v.version}</span>
-              <span style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>{v.date}</span>
+              <span style={{ fontSize: 14, color: 'var(--text-tertiary)' }}>{v.date}</span>
               {v.breaking && (
                 <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 100, background: 'rgba(244,0,0,0.15)', color: '#FF4A20' }}>
                   BREAKING
@@ -305,11 +303,11 @@ export default function ChangelogPage() {
                 border: '1px solid var(--border-divider)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
-                  <code style={{ fontSize: 13, color: 'var(--accent)' }}>{c.file}</code>
+                  <code>{c.file}</code>
                   {c.subVersion && <span style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>{c.subVersion}</span>}
                   <StatusBadge status={c.status} />
                 </div>
-                <ul style={{ paddingLeft: 16, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+                <ul style={{ paddingLeft: 16, fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
                   {c.items.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
               </div>

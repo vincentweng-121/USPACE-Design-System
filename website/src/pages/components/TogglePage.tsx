@@ -1,16 +1,28 @@
 import { useState } from 'react';
 import SectionTitle from '../../components/SectionTitle';
+import PageTabs, { usePageTab } from '../../components/PageTabs';
+import PageHero from '../../components/PageHero';
+import { Segmented } from '../../components/Controls';
+import { asOptions } from '../../utils';
+import { semantic } from '../../tokens/colors';
+import { toggleSpec } from '../../tokens/componentSpecs';
+
+const { track, thumb } = toggleSpec.layout! as Record<
+  string,
+  { width: number; height: number }
+>;
 
 function Toggle({ value, onChange, disabled = false }: {
   value: boolean;
   onChange: (v: boolean) => void;
   disabled?: boolean;
 }) {
+  // token 對應來源：styles/toggle.dart
   const trackColor = value
-    ? '#C3F400' // actionPrimaryContentAccent
+    ? semantic.actionPrimaryContentAccent
     : disabled
-      ? '#EEEEEE' // actionDisabledBg
-      : '#D9D9D9'; // actionPrimaryContent
+      ? semantic.actionDisabledBg
+      : semantic.actionPrimaryContent;
 
   const opacity = value && disabled ? 0.25 : 1;
 
@@ -18,7 +30,7 @@ function Toggle({ value, onChange, disabled = false }: {
     <div
       onClick={() => !disabled && onChange(!value)}
       style={{
-        width: 64, height: 24, borderRadius: 27, padding: 2,
+        width: track.width, height: track.height, borderRadius: 27, padding: 2,
         background: trackColor,
         display: 'flex', alignItems: 'center',
         justifyContent: value ? 'flex-end' : 'flex-start',
@@ -28,8 +40,8 @@ function Toggle({ value, onChange, disabled = false }: {
       }}
     >
       <div style={{
-        width: 34, height: 20, borderRadius: 27,
-        background: '#FFFFFF', // contentInverse
+        width: thumb.width, height: thumb.height, borderRadius: 27,
+        background: semantic.contentInverse,
         transition: 'all 0.2s',
       }} />
     </div>
@@ -46,32 +58,20 @@ function TogglePlayground() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 64 }}>Status</span>
-          <div style={{
-            display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
-            border: '1px solid var(--border-divider)',
-          }}>
-            {(['Enable', 'Disable'] as const).map(s => {
-              const active = s === 'Enable' ? !disabled : disabled;
-              return (
-                <button key={s} onClick={() => setDisabled(s === 'Disable')} style={{
-                  padding: '6px 12px', border: 'none', fontSize: 11, cursor: 'pointer',
-                  fontFamily: 'inherit', transition: 'all 0.12s',
-                  background: active ? 'var(--accent)' : 'var(--page-primary)',
-                  color: active ? '#000' : 'var(--text-secondary)',
-                  fontWeight: active ? 600 : 400,
-                }}>
-                  {s}
-                </button>
-              );
-            })}
-          </div>
+          <Segmented
+            compact
+            value={disabled ? 'Disable' : 'Enable'}
+            onChange={v => setDisabled(v === 'Disable')}
+            options={asOptions(['Enable', 'Disable'] as const)}
+          />
         </div>
       </div>
 
       {/* Toggle Demo */}
       <div style={{
-        padding: '32px 24px', borderRadius: 16,
+        padding: '32px 24px', borderRadius: 16, width: '100%',
         background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
+        display: 'flex', flexDirection: 'column' as const, alignItems: 'center',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <Toggle value={isOn} onChange={setIsOn} disabled={disabled} />
@@ -90,9 +90,9 @@ function TogglePlayground() {
         flexWrap: 'wrap', gap: 8,
       }}>
         <span>
-          Switch: <strong style={{ color: 'var(--text-primary)', fontSize: 13 }}>{isOn ? 'ON' : 'OFF'}</strong>
+          Switch: <strong style={{ color: 'var(--text-primary)', fontSize: 14 }}>{isOn ? 'ON' : 'OFF'}</strong>
           {' / '}
-          Status: <strong style={{ color: 'var(--text-primary)', fontSize: 13 }}>{disabled ? 'Disable' : 'Enable'}</strong>
+          Status: <strong style={{ color: 'var(--text-primary)', fontSize: 14 }}>{disabled ? 'Disable' : 'Enable'}</strong>
         </span>
         <span style={{ fontFamily: 'monospace', fontSize: 11 }}>
           {isOn && disabled ? 'opacity: 0.25' : 'opacity: 1.0'}
@@ -103,94 +103,122 @@ function TogglePlayground() {
 }
 
 export default function TogglePage() {
+  const [tab, setTab] = usePageTab();
+
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Toggle</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
-        定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>toggle.dart</code>。
-        自訂 Toggle Switch，不依賴 Flutter Switch widget。
-      </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        Figma node: 191:6185。2 states (ON / OFF) × 2 status (Enable / Disable)。
-        Thumb 為 34×20 pill shape，非圓形。
-      </p>
+      <PageHero
+        title="Toggle"
+        lead="Toggle Switch 開關元件，支援 Enable 與 Disable 狀態切換，適用於設定頁面中的即時偏好控制。"
+      />
+      <PageTabs active={tab} onChange={setTab} />
 
-      <SectionTitle>Playground</SectionTitle>
-      <div style={{ maxWidth: 560, marginBottom: 140 }}>
-        <TogglePlayground />
-      </div>
+      {tab === 'design' && (
+        <div>
+          {/* Playground */}
+          <SectionTitle>Playground</SectionTitle>
+          <div style={{ marginBottom: 120 }}>
+            <TogglePlayground />
+          </div>
 
-      {/* Token Mapping */}
-      <SectionTitle>Token Mapping</SectionTitle>
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              {['State', 'Track Color', 'Thumb', 'Opacity'].map(h => (
-                <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['ON + Enable', 'actionPrimaryContentAccent', 'contentInverse', '1.0'],
-              ['ON + Disable', 'actionPrimaryContentAccent', 'contentInverse', '0.25'],
-              ['OFF + Enable', 'actionPrimaryContent', 'contentInverse', '1.0'],
-              ['OFF + Disable', 'actionDisabledBg', 'contentInverse', '1.0'],
-            ].map(([state, track, thumb, opacity], i) => (
-              <tr key={i} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                <td style={{ padding: '10px 12px', fontWeight: 500 }}>{state}</td>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{track}</code></td>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{thumb}</code></td>
-                <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{opacity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          {/* UX Principle */}
+          <SectionTitle>UX Principle</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>Thumb 為 34x20 pill shape（非圓形），區別於系統 Switch</strong></li>
+              <li><strong>自訂實作（非 Flutter Switch），確保跨平台視覺一致</strong></li>
+              <li><strong>ON 用 accent 色（螢光綠）清楚傳達啟用狀態</strong></li>
+              <li><strong>OFF 用中性灰，不帶情緒暗示</strong></li>
+              <li><strong>ON+Disable 用 opacity 降低表示「已啟用但不可操作」</strong></li>
+              <li><strong>OFF+Disable 改用 disabledBg（非 opacity），避免與 OFF+Enable 混淆</strong></li>
+            </ul>
+          </div>
 
-      {/* Layout Specs */}
-      <div style={{ marginTop: 120 }}>
-        <SectionTitle>Layout Specs</SectionTitle>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                {['Part', 'Width', 'Height', 'Radius', 'Padding'].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                ['Track', '64px', '24px', '27px', '2px'],
-                ['Thumb', '34px', '20px', '27px', '—'],
-              ].map(([part, w, h, r, p]) => (
-                <tr key={part} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                  <td style={{ padding: '10px 12px', fontWeight: 500 }}>{part}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{w}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{h}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{r}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{p}</td>
+          {/* Interaction & States */}
+          <SectionTitle>Interaction & States</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 120 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>ON + Enable</strong>：Track 使用 <code>actionPrimaryContentAccent</code>（螢光綠），Thumb 為白色，opacity 1.0。正常可點擊切換為 OFF。</li>
+              <li><strong>ON + Disable</strong>：同 ON + Enable 色彩，但整體以 <code>Opacity(0.25)</code> 包裹，表示已啟用但不可操作。cursor 變為 not-allowed。</li>
+              <li><strong>OFF + Enable</strong>：Track 使用 <code>actionPrimaryContent</code>（中性灰 {semantic.actionPrimaryContent}），Thumb 為白色，opacity 1.0。正常可點擊切換為 ON。</li>
+              <li><strong>OFF + Disable</strong>：Track 改為 <code>actionDisabledBg</code>（{semantic.actionDisabledBg}），不使用 opacity 降低，以明確區別於 OFF + Enable。cursor 變為 not-allowed。</li>
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {tab === 'develop' && (
+        <div>
+          {/* Token Mapping */}
+          <SectionTitle>Token Mapping</SectionTitle>
+          <div style={{ overflowX: 'auto', marginBottom: 120 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 500 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  {['State', 'Track Color', 'Thumb', 'Opacity'].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+              </thead>
+              {/* 由 tokens/components/toggle.json 產生，與 Flutter widget test 同源 */}
+              <tbody>
+                {toggleSpec.variants.map((v, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 500 }}>
+                      {String(v.value).toUpperCase()} + {v.enabled === 'enabled' ? 'Enable' : 'Disable'}
+                    </td>
+                    <td style={{ padding: '10px 12px' }}><code>{v.track}</code></td>
+                    <td style={{ padding: '10px 12px' }}><code>{v.thumb}</code></td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>
+                      {Number(v.opacity).toFixed(2)}
+                      {v.note && <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginTop: 2 }}>{v.note}</div>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      {/* Notes */}
-      <div style={{ marginTop: 120 }}>
-        <SectionTitle>Notes</SectionTitle>
-        <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-          <ul style={{ paddingLeft: 20 }}>
-            <li><strong>Thumb shape</strong>: 34×20 pill（rounded=27），非圓形</li>
-            <li><strong>ON + Disable</strong>: 使用 Opacity widget 包裹，opacity=0.25</li>
-            <li><strong>OFF + Disable</strong>: track 改為 actionDisabledBg（不使用 opacity）</li>
-            <li><strong>不使用 Flutter Switch</strong>: 自訂 Container + GestureDetector，以精確控制尺寸與圓角</li>
-          </ul>
+          {/* Layout Specs */}
+          <SectionTitle>Layout Specs</SectionTitle>
+          <div style={{ overflowX: 'auto', marginBottom: 120 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 400 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                  {['Part', 'Width', 'Height', 'Radius', 'Padding'].map(h => (
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Track', '64px', '24px', '27px', '2px'],
+                  ['Thumb', '34px', '20px', '27px', '—'],
+                ].map(([part, w, h, r, p]) => (
+                  <tr key={part} style={{ borderBottom: '1px solid var(--border-divider)' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 500 }}>{part}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{w}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{h}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text-secondary)' }}>{p}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Notes */}
+          <SectionTitle>Notes</SectionTitle>
+          <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+            <ul style={{ paddingLeft: 20 }}>
+              <li><strong>Thumb shape</strong>: 34x20 pill（rounded=27），非圓形</li>
+              <li><strong>ON + Disable</strong>: 使用 Opacity widget 包裹，opacity=0.25</li>
+              <li><strong>OFF + Disable</strong>: track 改為 actionDisabledBg（不使用 opacity）</li>
+              <li><strong>不使用 Flutter Switch</strong>: 自訂 Container + GestureDetector，以精確控制尺寸與圓角</li>
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

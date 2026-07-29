@@ -1,25 +1,24 @@
 import SectionTitle from '../../components/SectionTitle';
+import PageHero from '../../components/PageHero';
+import { palette } from '../../tokens/colors';
+import { glass } from '../../tokens/scalars';
 
 export default function GlassPage() {
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Glass / Materials</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
-        USPACE 使用半透明毛玻璃效果作為浮動元件的視覺語言。
-      </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 48, lineHeight: 1.6 }}>
-        定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>glass_extension.dart</code>。
-        渲染策略依平台不同：iOS 26+ 預計使用 Liquid Glass，其餘平台使用 BackdropFilter + Gaussian blur。
-      </p>
+      <PageHero
+        title="Glass / Materials"
+        lead={<>USPACE 使用半透明毛玻璃效果作為浮動元件的視覺語言。 定義於 <code>glass_extension.dart</code>。 渲染策略依平台不同：iOS 26+ 預計使用 Liquid Glass，其餘平台使用 BackdropFilter + Gaussian blur。</>}
+      />
 
       <SectionTitle>Specs</SectionTitle>
       <div style={{
         display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: 16, marginBottom: 48,
+        gap: 16, marginBottom: 120,
       }}>
         {[
-          { label: 'Fill Color', value: 'rgba(255, 255, 255, 0.20)', code: 'Color(0x33FFFFFF)' },
-          { label: 'Blur Sigma', value: '10.0', code: 'sigmaX: 10.0, sigmaY: 10.0' },
+          { label: 'Fill Color', value: glass.fillColor, code: glass.fillColorDart },
+          { label: 'Blur Sigma', value: String(glass.blurSigma), code: `sigmaX: ${glass.blurSigma}, sigmaY: ${glass.blurSigma}` },
         ].map(spec => (
           <div key={spec.label} style={{
             padding: 20, borderRadius: 12,
@@ -27,7 +26,7 @@ export default function GlassPage() {
           }}>
             <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>{spec.label}</div>
             <div style={{ fontSize: 16, color: 'var(--text-primary)', marginBottom: 8 }}>{spec.value}</div>
-            <code style={{ fontSize: 11, color: 'var(--accent)' }}>{spec.code}</code>
+            <code>{spec.code}</code>
           </div>
         ))}
       </div>
@@ -35,17 +34,17 @@ export default function GlassPage() {
       <SectionTitle>Preview</SectionTitle>
       <div style={{
         position: 'relative', height: 240, borderRadius: 16, overflow: 'hidden',
-        background: 'linear-gradient(135deg, #1A1A1A 0%, #323237 40%, #606060 100%)',
-        marginBottom: 48,
+        background: `linear-gradient(135deg, ${palette.grey900} 0%, ${palette.grey800} 40%, ${palette.grey700} 100%)`,
+        marginBottom: 120,
       }}>
         {/* Single floating button */}
         <div style={{
           position: 'absolute', top: 24, left: 24,
           width: 44, height: 44, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.20)',
-          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          background: glass.fillColor,
+          backdropFilter: `blur(${glass.blurSigma}px)`, WebkitBackdropFilter: `blur(${glass.blurSigma}px)`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 20, color: '#fff',
+          fontSize: 20, color: palette.white,
         }}>
           +
         </div>
@@ -60,16 +59,16 @@ export default function GlassPage() {
         <div style={{
           position: 'absolute', top: 24, right: 24,
           borderRadius: 100, padding: 4,
-          background: 'rgba(255,255,255,0.20)',
-          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          background: glass.fillColor,
+          backdropFilter: `blur(${glass.blurSigma}px)`, WebkitBackdropFilter: `blur(${glass.blurSigma}px)`,
           display: 'flex', flexDirection: 'column', gap: 2,
         }}>
           {['◉', '◎', '◇'].map((icon, i) => (
             <div key={i} style={{
               width: 44, height: 44, borderRadius: '50%',
-              background: i === 0 ? 'rgba(255,255,255,0.20)' : 'transparent',
+              background: i === 0 ? glass.fillColor : 'transparent',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 16, color: '#fff',
+              fontSize: 16, color: palette.white,
             }}>
               {icon}
             </div>
@@ -80,13 +79,13 @@ export default function GlassPage() {
           position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
           fontSize: 12, color: 'var(--text-tertiary)', whiteSpace: 'nowrap',
         }}>
-          fillColor: rgba(255,255,255,0.20) &middot; blurSigma: 10.0
+          fillColor: {glass.fillColor} &middot; blurSigma: {glass.blurSigma}
         </div>
       </div>
 
       <SectionTitle>Platform Rendering</SectionTitle>
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 400 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16, minWidth: 400 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
               {['Platform', 'Strategy', 'Note'].map(h => (

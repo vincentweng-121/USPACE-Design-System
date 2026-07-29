@@ -88,7 +88,7 @@ class USpaceTab extends StatelessWidget {
 
   Widget _buildContainer(
     USpaceColorsExtension colors,
-    dynamic typo,
+    AppTypographyExtension typo,
     BuildContext context,
   ) {
     switch (type) {
@@ -106,7 +106,7 @@ class USpaceTab extends StatelessWidget {
   }
 
   // ── Tab_icon: icon + label, h=38, rounded=32 ──
-  Widget _buildTabIcon(USpaceColorsExtension colors, dynamic typo) {
+  Widget _buildTabIcon(USpaceColorsExtension colors, AppTypographyExtension typo) {
     final bg = isActive ? colors.contentPrimary : colors.actionTertiaryBg;
     final textColor = isActive ? colors.textInverse : colors.actionTertiaryContent;
 
@@ -136,7 +136,7 @@ class USpaceTab extends StatelessWidget {
   }
 
   // ── Tab_Graphic: graphic + label, h=38, rounded=32 ──
-  Widget _buildTabGraphic(USpaceColorsExtension colors, dynamic typo) {
+  Widget _buildTabGraphic(USpaceColorsExtension colors, AppTypographyExtension typo) {
     final bg = isActive ? colors.contentPrimary : colors.actionTertiaryBg;
     final textColor = isActive ? colors.textInverse : colors.actionTertiaryContent;
 
@@ -166,7 +166,7 @@ class USpaceTab extends StatelessWidget {
   }
 
   // ── Tab: label only, h=38, rounded=32 ──
-  Widget _buildTab(USpaceColorsExtension colors, dynamic typo) {
+  Widget _buildTab(USpaceColorsExtension colors, AppTypographyExtension typo) {
     final bg = isActive ? colors.contentPrimary : colors.actionTertiaryBg;
     final textColor = isActive ? colors.textInverse : colors.actionTertiaryContent;
 
@@ -187,7 +187,7 @@ class USpaceTab extends StatelessWidget {
   }
 
   // ── Filter: label, h=32, rounded=1000, labelS ──
-  Widget _buildFilter(USpaceColorsExtension colors, dynamic typo) {
+  Widget _buildFilter(USpaceColorsExtension colors, AppTypographyExtension typo) {
     final bg = isActive ? colors.actionPrimaryBg : colors.actionTertiaryBg;
     final textColor = isActive ? colors.textInverse : colors.actionTertiaryContent;
 
@@ -213,7 +213,7 @@ class USpaceTab extends StatelessWidget {
   }
 
   // ── Input: label + close, rounded=1000, outline ──
-  Widget _buildInput(USpaceColorsExtension colors, dynamic typo) {
+  Widget _buildInput(USpaceColorsExtension colors, AppTypographyExtension typo) {
     return Container(
       padding: const EdgeInsets.only(left: USpaceSpacing.spacer12, right: USpaceSpacing.spacer8, top: USpaceSpacing.spacer8, bottom: USpaceSpacing.spacer8),
       decoration: BoxDecoration(

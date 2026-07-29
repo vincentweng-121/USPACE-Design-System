@@ -1,0 +1,35 @@
+{
+  "$comment": "USpaceButton 的 style × size × state → token 對應表。顏色不隨 size 改變，因此 variants 只列 style × state。",
+  "$drives": [
+    "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
+    "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
+  ],
+  "$rule": "改動元件的 token 對應時，必須同時更新這裡，否則測試會失敗。",
+  "$source": "Figma node 3611:8842（Size: Regular）與 3611:8861（Size: Small），2026-07-28 逐一讀取",
+  "component": "USpaceButton",
+  "source": "styles/button.dart",
+  "figmaNode": "3611:8842 / 3611:8861",
+  "dimensions": {
+    "style": ["accent", "charging", "primary", "secondary", "tertiary"],
+    "size": ["regular", "small"],
+    "state": ["enabled", "disabled"]
+  },
+  "layout": { "height": 48, "iconSize": 24, "gap": 8, "smallPaddingX": 24 },
+  "variants": [
+    { "style": "accent", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent", "border": null },
+    { "style": "accent", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "style": "charging", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging", "border": null },
+    { "style": "charging", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "style": "primary", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent", "border": null },
+    { "style": "primary", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "style": "secondary", "state": "enabled", "bg": null, "content": "actionSecondaryContent", "border": "actionSecondaryContent", "note": "透明底 + 2px 描邊，描邊與文字同色" },
+    { "style": "secondary", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": "actionDisabledBg" },
+    { "style": "tertiary", "state": "enabled", "bg": null, "content": "actionTertiaryContent", "border": null, "note": "純文字按鈕，無底色無描邊" },
+    { "style": "tertiary", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": null }
+  ],
+  "$typography": "文字使用 displayM（18px/26px Medium）。Figma 標示為 16px/24px Medium + 0.6px 字距，經使用者確認採用 displayM。",
+  "$deviations": [
+    "Figma disabled 文字為 #ACACAC，palette 無對應色票；經使用者確認沿用 actionDisabledContent。",
+    "Figma primary enabled 文字為 #FFFFFF，經使用者確認沿用 actionPrimaryContent（light 為 grey200）。"
+  ]
+}

@@ -1,21 +1,27 @@
+import PageHero from '../components/PageHero';
+
 export default function ComingSoonPage({ title }: { title: string }) {
   return (
-    <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 8 }}>{title}</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 40 }}>
-        此頁面正在規劃中。
-      </p>
-      <div style={{
-        padding: '80px 24px', textAlign: 'center', borderRadius: 16,
-        border: '1px dashed var(--border-divider)',
-        background: 'var(--page-secondary)',
-      }}>
-        <div style={{ fontSize: 40, marginBottom: 16, opacity: 0.3 }}>🚧</div>
-        <div style={{ fontSize: 16, color: 'var(--text-tertiary)', marginBottom: 8 }}>Coming Soon</div>
-        <div style={{ fontSize: 13, color: 'var(--text-tertiary)', opacity: 0.6 }}>
-          設計規格制定中，完成後將更新至此頁面。
+    <>
+      <PageHero title={title} />
+
+      <div
+        style={{
+          padding: '48px 32px',
+          border: '1px dashed var(--border-strong)',
+          borderRadius: 12,
+          textAlign: 'center',
+          color: 'var(--text-secondary)',
+        }}
+      >
+        <div className="heading-md" style={{ color: 'var(--text-primary)', marginBottom: 8 }}>
+          尚未開始
         </div>
+        <p className="text-md">
+          這個項目已排入規劃，設計稿與實作尚未完成。
+          進度請見 <a href="#/help/status" style={{ textDecoration: 'underline' }}>Status</a>。
+        </p>
       </div>
-    </div>
+    </>
   );
 }

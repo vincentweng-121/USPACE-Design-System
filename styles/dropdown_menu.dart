@@ -86,7 +86,9 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
 
   void _toggle() {
     if (widget.status == USpaceDropdownMenuStatus.incomplete ||
-        widget.status == USpaceDropdownMenuStatus.error) return;
+        widget.status == USpaceDropdownMenuStatus.error) {
+      return;
+    }
 
     setState(() {
       _isOpen = !_isOpen;
@@ -190,7 +192,7 @@ class _USpaceDropdownMenuState<T> extends State<USpaceDropdownMenu<T>> {
     );
   }
 
-  Widget _buildDropdownPanel(USpaceColorsExtension colors, dynamic typo) {
+  Widget _buildDropdownPanel(USpaceColorsExtension colors, AppTypographyExtension typo) {
     final renderBox =
         _triggerKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) return const SizedBox.shrink();

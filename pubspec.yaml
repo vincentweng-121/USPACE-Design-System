@@ -1,0 +1,20 @@
+name: uspace_design_system
+description: USPACE Design System — Flutter token 與元件實作
+version: 3.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+# 注意：原始碼放在 styles/ 而非 lib/，維持既有交付方式
+# （工程師直接取用 styles/ 的檔案，見 rules/LESSONS_LEARNED.md）。
+# pubspec 的用途是讓 dart analyze 與 flutter test 能在 CI 執行。

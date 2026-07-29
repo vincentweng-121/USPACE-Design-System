@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'uspace_palette.dart';
 import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'button.dart';
@@ -227,7 +226,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
               if (widget.showButton) ...[
                 USpaceButton(
                   label: widget.buttonLabel,
-                  level: USpaceButtonLevel.primary,
+                  style: USpaceButtonStyle.primary,
                   size: USpaceButtonSize.small,
                   onPressed: _isDisabled ? null : widget.onButtonPressed,
                 ),

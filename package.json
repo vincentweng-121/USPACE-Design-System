@@ -1,0 +1,11 @@
+{
+  "name": "uspace-design-system",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "USPACE Design System — token 單一真實來源與產生器",
+  "scripts": {
+    "gen:tokens": "node tools/generate-tokens.mjs",
+    "check:tokens": "node tools/generate-tokens.mjs --check"
+  }
+}

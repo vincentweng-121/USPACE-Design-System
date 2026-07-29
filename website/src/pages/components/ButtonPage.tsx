@@ -1,153 +1,599 @@
-import { useState } from 'react';
 import SectionTitle from '../../components/SectionTitle';
+import PageTabs, { usePageTab } from '../../components/PageTabs';
+import PageHero from '../../components/PageHero';
+import DoDont from '../../components/DoDont';
+import CodeBlock from '../../components/CodeBlock';
+import SpecTable from '../../components/SpecTable';
+import { semantic } from '../../tokens/colors';
+import { typographyStyles } from '../../tokens/typography';
+import { buttonSpec } from '../../tokens/componentSpecs';
 
-type Level = 'Accent' | 'Charging' | 'Primary' | 'Secondary' | 'Customized';
+type Style = 'accent' | 'charging' | 'primary' | 'secondary' | 'tertiary';
+type Size = 'regular' | 'small';
+type State = 'enabled' | 'disabled';
 
-const levels: { name: Level; bg: string; text: string; tokenBg: string; tokenText: string }[] = [
-  { name: 'Accent', bg: '#323237', text: '#C3F400', tokenBg: 'actionPrimaryBg', tokenText: 'actionPrimaryContentAccent' },
-  { name: 'Charging', bg: '#323237', text: '#00F158', tokenBg: 'actionPrimaryBg', tokenText: 'actionPrimaryContentCharging' },
-  { name: 'Primary', bg: '#323237', text: '#D9D9D9', tokenBg: 'actionPrimaryBg', tokenText: 'actionPrimaryContent' },
-  { name: 'Secondary', bg: '#B4B4B4', text: '#323237', tokenBg: 'actionSecondaryBg', tokenText: 'actionSecondaryContent' },
-  { name: 'Customized', bg: '', text: '', tokenBg: 'transparent', tokenText: 'actionTertiaryContent' },
-];
+const styles = buttonSpec.dimensions.style as Style[];
+const states = buttonSpec.dimensions.state as State[];
+const layout = buttonSpec.layout! as Record<string, number>;
+
+/** 按鈕文字使用的字體 token */
+const labelType = typographyStyles
+  .flatMap((f) => f.styles.map((s) => ({ ...s, family: f.family })))
+  .find((s) => s.name === 'displayM')!;
+
+/** 由 tokens/components/button.json 查出該 style × state 的 token 名稱 */
+function variantOf(style: Style, state: State) {
+  return buttonSpec.variants.find((v) => v.style === style && v.state === state)!;
+}
+
+/** token 名稱 → 實際色值 */
+const colorOf = (token: string | null | undefined) =>
+  token ? (semantic as Record<string, string>)[token] : undefined;
+
+const cap = (v: string) => v.charAt(0).toUpperCase() + v.slice(1);
+
+// ── 車輛 icon（Figma 使用 .24px/NormalCar）──
+function CarIcon({ color }: { color: string }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4.5 15.5v2a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5v-2m17 0v2a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-2M2.5 15.5h17V12l-1.6-4a1.5 1.5 0 0 0-1.4-1H7.5a1.5 1.5 0 0 0-1.4 1L4.5 12v3.5Z"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <circle cx="6.5" cy="13.5" r="1" fill={color} />
+      <circle cx="15.5" cy="13.5" r="1" fill={color} />
+    </svg>
+  );
+}
+
+// ── 依 token 渲染的按鈕 ──
+function ButtonPreview({
+  label,
+  style,
+  size,
+  state,
+  leading = false,
+  trailing = false,
+}: {
+  label: string;
+  style: Style;
+  size: Size;
+  state: State;
+  leading?: boolean;
+  trailing?: boolean;
+}) {
+  const v = variantOf(style, state);
+  const content = colorOf(v.content as string)!;
+  const border = colorOf(v.border as string | null);
+
+  return (
+    <button
+      disabled={state === 'disabled'}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: layout.gap,
+        height: layout.height,
+        width: size === 'regular' ? '100%' : undefined,
+        maxWidth: size === 'regular' ? 350 : undefined,
+        padding: size === 'small' ? `0 ${layout.smallPaddingX}px` : 0,
+        borderRadius: 1000,
+        background: colorOf(v.bg as string | null) ?? 'transparent',
+        border: border ? `2px solid ${border}` : '2px solid transparent',
+        color: content,
+        fontSize: labelType.size,
+        lineHeight: `${labelType.lineHeight}px`,
+        fontWeight: labelType.weight,
+        fontFamily: '"PingFang TC", sans-serif',
+        whiteSpace: 'nowrap',
+        cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
+      }}
+    >
+      {leading && <CarIcon color={content} />}
+      {label}
+      {trailing && <CarIcon color={content} />}
+    </button>
+  );
+}
+
+// ── 編號圓圈 ──
+function Badge({ n }: { n: number }) {
+  return (
+    <span
+      aria-hidden
+      style={{
+        flexShrink: 0,
+        width: 26,
+        height: 26,
+        borderRadius: '50%',
+        border: '1px solid var(--border-strong)',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 12,
+        color: 'var(--text-secondary)',
+        background: 'var(--page-secondary)',
+      }}
+    >
+      {n}
+    </span>
+  );
+}
+
+// ── 變體展示列 ──
+function SpecimenRow({
+  n,
+  title,
+  note,
+  children,
+}: {
+  n: number;
+  title: string;
+  note: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        gap: 20,
+        padding: '24px 0',
+        borderTop: n === 1 ? 'none' : '1px solid var(--border-divider)',
+      }}
+    >
+      <div style={{ marginTop: 2 }}>
+        <Badge n={n} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="heading-sm" style={{ marginBottom: 2 }}>
+          {title}
+        </div>
+        <div className="text-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 16 }}>
+          {note}
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── 色票方塊 ──
+function Swatch({ token }: { token: string | null }) {
+  if (!token) return <span style={{ color: 'var(--text-tertiary)' }}>—</span>;
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+      <span
+        aria-hidden
+        style={{
+          width: 16,
+          height: 16,
+          borderRadius: 4,
+          flexShrink: 0,
+          background: colorOf(token),
+          border: '1px solid var(--border-divider)',
+        }}
+      />
+      <code>{token}</code>
+    </span>
+  );
+}
 
 export default function ButtonPage() {
-  const [activeLevel, setActiveLevel] = useState<Level>('Accent');
-  const current = levels.find(l => l.name === activeLevel)!;
+  const [tab, setTab] = usePageTab();
 
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 400, marginBottom: 4 }}>Button</h1>
-      <p style={{ fontSize: 14, color: 'var(--text-tertiary)', marginBottom: 12 }}>
-        定義於 <code style={{ color: 'var(--accent)', fontSize: 12 }}>button.dart</code>。
-        支援 5 種 Level、2 種 Size，以及 Floating Button 系列。
-      </p>
-      <p style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 40, lineHeight: 1.6 }}>
-        文字使用 <code style={{ color: 'var(--accent)' }}>labelL</code> Typography Token。
-        Disabled 狀態由 <code style={{ color: 'var(--accent)' }}>onPressed: null</code> 觸發。
-      </p>
+      <PageHero
+        title="Button"
+        lead="按鈕觸發單一明確的行動。由 style、size、state 三個維度組合而成，文字左右兩側皆可放置 icon。"
+        meta={
+          <>
+            <span>
+              來源 <code>{buttonSpec.source}</code>
+            </span>
+            <span>
+              Figma <code>{buttonSpec.figmaNode}</code>
+            </span>
+          </>
+        }
+      />
 
-      {/* Levels */}
-      <SectionTitle>Levels</SectionTitle>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 12, color: 'var(--text-tertiary)', minWidth: 48 }}>Level</span>
-          <div style={{
-            display: 'inline-flex', borderRadius: 8, overflow: 'hidden',
-            border: '1px solid var(--border-divider)',
-          }}>
-            {levels.map(l => (
-              <button key={l.name} onClick={() => setActiveLevel(l.name)} style={{
-                padding: '6px 12px', border: 'none', fontSize: 11, cursor: 'pointer',
-                fontFamily: 'inherit', transition: 'all 0.12s',
-                background: activeLevel === l.name ? 'var(--accent)' : 'var(--page-primary)',
-                color: activeLevel === l.name ? '#000' : 'var(--text-secondary)',
-                fontWeight: activeLevel === l.name ? 600 : 400,
-              }}>
-                {l.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      <PageTabs active={tab} onChange={setTab} />
 
-      <div style={{
-        padding: 'clamp(16px, 4vw, 32px)', borderRadius: 16,
-        background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
-        marginBottom: 40,
-      }}>
-        {activeLevel !== 'Customized' ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {/* Regular */}
-            <div>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>Regular</div>
-              <button style={{
-                padding: '12px 24px', borderRadius: 100, border: 'none', width: '100%', maxWidth: 320,
-                background: current.bg, color: current.text,
-                fontSize: 16, fontWeight: 400, cursor: 'pointer', fontFamily: 'inherit',
-              }}>
-                {activeLevel} Button
-              </button>
-            </div>
-            {/* Small */}
-            <div>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>Small</div>
-              <button style={{
-                padding: '8px 24px', borderRadius: 100, border: 'none',
-                background: current.bg, color: current.text,
-                fontSize: 16, fontWeight: 400, cursor: 'pointer', fontFamily: 'inherit',
-              }}>
-                {activeLevel}
-              </button>
-            </div>
-            {/* Disabled */}
-            <div>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>Disabled</div>
-              <button style={{
-                padding: '12px 24px', borderRadius: 100, border: 'none', width: '100%', maxWidth: 320,
-                background: '#EEEEEE', color: '#D9D9D9',
-                fontSize: 16, fontWeight: 400, cursor: 'not-allowed', fontFamily: 'inherit',
-              }}>
-                Disabled
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>Gradient Border</div>
-            <button style={{
-              padding: '12px 24px', borderRadius: 100, background: 'transparent',
-              border: '3px solid transparent',
-              backgroundImage: 'linear-gradient(var(--page-secondary), var(--page-secondary)), linear-gradient(to right, #777777, #D9D9D9)',
-              backgroundOrigin: 'border-box', backgroundClip: 'padding-box, border-box',
-              color: '#777777', fontSize: 16, fontWeight: 400, cursor: 'pointer',
-              width: '100%', maxWidth: 320, fontFamily: 'inherit',
-            }}>
-              Customized Button
-            </button>
-          </div>
-        )}
-      </div>
+      {tab === 'design' && (
+        <div>
+          {/* ── 1. Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              5 種樣式代表不同的行動權重，由重到輕排列。同一個畫面裡權重最高的只該有一個。
+            </p>
 
-      {/* Token Mapping */}
-      <SectionTitle>Token Mapping</SectionTitle>
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 500 }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              {['Level', 'Background', 'Text / Icon Color'].map(h => (
-                <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: 'var(--text-tertiary)', fontWeight: 500, fontSize: 11 }}>{h}</th>
+            <div style={{ display: 'grid', gap: 16 }}>
+              {[
+                { style: 'accent' as Style, desc: '最高權重。畫面上最主要的那一個行動。' },
+                { style: 'charging' as Style, desc: '充電相關流程專用，不作為一般強調色使用。' },
+                { style: 'primary' as Style, desc: '一般操作。與 accent 同底色，靠文字色區分。' },
+                { style: 'secondary' as Style, desc: '次要操作。透明底加描邊，保有邊界但不搶焦點。' },
+                { style: 'tertiary' as Style, desc: '最低權重。純文字，適合取消、略過這類動作。' },
+              ].map((v) => (
+                <div
+                  key={v.style}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 24,
+                    flexWrap: 'wrap',
+                    padding: 24,
+                    borderRadius: 12,
+                    background: 'var(--page-secondary)',
+                    border: '1px solid var(--border-divider)',
+                  }}
+                >
+                  <div style={{ flexShrink: 0 }}>
+                    <ButtonPreview label={cap(v.style)} style={v.style} size="small" state="enabled" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 220 }}>
+                    <div className="heading-sm" style={{ marginBottom: 4 }}>
+                      {cap(v.style)}
+                    </div>
+                    <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                      {v.desc}
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {levels.map(l => (
-              <tr key={l.name} style={{ borderBottom: '1px solid var(--border-divider)' }}>
-                <td style={{ padding: '10px 12px', fontWeight: 500 }}>{l.name}</td>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{l.tokenBg}</code></td>
-                <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>{l.tokenText}</code></td>
-              </tr>
-            ))}
-            <tr style={{ borderBottom: '1px solid var(--border-divider)' }}>
-              <td style={{ padding: '10px 12px', fontWeight: 500 }}>Disabled</td>
-              <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>actionDisabledBg</code></td>
-              <td style={{ padding: '10px 12px' }}><code style={{ color: 'var(--accent)', fontSize: 12 }}>actionDisabledContent</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            </div>
+          </section>
 
-      {/* Size Spec */}
-      <div style={{ marginTop: 120 }}>
-        <SectionTitle>Size Specs</SectionTitle>
-        <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-          <ul style={{ paddingLeft: 20 }}>
-            <li><strong>Regular</strong>: padding 12px vertical, full width, StadiumBorder</li>
-            <li><strong>Small</strong>: padding 8px 24px, hug content, StadiumBorder</li>
-            <li>Icon 置於文字左側，尺寸 24px，間距 8px</li>
-          </ul>
+          {/* ── 2. Configurations ── */}
+          <section className="section">
+            <SectionTitle>Configurations</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              每一列展示同一個維度的所有變體，全部為實際渲染結果，非示意圖。
+            </p>
+
+            <div
+              style={{
+                padding: 'clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px)',
+                borderRadius: 12,
+                background: 'var(--page-secondary)',
+                border: '1px solid var(--border-divider)',
+              }}
+            >
+              <SpecimenRow n={1} title="Size" note="高度相同，Regular 滿寬、Small 貼合內容">
+                <ButtonPreview label="Small" style="accent" size="small" state="enabled" />
+                <ButtonPreview label="Regular" style="accent" size="regular" state="enabled" />
+              </SpecimenRow>
+
+              <SpecimenRow n={2} title="Style" note="5 種樣式，此列以 Small 呈現以便並排比較">
+                {styles.map((st) => (
+                  <ButtonPreview key={st} label={cap(st)} style={st} size="small" state="enabled" />
+                ))}
+              </SpecimenRow>
+
+              <SpecimenRow n={3} title="State" note="disabled 同時移除點擊行為">
+                {states.map((stt) => (
+                  <ButtonPreview key={stt} label={cap(stt)} style="accent" size="small" state={stt} />
+                ))}
+              </SpecimenRow>
+
+              <SpecimenRow n={4} title="Icon" note="文字左右兩側各自獨立，可任意組合">
+                <ButtonPreview label="無 icon" style="accent" size="small" state="enabled" />
+                <ButtonPreview label="左側" style="accent" size="small" state="enabled" leading />
+                <ButtonPreview label="右側" style="accent" size="small" state="enabled" trailing />
+                <ButtonPreview label="兩側" style="accent" size="small" state="enabled" leading trailing />
+              </SpecimenRow>
+            </div>
+          </section>
+
+          {/* ── 3. Tokens & specs ── */}
+          <section className="section">
+            <SectionTitle>Tokens &amp; specs</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              不隨 style 或 size 改變的共通規格。逐項細節見下方各區塊。
+            </p>
+            <SpecTable
+              headers={['項目', '值', 'Token']}
+              rows={[
+                ['樣式數', `${styles.length} 種`, '—'],
+                ['尺寸數', '2 種（Regular / Small）', '—'],
+                ['狀態數', `${states.length} 種（尚無 pressed）`, '—'],
+                ['高度', `${layout.height}px（固定）`, '—'],
+                ['圓角', '1000px', <code key="r">USpaceRadius.full</code>],
+                [
+                  '文字',
+                  `${labelType.family} ${labelType.size}px / ${labelType.lineHeight}px Medium`,
+                  <code key="t">{labelType.name}</code>,
+                ],
+                ['icon 尺寸', `${layout.iconSize}px`, '—'],
+                [
+                  'icon 與文字間距',
+                  `${layout.gap}px`,
+                  <code key="g">USpaceSpacing.spacer{layout.gap}</code>,
+                ],
+              ]}
+              minWidth={620}
+            />
+            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              Figma 標示文字為 16px / 24px Medium 並帶 0.6px 字距。經確認採用既有的{' '}
+              <code>{labelType.name}</code> token，因此實作為 {labelType.size}px /{' '}
+              {labelType.lineHeight}px 且無字距。也因為行高變為 {labelType.lineHeight}，
+              高度改以固定 {layout.height}px 置中，而非由垂直內距推算。
+            </p>
+          </section>
+
+          {/* ── 4. Anatomy ── */}
+          <section className="section">
+            <SectionTitle>Anatomy</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              按鈕由四個部件組成。除文字外，其餘皆為選用。
+            </p>
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: 'clamp(32px, 6vw, 64px) 24px',
+                borderRadius: 12,
+                background: 'var(--page-secondary)',
+                border: '1px solid var(--border-divider)',
+                marginBottom: 32,
+              }}
+            >
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <div style={{ position: 'absolute', top: -13, left: -13, zIndex: 1 }}>
+                  <Badge n={1} />
+                </div>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto auto auto',
+                    gap: `14px ${layout.gap}px`,
+                    justifyItems: 'center',
+                    alignItems: 'center',
+                    padding: `20px ${layout.smallPaddingX}px`,
+                    borderRadius: 1000,
+                    background: colorOf('actionPrimaryBg'),
+                  }}
+                >
+                  <Badge n={2} />
+                  <Badge n={3} />
+                  <Badge n={4} />
+                  <CarIcon color={colorOf('actionPrimaryContentAccent')!} />
+                  <span
+                    style={{
+                      color: colorOf('actionPrimaryContentAccent'),
+                      fontSize: labelType.size,
+                      lineHeight: `${labelType.lineHeight}px`,
+                      fontWeight: labelType.weight,
+                      fontFamily: '"PingFang TC", sans-serif',
+                    }}
+                  >
+                    Label
+                  </span>
+                  <CarIcon color={colorOf('actionPrimaryContentAccent')!} />
+                </div>
+              </div>
+            </div>
+
+            <SpecTable
+              headers={['', '部件', '必要性', '說明']}
+              rows={[
+                ['1', '容器 Container', '必要', '底色、描邊與圓角由 style 決定；高度固定 48'],
+                ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
+                ['3', '文字 Label', '必要', '按鈕語意的唯一承載者，不可省略'],
+                ['4', 'Trailing icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
+              ]}
+              minWidth={560}
+            />
+          </section>
+
+          {/* ── 5. Color ── */}
+          <section className="section">
+            <SectionTitle>Color</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              顏色只由 style 與 state 決定，不隨 size 改變。以下為亮色主題的值，
+              暗色主題由同一組語意 token 自動切換。
+            </p>
+
+            {styles.map((st) => (
+              <div key={st} style={{ marginBottom: 48 }}>
+                <h3 className="heading-md" style={{ marginBottom: 16 }}>
+                  {cap(st)}
+                </h3>
+                <SpecTable
+                  headers={['元素', 'Enabled', 'Disabled']}
+                  rows={(['bg', 'border', 'content'] as const).map((part) => [
+                    part === 'bg' ? '容器底色' : part === 'border' ? '描邊' : '文字與 icon',
+                    <Swatch key="e" token={variantOf(st, 'enabled')[part] as string | null} />,
+                    <Swatch key="d" token={variantOf(st, 'disabled')[part] as string | null} />,
+                  ])}
+                  minWidth={560}
+                />
+                {variantOf(st, 'enabled').note && (
+                  <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+                    {String(variantOf(st, 'enabled').note)}
+                  </p>
+                )}
+              </div>
+            ))}
+          </section>
+
+          {/* ── 6. States ── */}
+          <section className="section">
+            <SectionTitle>States</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              目前只定義 enabled 與 disabled 兩種狀態，Figma 尚無 pressed 規格。
+            </p>
+            <SpecTable
+              headers={['狀態', '外觀', '互動']}
+              rows={[
+                ['Enabled', '依 style 呈現對應的底色、描邊與文字色', '可點擊，觸發 onPressed'],
+                [
+                  'Disabled',
+                  '填色樣式改為 actionDisabledBg 底；secondary 描邊改為 actionDisabledBg；文字一律 actionDisabledContent',
+                  '不可點擊，onPressed 不會被呼叫',
+                ],
+                ['Pressed', '尚未定義', '—'],
+              ]}
+              minWidth={620}
+            />
+            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              傳入 <code>onPressed: null</code> 也會進入 disabled，與明確設定 <code>state</code>{' '}
+              效果相同，兩者取聯集。
+            </p>
+          </section>
+
+          {/* ── 7. Measurements ── */}
+          <section className="section">
+            <SectionTitle>Measurements</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              兩種尺寸的差別只有寬度行為與水平內距，高度與其餘數值完全相同。
+            </p>
+            <SpecTable
+              headers={['項目', 'Regular', 'Small', 'Token']}
+              rows={[
+                ['高度', `${layout.height}px`, `${layout.height}px`, '—'],
+                ['寬度', '滿版', '貼合內容', '—'],
+                [
+                  '水平內距',
+                  '0',
+                  `${layout.smallPaddingX}px`,
+                  <code key="p">USpaceSpacing.spacer{layout.smallPaddingX}</code>,
+                ],
+                [
+                  'icon 與文字間距',
+                  `${layout.gap}px`,
+                  `${layout.gap}px`,
+                  <code key="g">USpaceSpacing.spacer{layout.gap}</code>,
+                ],
+                ['icon 尺寸', `${layout.iconSize}px`, `${layout.iconSize}px`, '—'],
+                ['圓角', '1000px', '1000px', <code key="r">USpaceRadius.full</code>],
+                ['描邊寬度', '2px（僅 secondary）', '2px（僅 secondary）', '—'],
+              ]}
+              minWidth={620}
+            />
+          </section>
+
+          {/* ── 8. Usage ── */}
+          <section className="section">
+            <SectionTitle>Usage</SectionTitle>
+            <div style={{ marginTop: 32 }}>
+              <DoDont
+                dos={[
+                  '一個畫面只給一個 accent 按鈕，代表最主要的行動',
+                  'charging 只用於充電相關流程，不要當成一般強調色',
+                  'secondary 用於次要但仍需要邊界的操作，tertiary 用於低權重的文字動作',
+                  'icon 只作輔助，按鈕語意仍以文字為主',
+                ]}
+                donts={[
+                  '不要同時使用多個 accent 按鈕，權重會互相抵銷',
+                  '不要只放 icon 不放文字，這個元件的文字是必填',
+                  '不要用 tertiary 承載主要行動，它沒有底色與邊界',
+                  '不要自行改變高度，兩種 size 之外的尺寸不在規範內',
+                ]}
+              />
+            </div>
+          </section>
+
+          {/* ── 9. Accessibility ── */}
+          <section className="section">
+            <SectionTitle>Accessibility</SectionTitle>
+            <ul
+              className="text-md text-muted"
+              style={{ paddingLeft: 20, display: 'grid', gap: 10, marginTop: 32 }}
+            >
+              <li>固定高度 {layout.height}px，超過觸控目標最小 44px 的建議值。</li>
+              <li>disabled 同時移除點擊行為，不會出現「看起來不能按卻按得下去」的狀況。</li>
+              <li>icon 為裝飾性元素，語意由文字承載，讀屏軟體只會讀到 label。</li>
+              <li>tertiary 沒有底色與描邊，放在複雜背景上時需自行確認對比度。</li>
+            </ul>
+          </section>
         </div>
-      </div>
+      )}
+
+      {tab === 'develop' && (
+        <div>
+          <section className="section">
+            <SectionTitle>Examples</SectionTitle>
+            <div style={{ marginTop: 32 }}>
+              <CodeBlock
+                code={`USpaceButton(
+  label: '確認送出',
+  style: USpaceButtonStyle.accent,
+  size: USpaceButtonSize.regular,
+  leadingIcon: const Icon(Icons.directions_car),
+  onPressed: () {},
+)`}
+              />
+            </div>
+            <div style={{ marginTop: 24 }}>
+              <CodeBlock
+                title="兩側 icon + 明確 disabled"
+                code={`USpaceButton(
+  label: '前往付款',
+  style: USpaceButtonStyle.secondary,
+  size: USpaceButtonSize.small,
+  state: USpaceButtonState.disabled,
+  leadingIcon: const Icon(Icons.directions_car),
+  trailingIcon: const Icon(Icons.chevron_right),
+  onPressed: () {},
+)`}
+              />
+            </div>
+          </section>
+
+          <section className="section">
+            <SectionTitle>API</SectionTitle>
+            <div style={{ marginTop: 32 }}>
+              <SpecTable
+                headers={['參數', '型別', '預設', '說明']}
+                rows={[
+                  [<code key="a">label</code>, 'String', '必填', '按鈕文字'],
+                  [<code key="b">style</code>, 'USpaceButtonStyle', 'accent', '5 種視覺樣式'],
+                  [
+                    <code key="c">size</code>,
+                    'USpaceButtonSize',
+                    'regular',
+                    'regular 滿寬 / small 貼合內容',
+                  ],
+                  [<code key="d">state</code>, 'USpaceButtonState', 'enabled', 'disabled 時不可點擊'],
+                  [<code key="e">leadingIcon</code>, 'Widget?', 'null', '文字左側 icon'],
+                  [<code key="f">trailingIcon</code>, 'Widget?', 'null', '文字右側 icon'],
+                  [<code key="g">onPressed</code>, 'VoidCallback?', 'null', 'null 時同樣視為 disabled'],
+                ]}
+                minWidth={560}
+              />
+            </div>
+          </section>
+
+          <section className="section">
+            <SectionTitle>Baseline tokens</SectionTitle>
+            <p className="text-sm text-muted" style={{ margin: '32px 0 16px' }}>
+              此表由 <code>tokens/components/button.json</code> 產生，
+              並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
+            </p>
+            <SpecTable
+              headers={['Style', 'State', 'Background', 'Border', 'Content']}
+              rows={buttonSpec.variants.map((row) => [
+                String(row.style),
+                String(row.state),
+                row.bg ? <code>{String(row.bg)}</code> : <span>transparent</span>,
+                row.border ? <code>{String(row.border)}</code> : <span>—</span>,
+                <code key="c">{String(row.content)}</code>,
+              ])}
+              minWidth={620}
+            />
+          </section>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,114 @@
+{
+  "$comment": "USPACE semantic color tokens — 值為 palette.json 的 token 名稱",
+  "groups": [
+    {
+      "name": "Content",
+      "tokens": {
+        "contentAccent": { "light": "neonLime600", "dark": "neonLime600" },
+        "contentPrimary": { "light": "grey800", "dark": "white" },
+        "contentSecondary": { "light": "grey600", "dark": "grey100" },
+        "contentTertiary": { "light": "transparentGrey80015", "dark": "grey800" },
+        "contentDisabled": { "light": "grey400", "dark": "grey500" },
+        "contentDisabledWithoutBg": { "light": "grey200", "dark": "white" },
+        "contentError": { "light": "red400", "dark": "red400" },
+        "contentInverse": { "light": "white", "dark": "grey800" },
+        "contentUC": { "light": "neonLime400", "dark": "grey800" },
+        "contentUW": { "light": "neonLime200", "dark": "grey800" }
+      }
+    },
+    {
+      "name": "Text",
+      "tokens": {
+        "textAccent": { "light": "neonLime800", "dark": "neonLime600" },
+        "textPrimary": { "light": "grey800", "dark": "white" },
+        "textSecondary": { "light": "grey600", "dark": "grey200" },
+        "textTertiary": { "light": "grey400", "dark": "grey500" },
+        "textDisabled": { "light": "grey400", "dark": "grey500" },
+        "textDisabledMuted": { "light": "grey200", "dark": "grey500" },
+        "textError": { "light": "red500", "dark": "red500" },
+        "textInverse": { "light": "white", "dark": "grey800" },
+        "textWarning": { "light": "red300", "dark": "white" }
+      }
+    },
+    {
+      "name": "Background",
+      "tokens": {
+        "pagePrimary": { "light": "white", "dark": "black" },
+        "pageSecondary": { "light": "grey50", "dark": "grey900" },
+        "pageMask": { "light": "transparentBlack40", "dark": "transparentWhite5" },
+        "pagePopup": { "light": "transparentWhite80", "dark": "transparentWhite10" },
+        "sectionPrimary": { "light": "white", "dark": "black" },
+        "sectionSecondary": { "light": "grey50", "dark": "grey900" },
+        "sectionAccent": { "light": "neonLime600", "dark": "neonLime600" },
+        "sectionError": { "light": "red500", "dark": "white" }
+      }
+    },
+    {
+      "name": "Border",
+      "tokens": {
+        "borderDivider": { "light": "transparentGrey8003", "dark": "grey800" }
+      }
+    },
+    {
+      "name": "Effect",
+      "tokens": {
+        "shadowDefault": { "light": "transparentBlack10", "dark": "transparentBlack10" }
+      }
+    },
+    {
+      "name": "Action",
+      "tokens": {
+        "actionPrimaryBg": { "light": "grey800", "dark": "grey700" },
+        "actionPrimaryContentAccent": { "light": "neonLime600", "dark": "neonLime600" },
+        "actionPrimaryContentCharging": { "light": "neonLime400", "dark": "neonLime400" },
+        "actionPrimaryContent": { "light": "grey200", "dark": "white" },
+        "actionSecondaryBg": { "light": "grey300", "dark": "grey800" },
+        "actionSecondaryContent": { "light": "grey800", "dark": "white" },
+        "actionTertiaryBg": { "light": "grey100", "dark": "grey800" },
+        "actionTertiaryContent": { "light": "grey800", "dark": "grey600" },
+        "actionDisabledBg": { "light": "grey100", "dark": "white" },
+        "actionDisabledContent": { "light": "grey200", "dark": "white" },
+        "actionOutlineBg": { "light": "white", "dark": "grey800" },
+        "actionOutlineContent": { "light": "grey600", "dark": "white" },
+        "actionFabBg": { "light": "transparentWhite70", "dark": "transparentWhite10" },
+        "actionFabContent": { "light": "grey800", "dark": "grey500" },
+        "actionFabSelected": { "light": "transparentGrey20020", "dark": "white" },
+        "actionFabOpacityBg": { "light": "transparentWhite10", "dark": "white" },
+        "actionGraphicBg": { "light": "grey200", "dark": "white" },
+        "actionGraphicContent": { "light": "grey400", "dark": "white" }
+      }
+    },
+    {
+      "name": "Input",
+      "tokens": {
+        "inputBgDefault": { "light": "white", "dark": "white" },
+        "inputBorderActive": { "light": "neonLime600", "dark": "white" },
+        "inputBorderError": { "light": "red500", "dark": "white" },
+        "inputText": { "light": "grey800", "dark": "white" },
+        "inputTextError": { "light": "red500", "dark": "white" },
+        "inputTextPlaceholder": { "light": "grey200", "dark": "white" },
+        "inputTextDisabled": { "light": "grey200", "dark": "white" }
+      }
+    },
+    {
+      "name": "Chip",
+      "tokens": {
+        "chipBgPrimary": { "light": "white", "dark": "neonLime600" },
+        "chipBgSecondary": { "light": "grey100", "dark": "white" },
+        "chipBgAccent": { "light": "neonLime600", "dark": "white" }
+      }
+    },
+    {
+      "name": "Project",
+      "tokens": {
+        "projectCharging": { "light": "neonLime400", "dark": "white" },
+        "projectGoldenCard": { "light": "yellow400", "dark": "white" },
+        "projectBlackCard": { "light": "grey800", "dark": "white" },
+        "projectPlatinumCard": { "light": "grey300", "dark": "white" },
+        "projectGreenCard": { "light": "neonLime900", "dark": "white" },
+        "projectUspaceBlack": { "light": "black", "dark": "white" },
+        "projectUspaceWhite": { "light": "white", "dark": "white" }
+      }
+    }
+  ]
+}

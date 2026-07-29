@@ -1,3 +1,11 @@
+/* ─────────────────────────────────────────────────────────────
+   USPACE Design System — 文件站樣式
+   版面與資訊架構參考 Porsche Design System v3。
+
+   原則：介面本身走中性灰階，品牌色（neonLime）只出現在
+   被展示的元件與色票裡，不用於導覽、連結、選取狀態。
+   ───────────────────────────────────────────────────────────── */
+
 * {
   margin: 0;
   padding: 0;
@@ -5,17 +13,55 @@
 }
 
 :root {
-  /* Light theme — mapped from USpaceColorsExtension.light */
+  /* ── 版面尺寸 ── */
+  --topbar-h: 60px;
+  --sidebar-w: 280px;
+  --toc-w: 232px;
+  --content-max: 800px;
+
+  /* ── 中性介面色階（light）── */
   --page-primary: #FFFFFF;
-  --page-secondary: #F8F8F8;
-  --text-primary: #323237;
-  --text-secondary: #777777;
-  --text-tertiary: #A6A6A6;
+  --page-secondary: #FAFAFA;
+  --surface-raised: #FFFFFF;
+  --surface-sunken: #F4F4F5;
+
+  --text-primary: #0E0E10;
+  --text-secondary: #6E6E76;
+  --text-tertiary: #96969E;
+
+  --border-divider: #E4E4E7;
+  --border-strong: #C8C8CE;
+
+  /* 導覽互動：純灰，不帶品牌色 */
+  --nav-hover: rgba(14, 14, 16, 0.05);
+  --nav-active: rgba(14, 14, 16, 0.08);
+  --nav-active-text: #0E0E10;
+  --nav-marker: #0E0E10;
+
+  /* 行內程式碼與 token 名稱 */
+  --code-fg: #0E0E10;
+  --code-bg: #F4F4F5;
+  --code-border: #E4E4E7;
+
+  /* 程式碼區塊（永遠深色，兩個主題一致） */
+  --codeblock-bg: #17171A;
+  --codeblock-fg: #E7E7EA;
+  --codeblock-muted: #8A8A93;
+
+  /* Do / Don't */
+  --positive: #17803D;
+  --positive-bg: rgba(23, 128, 61, 0.08);
+  --negative: #C22B2B;
+  --negative-bg: rgba(194, 43, 43, 0.08);
+
+  /* 品牌色：僅供展示區塊使用 */
   --accent: #A7D100;
   --accent-bg: #C3F400;
   --accent-dim: #74AA5A;
-  --border-divider: #EEEEEE;
-  --section-secondary: #F8F8F8;
+  --section-accent: #C3F400;
+
+  /* 元件預覽沿用的舊變數（保持相容） */
+  --section-secondary: #FAFAFA;
   --grey100: #EEEEEE;
   --grey200: #D9D9D9;
   --grey700: #606060;
@@ -25,16 +71,75 @@
   --input-border-error: #F40000;
   --input-text-placeholder: #D9D9D9;
   --input-text-error: #F40000;
-  --section-accent: #C3F400;
+  --sidebar-bg: #FFFFFF;
+  --toggle-bg: #F4F4F5;
+
+  --shadow-overlay: 0 16px 48px rgba(14, 14, 16, 0.16);
 }
 
-html, body, #root {
+[data-theme='dark'] {
+  --page-primary: #0E0E10;
+  --page-secondary: #141417;
+  --surface-raised: #1A1A1E;
+  --surface-sunken: #1A1A1E;
+
+  --text-primary: #F2F2F3;
+  --text-secondary: #A1A1A9;
+  --text-tertiary: #71717A;
+
+  --border-divider: #26262B;
+  --border-strong: #3A3A42;
+
+  --nav-hover: rgba(255, 255, 255, 0.06);
+  --nav-active: rgba(255, 255, 255, 0.10);
+  --nav-active-text: #FFFFFF;
+  --nav-marker: #FFFFFF;
+
+  --code-fg: #F2F2F3;
+  --code-bg: #1F1F24;
+  --code-border: #2C2C33;
+
+  --positive: #4ADE80;
+  --positive-bg: rgba(74, 222, 128, 0.10);
+  --negative: #F87171;
+  --negative-bg: rgba(248, 113, 113, 0.10);
+
+  --accent: #C3F400;
+  --accent-bg: #C3F400;
+  --accent-dim: #74AA5A;
+  --section-accent: rgba(195, 244, 0, 0.2);
+
+  --section-secondary: #141417;
+  --grey100: #26262B;
+  --grey200: #3A3A42;
+  --grey700: #A1A1A9;
+  --grey800: #F2F2F3;
+  --input-bg: #1A1A1E;
+  --input-border-active: #C3F400;
+  --input-border-error: #F87171;
+  --input-text-placeholder: #52525B;
+  --input-text-error: #F87171;
+  --sidebar-bg: #0E0E10;
+  --toggle-bg: #1F1F24;
+
+  --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+html,
+body,
+#root {
   height: 100%;
+}
+
+body {
   background: var(--page-primary);
   color: var(--text-primary);
-  font-family: -apple-system, 'PingFang TC', 'SF Pro', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang TC', 'SF Pro Text',
+    'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 a {
@@ -42,13 +147,106 @@ a {
   text-decoration: none;
 }
 
+/* ── 字級尺度 ───────────────────────────────────────────────
+   Porsche 用 Display / Heading / Text 三層。
+   這裡對齊該結構，實際數值依中文閱讀調整。
+   ───────────────────────────────────────────────────────── */
+
+.display-lg {
+  font-size: clamp(40px, 6vw, 64px);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.heading-lg {
+  font-size: 40px;
+  line-height: 1.18;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.heading-md {
+  font-size: 24px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.heading-sm {
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-lg {
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.text-md {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.text-sm {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.text-muted {
+  color: var(--text-secondary);
+}
+
+/* ── 行內程式碼 ── */
+
+code {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  font-size: 0.875em;
+  color: var(--code-fg);
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+/* ── 內容區塊間距 ── */
+
+.section + .section {
+  margin-top: 144px;
+}
+
+/* ── 捲軸 ── */
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--grey200);
-  border-radius: 3px;
+  background: var(--border-strong);
+  border: 3px solid var(--page-primary);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ── 鍵盤焦點 ── */
+
+:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
