@@ -135,6 +135,7 @@
 | button.dart（Small size） | v1.2.0 | ✅ PUBLISHED | 2026-04-16 | USpaceButtonSize enum；small padding/hug content |
 | button.dart（Square / Floating） | v1.0.0 | ✅ PUBLISHED | 2026-04-16 | USpaceFloatingButton + USpaceFloatingButtonBar |
 | button.dart（寫死值註解） | v1.2.1 | ✅ PUBLISHED | 2026-05-20 | ScaleDownOrder vertical:6 / dot 6×6 / GlassCircle overlay 色值加註解 |
+| button.dart（Figma 全量改版）| v2.0.0 | ✅ PUBLISHED | 2026-07-28 | ⚠️ BREAKING：level→style、customized→tertiary、雙 icon、state 明確化；Secondary 改描邊、Tertiary 改純文字 |
 
 #### 待處理
 | 項目 | 最新版本 | 狀態 | 最後更新 | 備註 |

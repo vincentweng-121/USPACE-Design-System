@@ -15,6 +15,7 @@
 
 ## 錯誤記錄
 <!-- [日期] 問題 → 正確做法 -->
+- [2026-07-28] Figma 的 Button 已改版：Secondary 由實心改為描邊、Tertiary 由漸層邊框改為純文字，且 style 的第五項名為 Tertiary 而非 Customized。→ 元件改版時要逐一讀完所有變體（本次 20 個）再動手，不可假設只是新增屬性。
 - [2026-07-28] `styles/` 的 4176 行 Dart 從未被任何工具編譯，改壞了要等工程師貼進 app 才發現。→ 已加 pubspec + CI；元件的 token 對應改由 `tokens/components/*.json` 定義，同時驅動 Flutter 測試與網站規格表，改一邊忘了另一邊會失敗。
 - [2026-07-28] website 的 token 是第三份手抄資料，已與 Dart 漂移（borderDivider 停在 grey100，Dart 早已是 transparentGrey8003）。→ Dart 與 website 一律由 tokens/*.json 產生，不再兩邊各自維護。
 - [2026-07-28] website 元件頁寫死色碼，導致 6 處與 Dart 不符（Customized 文字色、內嵌按鈕文字、GrabBar、Header 副標、modal blur、chip 漸層角度）。→ 頁面一律引用 `tokens/colors.ts`，且對應的 token 必須逐一查 `styles/*.dart` 該元件實際使用的值，不得由名稱推斷。

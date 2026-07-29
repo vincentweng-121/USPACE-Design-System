@@ -531,7 +531,7 @@ function tsComponentSpecs() {
     '  figmaNode?: string;',
     '  dimensions: Record<string, string[]>;',
     '  variants: Record<string, string | number | null | undefined>[];',
-    '  layout?: Record<string, { width: number; height: number }>;',
+    '  layout?: Record<string, number | { width: number; height: number }>;',
     '}',
     '',
   ];

@@ -11,20 +11,20 @@ export interface ComponentSpec {
   figmaNode?: string;
   dimensions: Record<string, string[]>;
   variants: Record<string, string | number | null | undefined>[];
-  layout?: Record<string, { width: number; height: number }>;
+  layout?: Record<string, number | { width: number; height: number }>;
 }
 
 export const buttonSpec: ComponentSpec = {
   "component": "USpaceButton",
   "source": "styles/button.dart",
-  "figmaNode": "473:10438",
+  "figmaNode": "3611:8842 / 3611:8861",
   "dimensions": {
-    "level": [
+    "style": [
       "accent",
       "charging",
       "primary",
       "secondary",
-      "customized"
+      "tertiary"
     ],
     "size": [
       "regular",
@@ -37,84 +37,84 @@ export const buttonSpec: ComponentSpec = {
   },
   "variants": [
     {
-      "level": "accent",
-      "size": "regular",
+      "style": "accent",
       "state": "enabled",
       "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentAccent"
+      "content": "actionPrimaryContentAccent",
+      "border": null
     },
     {
-      "level": "accent",
-      "size": "small",
+      "style": "accent",
+      "state": "disabled",
+      "bg": "actionDisabledBg",
+      "content": "actionDisabledContent",
+      "border": null
+    },
+    {
+      "style": "charging",
       "state": "enabled",
       "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentAccent"
+      "content": "actionPrimaryContentCharging",
+      "border": null
     },
     {
-      "level": "charging",
-      "size": "regular",
+      "style": "charging",
+      "state": "disabled",
+      "bg": "actionDisabledBg",
+      "content": "actionDisabledContent",
+      "border": null
+    },
+    {
+      "style": "primary",
       "state": "enabled",
       "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentCharging"
+      "content": "actionPrimaryContent",
+      "border": null
     },
     {
-      "level": "charging",
-      "size": "small",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentCharging"
+      "style": "primary",
+      "state": "disabled",
+      "bg": "actionDisabledBg",
+      "content": "actionDisabledContent",
+      "border": null
     },
     {
-      "level": "primary",
-      "size": "regular",
+      "style": "secondary",
       "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContent"
-    },
-    {
-      "level": "primary",
-      "size": "small",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContent"
-    },
-    {
-      "level": "secondary",
-      "size": "regular",
-      "state": "enabled",
-      "bg": "actionSecondaryBg",
-      "content": "actionSecondaryContent"
-    },
-    {
-      "level": "secondary",
-      "size": "small",
-      "state": "enabled",
-      "bg": "actionTertiaryBg",
+      "bg": null,
       "content": "actionSecondaryContent",
-      "note": "small 的底色刻意與 regular 不同（Figma）"
+      "border": "actionSecondaryContent",
+      "note": "透明底 + 2px 描邊，描邊與文字同色"
     },
     {
-      "level": "accent",
-      "size": "regular",
+      "style": "secondary",
       "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent"
+      "bg": null,
+      "content": "actionDisabledContent",
+      "border": "actionDisabledBg"
     },
     {
-      "level": "primary",
-      "size": "small",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent"
+      "style": "tertiary",
+      "state": "enabled",
+      "bg": null,
+      "content": "actionTertiaryContent",
+      "border": null,
+      "note": "純文字按鈕，無底色無描邊"
     },
     {
-      "level": "secondary",
-      "size": "regular",
+      "style": "tertiary",
       "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent"
+      "bg": null,
+      "content": "actionDisabledContent",
+      "border": null
     }
-  ]
+  ],
+  "layout": {
+    "height": 48,
+    "iconSize": 24,
+    "gap": 8,
+    "smallPaddingX": 24
+  }
 };
 
 export const toggleSpec: ComponentSpec = {

@@ -226,7 +226,7 @@ class _USpaceTextFieldState extends State<USpaceTextField> {
               if (widget.showButton) ...[
                 USpaceButton(
                   label: widget.buttonLabel,
-                  level: USpaceButtonLevel.primary,
+                  style: USpaceButtonStyle.primary,
                   size: USpaceButtonSize.small,
                   onPressed: _isDisabled ? null : widget.onButtonPressed,
                 ),

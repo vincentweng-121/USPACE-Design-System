@@ -160,14 +160,14 @@ a {
 }
 
 .heading-lg {
-  font-size: 28px;
-  line-height: 1.25;
+  font-size: 40px;
+  line-height: 1.18;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
 .heading-md {
-  font-size: 20px;
+  font-size: 24px;
   line-height: 1.35;
   font-weight: 600;
 }
@@ -213,7 +213,7 @@ code {
 /* ── 內容區塊間距 ── */
 
 .section + .section {
-  margin-top: 72px;
+  margin-top: 144px;
 }
 
 /* ── 捲軸 ── */

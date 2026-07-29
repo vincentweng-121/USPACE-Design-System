@@ -7,7 +7,10 @@ import { asOptions } from '../../utils';
 import { semantic } from '../../tokens/colors';
 import { toggleSpec } from '../../tokens/componentSpecs';
 
-const { track, thumb } = toggleSpec.layout!;
+const { track, thumb } = toggleSpec.layout! as Record<
+  string,
+  { width: number; height: number }
+>;
 
 function Toggle({ value, onChange, disabled = false }: {
   value: boolean;

@@ -6,6 +6,71 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
+### 2026-07-28 | button.dart | Figma 全量改版（v3.0.0）
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE — 前端需全專案調整
+
+來源：Figma node 3611:8842（Size: Regular）與 3611:8861（Size: Small），
+20 個變體全部逐一讀取，無任何推斷。
+
+#### API 變更
+| 舊 | 新 |
+|----|----|
+| `USpaceButtonLevel` | `USpaceButtonStyle` |
+| `USpaceButtonLevel.customized` | `USpaceButtonStyle.tertiary` |
+| `level:` | `style:` |
+| `icon:` | `leadingIcon:` / `trailingIcon:` |
+| （無） | `state: USpaceButtonState` |
+
+`state` 為 Figma 的獨立 property。`onPressed == null` 仍視為 disabled，
+兩者取聯集，既有呼叫端不會因此壞掉。
+
+#### 視覺改版
+- **Secondary**：實心 grey300 底 → **透明底 + 2px 描邊**
+- **Tertiary**：Silver Linear 漸層邊框 → **純文字按鈕**，無底色無描邊
+- **Small 高度**：垂直 padding 8 → 固定高度 48，與 Regular 相同
+- 移除「Secondary + Small 使用 actionTertiaryBg」規則（Figma 已無此區分）
+- 移除 `_CustomizedButton`、`_GradientBorderContainer`、`_GradientBorderPainter`
+  （共約 100 行）。`silverLinear` / `actionCustomizedBorder` token 保留但 Flutter 端已無引用。
+
+#### Token 對應（顏色不隨 size 改變）
+| style | enabled | disabled |
+|-------|---------|----------|
+| accent | actionPrimaryBg / actionPrimaryContentAccent | actionDisabledBg / actionDisabledContent |
+| charging | actionPrimaryBg / actionPrimaryContentCharging | 同上 |
+| primary | actionPrimaryBg / actionPrimaryContent | 同上 |
+| secondary | 透明 + actionSecondaryContent 描邊 / actionSecondaryContent | 透明 + actionDisabledBg 描邊 / actionDisabledContent |
+| tertiary | 透明 / actionTertiaryContent | 透明 / actionDisabledContent |
+
+#### 版面
+高度 48（固定）、圓角 full、icon 24px、icon 與文字間距 spacer8、
+Small 水平 padding spacer24、Regular 滿寬。
+
+#### 與 Figma 的三處差異（皆經使用者確認）
+| 項目 | Figma | 採用 | 決定 |
+|------|-------|------|------|
+| 文字樣式 | 16px/24px Medium + 0.6px 字距 | `displayM`（18px/26px Medium，無字距） | 使用者指定沿用既有 token |
+| disabled 文字 | `#ACACAC`（palette 無此色） | `actionDisabledContent` | 使用者確認原色正確 |
+| primary 文字 | `#FFFFFF` | `actionPrimaryContent`（light 為 grey200） | 使用者確認不改 |
+
+因文字改用 displayM（行高 26），若以 padding 推算高度會變成 50，
+故改為固定高度 48 並置中，維持 Figma 標示的高度。
+
+#### 連帶更新
+- `list.dart`：`buttonLevel` → `buttonStyle`
+- `text_field.dart`：內嵌按鈕改用 `style:`
+- `tokens/components/button.json`：改為 style × state 共 10 個變體，新增 layout 與差異註記
+- `test/component_token_test.dart`：Button 測試由 8 個增至 23 個
+  （5 styles × 2 states × 2 sizes，加上 icon 省略、disabled 不可點、字體三項）
+- 網站 ButtonPage 全面重寫：Configurator 支援五個維度切換，
+  新增 Usage（Do/Don't）、Accessibility、Examples、API、Layout 區塊
+
+#### 驗證
+`dart analyze --fatal-infos` 無問題；60 個測試全數通過。
+已用變異測試確認：把 secondary 描邊改成錯誤 token 會使 2 個測試失敗。
+
+---
+
 ### 2026-07-28 | header + 新色票 + 檔案拆分（v2.11.0）
 狀態：PUBLISHED
 ⚠️ 無 BREAKING CHANGE — 元件 API 不變

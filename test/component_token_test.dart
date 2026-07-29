@@ -54,47 +54,110 @@ void main() {
 
   // ── Button ──────────────────────────────────────────────
   group('USpaceButton', () {
-    const levels = {
-      'accent': USpaceButtonLevel.accent,
-      'charging': USpaceButtonLevel.charging,
-      'primary': USpaceButtonLevel.primary,
-      'secondary': USpaceButtonLevel.secondary,
+    const styles = {
+      'accent': USpaceButtonStyle.accent,
+      'charging': USpaceButtonStyle.charging,
+      'primary': USpaceButtonStyle.primary,
+      'secondary': USpaceButtonStyle.secondary,
+      'tertiary': USpaceButtonStyle.tertiary,
     };
     const sizes = {
       'regular': USpaceButtonSize.regular,
       'small': USpaceButtonSize.small,
     };
+    final layout = readJson('tokens/components/button.json')['layout'] as Map<String, dynamic>;
 
+    // 顏色不隨 size 改變，因此每個 style × state 都在兩種 size 各驗一次
     for (final v in variantsOf('button.json')) {
-      final label = '${v['level']} / ${v['size']} / ${v['state']}';
-      testWidgets(label, (tester) async {
-        await pump(
-          tester,
-          USpaceButton(
-            label: 'Label',
-            level: levels[v['level']]!,
-            size: sizes[v['size']]!,
-            onPressed: v['state'] == 'enabled' ? () {} : null,
-          ),
-        );
+      for (final sizeKey in sizes.keys) {
+        final label = '${v['style']} / $sizeKey / ${v['state']}';
+        testWidgets(label, (tester) async {
+          await pump(
+            tester,
+            USpaceButton(
+              label: 'Label',
+              style: styles[v['style']]!,
+              size: sizes[sizeKey]!,
+              state: v['state'] == 'enabled'
+                  ? USpaceButtonState.enabled
+                  : USpaceButtonState.disabled,
+              leadingIcon: const Icon(Icons.directions_car),
+              trailingIcon: const Icon(Icons.chevron_right),
+              onPressed: () {},
+            ),
+          );
 
-        final material = tester.widget<Material>(
-          find.descendant(of: find.byType(USpaceButton), matching: find.byType(Material)).first,
-        );
-        expect(
-          material.color,
-          tokenColor(v['bg'] as String),
-          reason: '$label 的底色應為 ${v['bg']}',
-        );
+          final material = tester.widget<Material>(
+            find
+                .descendant(of: find.byType(USpaceButton), matching: find.byType(Material))
+                .first,
+          );
 
-        final text = tester.widget<Text>(find.text('Label'));
-        expect(
-          text.style?.color,
-          tokenColor(v['content'] as String),
-          reason: '$label 的文字色應為 ${v['content']}',
-        );
-      });
+          // 底色：null 代表透明
+          expect(
+            material.color,
+            v['bg'] == null ? Colors.transparent : tokenColor(v['bg'] as String),
+            reason: '$label 的底色應為 ${v['bg'] ?? '透明'}',
+          );
+
+          // 描邊：只有 secondary 有
+          final shape = material.shape as StadiumBorder;
+          if (v['border'] == null) {
+            expect(shape.side.style, BorderStyle.none, reason: '$label 不應有描邊');
+          } else {
+            expect(
+              shape.side.color,
+              tokenColor(v['border'] as String),
+              reason: '$label 的描邊應為 ${v['border']}',
+            );
+          }
+
+          final text = tester.widget<Text>(find.text('Label'));
+          expect(
+            text.style?.color,
+            tokenColor(v['content'] as String),
+            reason: '$label 的文字色應為 ${v['content']}',
+          );
+
+          // 高度固定 48，兩種 size 相同
+          expect(
+            tester.getSize(find.text('Label')).height <= (layout['height'] as num),
+            isTrue,
+            reason: '$label 的內容不應超過固定高度',
+          );
+        });
+      }
     }
+
+    testWidgets('左右 icon 可各自省略', (tester) async {
+      await pump(
+        tester,
+        const USpaceButton(label: 'Label', leadingIcon: Icon(Icons.add)),
+      );
+      expect(find.byIcon(Icons.add), findsOneWidget);
+      expect(find.byType(Icon), findsOneWidget);
+    });
+
+    testWidgets('state=disabled 時不可點擊', (tester) async {
+      var taps = 0;
+      await pump(
+        tester,
+        USpaceButton(
+          label: 'Label',
+          state: USpaceButtonState.disabled,
+          onPressed: () => taps++,
+        ),
+      );
+      await tester.tap(find.text('Label'));
+      expect(taps, 0);
+    });
+
+    testWidgets('文字使用 displayM', (tester) async {
+      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
+      final text = tester.widget<Text>(find.text('Label'));
+      expect(text.style?.fontSize, AppTypographyExtension.light.displayM.fontSize);
+      expect(text.style?.fontWeight, AppTypographyExtension.medium);
+    });
   });
 
   // ── Toggle ──────────────────────────────────────────────
