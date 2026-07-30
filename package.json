@@ -6,6 +6,7 @@
   "description": "USPACE Design System — token 單一真實來源與產生器",
   "scripts": {
     "gen:tokens": "node tools/generate-tokens.mjs",
-    "check:tokens": "node tools/generate-tokens.mjs --check"
+    "check:tokens": "node tools/generate-tokens.mjs --check",
+    "check:assets": "node tools/check-assets.mjs"
   }
 }

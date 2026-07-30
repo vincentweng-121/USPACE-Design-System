@@ -4,6 +4,7 @@ import PageHero from '../../components/PageHero';
 import DoDont from '../../components/DoDont';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
+import { AnatomyImage } from '../../components/spec';
 import { semantic } from '../../tokens/colors';
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
@@ -328,24 +329,10 @@ export default function ButtonPage() {
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
               按鈕由四個部件組成。除文字外，其餘皆為選用。
             </p>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                padding: 'clamp(32px, 6vw, 64px) 24px',
-                borderRadius: 12,
-                background: 'var(--page-secondary)',
-                border: '1px solid var(--border-divider)',
-                marginBottom: 32,
-              }}
-            >
-              {/* 站台部署在子路徑下，圖片必須帶 BASE_URL；檔名大小寫需與實際檔案一致 */}
-              <img
-                src={`${import.meta.env.BASE_URL}images/Anatomy-Button.png`}
-                alt="按鈕的四個組成部件：容器、左側 icon、文字、右側 icon"
-                style={{ maxWidth: '100%', height: 'auto' }}
-              />
-            </div>
+            <AnatomyImage
+              file="Anatomy-Button.png"
+              alt="按鈕的四個組成部件：容器、左側 icon、文字、右側 icon"
+            />
 
             <SpecTable
               headers={['', '部件', '必要性', '說明']}

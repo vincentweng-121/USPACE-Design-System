@@ -16,6 +16,7 @@
 
 ## 錯誤記錄
 <!-- [日期] 問題 → 正確做法 -->
+- [2026-07-30] 圖片寫成 `/images/x.png` 且大小寫與實際檔名不符，本機正常但上線 404（macOS 檔案系統不分大小寫，看不出來）。→ 解剖圖一律用 `<AnatomyImage file="…" />`，路徑由元件處理；`npm run check:assets` 會擋下錯誤，已納入 CI。
 - [2026-07-28] Figma 的 Button 已改版：Secondary 由實心改為描邊、Tertiary 由漸層邊框改為純文字，且 style 的第五項名為 Tertiary 而非 Customized。→ 元件改版時要逐一讀完所有變體（本次 20 個）再動手，不可假設只是新增屬性。
 - [2026-07-28] `styles/` 的 4176 行 Dart 從未被任何工具編譯，改壞了要等工程師貼進 app 才發現。→ 已加 pubspec + CI；元件的 token 對應改由 `tokens/components/*.json` 定義，同時驅動 Flutter 測試與網站規格表，改一邊忘了另一邊會失敗。
 - [2026-07-28] website 的 token 是第三份手抄資料，已與 Dart 漂移（borderDivider 停在 grey100，Dart 早已是 transparentGrey8003）。→ Dart 與 website 一律由 tokens/*.json 產生，不再兩邊各自維護。
