@@ -323,29 +323,29 @@ export default function ButtonPage() {
           </section>
 
           {/* ── 4. Anatomy ── */}
-            <section className="section">
-              <SectionTitle>Anatomy</SectionTitle>
-              <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-                按鈕由四個部件組成。除文字外，其餘皆為選用。
-              </p>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  padding: 'clamp(32px, 6vw, 64px) 24px',
-                  borderRadius: 12,
-                  background: 'var(--page-secondary)',
-                  border: '1px solid var(--border-divider)',
-                  marginBottom: 32,
-                }}
-              >
-                <img
-                  src="/images/anatomy-button.png"
-                  alt="按鈕組成部件示意圖"
-                  style={{ maxWidth: '100%', height: 'auto' }}
-                />
-              </div>
-            </section>
+          <section className="section">
+            <SectionTitle>Anatomy</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              按鈕由四個部件組成。除文字外，其餘皆為選用。
+            </p>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: 'clamp(32px, 6vw, 64px) 24px',
+                borderRadius: 12,
+                background: 'var(--page-secondary)',
+                border: '1px solid var(--border-divider)',
+                marginBottom: 32,
+              }}
+            >
+              {/* 站台部署在子路徑下，圖片必須帶 BASE_URL；檔名大小寫需與實際檔案一致 */}
+              <img
+                src={`${import.meta.env.BASE_URL}images/Anatomy-Button.png`}
+                alt="按鈕的四個組成部件：容器、左側 icon、文字、右側 icon"
+                style={{ maxWidth: '100%', height: 'auto' }}
+              />
+            </div>
 
             <SpecTable
               headers={['', '部件', '必要性', '說明']}
