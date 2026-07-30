@@ -3,6 +3,7 @@
 
 ## 不可違反的規則
 - **版號目前為 0.x**：試做階段，`v1.0.0` 保留給第一個完整可用的版本。破壞性變更升 minor（0.3→0.4），其餘升 patch。改版號要同時改 `package.json` 與 `pubspec.yaml`，否則 `check:tokens` 會擋下。
+- **不直接推 main**：main 一有 push 就自動部署。一律走分支 → PR → CI 綠 → 合併，分支命名與完整流程見 `rules/GIT_WORKFLOW.md`。
 - **提交前跑 `./verify_skill.sh`**：token 同步、`dart analyze --fatal-infos`、`flutter test`、文件站建置四項全綠才提交。規則違反（裸 hex／寫死圓角／間距魔術數字／`FontWeight.wNNN`）由 `test/token_rules_test.dart` 擋下。
 - **Token 只改 JSON**：`styles/` 的 6 個 token .dart 與 `website/src/tokens/*.ts` 檔頭標有 `⚠️ GENERATED FILE`，一律不得手改。改 `tokens/*.json` 後執行 `npm run gen:tokens`；CI 會跑 `check:tokens` 擋下漂移。
 - **Sidebar 子項目規則**：Component 頁面若包含多種分類（例如 List Menu / Order History / Payment），**必須**拆成獨立子頁面，在 sidebar 以 `_ExpandableSubGroup` 呈現子項（同 Button 的做法）。路由 ID 格式：`<component>-<variant>`（例如 `list-menu`、`list-order`）。**禁止**將多種分類塞進同一頁。
