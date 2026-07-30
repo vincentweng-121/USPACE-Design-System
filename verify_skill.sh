@@ -35,6 +35,9 @@ echo "════════════════════════�
 run "產生檔與 tokens/*.json 同步" \
   npm run --silent check:tokens
 
+run "靜態資源引用（路徑與大小寫）" \
+  npm run --silent check:assets
+
 run "Dart 靜態分析" \
   dart analyze --fatal-infos
 

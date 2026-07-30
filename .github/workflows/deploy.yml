@@ -41,6 +41,9 @@ jobs:
       # 擋住「改了 styles/*.dart 或 tokens.ts 卻沒改 tokens/*.json」的漂移
       - name: Check token drift
         run: npm run check:tokens
+      # 擋住「本機看得到、上線 404」的圖片路徑與大小寫錯誤
+      - name: Check asset references
+        run: npm run check:assets
       - name: Install and Build
         working-directory: website
         run: |
