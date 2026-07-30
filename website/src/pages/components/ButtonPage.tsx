@@ -323,59 +323,29 @@ export default function ButtonPage() {
           </section>
 
           {/* ── 4. Anatomy ── */}
-          <section className="section">
-            <SectionTitle>Anatomy</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              按鈕由四個部件組成。除文字外，其餘皆為選用。
-            </p>
-
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                padding: 'clamp(32px, 6vw, 64px) 24px',
-                borderRadius: 12,
-                background: 'var(--page-secondary)',
-                border: '1px solid var(--border-divider)',
-                marginBottom: 32,
-              }}
-            >
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <div style={{ position: 'absolute', top: -13, left: -13, zIndex: 1 }}>
-                  <Badge n={1} />
-                </div>
-
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'auto auto auto',
-                    gap: `14px ${layout.gap}px`,
-                    justifyItems: 'center',
-                    alignItems: 'center',
-                    padding: `20px ${layout.smallPaddingX}px`,
-                    borderRadius: 1000,
-                    background: colorOf('actionPrimaryBg'),
-                  }}
-                >
-                  <Badge n={2} />
-                  <Badge n={3} />
-                  <Badge n={4} />
-                  <CarIcon color={colorOf('actionPrimaryContentAccent')!} />
-                  <span
-                    style={{
-                      color: colorOf('actionPrimaryContentAccent'),
-                      fontSize: labelType.size,
-                      lineHeight: `${labelType.lineHeight}px`,
-                      fontWeight: labelType.weight,
-                      fontFamily: '"PingFang TC", sans-serif',
-                    }}
-                  >
-                    Label
-                  </span>
-                  <CarIcon color={colorOf('actionPrimaryContentAccent')!} />
-                </div>
+            <section className="section">
+              <SectionTitle>Anatomy</SectionTitle>
+              <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+                按鈕由四個部件組成。除文字外，其餘皆為選用。
+              </p>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  padding: 'clamp(32px, 6vw, 64px) 24px',
+                  borderRadius: 12,
+                  background: 'var(--page-secondary)',
+                  border: '1px solid var(--border-divider)',
+                  marginBottom: 32,
+                }}
+              >
+                <img
+                  src="/images/anatomy-button.png"
+                  alt="按鈕組成部件示意圖"
+                  style={{ maxWidth: '100%', height: 'auto' }}
+                />
               </div>
-            </div>
+            </section>
 
             <SpecTable
               headers={['', '部件', '必要性', '說明']}
