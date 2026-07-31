@@ -287,6 +287,37 @@ code {
   border-bottom: none;
 }
 
+/* ── 圖說編號列表 ───────────────────────────────────────────
+   接在說明圖下方，對應圖片上的標號。欄數隨版面寬度自動增減。
+   ───────────────────────────────────────────────────────── */
+
+/* 選擇器要壓過 `.section > ol` 的 max-width：說明要對齊上方滿版的圖，
+   不套用敘述段落的 66ch 行寬。 */
+.section > ol.numbered-captions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px 32px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.numbered-captions strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.numbered-captions span {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
 /* ── 互動式展示區 ───────────────────────────────────────────
    結構參考 Montage 文件站的 Variants 區塊：左側是即時預覽，
    右側是一張控制卡，每個維度一組 radio，點了立刻反映在預覽上。
