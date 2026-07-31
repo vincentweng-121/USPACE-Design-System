@@ -268,23 +268,51 @@ export function ColorTable({
   );
 }
 
-// ── 解剖圖（圖片版）──
+// ── 說明圖（明暗雙版）──
 /**
- * 以圖片呈現的解剖圖。
+ * 依主題切換的說明圖。
  *
- * 站台部署在子路徑下，圖片路徑一律要帶 BASE_URL；
- * 直接寫 `/images/...` 在本機看得到、上線會 404。
- * 這個元件把路徑處理包起來，呼叫端只需要給檔名。
+ * 呼叫端給的是**不含 -light / -dark 與副檔名的基底名稱**，
+ * 例如 `image="button-anatomy"` 會對應到：
  *
- * ⚠️ 檔名大小寫必須與 website/public/images/ 下的實際檔案完全一致。
- * macOS 本機不分大小寫，寫錯不會有徵兆，但 GitHub Pages 會 404。
- * `npm run check:assets` 會檢查這件事。
+ *   website/public/images/button-anatomy-light.png
+ *   website/public/images/button-anatomy-dark.png
  *
- * 容器高度固定 400，寬度隨版面延伸，圖片置中。圖片本身是 Figma 的
- * @2x 匯出（960×700），以一半的 CSS 尺寸呈現，在高解析度螢幕上才清晰。
- * 背景需為透明 PNG，見 tools/make-transparent.mjs。
+ * 兩張都會渲染，再由 CSS 依 `data-theme` 決定顯示哪一張。不用
+ * `<picture>` 搭配 prefers-color-scheme，是因為站台的主題可以手動
+ * 切換，媒體查詢不會跟著切。
+ *
+ * 站台部署在子路徑下，路徑一律要帶 BASE_URL；直接寫 `/images/...`
+ * 在本機看得到、上線會 404。`npm run check:assets` 會驗證兩個檔案
+ * 都存在且大小寫相符。
  */
-export function AnatomyImage({ file, alt }: { file: string; alt: string }) {
+export function ThemedImage({
+  image,
+  alt,
+  className,
+  style,
+}: {
+  image: string;
+  alt: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const base = `${import.meta.env.BASE_URL}images/${image}`;
+  return (
+    <>
+      <img src={`${base}-light.png`} alt={alt} className={`theme-light-only ${className ?? ''}`} style={style} />
+      <img src={`${base}-dark.png`} alt={alt} className={`theme-dark-only ${className ?? ''}`} style={style} />
+    </>
+  );
+}
+
+/**
+ * 元件說明圖的標準容器。
+ *
+ * 容器高度固定 400，寬度隨版面延伸，圖片置中。圖片是 Figma 的
+ * @2x 匯出（960×700），以一半的 CSS 尺寸呈現，在高解析度螢幕上才清晰。
+ */
+export function AnatomyImage({ image, alt }: { image: string; alt: string }) {
   return (
     <div
       style={{
@@ -301,9 +329,8 @@ export function AnatomyImage({ file, alt }: { file: string; alt: string }) {
         overflow: 'hidden',
       }}
     >
-      {/* 圖是 @2x（960×700），以一半的 CSS 尺寸呈現換取高解析度 */}
-      <img
-        src={`${import.meta.env.BASE_URL}images/${file}`}
+      <ThemedImage
+        image={image}
         alt={alt}
         style={{
           width: 480,

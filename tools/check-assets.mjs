@@ -4,7 +4,7 @@
  *
  *   node tools/check-assets.mjs
  *
- * 擋兩類上線才會爆的錯誤：
+ * 擋三類上線才會爆的錯誤：
  *
  * 1. 大小寫不符
  *    macOS 的檔案系統預設不分大小寫，`Anatomy-Button.png` 寫成
@@ -14,6 +14,10 @@
  * 2. 缺少站台路徑
  *    站台部署在 /USPACE-Design-System/ 之下，寫 `/images/x.png`
  *    會指向網域根目錄。必須用 import.meta.env.BASE_URL。
+ *
+ * 3. 明暗雙版只補了一半
+ *    說明圖一律成對存在（`-light.png` / `-dark.png`）。只加了 light
+ *    的話，切到暗色主題就是破圖，而淺色下完全看不出問題。
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
@@ -42,8 +46,9 @@ const problems = [];
 const OK_REF = /\$\{import\.meta\.env\.BASE_URL\}([^`'"]+)/g;
 // 直接寫死的絕對路徑
 const BAD_REF = /src=["']\/([^"']+\.(?:png|jpe?g|svg|webp|mp4|gif))["']/g;
-// <AnatomyImage file="Foo.png" />
-const ANATOMY_REF = /<AnatomyImage[^>]*?\sfile=["']([^"']+)["']/gs;
+// 明暗雙版說明圖的基底名稱：image="button-anatomy" 或 image: 'button-anatomy'
+// 兩種寫法分別對應 AnatomyImage / ThemedImage 的 prop 與 DoDontExamples 的欄位。
+const THEMED_REF = /\bimage[=:]\s*["']([a-z0-9][a-z0-9-]*)["']/g;
 
 for (const rel of sources) {
   const text = readFileSync(join(SRC, rel), 'utf8');
@@ -61,16 +66,18 @@ for (const rel of sources) {
     );
   }
 
-  // <AnatomyImage file="Foo.png" /> 的呼叫端
-  for (const m of text.matchAll(ANATOMY_REF)) {
-    const asked = `images/${m[1]}`;
-    if (publicFiles.includes(asked)) continue;
-    const actual = publicLower.get(asked.toLowerCase());
-    problems.push(
-      actual
-        ? `${rel}\n    AnatomyImage file="${m[1]}"\n    實際檔名是 ${actual.replace('images/', '')} — 大小寫不符，上線會 404`
-        : `${rel}\n    AnatomyImage file="${m[1]}"\n    public/images/ 下找不到這個檔案`
-    );
+  // 明暗雙版說明圖：一個基底名稱要對應到 -light 與 -dark 兩個檔案，缺一不可
+  for (const m of text.matchAll(THEMED_REF)) {
+    for (const mode of ['light', 'dark']) {
+      const asked = `images/${m[1]}-${mode}.png`;
+      if (publicFiles.includes(asked)) continue;
+      const actual = publicLower.get(asked.toLowerCase());
+      problems.push(
+        actual
+          ? `${rel}\n    image="${m[1]}" 需要 ${asked}\n    實際檔名是 ${actual} — 大小寫不符，上線會 404`
+          : `${rel}\n    image="${m[1]}" 需要 ${asked}\n    public/ 下找不到這個檔案`
+      );
+    }
   }
 
   for (const m of text.matchAll(BAD_REF)) {

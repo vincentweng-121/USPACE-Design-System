@@ -6,6 +6,47 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
+### 2026-07-31 | 文件站 | 說明圖改為明暗雙版，並清理冗餘程式碼（v0.6.1）
+狀態：PUBLISHED
+
+僅影響文件站，`styles/` 與 token 未變動。
+
+#### 說明圖規則變更
+| 項目 | 舊 | 新 |
+|------|----|----|
+| 透明度 | 泛洪去背成透明 PNG | **取消**，整張圖直出 |
+| 檔名 | `button-anatomy.png` | `button-anatomy-light.png` / `-dark.png` |
+| 呼叫端 | `<AnatomyImage file="button-anatomy.png" />` | `<AnatomyImage image="button-anatomy" />` |
+| 解析度 | `scale: 2`，960×700 | 不變 |
+| 版面 | 容器固定高 400、圖片 480 CSS px 置中 | 不變 |
+
+去背規則廢除的原因：容差稍大會把 tertiary 的 grey100 底一起挖掉，
+容差稍小又留下白邊；Modal 類的圖更是無法分離。`tools/make-transparent.mjs`
+已刪除。
+
+新增 `ThemedImage`，同時渲染明暗兩張，由 CSS 依 `data-theme` 切換。
+不用 `prefers-color-scheme`，因為站台主題可手動切換，媒體查詢不會跟著切。
+
+`check:assets` 增加第三類檢查：基底名稱必須同時存在 `-light` 與 `-dark`，
+只補一半會被擋下（已實測）。
+
+#### 內容
+- Usage 的 Do/Don't 從 1 組擴充為 3 組（權重、icon 單雙側、icon 是否配文字）
+- Configurations 的 Icon option 移除 Both，只保留 None / Leading / Trailing
+- 相關文案同步：hero、Anatomy 表的 Trailing icon 說明、Develop 範例
+
+#### 清理
+| 項目 | 說明 |
+|------|------|
+| `components/Controls.tsx` | Playground 控制項的舊版（分段按鈕），已被 radio 版取代，無人引用 |
+| `pages/ComponentsPage.tsx` 等 3 個 | 索引頁，App.tsx 早已改為 `Navigate` 轉址，內容也已過時 |
+| `tokens/util.ts` | 僅 ComponentsPage 使用，隨之成為孤兒 |
+| `utils.ts` 的 `asOptions` | 從未被使用 |
+| ButtonPage 的 `colorOf` / `cap` | 與 `utils.ts` 重複定義，改為引用共用版本 |
+
+共移除 6 個檔案。盤點確認：無未使用的 CSS class、無未使用的 export、
+無未被引用的檔案。
+
 ### 2026-07-31 | button.dart | style 更名為 level（v0.6.0）
 狀態：PUBLISHED
 ⚠️ BREAKING CHANGE — 所有 USpaceButton 呼叫端都要改
