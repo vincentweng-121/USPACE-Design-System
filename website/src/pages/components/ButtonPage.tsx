@@ -42,18 +42,29 @@ const colorOf = (token: string | null | undefined) =>
 
 const cap = (v: string) => v.charAt(0).toUpperCase() + v.slice(1);
 
-// ── 車輛 icon（Figma 使用 .24px/NormalCar）──
-function CarIcon({ color }: { color: string }) {
+// ── icon 佔位框 ──
+/**
+ * 虛線方框，代表「這裡放一個 icon」。
+ *
+ * 來源：Figma node 3746:15802。文件站不該指定某個具體圖示，
+ * 否則讀者會以為那是規範的一部分；佔位框只表達尺寸與位置。
+ *
+ * 顏色跟著文字走，與 Anatomy 表寫的「顏色與文字相同」一致。
+ */
+function IconPlaceholder({ color }: { color: string }) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M4.5 15.5v2a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5v-2m17 0v2a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-2M2.5 15.5h17V12l-1.6-4a1.5 1.5 0 0 0-1.4-1H7.5a1.5 1.5 0 0 0-1.4 1L4.5 12v3.5Z"
+      <rect
+        x="1"
+        y="1"
+        width="22"
+        height="22"
+        rx="1.33"
         stroke={color}
-        strokeWidth="1.5"
-        strokeLinejoin="round"
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        strokeDasharray="4 4"
       />
-      <circle cx="6.5" cy="13.5" r="1" fill={color} />
-      <circle cx="15.5" cy="13.5" r="1" fill={color} />
     </svg>
   );
 }
@@ -104,9 +115,9 @@ function ButtonPreview({
         cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
       }}
     >
-      {leading && <CarIcon color={content} />}
+      {leading && <IconPlaceholder color={content} />}
       {label}
-      {trailing && <CarIcon color={content} />}
+      {trailing && <IconPlaceholder color={content} />}
     </button>
   );
 }
@@ -196,9 +207,9 @@ function Playground() {
           onChange={setIcon}
           options={[
             { value: 'none', label: 'None' },
-            { value: 'leading', label: 'Leading icon with label' },
-            { value: 'trailing', label: 'Trailing icon with label' },
-            { value: 'both', label: 'Both icons with label' },
+            { value: 'leading', label: 'Leading' },
+            { value: 'trailing', label: 'Trailing' },
+            { value: 'both', label: 'Both' },
           ]}
         />
       </div>
