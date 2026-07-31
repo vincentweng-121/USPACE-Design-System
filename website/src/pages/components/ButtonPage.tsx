@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import DoDont, { DoDontExamples } from '../../components/DoDont';
+import { DoDontExamples } from '../../components/DoDont';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import { AnatomyImage } from '../../components/spec';
@@ -541,25 +541,7 @@ export default function ButtonPage() {
           {/* ── 9. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
-            <div style={{ marginTop: 32 }}>
-              <DoDont
-                dos={[
-                  '一個畫面只給一個 primary 按鈕，代表最主要的行動',
-                  'emphasis accent 用來讓那一顆 primary 更醒目，一個畫面同樣只給一顆',
-                  'emphasis charging 只用於充電相關流程，不要當成一般強調色',
-                  'secondary 用於次要操作，tertiary 用於取消、略過這類低權重動作',
-                  'icon 只放單側，左右擇一；語意仍以文字為主',
-                ]}
-                donts={[
-                  '不要同時使用多個 primary 按鈕，權重會互相抵銷',
-                  '不要用 emphasis 取代權重階層，它只改文字色，不會讓按鈕變得更重要',
-                  '不要只放 icon 不放文字，這個元件的文字是必填',
-                  '不要用 tertiary 承載主要行動，它的淺灰底與頁面背景相近，不夠醒目',
-                  '不要自行改變高度，兩種 size 之外的尺寸不在規範內',
-                ]}
-              />
-            </div>
-            <div style={{ display: 'grid', gap: 32, marginTop: 16 }}>
+            <div style={{ display: 'grid', gap: 32, marginTop: 32 }}>
               <DoDontExamples
                 items={[
                   {
