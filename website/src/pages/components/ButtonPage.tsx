@@ -224,6 +224,10 @@ export default function ButtonPage() {
               3 種樣式代表不同的行動權重，由重到輕排列。同一個畫面裡權重最高的只該有一個。
               文字色的變化屬於 emphasis，不是另一個權重層級，見下方 Configurations。
             </p>
+            <AnatomyImage
+              file="button-varient.png"
+              alt="三種按鈕權重由重到輕：深底的 Primary、中灰底的 Secondary、淺灰底的 Tertiary"
+            />
 
             <div style={{ display: 'grid', gap: 16 }}>
               {[
