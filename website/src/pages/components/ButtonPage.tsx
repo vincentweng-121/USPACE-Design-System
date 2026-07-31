@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
@@ -110,46 +111,98 @@ function ButtonPreview({
   );
 }
 
-// ── 維度矩陣 ──
-/**
- * 一個維度一列：左側是維度名稱與補充說明，右側並排所有選項。
- * 結構參考 Montage 文件站的 Variants 區塊。
- */
-function DimensionRow({
+// ── 互動式展示區 ──
+type IconOption = 'none' | 'leading' | 'trailing' | 'both';
+
+/** 一組 radio。點選後由呼叫端更新狀態，預覽即時反映。 */
+function ControlGroup<T extends string>({
   name,
-  note,
-  children,
+  label,
+  value,
+  options,
+  onChange,
 }: {
   name: string;
-  note?: string;
-  children: React.ReactNode;
+  label: string;
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
 }) {
   return (
-    <div className="dimension-row">
-      <div className="dimension-label">
-        {name}
-        {note && <span>{note}</span>}
-      </div>
-      <div className="dimension-options">{children}</div>
-    </div>
+    <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
+      <legend className="control-group-label">{label}</legend>
+      {options.map((opt) => (
+        <label key={opt.value} className="control-option">
+          <input
+            type="radio"
+            name={name}
+            value={opt.value}
+            checked={value === opt.value}
+            onChange={() => onChange(opt.value)}
+          />
+          {opt.label}
+        </label>
+      ))}
+    </fieldset>
   );
 }
 
-/** 單一選項：元件本體 + 下方的選項名稱 */
-function DimensionOption({
-  caption,
-  full = false,
-  children,
-}: {
-  caption: string;
-  full?: boolean;
-  children: React.ReactNode;
-}) {
+/**
+ * 左側即時預覽 + 右側控制卡。
+ * 結構參考 Montage 文件站的 Variants 區塊。
+ */
+function Playground() {
+  const [size, setSize] = useState<Size>('regular');
+  const [level, setLevel] = useState<Style>('primary');
+  const [icon, setIcon] = useState<IconOption>('none');
+
   return (
-    <figure className="dimension-option" data-full={full}>
-      {children}
-      <figcaption>{caption}</figcaption>
-    </figure>
+    <div className="playground">
+      <div className="playground-preview">
+        <div>
+          <ButtonPreview
+            label="Label"
+            style={level}
+            size={size}
+            state="enabled"
+            leading={icon === 'leading' || icon === 'both'}
+            trailing={icon === 'trailing' || icon === 'both'}
+          />
+        </div>
+      </div>
+
+      <div className="playground-controls">
+        <ControlGroup
+          name="button-size"
+          label="Size"
+          value={size}
+          onChange={setSize}
+          options={[
+            { value: 'regular', label: 'Regular' },
+            { value: 'small', label: 'Small' },
+          ]}
+        />
+        <ControlGroup
+          name="button-level"
+          label="Level"
+          value={level}
+          onChange={setLevel}
+          options={styles.map((st) => ({ value: st, label: cap(st) }))}
+        />
+        <ControlGroup
+          name="button-icon"
+          label="Icon option"
+          value={icon}
+          onChange={setIcon}
+          options={[
+            { value: 'none', label: 'None' },
+            { value: 'leading', label: 'Leading icon with label' },
+            { value: 'trailing', label: 'Trailing icon with label' },
+            { value: 'both', label: 'Both icons with label' },
+          ]}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -249,63 +302,10 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              基本樣式的四個維度。互動與狀態不在此處，見下方 States。
+              調整右側的屬性，左側會即時反映。互動與狀態不在此處，見下方 States。
             </p>
 
-            <div className="dimension-matrix">
-              <DimensionRow name="Size" note="高度相同，只差寬度行為">
-                <DimensionOption caption="Small">
-                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" />
-                </DimensionOption>
-                <DimensionOption caption="Regular" full>
-                  <ButtonPreview label="Label" style="primary" size="regular" state="enabled" />
-                </DimensionOption>
-              </DimensionRow>
-
-              <DimensionRow name="Style" note="三種行動權重，由重到輕">
-                {styles.map((st) => (
-                  <DimensionOption key={st} caption={cap(st)}>
-                    <ButtonPreview label="Label" style={st} size="small" state="enabled" />
-                  </DimensionOption>
-                ))}
-              </DimensionRow>
-
-              <DimensionRow name="Emphasis" note="只改 Primary 的文字色，權重不變">
-                {emphases.map((em) => (
-                  <DimensionOption key={em} caption={cap(em)}>
-                    <ButtonPreview
-                      label="Label"
-                      style="primary"
-                      size="small"
-                      state="enabled"
-                      emphasis={em}
-                    />
-                  </DimensionOption>
-                ))}
-              </DimensionRow>
-
-              <DimensionRow name="Icon option" note="左右兩側各自獨立，可任意組合">
-                <DimensionOption caption="None">
-                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" />
-                </DimensionOption>
-                <DimensionOption caption="Leading icon">
-                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" leading />
-                </DimensionOption>
-                <DimensionOption caption="Trailing icon">
-                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" trailing />
-                </DimensionOption>
-                <DimensionOption caption="Both">
-                  <ButtonPreview
-                    label="Label"
-                    style="primary"
-                    size="small"
-                    state="enabled"
-                    leading
-                    trailing
-                  />
-                </DimensionOption>
-              </DimensionRow>
-            </div>
+            <Playground />
           </section>
 
           {/* ── 3. Tokens & specs ── */}

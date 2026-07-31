@@ -287,80 +287,85 @@ code {
   border-bottom: none;
 }
 
-/* ── 維度矩陣 ───────────────────────────────────────────────
-   樣式參考 Montage 文件站的 Variants 區塊：左側是維度名稱，
-   右側並排該維度的所有選項，每個選項在下方標注名稱。
-   不編號、不寫長敘述，讓元件本身說明差異。
+/* ── 互動式展示區 ───────────────────────────────────────────
+   結構參考 Montage 文件站的 Variants 區塊：左側是即時預覽，
+   右側是一張控制卡，每個維度一組 radio，點了立刻反映在預覽上。
    ───────────────────────────────────────────────────────── */
 
-.dimension-matrix {
+.playground {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 16px;
+  padding: 16px;
+  min-height: 480px;
   border: 1px solid var(--border-divider);
   border-radius: 16px;
-  overflow: hidden;
+  background: var(--page-secondary);
 }
 
-.dimension-row {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  border-bottom: 1px solid var(--border-divider);
-}
-
-.dimension-row:last-child {
-  border-bottom: none;
-}
-
-.dimension-label {
-  padding: 24px 20px;
-  background: var(--surface-sunken);
-  border-right: 1px solid var(--border-divider);
-  color: var(--text-primary);
-  font-size: 15px;
-}
-
-/* 維度的補充說明，例如「高度相同，只差寬度行為」 */
-.dimension-label span {
-  display: block;
-  margin-top: 6px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-tertiary);
-}
-
-.dimension-options {
+.playground-preview {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 24px 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  min-width: 0;
 }
 
-.dimension-option {
+/* Regular size 需要一個有限寬度的容器才能撐滿 */
+.playground-preview > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.playground-controls {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 0;
+  gap: 28px;
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--surface-raised);
 }
 
-/* 滿寬的選項（Regular size）獨佔一列 */
-.dimension-option[data-full='true'] {
-  flex: 1 1 100%;
-}
-
-.dimension-option figcaption {
+.control-group-label {
+  margin-bottom: 8px;
   font-size: 13px;
   color: var(--text-tertiary);
 }
 
-@media (max-width: 720px) {
-  .dimension-row {
+.control-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 15px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.control-option input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* 選取中的項目加重，未選取的退到次要色 */
+.control-option:has(input:checked) {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+@media (max-width: 860px) {
+  .playground {
     grid-template-columns: 1fr;
+    min-height: 0;
   }
 
-  .dimension-label {
-    border-right: none;
-    border-bottom: 1px solid var(--border-divider);
-    padding: 16px 20px;
+  .playground-preview {
+    padding: 40px 16px;
   }
 }
 
