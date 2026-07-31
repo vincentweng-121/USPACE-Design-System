@@ -6,6 +6,41 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
+### 2026-07-31 | button.dart | Secondary 與 Tertiary 改為實心底色（v0.5.0）
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE — 視覺改版，前端不需改 API
+
+來源：Figma node 52:3325（Secondary）與 1739:16858（Tertiary），2026-07-31 讀取。
+
+#### 視覺改版
+| style | 舊 | 新 |
+|-------|----|----|
+| Secondary | 透明底 + 2px 描邊 | 實心 `actionSecondaryBg`（grey300 `#B4B4B4`） |
+| Tertiary | 純文字，無底色無描邊 | 實心 `actionTertiaryBg`（grey100 `#EEEEEE`） |
+
+三個層級現在都是實心底色，**button 已無任何 style 使用描邊**。
+`_borderColor()` 與 `_borderWidth` 隨之移除。
+
+#### Token
+未新增任何 token。Figma 的 `Action/Secondary/Bg` `#b4b4b4` 與
+`Action/Tertiary/Bg` `#eeeeee` 對應到語意層既有的 `actionSecondaryBg`
+（grey300）與 `actionTertiaryBg`（grey100），值完全吻合。這兩個 token
+在 2026-07-28 改版後就沒有元件使用，這次接回。
+
+文字色不變：secondary 與 tertiary 皆為 `#323237` = grey800，
+與既有的 `actionSecondaryContent` / `actionTertiaryContent` 一致。
+
+#### 需要注意
+- **Secondary / Tertiary 的 disabled 在 Figma 無對應 node。** 既然兩者已改
+  實心，沿用文件既有的「disabled 時所有 style 收斂為同一組配色」規則，
+  套 `actionDisabledBg` + `actionDisabledContent`。待 Figma 補規格後核對。
+- **暗色主題的階層會塌掉。** `actionSecondaryBg` 與 `actionTertiaryBg`
+  的 dark 值都是 grey800，兩者背景完全相同；而 `actionPrimaryBg` 的
+  dark 值是 grey700，比它們更淺，權重由深到淺的關係在暗色下反轉。
+  另外 tertiary 暗色的文字（grey600 `#777777`）對 grey800 底的對比約
+  2.9:1，低於 WCAG AA 的 4.5:1。這三個 dark 值都是既有 token，
+  未取得 Figma 暗色規格前不自行更動。
+
 ### 2026-07-31 | button.dart | style 收斂為三個權重層級（v0.4.0）
 狀態：PUBLISHED
 ⚠️ BREAKING CHANGE — 使用 accent / charging 的呼叫端需調整

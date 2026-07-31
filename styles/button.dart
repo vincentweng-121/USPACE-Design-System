@@ -11,13 +11,13 @@ import 'spacing_extension.dart';
 // ── Button Style ─────────────────────────────────────────────
 /// 行動權重，由重到輕三個層級。
 enum USpaceButtonStyle {
-  /// 實心底（actionPrimaryBg），最高行動權重
+  /// 實心深底（actionPrimaryBg），最高行動權重
   primary,
 
-  /// 透明底 + 2px 描邊
+  /// 實心中灰底（actionSecondaryBg）
   secondary,
 
-  /// 透明底、無描邊，純文字按鈕
+  /// 實心淺灰底（actionTertiaryBg），最低權重
   tertiary,
 }
 
@@ -67,12 +67,14 @@ enum USpaceButtonState { enabled, disabled }
 ///   │           │   ...ContentAccent   │                          │
 ///   │           │ emphasis.charging    │                          │
 ///   │           │   ...ContentCharging │                          │
-///   │ secondary │ 透明 + 2px 描邊      │ 透明 + 2px 描邊          │
-///   │           │ actionSecondary-     │ actionDisabledBg 描邊    │
-///   │           │ Content（描邊同文字）│ actionDisabledContent    │
-///   │ tertiary  │ 透明、無描邊         │ 透明、無描邊             │
+///   │ secondary │ bg actionSecondaryBg │ bg actionDisabledBg      │
+///   │           │ actionSecondary-     │ actionDisabledContent    │
+///   │           │ Content              │                          │
+///   │ tertiary  │ bg actionTertiaryBg  │ bg actionDisabledBg      │
 ///   │           │ actionTertiaryContent│ actionDisabledContent    │
 ///   └───────────┴──────────────────────┴──────────────────────────┘
+///
+/// 三個層級都是實心底色，皆無描邊。
 ///
 /// Layout：
 ///   高度 48（固定）、圓角 full、icon 24px、icon 與文字間距 8
@@ -122,22 +124,16 @@ class USpaceButton extends StatelessWidget {
   /// 而非用垂直 padding 推算，否則會變成 50。
   static const double _height = 48;
   static const double _iconSize = 24;
-  static const double _borderWidth = 2;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.uColors;
     final content = _contentColor(colors);
-    final border = _borderColor(colors);
     final isSmall = size == USpaceButtonSize.small;
 
     final button = Material(
-      color: _backgroundColor(colors) ?? Colors.transparent,
-      shape: border == null
-          ? const StadiumBorder()
-          : StadiumBorder(
-              side: BorderSide(color: border, width: _borderWidth),
-            ),
+      color: _backgroundColor(colors),
+      shape: const StadiumBorder(),
       child: InkWell(
         onTap: _isDisabled ? null : onPressed,
         customBorder: const StadiumBorder(),
@@ -179,22 +175,14 @@ class USpaceButton extends StatelessWidget {
         child: icon,
       );
 
-  /// secondary / tertiary 為透明底，回傳 null。
-  Color? _backgroundColor(USpaceColorsExtension colors) {
-    switch (style) {
-      case USpaceButtonStyle.secondary:
-      case USpaceButtonStyle.tertiary:
-        return null;
-      case USpaceButtonStyle.primary:
-        return _isDisabled ? colors.actionDisabledBg : colors.actionPrimaryBg;
-    }
-  }
-
-  /// 只有 secondary 有描邊。Figma 的描邊色與文字色相同，
-  /// 因此沿用 actionSecondaryContent，不另立 border token。
-  Color? _borderColor(USpaceColorsExtension colors) {
-    if (style != USpaceButtonStyle.secondary) return null;
-    return _isDisabled ? colors.actionDisabledBg : colors.actionSecondaryContent;
+  /// 三個層級都是實心底色，disabled 時一律收斂為 actionDisabledBg。
+  Color _backgroundColor(USpaceColorsExtension colors) {
+    if (_isDisabled) return colors.actionDisabledBg;
+    return switch (style) {
+      USpaceButtonStyle.primary => colors.actionPrimaryBg,
+      USpaceButtonStyle.secondary => colors.actionSecondaryBg,
+      USpaceButtonStyle.tertiary => colors.actionTertiaryBg,
+    };
   }
 
   Color _contentColor(USpaceColorsExtension colors) {

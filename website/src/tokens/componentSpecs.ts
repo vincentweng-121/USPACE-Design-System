@@ -96,33 +96,33 @@ export const buttonSpec: ComponentSpec = {
       "style": "secondary",
       "emphasis": "none",
       "state": "enabled",
-      "bg": null,
+      "bg": "actionSecondaryBg",
       "content": "actionSecondaryContent",
-      "border": "actionSecondaryContent",
-      "note": "透明底 + 2px 描邊，描邊與文字同色"
+      "border": null,
+      "note": "實心中灰底，無描邊"
     },
     {
       "style": "secondary",
       "emphasis": "none",
       "state": "disabled",
-      "bg": null,
+      "bg": "actionDisabledBg",
       "content": "actionDisabledContent",
-      "border": "actionDisabledBg"
+      "border": null
     },
     {
       "style": "tertiary",
       "emphasis": "none",
       "state": "enabled",
-      "bg": null,
+      "bg": "actionTertiaryBg",
       "content": "actionTertiaryContent",
       "border": null,
-      "note": "純文字按鈕，無底色無描邊"
+      "note": "實心淺灰底，無描邊"
     },
     {
       "style": "tertiary",
       "emphasis": "none",
       "state": "disabled",
-      "bg": null,
+      "bg": "actionDisabledBg",
       "content": "actionDisabledContent",
       "border": null
     }
