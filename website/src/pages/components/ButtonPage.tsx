@@ -228,8 +228,8 @@ export default function ButtonPage() {
             <div style={{ display: 'grid', gap: 16 }}>
               {[
                 { style: 'primary' as Style, desc: '最高權重。畫面上最主要的那一個行動，實心底色。' },
-                { style: 'secondary' as Style, desc: '次要操作。透明底加描邊，保有邊界但不搶焦點。' },
-                { style: 'tertiary' as Style, desc: '最低權重。純文字，適合取消、略過這類動作。' },
+                { style: 'secondary' as Style, desc: '次要操作。實心中灰底，存在感低於 primary。' },
+                { style: 'tertiary' as Style, desc: '最低權重。實心淺灰底，適合取消、略過這類動作。' },
               ].map((v) => (
                 <div
                   key={v.style}
@@ -363,7 +363,7 @@ export default function ButtonPage() {
             <SpecTable
               headers={['', '部件', '必要性', '說明']}
               rows={[
-                ['1', '容器 Container', '必要', '底色、描邊與圓角由 style 決定；高度固定 48'],
+                ['1', '容器 Container', '必要', '底色與圓角由 style 決定；三個層級皆無描邊，高度固定 48'],
                 ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
                 ['3', '文字 Label', '必要', '按鈕語意的唯一承載者，不可省略'],
                 ['4', 'Trailing icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
@@ -376,8 +376,8 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Color</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              顏色由 style 與 state 決定，不隨 size 改變。以下為亮色主題的值，
-              暗色主題由同一組語意 token 自動切換。
+              顏色由 style 與 state 決定，不隨 size 改變。三個層級都是實心底色，皆無描邊。
+              以下為亮色主題的值，暗色主題由同一組語意 token 自動切換。
             </p>
 
             {styles.map((st) => (
@@ -392,11 +392,6 @@ export default function ButtonPage() {
                       '容器底色',
                       <Swatch key="e" token={variantOf(st, 'enabled').bg as string | null} />,
                       <Swatch key="d" token={variantOf(st, 'disabled').bg as string | null} />,
-                    ],
-                    [
-                      '描邊',
-                      <Swatch key="e" token={variantOf(st, 'enabled').border as string | null} />,
-                      <Swatch key="d" token={variantOf(st, 'disabled').border as string | null} />,
                     ],
                     // primary 的文字色隨 emphasis 變化，逐列展開；其餘層級只有一列
                     ...(st === 'primary'
@@ -417,7 +412,7 @@ export default function ButtonPage() {
                 />
                 {st === 'primary' ? (
                   <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-                    三種 emphasis 的容器底色與描邊完全相同，差別只在文字色。
+                    三種 emphasis 的容器底色完全相同，差別只在文字色。
                     accent 用於畫面上最主要的那一個行動，charging 為充電流程專用，
                     兩者都不改變 primary 的權重層級。disabled 時 emphasis 不生效。
                   </p>
@@ -483,10 +478,10 @@ export default function ButtonPage() {
             <SpecTable
               headers={['狀態', '外觀', '互動']}
               rows={[
-                ['Enabled', '依 style 呈現對應的底色、描邊與文字色；primary 另受 emphasis 影響文字色', '可點擊，觸發 onPressed'],
+                ['Enabled', '依 style 呈現對應的底色與文字色；primary 另受 emphasis 影響文字色', '可點擊，觸發 onPressed'],
                 [
                   'Disabled',
-                  'primary 改為 actionDisabledBg 底；secondary 描邊改為 actionDisabledBg；文字一律 actionDisabledContent，emphasis 不生效',
+                  '三個層級一律改為 actionDisabledBg 底、actionDisabledContent 文字，emphasis 不生效',
                   '不可點擊，onPressed 不會被呼叫',
                 ],
                 ['Pressed', '尚未定義', '—'],
@@ -529,7 +524,7 @@ export default function ButtonPage() {
                 ],
                 ['icon 尺寸', `${layout.iconSize}px`, `${layout.iconSize}px`, '—'],
                 ['圓角', '1000px', '1000px', <code key="r">USpaceRadius.full</code>],
-                ['描邊寬度', '2px（僅 secondary）', '2px（僅 secondary）', '—'],
+                
               ]}
               minWidth={620}
             />
@@ -557,14 +552,14 @@ export default function ButtonPage() {
                   '一個畫面只給一個 primary 按鈕，代表最主要的行動',
                   'emphasis accent 用來讓那一顆 primary 更醒目，一個畫面同樣只給一顆',
                   'emphasis charging 只用於充電相關流程，不要當成一般強調色',
-                  'secondary 用於次要但仍需要邊界的操作，tertiary 用於低權重的文字動作',
+                  'secondary 用於次要操作，tertiary 用於取消、略過這類低權重動作',
                   'icon 只作輔助，按鈕語意仍以文字為主',
                 ]}
                 donts={[
                   '不要同時使用多個 primary 按鈕，權重會互相抵銷',
                   '不要用 emphasis 取代權重階層，它只改文字色，不會讓按鈕變得更重要',
                   '不要只放 icon 不放文字，這個元件的文字是必填',
-                  '不要用 tertiary 承載主要行動，它沒有底色與邊界',
+                  '不要用 tertiary 承載主要行動，它的淺灰底與頁面背景相近，不夠醒目',
                   '不要自行改變高度，兩種 size 之外的尺寸不在規範內',
                 ]}
               />
@@ -599,7 +594,7 @@ export default function ButtonPage() {
               <li>固定高度 {layout.height}px，超過觸控目標最小 44px 的建議值。</li>
               <li>disabled 同時移除點擊行為，不會出現「看起來不能按卻按得下去」的狀況。</li>
               <li>icon 為裝飾性元素，語意由文字承載，讀屏軟體只會讀到 label。</li>
-              <li>tertiary 沒有底色與描邊，放在複雜背景上時需自行確認對比度。</li>
+              <li>tertiary 的淺灰底與頁面背景相近，放在深淺不一的背景上時需自行確認邊界是否可辨。</li>
             </ul>
           </section>
         </div>
