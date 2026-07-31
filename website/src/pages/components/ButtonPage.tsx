@@ -624,7 +624,7 @@ export default function ButtonPage() {
               <CodeBlock
                 title="用 emphasis 讓 primary 更醒目"
                 code={`USpaceButton(
-  label: '確認降鎖',
+  label: '確認',
   style: USpaceButtonStyle.primary,
   emphasis: USpaceButtonEmphasis.accent,
   onPressed: () {},
