@@ -28,6 +28,7 @@ function List({ kind, title, items }: { kind: 'do' | 'dont'; title: string; item
         border: '1px solid var(--border-divider)',
         borderRadius: 10,
         overflow: 'hidden',
+        background: 'var(--page-secondary)',
       }}
     >
       <h3
