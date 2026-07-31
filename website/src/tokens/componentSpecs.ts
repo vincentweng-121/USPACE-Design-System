@@ -20,12 +20,15 @@ export const buttonSpec: ComponentSpec = {
   "source": "styles/button.dart",
   "figmaNode": "3611:8842 / 3611:8861",
   "dimensions": {
-    "style": [
-      "accent",
-      "charging",
+    "level": [
       "primary",
       "secondary",
       "tertiary"
+    ],
+    "emphasis": [
+      "none",
+      "accent",
+      "charging"
     ],
     "size": [
       "regular",
@@ -38,74 +41,88 @@ export const buttonSpec: ComponentSpec = {
   },
   "variants": [
     {
-      "style": "accent",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentAccent",
-      "border": null
-    },
-    {
-      "style": "accent",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
-      "border": null
-    },
-    {
-      "style": "charging",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentCharging",
-      "border": null
-    },
-    {
-      "style": "charging",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
-      "border": null
-    },
-    {
-      "style": "primary",
+      "level": "primary",
+      "emphasis": "none",
       "state": "enabled",
       "bg": "actionPrimaryBg",
       "content": "actionPrimaryContent",
       "border": null
     },
     {
-      "style": "primary",
+      "level": "primary",
+      "emphasis": "accent",
+      "state": "enabled",
+      "bg": "actionPrimaryBg",
+      "content": "actionPrimaryContentAccent",
+      "border": null,
+      "note": "螢光綠文字，同一畫面最多一顆"
+    },
+    {
+      "level": "primary",
+      "emphasis": "charging",
+      "state": "enabled",
+      "bg": "actionPrimaryBg",
+      "content": "actionPrimaryContentCharging",
+      "border": null,
+      "note": "充電流程專用的螢光綠"
+    },
+    {
+      "level": "primary",
+      "emphasis": "none",
       "state": "disabled",
       "bg": "actionDisabledBg",
       "content": "actionDisabledContent",
       "border": null
     },
     {
-      "style": "secondary",
-      "state": "enabled",
-      "bg": null,
-      "content": "actionSecondaryContent",
-      "border": "actionSecondaryContent",
-      "note": "透明底 + 2px 描邊，描邊與文字同色"
-    },
-    {
-      "style": "secondary",
+      "level": "primary",
+      "emphasis": "accent",
       "state": "disabled",
-      "bg": null,
+      "bg": "actionDisabledBg",
       "content": "actionDisabledContent",
-      "border": "actionDisabledBg"
+      "border": null,
+      "note": "disabled 時 emphasis 不生效"
     },
     {
-      "style": "tertiary",
+      "level": "primary",
+      "emphasis": "charging",
+      "state": "disabled",
+      "bg": "actionDisabledBg",
+      "content": "actionDisabledContent",
+      "border": null,
+      "note": "disabled 時 emphasis 不生效"
+    },
+    {
+      "level": "secondary",
+      "emphasis": "none",
       "state": "enabled",
-      "bg": null,
+      "bg": "actionSecondaryBg",
+      "content": "actionSecondaryContent",
+      "border": null,
+      "note": "實心中灰底，無描邊"
+    },
+    {
+      "level": "secondary",
+      "emphasis": "none",
+      "state": "disabled",
+      "bg": "actionDisabledBg",
+      "content": "actionDisabledContent",
+      "border": null
+    },
+    {
+      "level": "tertiary",
+      "emphasis": "none",
+      "state": "enabled",
+      "bg": "actionTertiaryBg",
       "content": "actionTertiaryContent",
       "border": null,
-      "note": "純文字按鈕，無底色無描邊"
+      "note": "實心淺灰底，無描邊"
     },
     {
-      "style": "tertiary",
+      "level": "tertiary",
+      "emphasis": "none",
       "state": "disabled",
-      "bg": null,
+      "bg": "actionDisabledBg",
       "content": "actionDisabledContent",
       "border": null
     }

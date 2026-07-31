@@ -54,12 +54,15 @@ void main() {
 
   // ── Button ──────────────────────────────────────────────
   group('USpaceButton', () {
-    const styles = {
-      'accent': USpaceButtonStyle.accent,
-      'charging': USpaceButtonStyle.charging,
-      'primary': USpaceButtonStyle.primary,
-      'secondary': USpaceButtonStyle.secondary,
-      'tertiary': USpaceButtonStyle.tertiary,
+    const levels = {
+      'primary': USpaceButtonLevel.primary,
+      'secondary': USpaceButtonLevel.secondary,
+      'tertiary': USpaceButtonLevel.tertiary,
+    };
+    const emphases = {
+      'none': USpaceButtonEmphasis.none,
+      'accent': USpaceButtonEmphasis.accent,
+      'charging': USpaceButtonEmphasis.charging,
     };
     const sizes = {
       'regular': USpaceButtonSize.regular,
@@ -67,16 +70,17 @@ void main() {
     };
     final layout = readJson('tokens/components/button.json')['layout'] as Map<String, dynamic>;
 
-    // 顏色不隨 size 改變，因此每個 style × state 都在兩種 size 各驗一次
+    // 顏色不隨 size 改變，因此每個 style × emphasis × state 都在兩種 size 各驗一次
     for (final v in variantsOf('button.json')) {
       for (final sizeKey in sizes.keys) {
-        final label = '${v['style']} / $sizeKey / ${v['state']}';
+        final label = '${v['level']} / ${v['emphasis']} / $sizeKey / ${v['state']}';
         testWidgets(label, (tester) async {
           await pump(
             tester,
             USpaceButton(
               label: 'Label',
-              style: styles[v['style']]!,
+              level: levels[v['level']]!,
+              emphasis: emphases[v['emphasis']]!,
               size: sizes[sizeKey]!,
               state: v['state'] == 'enabled'
                   ? USpaceButtonState.enabled
@@ -157,6 +161,45 @@ void main() {
       final text = tester.widget<Text>(find.text('Label'));
       expect(text.style?.fontSize, AppTypographyExtension.light.displayM.fontSize);
       expect(text.style?.fontWeight, AppTypographyExtension.medium);
+    });
+
+    // emphasis 是 primary 專用的文字色變化，不應外溢到其他層級
+    for (final level in [USpaceButtonLevel.secondary, USpaceButtonLevel.tertiary]) {
+      testWidgets('${level.name} 忽略 emphasis', (tester) async {
+        for (final e in USpaceButtonEmphasis.values) {
+          await pump(
+            tester,
+            USpaceButton(
+              label: 'Label',
+              level: level,
+              emphasis: e,
+              onPressed: () {},
+            ),
+          );
+          final text = tester.widget<Text>(find.text('Label'));
+          expect(
+            text.style?.color,
+            tokenColor(
+              level == USpaceButtonLevel.secondary
+                  ? 'actionSecondaryContent'
+                  : 'actionTertiaryContent',
+            ),
+            reason: '${level.name} 的文字色不應隨 emphasis=${e.name} 改變',
+          );
+        }
+      });
+    }
+
+    testWidgets('預設為 primary / emphasis none', (tester) async {
+      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
+      final material = tester.widget<Material>(
+        find
+            .descendant(of: find.byType(USpaceButton), matching: find.byType(Material))
+            .first,
+      );
+      expect(material.color, tokenColor('actionPrimaryBg'));
+      final text = tester.widget<Text>(find.text('Label'));
+      expect(text.style?.color, tokenColor('actionPrimaryContent'));
     });
   });
 

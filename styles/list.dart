@@ -59,7 +59,7 @@ class USpaceListItem extends StatelessWidget {
     this.trailing = USpaceListTrailing.none,
     // button trailing
     this.buttonLabel,
-    this.buttonStyle = USpaceButtonStyle.primary,
+    this.buttonLevel = USpaceButtonLevel.primary,
     this.onButtonPressed,
     // toggle trailing
     this.toggleValue = false,
@@ -83,7 +83,7 @@ class USpaceListItem extends StatelessWidget {
   final USpaceListTrailing trailing;
 
   final String? buttonLabel;
-  final USpaceButtonStyle buttonStyle;
+  final USpaceButtonLevel buttonLevel;
   final VoidCallback? onButtonPressed;
 
   final bool toggleValue;
@@ -124,7 +124,7 @@ class USpaceListItem extends StatelessWidget {
       USpaceListTrailing.none => const SizedBox.shrink(),
       USpaceListTrailing.button => USpaceButton(
         label: buttonLabel ?? '',
-        style: buttonStyle,
+        level: buttonLevel,
         size: USpaceButtonSize.small,
         onPressed: onButtonPressed,
       ),

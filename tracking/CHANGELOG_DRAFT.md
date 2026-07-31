@@ -6,6 +6,129 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
+### 2026-07-31 | button.dart | style 更名為 level（v0.6.0）
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE — 所有 USpaceButton 呼叫端都要改
+
+原因：這個維度表達的是行動權重的層級，不是視覺樣式。文件站的
+Configurations 面板已改稱 Level，程式端一併對齊，避免設計與工程
+講兩個名字。
+
+#### API 變更
+| 舊 | 新 |
+|----|----|
+| `USpaceButtonStyle` | `USpaceButtonLevel` |
+| `style:` | `level:` |
+| `USpaceListItem(buttonStyle:)` | `USpaceListItem(buttonLevel:)` |
+
+`tokens/components/button.json` 的維度與 variants 也由 `style` 改為 `level`，
+文件站的 Baseline tokens 表頭同步改為 Level。
+
+#### 呼叫端遷移
+```dart
+// 舊
+USpaceButton(label: '確認', style: USpaceButtonStyle.primary)
+// 新
+USpaceButton(label: '確認', level: USpaceButtonLevel.primary)
+```
+
+sed 可一次處理：
+```bash
+sed -i '' 's/USpaceButtonStyle/USpaceButtonLevel/g; s/\bstyle: USpaceButtonLevel/level: USpaceButtonLevel/g' <檔案>
+```
+
+#### 沒有變的
+token 值、視覺、emphasis 機制、size 與 state 都不受影響。這是純更名。
+
+#### 注意
+2026-07-28 曾把 `USpaceButtonLevel` 改名為 `USpaceButtonStyle`，這次改回。
+前端在三天內要改兩次同一個識別字，已向使用者說明後由其確認執行。
+
+### 2026-07-31 | button.dart | Secondary 與 Tertiary 改為實心底色（v0.5.0）
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE — 視覺改版，前端不需改 API
+
+來源：Figma node 52:3325（Secondary）與 1739:16858（Tertiary），2026-07-31 讀取。
+
+#### 視覺改版
+| style | 舊 | 新 |
+|-------|----|----|
+| Secondary | 透明底 + 2px 描邊 | 實心 `actionSecondaryBg`（grey300 `#B4B4B4`） |
+| Tertiary | 純文字，無底色無描邊 | 實心 `actionTertiaryBg`（grey100 `#EEEEEE`） |
+
+三個層級現在都是實心底色，**button 已無任何 style 使用描邊**。
+`_borderColor()` 與 `_borderWidth` 隨之移除。
+
+#### Token
+未新增任何 token。Figma 的 `Action/Secondary/Bg` `#b4b4b4` 與
+`Action/Tertiary/Bg` `#eeeeee` 對應到語意層既有的 `actionSecondaryBg`
+（grey300）與 `actionTertiaryBg`（grey100），值完全吻合。這兩個 token
+在 2026-07-28 改版後就沒有元件使用，這次接回。
+
+文字色不變：secondary 與 tertiary 皆為 `#323237` = grey800，
+與既有的 `actionSecondaryContent` / `actionTertiaryContent` 一致。
+
+#### 需要注意
+- **Secondary / Tertiary 的 disabled 在 Figma 無對應 node。** 既然兩者已改
+  實心，沿用文件既有的「disabled 時所有 style 收斂為同一組配色」規則，
+  套 `actionDisabledBg` + `actionDisabledContent`。待 Figma 補規格後核對。
+- **暗色主題的階層會塌掉。** `actionSecondaryBg` 與 `actionTertiaryBg`
+  的 dark 值都是 grey800，兩者背景完全相同；而 `actionPrimaryBg` 的
+  dark 值是 grey700，比它們更淺，權重由深到淺的關係在暗色下反轉。
+  另外 tertiary 暗色的文字（grey600 `#777777`）對 grey800 底的對比約
+  2.9:1，低於 WCAG AA 的 4.5:1。這三個 dark 值都是既有 token，
+  未取得 Figma 暗色規格前不自行更動。
+
+### 2026-07-31 | button.dart | style 收斂為三個權重層級（v0.4.0）
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE — 使用 accent / charging 的呼叫端需調整
+
+原因：`accent`、`charging`、`primary` 三者的容器底色完全相同（皆為
+`actionPrimaryBg`），差別只在文字色。把它們並列為 style 會讓「行動權重」
+這個語意被稀釋成五個選項，實際上只有三個層級。
+
+#### API 變更
+| 舊 | 新 |
+|----|----|
+| `USpaceButtonStyle.accent` | `style: primary` + `emphasis: accent` |
+| `USpaceButtonStyle.charging` | `style: primary` + `emphasis: charging` |
+| `style` 預設值 `accent` | `style` 預設值 `primary` |
+| （無） | `emphasis: USpaceButtonEmphasis`，預設 `none` |
+
+`USpaceButtonStyle` 現為 `primary` / `secondary` / `tertiary`。
+新增 `USpaceButtonEmphasis`：`none` / `accent` / `charging`。
+
+`emphasis` 只對 `primary` 的 enabled 狀態生效；secondary、tertiary
+與所有 disabled 狀態一律忽略，已加測試斷言不會外溢。
+
+#### Token 對應
+沒有任何 token 值改變，只是重新歸類：
+
+| style | emphasis | enabled | disabled |
+|-------|----------|---------|----------|
+| primary | none | actionPrimaryBg / actionPrimaryContent | actionDisabledBg / actionDisabledContent |
+| primary | accent | actionPrimaryBg / actionPrimaryContentAccent | 同上 |
+| primary | charging | actionPrimaryBg / actionPrimaryContentCharging | 同上 |
+| secondary | none | 透明 + 2px 描邊 actionSecondaryContent | 透明 + actionDisabledBg 描邊 |
+| tertiary | none | 透明 / actionTertiaryContent | 透明 / actionDisabledContent |
+
+#### 呼叫端遷移
+```dart
+// 舊
+USpaceButton(label: '確認', style: USpaceButtonStyle.accent)
+// 新
+USpaceButton(
+  label: '確認',
+  style: USpaceButtonStyle.primary,
+  emphasis: USpaceButtonEmphasis.accent,
+)
+```
+
+#### 待處理
+Secondary 與 Tertiary 是否改為實心灰階（使用者 2026-07-31 提出），
+需要 Figma 的實際 token，palette 目前沒有對應的中灰／淺灰底色票。
+此版未動這兩個層級的外觀。
+
 ### 2026-07-28 | button.dart | Figma 全量改版（v0.3.0）
 狀態：PUBLISHED
 ⚠️ BREAKING CHANGE — 前端需全專案調整

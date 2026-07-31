@@ -279,24 +279,38 @@ export function ColorTable({
  * ⚠️ 檔名大小寫必須與 website/public/images/ 下的實際檔案完全一致。
  * macOS 本機不分大小寫，寫錯不會有徵兆，但 GitHub Pages 會 404。
  * `npm run check:assets` 會檢查這件事。
+ *
+ * 容器高度固定 400，寬度隨版面延伸，圖片置中。圖片本身是 Figma 的
+ * @2x 匯出（960×700），以一半的 CSS 尺寸呈現，在高解析度螢幕上才清晰。
+ * 背景需為透明 PNG，見 tools/make-transparent.mjs。
  */
 export function AnatomyImage({ file, alt }: { file: string; alt: string }) {
   return (
     <div
       style={{
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
-        padding: 'clamp(32px, 6vw, 64px) 24px',
+        width: '100%',
+        height: 400,
+        padding: 24,
         borderRadius: 12,
         background: 'var(--page-secondary)',
         border: '1px solid var(--border-divider)',
         marginBottom: 32,
+        overflow: 'hidden',
       }}
     >
+      {/* 圖是 @2x（960×700），以一半的 CSS 尺寸呈現換取高解析度 */}
       <img
         src={`${import.meta.env.BASE_URL}images/${file}`}
         alt={alt}
-        style={{ maxWidth: 'min(520px, 100%)', width: '100%', height: 'auto' }}
+        style={{
+          width: 480,
+          maxWidth: '100%',
+          maxHeight: '100%',
+          objectFit: 'contain',
+        }}
       />
     </div>
   );

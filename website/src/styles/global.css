@@ -287,6 +287,119 @@ code {
   border-bottom: none;
 }
 
+/* ── 圖說編號列表 ───────────────────────────────────────────
+   接在說明圖下方，對應圖片上的標號。欄數隨版面寬度自動增減。
+   ───────────────────────────────────────────────────────── */
+
+/* 選擇器要壓過 `.section > ol` 的 max-width：說明要對齊上方滿版的圖，
+   不套用敘述段落的 66ch 行寬。 */
+.section > ol.numbered-captions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px 32px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.numbered-captions strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.numbered-captions span {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ── 互動式展示區 ───────────────────────────────────────────
+   結構參考 Montage 文件站的 Variants 區塊：左側是即時預覽，
+   右側是一張控制卡，每個維度一組 radio，點了立刻反映在預覽上。
+   ───────────────────────────────────────────────────────── */
+
+.playground {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 16px;
+  padding: 16px;
+  min-height: 480px;
+  border: 1px solid var(--border-divider);
+  border-radius: 16px;
+  background: var(--page-secondary);
+}
+
+.playground-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  min-width: 0;
+}
+
+/* Regular size 需要一個有限寬度的容器才能撐滿 */
+.playground-preview > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.playground-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--surface-raised);
+}
+
+.control-group-label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.control-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 15px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.control-option input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* 選取中的項目加重，未選取的退到次要色 */
+.control-option:has(input:checked) {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+@media (max-width: 860px) {
+  .playground {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .playground-preview {
+    padding: 40px 16px;
+  }
+}
+
 /* ── 捲軸 ── */
 
 ::-webkit-scrollbar {

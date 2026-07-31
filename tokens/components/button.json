@@ -1,35 +1,39 @@
 {
-  "$comment": "USpaceButton 的 style × size × state → token 對應表。顏色不隨 size 改變，因此 variants 只列 style × state。",
+  "$comment": "USpaceButton 的 level × emphasis × size × state → token 對應表。顏色不隨 size 改變，因此 variants 只列 level × emphasis × state。",
   "$drives": [
     "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
     "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
   ],
   "$rule": "改動元件的 token 對應時，必須同時更新這裡，否則測試會失敗。",
-  "$source": "Figma node 3611:8842（Size: Regular）與 3611:8861（Size: Small），2026-07-28 逐一讀取",
+  "$source": "Figma node 3611:8842（Size: Regular）與 3611:8861（Size: Small），2026-07-28 逐一讀取。Secondary 與 Tertiary 的實心底色來自 node 52:3325 與 1739:16858，2026-07-31 讀取。",
   "component": "USpaceButton",
   "source": "styles/button.dart",
   "figmaNode": "3611:8842 / 3611:8861",
   "dimensions": {
-    "style": ["accent", "charging", "primary", "secondary", "tertiary"],
+    "level": ["primary", "secondary", "tertiary"],
+    "emphasis": ["none", "accent", "charging"],
     "size": ["regular", "small"],
     "state": ["enabled", "disabled"]
   },
   "layout": { "height": 48, "iconSize": 24, "gap": 8, "smallPaddingX": 24 },
   "variants": [
-    { "style": "accent", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent", "border": null },
-    { "style": "accent", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "charging", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging", "border": null },
-    { "style": "charging", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "primary", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent", "border": null },
-    { "style": "primary", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "secondary", "state": "enabled", "bg": null, "content": "actionSecondaryContent", "border": "actionSecondaryContent", "note": "透明底 + 2px 描邊，描邊與文字同色" },
-    { "style": "secondary", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": "actionDisabledBg" },
-    { "style": "tertiary", "state": "enabled", "bg": null, "content": "actionTertiaryContent", "border": null, "note": "純文字按鈕，無底色無描邊" },
-    { "style": "tertiary", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": null }
+    { "level": "primary", "emphasis": "none", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent", "border": null },
+    { "level": "primary", "emphasis": "accent", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent", "border": null, "note": "螢光綠文字，同一畫面最多一顆" },
+    { "level": "primary", "emphasis": "charging", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging", "border": null, "note": "充電流程專用的螢光綠" },
+    { "level": "primary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "level": "primary", "emphasis": "accent", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
+    { "level": "primary", "emphasis": "charging", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
+    { "level": "secondary", "emphasis": "none", "state": "enabled", "bg": "actionSecondaryBg", "content": "actionSecondaryContent", "border": null, "note": "實心中灰底，無描邊" },
+    { "level": "secondary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "level": "tertiary", "emphasis": "none", "state": "enabled", "bg": "actionTertiaryBg", "content": "actionTertiaryContent", "border": null, "note": "實心淺灰底，無描邊" },
+    { "level": "tertiary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null }
   ],
   "$typography": "文字使用 displayM（18px/26px Medium）。Figma 標示為 16px/24px Medium + 0.6px 字距，經使用者確認採用 displayM。",
   "$deviations": [
     "Figma disabled 文字為 #ACACAC，palette 無對應色票；經使用者確認沿用 actionDisabledContent。",
-    "Figma primary enabled 文字為 #FFFFFF，經使用者確認沿用 actionPrimaryContent（light 為 grey200）。"
+    "Figma primary enabled 文字為 #FFFFFF，經使用者確認沿用 actionPrimaryContent（light 為 grey200）。",
+    "2026-07-31 經使用者確認重整：原本的 accent / charging / primary 三個 style 底色完全相同（actionPrimaryBg），差別只在文字色，並非三個行動權重層級。改為 style 僅保留 primary / secondary / tertiary 三個層級，文字色改由獨立的 emphasis 維度表示。",
+    "2026-07-31 Secondary 與 Tertiary 改為實心底色（Figma node 52:3325 / 1739:16858）。Action/Secondary/Bg #b4b4b4 與 Action/Tertiary/Bg #eeeeee 對應到既有的 actionSecondaryBg（grey300）與 actionTertiaryBg（grey100），值完全吻合，未新增 token。兩者的 2px 描邊隨之移除，button 已無任何 style 使用描邊。",
+    "Secondary / Tertiary 的 disabled 在 Figma 無對應 node。既然兩者已改為實心，沿用文件既有的「disabled 時所有 style 收斂為同一組配色」規則，套 actionDisabledBg + actionDisabledContent。待 Figma 補上 disabled 規格後再核對。"
   ]
 }
