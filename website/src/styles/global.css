@@ -20,7 +20,6 @@
   --content-max: 1080px;
   /* 長文的可讀行寬。容器變寬後，表格與展示區用滿寬，
      但敘述文字仍要收在一行 60-70 字以內，否則視線回掃會很吃力。 */
-  --prose-max: 66ch;
 
   /* ── 中性介面色階（light）── */
   --page-primary: #FFFFFF;
@@ -220,18 +219,9 @@ code {
   margin-top: 144px;
 }
 
-/* 敘述段落與條列維持可讀行寬。max-width 只會縮不會撐，
-   因此放在窄容器（卡片、儲存格）裡時不生效。 */
-.section p,
-.section > ul,
-.section > ol {
-  max-width: var(--prose-max);
-}
-
-/* 表格儲存格內的文字由欄寬決定，不套用行寬限制 */
-.spec-table p {
-  max-width: none;
-}
+/* 敘述段落與條列不另外限制行寬。
+   內容欄本身已由 --content-max 收斂；再加一層 66ch 只會讓文字比
+   同層的表格、圖片、分頁列都窄，右緣對不齊。 */
 
 /* ── 規格表 ─────────────────────────────────────────────────
    樣式參考 Material 3 文件站：圓角外框包住整張表，
@@ -315,13 +305,10 @@ code {
    接在說明圖下方，對應圖片上的標號。欄數隨版面寬度自動增減。
    ───────────────────────────────────────────────────────── */
 
-/* 選擇器要壓過 `.section > ol` 的 max-width：說明要對齊上方滿版的圖，
-   不套用敘述段落的 66ch 行寬。 */
-.section > ol.numbered-captions {
+.numbered-captions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px 32px;
-  max-width: none;
   margin: 0;
   padding: 0;
   list-style: none;

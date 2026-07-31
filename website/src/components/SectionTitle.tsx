@@ -12,7 +12,7 @@ export default function SectionTitle({ children }: { children: React.ReactNode }
       className="heading-lg"
       style={{
         color: 'var(--text-primary)',
-        marginBottom: 20,
+        marginBottom: 32,
         scrollMarginTop: 'calc(var(--topbar-h) + 24px)',
       }}
     >
