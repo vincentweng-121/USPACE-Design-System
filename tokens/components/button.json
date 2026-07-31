@@ -1,5 +1,5 @@
 {
-  "$comment": "USpaceButton 的 style × size × state → token 對應表。顏色不隨 size 改變，因此 variants 只列 style × state。",
+  "$comment": "USpaceButton 的 style × emphasis × size × state → token 對應表。顏色不隨 size 改變，因此 variants 只列 style × emphasis × state。",
   "$drives": [
     "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
     "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
@@ -10,26 +10,28 @@
   "source": "styles/button.dart",
   "figmaNode": "3611:8842 / 3611:8861",
   "dimensions": {
-    "style": ["accent", "charging", "primary", "secondary", "tertiary"],
+    "style": ["primary", "secondary", "tertiary"],
+    "emphasis": ["none", "accent", "charging"],
     "size": ["regular", "small"],
     "state": ["enabled", "disabled"]
   },
   "layout": { "height": 48, "iconSize": 24, "gap": 8, "smallPaddingX": 24 },
   "variants": [
-    { "style": "accent", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent", "border": null },
-    { "style": "accent", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "charging", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging", "border": null },
-    { "style": "charging", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "primary", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent", "border": null },
-    { "style": "primary", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "secondary", "state": "enabled", "bg": null, "content": "actionSecondaryContent", "border": "actionSecondaryContent", "note": "透明底 + 2px 描邊，描邊與文字同色" },
-    { "style": "secondary", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": "actionDisabledBg" },
-    { "style": "tertiary", "state": "enabled", "bg": null, "content": "actionTertiaryContent", "border": null, "note": "純文字按鈕，無底色無描邊" },
-    { "style": "tertiary", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": null }
+    { "style": "primary", "emphasis": "none", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent", "border": null },
+    { "style": "primary", "emphasis": "accent", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent", "border": null, "note": "螢光綠文字，同一畫面最多一顆" },
+    { "style": "primary", "emphasis": "charging", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging", "border": null, "note": "充電流程專用的螢光綠" },
+    { "style": "primary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "style": "primary", "emphasis": "accent", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
+    { "style": "primary", "emphasis": "charging", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
+    { "style": "secondary", "emphasis": "none", "state": "enabled", "bg": null, "content": "actionSecondaryContent", "border": "actionSecondaryContent", "note": "透明底 + 2px 描邊，描邊與文字同色" },
+    { "style": "secondary", "emphasis": "none", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": "actionDisabledBg" },
+    { "style": "tertiary", "emphasis": "none", "state": "enabled", "bg": null, "content": "actionTertiaryContent", "border": null, "note": "純文字按鈕，無底色無描邊" },
+    { "style": "tertiary", "emphasis": "none", "state": "disabled", "bg": null, "content": "actionDisabledContent", "border": null }
   ],
   "$typography": "文字使用 displayM（18px/26px Medium）。Figma 標示為 16px/24px Medium + 0.6px 字距，經使用者確認採用 displayM。",
   "$deviations": [
     "Figma disabled 文字為 #ACACAC，palette 無對應色票；經使用者確認沿用 actionDisabledContent。",
-    "Figma primary enabled 文字為 #FFFFFF，經使用者確認沿用 actionPrimaryContent（light 為 grey200）。"
+    "Figma primary enabled 文字為 #FFFFFF，經使用者確認沿用 actionPrimaryContent（light 為 grey200）。",
+    "2026-07-31 經使用者確認重整：原本的 accent / charging / primary 三個 style 底色完全相同（actionPrimaryBg），差別只在文字色，並非三個行動權重層級。改為 style 僅保留 primary / secondary / tertiary 三個層級，文字色改由獨立的 emphasis 維度表示。"
   ]
 }

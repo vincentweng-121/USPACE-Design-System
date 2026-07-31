@@ -9,15 +9,9 @@ import 'radius_extension.dart';
 import 'spacing_extension.dart';
 
 // ── Button Style ─────────────────────────────────────────────
-/// 對應 Figma Button component 的 style property。
+/// 行動權重，由重到輕三個層級。
 enum USpaceButtonStyle {
-  /// 實心底（actionPrimaryBg）+ accent 文字，最高行動權重
-  accent,
-
-  /// 實心底 + charging 綠色文字
-  charging,
-
-  /// 實心底 + 一般文字
+  /// 實心底（actionPrimaryBg），最高行動權重
   primary,
 
   /// 透明底 + 2px 描邊
@@ -25,6 +19,22 @@ enum USpaceButtonStyle {
 
   /// 透明底、無描邊，純文字按鈕
   tertiary,
+}
+
+// ── Button Emphasis ───────────────────────────────────────────
+/// primary 的文字色變化，用來讓同為 primary 的按鈕再拉開強調程度。
+///
+/// 只對 [USpaceButtonStyle.primary] 的 enabled 狀態生效；
+/// secondary / tertiary 與所有 disabled 狀態都會忽略這個值。
+enum USpaceButtonEmphasis {
+  /// 一般文字色（actionPrimaryContent）
+  none,
+
+  /// 螢光綠文字（actionPrimaryContentAccent），最強調
+  accent,
+
+  /// 充電流程專用的螢光綠（actionPrimaryContentCharging）
+  charging,
 }
 
 // ── Button Size ───────────────────────────────────────────────
@@ -40,19 +50,23 @@ enum USpaceButtonState { enabled, disabled }
 ///
 /// 來源：Figma node 3611:8842（Size: Regular）/ 3611:8861（Size: Small）
 ///
-/// 三個維度：style × size × state，文字左右兩側皆可放 icon。
+/// 四個維度：style × emphasis × size × state，文字左右兩側皆可放 icon。
+///
+/// style 是行動權重（primary / secondary / tertiary）；
+/// emphasis 只改 primary 的文字色，不改變權重層級。
 ///
 /// Token mapping（顏色不隨 size 改變）：
 ///   ┌───────────┬──────────────────────┬──────────────────────────┐
 ///   │ style     │ enabled              │ disabled                 │
 ///   ├───────────┼──────────────────────┼──────────────────────────┤
-///   │ accent    │ bg actionPrimaryBg   │ bg actionDisabledBg      │
-///   │           │ actionPrimaryContent │ actionDisabledContent    │
-///   │           │ Accent               │                          │
-///   │ charging  │ 同上 bg              │ 同上                     │
-///   │           │ ...ContentCharging   │                          │
-///   │ primary   │ 同上 bg              │ 同上                     │
-///   │           │ actionPrimaryContent │                          │
+///   │ primary   │ bg actionPrimaryBg   │ bg actionDisabledBg      │
+///   │           │ emphasis.none        │ actionDisabledContent    │
+///   │           │   actionPrimary-     │ （emphasis 不生效）      │
+///   │           │   Content            │                          │
+///   │           │ emphasis.accent      │                          │
+///   │           │   ...ContentAccent   │                          │
+///   │           │ emphasis.charging    │                          │
+///   │           │   ...ContentCharging │                          │
 ///   │ secondary │ 透明 + 2px 描邊      │ 透明 + 2px 描邊          │
 ///   │           │ actionSecondary-     │ actionDisabledBg 描邊    │
 ///   │           │ Content（描邊同文字）│ actionDisabledContent    │
@@ -68,7 +82,8 @@ class USpaceButton extends StatelessWidget {
   const USpaceButton({
     super.key,
     required this.label,
-    this.style = USpaceButtonStyle.accent,
+    this.style = USpaceButtonStyle.primary,
+    this.emphasis = USpaceButtonEmphasis.none,
     this.size = USpaceButtonSize.regular,
     this.state = USpaceButtonState.enabled,
     this.leadingIcon,
@@ -79,8 +94,11 @@ class USpaceButton extends StatelessWidget {
   /// 按鈕文字
   final String label;
 
-  /// 視覺樣式
+  /// 行動權重
   final USpaceButtonStyle style;
+
+  /// primary 的文字色變化。只對 primary 的 enabled 狀態生效。
+  final USpaceButtonEmphasis emphasis;
 
   /// 尺寸
   final USpaceButtonSize size;
@@ -167,8 +185,6 @@ class USpaceButton extends StatelessWidget {
       case USpaceButtonStyle.secondary:
       case USpaceButtonStyle.tertiary:
         return null;
-      case USpaceButtonStyle.accent:
-      case USpaceButtonStyle.charging:
       case USpaceButtonStyle.primary:
         return _isDisabled ? colors.actionDisabledBg : colors.actionPrimaryBg;
     }
@@ -184,9 +200,12 @@ class USpaceButton extends StatelessWidget {
   Color _contentColor(USpaceColorsExtension colors) {
     if (_isDisabled) return colors.actionDisabledContent;
     return switch (style) {
-      USpaceButtonStyle.accent => colors.actionPrimaryContentAccent,
-      USpaceButtonStyle.charging => colors.actionPrimaryContentCharging,
-      USpaceButtonStyle.primary => colors.actionPrimaryContent,
+      // emphasis 只改 primary 的文字色，不影響其他兩個層級
+      USpaceButtonStyle.primary => switch (emphasis) {
+          USpaceButtonEmphasis.none => colors.actionPrimaryContent,
+          USpaceButtonEmphasis.accent => colors.actionPrimaryContentAccent,
+          USpaceButtonEmphasis.charging => colors.actionPrimaryContentCharging,
+        },
       USpaceButtonStyle.secondary => colors.actionSecondaryContent,
       USpaceButtonStyle.tertiary => colors.actionTertiaryContent,
     };

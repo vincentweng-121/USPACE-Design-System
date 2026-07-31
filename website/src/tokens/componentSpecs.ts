@@ -21,11 +21,14 @@ export const buttonSpec: ComponentSpec = {
   "figmaNode": "3611:8842 / 3611:8861",
   "dimensions": {
     "style": [
-      "accent",
-      "charging",
       "primary",
       "secondary",
       "tertiary"
+    ],
+    "emphasis": [
+      "none",
+      "accent",
+      "charging"
     ],
     "size": [
       "regular",
@@ -38,35 +41,8 @@ export const buttonSpec: ComponentSpec = {
   },
   "variants": [
     {
-      "style": "accent",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentAccent",
-      "border": null
-    },
-    {
-      "style": "accent",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
-      "border": null
-    },
-    {
-      "style": "charging",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentCharging",
-      "border": null
-    },
-    {
-      "style": "charging",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
-      "border": null
-    },
-    {
       "style": "primary",
+      "emphasis": "none",
       "state": "enabled",
       "bg": "actionPrimaryBg",
       "content": "actionPrimaryContent",
@@ -74,13 +50,51 @@ export const buttonSpec: ComponentSpec = {
     },
     {
       "style": "primary",
+      "emphasis": "accent",
+      "state": "enabled",
+      "bg": "actionPrimaryBg",
+      "content": "actionPrimaryContentAccent",
+      "border": null,
+      "note": "螢光綠文字，同一畫面最多一顆"
+    },
+    {
+      "style": "primary",
+      "emphasis": "charging",
+      "state": "enabled",
+      "bg": "actionPrimaryBg",
+      "content": "actionPrimaryContentCharging",
+      "border": null,
+      "note": "充電流程專用的螢光綠"
+    },
+    {
+      "style": "primary",
+      "emphasis": "none",
       "state": "disabled",
       "bg": "actionDisabledBg",
       "content": "actionDisabledContent",
       "border": null
     },
     {
+      "style": "primary",
+      "emphasis": "accent",
+      "state": "disabled",
+      "bg": "actionDisabledBg",
+      "content": "actionDisabledContent",
+      "border": null,
+      "note": "disabled 時 emphasis 不生效"
+    },
+    {
+      "style": "primary",
+      "emphasis": "charging",
+      "state": "disabled",
+      "bg": "actionDisabledBg",
+      "content": "actionDisabledContent",
+      "border": null,
+      "note": "disabled 時 emphasis 不生效"
+    },
+    {
       "style": "secondary",
+      "emphasis": "none",
       "state": "enabled",
       "bg": null,
       "content": "actionSecondaryContent",
@@ -89,6 +103,7 @@ export const buttonSpec: ComponentSpec = {
     },
     {
       "style": "secondary",
+      "emphasis": "none",
       "state": "disabled",
       "bg": null,
       "content": "actionDisabledContent",
@@ -96,6 +111,7 @@ export const buttonSpec: ComponentSpec = {
     },
     {
       "style": "tertiary",
+      "emphasis": "none",
       "state": "enabled",
       "bg": null,
       "content": "actionTertiaryContent",
@@ -104,6 +120,7 @@ export const buttonSpec: ComponentSpec = {
     },
     {
       "style": "tertiary",
+      "emphasis": "none",
       "state": "disabled",
       "bg": null,
       "content": "actionDisabledContent",

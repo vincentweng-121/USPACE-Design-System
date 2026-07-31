@@ -6,6 +6,56 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
+### 2026-07-31 | button.dart | style 收斂為三個權重層級（v0.4.0）
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE — 使用 accent / charging 的呼叫端需調整
+
+原因：`accent`、`charging`、`primary` 三者的容器底色完全相同（皆為
+`actionPrimaryBg`），差別只在文字色。把它們並列為 style 會讓「行動權重」
+這個語意被稀釋成五個選項，實際上只有三個層級。
+
+#### API 變更
+| 舊 | 新 |
+|----|----|
+| `USpaceButtonStyle.accent` | `style: primary` + `emphasis: accent` |
+| `USpaceButtonStyle.charging` | `style: primary` + `emphasis: charging` |
+| `style` 預設值 `accent` | `style` 預設值 `primary` |
+| （無） | `emphasis: USpaceButtonEmphasis`，預設 `none` |
+
+`USpaceButtonStyle` 現為 `primary` / `secondary` / `tertiary`。
+新增 `USpaceButtonEmphasis`：`none` / `accent` / `charging`。
+
+`emphasis` 只對 `primary` 的 enabled 狀態生效；secondary、tertiary
+與所有 disabled 狀態一律忽略，已加測試斷言不會外溢。
+
+#### Token 對應
+沒有任何 token 值改變，只是重新歸類：
+
+| style | emphasis | enabled | disabled |
+|-------|----------|---------|----------|
+| primary | none | actionPrimaryBg / actionPrimaryContent | actionDisabledBg / actionDisabledContent |
+| primary | accent | actionPrimaryBg / actionPrimaryContentAccent | 同上 |
+| primary | charging | actionPrimaryBg / actionPrimaryContentCharging | 同上 |
+| secondary | none | 透明 + 2px 描邊 actionSecondaryContent | 透明 + actionDisabledBg 描邊 |
+| tertiary | none | 透明 / actionTertiaryContent | 透明 / actionDisabledContent |
+
+#### 呼叫端遷移
+```dart
+// 舊
+USpaceButton(label: '確認降鎖', style: USpaceButtonStyle.accent)
+// 新
+USpaceButton(
+  label: '確認降鎖',
+  style: USpaceButtonStyle.primary,
+  emphasis: USpaceButtonEmphasis.accent,
+)
+```
+
+#### 待處理
+Secondary 與 Tertiary 是否改為實心灰階（使用者 2026-07-31 提出），
+需要 Figma 的實際 token，palette 目前沒有對應的中灰／淺灰底色票。
+此版未動這兩個層級的外觀。
+
 ### 2026-07-28 | button.dart | Figma 全量改版（v0.3.0）
 狀態：PUBLISHED
 ⚠️ BREAKING CHANGE — 前端需全專案調整
