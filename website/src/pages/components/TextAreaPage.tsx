@@ -80,7 +80,7 @@ export default function TextAreaPage() {
 
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
-            <div style={{ marginTop: 32 }}>
+            <div>
               <Pending
                 what="Anatomy"
                 why="部件拆解圖尚未製作。需先確認各部位的正式名稱與必要性，避免自行命名。"

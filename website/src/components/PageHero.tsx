@@ -40,7 +40,7 @@ export default function PageHero({
       </h1>
 
       {lead && (
-        <p className="text-lg text-muted" style={{ maxWidth: 'var(--prose-max)' }}>
+        <p className="text-lg text-muted">
           {lead}
         </p>
       )}

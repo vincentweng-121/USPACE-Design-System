@@ -246,7 +246,7 @@ export default function ModalPage() {
 
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
-            <div style={{ marginTop: 32 }}>
+            <div>
               <Pending
                 what="Anatomy"
                 why="部件拆解圖尚未製作。需先確認各部位的正式名稱與必要性，避免自行命名。"
@@ -256,7 +256,7 @@ export default function ModalPage() {
 
           <section className="section">
             <SectionTitle>Color</SectionTitle>
-            <div style={{ marginTop: 32 }}>
+            <div>
               <Pending
                 what="Color"
                 why="各部位的 token 對應尚未整理。維度已確認，但要逐一列出底色、描邊、文字的 token 需先比對 Figma 或細讀實作。"

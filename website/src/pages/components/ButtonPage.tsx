@@ -279,10 +279,6 @@ export default function ButtonPage() {
           {/* ── 1. Variants ── */}
           <section className="section">
             <SectionTitle>Variants</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              3 種樣式代表不同的行動權重，由重到輕排列。同一個畫面裡權重最高的只該有一個。
-              文字色的變化屬於 emphasis，不是另一個權重層級，見下方 Configurations。
-            </p>
             <AnatomyImage
               image="button-variant"
               alt="三種按鈕權重由重到輕：深底的 Primary、中灰底的 Secondary、淺灰底的 Tertiary"
@@ -300,9 +296,6 @@ export default function ButtonPage() {
           {/* ── 2. Configurations ── */}
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              調整右側的屬性，左側會即時反映。互動與狀態不在此處，見下方 States。
-            </p>
 
             <Playground />
           </section>
@@ -310,9 +303,6 @@ export default function ButtonPage() {
           {/* ── 3. Tokens & specs ── */}
           <section className="section">
             <SectionTitle>Tokens &amp; specs</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              不隨 level 或 size 改變的共通規格。逐項細節見下方各區塊。
-            </p>
             <SpecTable
               headers={['項目', '值', 'Token']}
               rows={[
@@ -347,9 +337,6 @@ export default function ButtonPage() {
           {/* ── 4. Anatomy ── */}
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              按鈕由四個部件組成。除文字外，其餘皆為選用。
-            </p>
             <AnatomyImage
               image="button-anatomy"
               alt="按鈕的四個組成部件：容器、左側 icon、文字、右側 icon"
@@ -370,10 +357,6 @@ export default function ButtonPage() {
           {/* ── 5. Color ── */}
           <section className="section">
             <SectionTitle>Color</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              顏色由 level 與 state 決定，不隨 size 改變。三個層級都是實心底色，皆無描邊。
-              以下為亮色主題的值，暗色主題由同一組語意 token 自動切換。
-            </p>
 
             {levels.map((lv) => (
               <div key={lv} style={{ marginBottom: 48 }}>
@@ -425,9 +408,6 @@ export default function ButtonPage() {
           {/* ── 6. States ── */}
           <section className="section">
             <SectionTitle>States</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              目前只定義 enabled 與 disabled 兩種狀態，Figma 尚無 pressed 規格。
-            </p>
 
             <div
               style={{
@@ -492,9 +472,6 @@ export default function ButtonPage() {
           {/* ── 7. Measurements ── */}
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              兩種尺寸的差別只有寬度行為與水平內距，高度與其餘數值完全相同。
-            </p>
             <AnatomyImage
               image="button-measurements"
               alt="Regular 與 Small 兩種尺寸的按鈕量測標示"
@@ -528,10 +505,6 @@ export default function ButtonPage() {
           {/* ── 8. Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              觸控熱區與容器可視邊界一致，不另外擴張。固定高度 {layout.height}px
-              已超過最小建議值 44px，Regular 與 Small 兩種尺寸皆滿足，不需額外處理。
-            </p>
             <AnatomyImage
               image="button-toucharea"
               alt="按鈕的觸控熱區範圍，與容器可視邊界一致"
@@ -541,7 +514,7 @@ export default function ButtonPage() {
           {/* ── 9. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
-            <div style={{ display: 'grid', gap: 32, marginTop: 32 }}>
+            <div style={{ display: 'grid', gap: 32 }}>
               <DoDontExamples
                 items={[
                   {
@@ -598,7 +571,7 @@ export default function ButtonPage() {
             <SectionTitle>Accessibility</SectionTitle>
             <ul
               className="text-md text-muted"
-              style={{ paddingLeft: 20, display: 'grid', gap: 10, marginTop: 32 }}
+              style={{ paddingLeft: 20, display: 'grid', gap: 10 }}
             >
               <li>固定高度 {layout.height}px，超過觸控目標最小 44px 的建議值。</li>
               <li>disabled 同時移除點擊行為，不會出現「看起來不能按卻按得下去」的狀況。</li>
@@ -613,7 +586,7 @@ export default function ButtonPage() {
         <div>
           <section className="section">
             <SectionTitle>Examples</SectionTitle>
-            <div style={{ marginTop: 32 }}>
+            <div>
               <CodeBlock
                 code={`USpaceButton(
   label: '確認送出',
@@ -652,7 +625,7 @@ export default function ButtonPage() {
 
           <section className="section">
             <SectionTitle>API</SectionTitle>
-            <div style={{ marginTop: 32 }}>
+            <div>
               <SpecTable
                 headers={['參數', '型別', '預設', '說明']}
                 rows={[
@@ -682,7 +655,7 @@ export default function ButtonPage() {
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="text-sm text-muted" style={{ margin: '32px 0 16px' }}>
+            <p className="text-sm text-muted" style={{ margin: '0 0 16px' }}>
               此表由 <code>tokens/components/button.json</code> 產生，
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
