@@ -10,12 +10,12 @@ import { semantic } from '../../tokens/colors';
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
 
-type Style = 'primary' | 'secondary' | 'tertiary';
+type Level = 'primary' | 'secondary' | 'tertiary';
 type Emphasis = 'none' | 'accent' | 'charging';
 type Size = 'regular' | 'small';
 type State = 'enabled' | 'disabled';
 
-const styles = buttonSpec.dimensions.style as Style[];
+const levels = buttonSpec.dimensions.level as Level[];
 const emphases = buttonSpec.dimensions.emphasis as Emphasis[];
 const states = buttonSpec.dimensions.state as State[];
 const layout = buttonSpec.layout! as Record<string, number>;
@@ -25,16 +25,16 @@ const labelType = typographyStyles
   .flatMap((f) => f.styles.map((s) => ({ ...s, family: f.family })))
   .find((s) => s.name === 'displayM')!;
 
-/** 由 tokens/components/button.json 查出該 style × emphasis × state 的 token 名稱 */
-function variantOf(style: Style, state: State, emphasis: Emphasis = 'none') {
+/** 由 tokens/components/button.json 查出該 level × emphasis × state 的 token 名稱 */
+function variantOf(level: Level, state: State, emphasis: Emphasis = 'none') {
   return buttonSpec.variants.find(
-    (v) => v.style === style && v.state === state && v.emphasis === emphasis,
+    (v) => v.level === level && v.state === state && v.emphasis === emphasis,
   )!;
 }
 
 /** emphasis 只對 primary 生效，其餘層級一律用 none 那筆 */
-const emphasisOf = (style: Style, emphasis: Emphasis) =>
-  style === 'primary' ? emphasis : 'none';
+const emphasisOf = (level: Level, emphasis: Emphasis) =>
+  level === 'primary' ? emphasis : 'none';
 
 /** token 名稱 → 實際色值 */
 const colorOf = (token: string | null | undefined) =>
@@ -72,7 +72,7 @@ function IconPlaceholder({ color }: { color: string }) {
 // ── 依 token 渲染的按鈕 ──
 function ButtonPreview({
   label,
-  style,
+  level,
   size,
   state,
   emphasis = 'none',
@@ -80,14 +80,14 @@ function ButtonPreview({
   trailing = false,
 }: {
   label: string;
-  style: Style;
+  level: Level;
   size: Size;
   state: State;
   emphasis?: Emphasis;
   leading?: boolean;
   trailing?: boolean;
 }) {
-  const v = variantOf(style, state, emphasisOf(style, emphasis));
+  const v = variantOf(level, state, emphasisOf(level, emphasis));
   const content = colorOf(v.content as string)!;
   const border = colorOf(v.border as string | null);
 
@@ -185,7 +185,7 @@ function ControlGroup<T extends string>({
  */
 function Playground() {
   const [size, setSize] = useState<Size>('regular');
-  const [level, setLevel] = useState<Style>('primary');
+  const [level, setLevel] = useState<Level>('primary');
   const [icon, setIcon] = useState<IconOption>('none');
 
   return (
@@ -194,7 +194,7 @@ function Playground() {
         <div>
           <ButtonPreview
             label="Label"
-            style={level}
+            level={level}
             size={size}
             state="enabled"
             leading={icon === 'leading' || icon === 'both'}
@@ -219,7 +219,7 @@ function Playground() {
           label="Level"
           value={level}
           onChange={setLevel}
-          options={styles.map((st) => ({ value: st, label: cap(st) }))}
+          options={levels.map((lv) => ({ value: lv, label: cap(lv) }))}
         />
         <ControlGroup
           name="button-icon"
@@ -266,7 +266,7 @@ export default function ButtonPage() {
     <div>
       <PageHero
         title="Button"
-        lead="按鈕觸發單一明確的行動。權重由 style 決定，共 primary、secondary、tertiary 三級；primary 可再用 emphasis 切換文字色做更強的強調。加上 size 與 state 共四個維度，文字左右兩側皆可放置 icon。"
+        lead="按鈕觸發單一明確的行動。權重由 level 決定，共 primary、secondary、tertiary 三級；primary 可再用 emphasis 切換文字色做更強的強調。加上 size 與 state 共四個維度，文字左右兩側皆可放置 icon。"
         meta={
           <>
             <span>
@@ -318,12 +318,12 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Tokens &amp; specs</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              不隨 style 或 size 改變的共通規格。逐項細節見下方各區塊。
+              不隨 level 或 size 改變的共通規格。逐項細節見下方各區塊。
             </p>
             <SpecTable
               headers={['項目', '值', 'Token']}
               rows={[
-                ['樣式數', `${styles.length} 種（Primary / Secondary / Tertiary）`, '—'],
+                ['樣式數', `${levels.length} 種（Primary / Secondary / Tertiary）`, '—'],
                 ['強調層級', `${emphases.length} 種（僅 Primary 適用）`, '—'],
                 ['尺寸數', '2 種（Regular / Small）', '—'],
                 ['狀態數', `${states.length} 種（尚無 pressed）`, '—'],
@@ -365,7 +365,7 @@ export default function ButtonPage() {
             <SpecTable
               headers={['', '部件', '必要性', '說明']}
               rows={[
-                ['1', '容器 Container', '必要', '底色與圓角由 style 決定；三個層級皆無描邊，高度固定 48'],
+                ['1', '容器 Container', '必要', '底色與圓角由 level 決定；三個層級皆無描邊，高度固定 48'],
                 ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
                 ['3', '文字 Label', '必要', '按鈕語意的唯一承載者，不可省略'],
                 ['4', 'Trailing icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
@@ -378,50 +378,50 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Color</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              顏色由 style 與 state 決定，不隨 size 改變。三個層級都是實心底色，皆無描邊。
+              顏色由 level 與 state 決定，不隨 size 改變。三個層級都是實心底色，皆無描邊。
               以下為亮色主題的值，暗色主題由同一組語意 token 自動切換。
             </p>
 
-            {styles.map((st) => (
-              <div key={st} style={{ marginBottom: 48 }}>
+            {levels.map((lv) => (
+              <div key={lv} style={{ marginBottom: 48 }}>
                 <h3 className="heading-md" style={{ marginBottom: 16 }}>
-                  {cap(st)}
+                  {cap(lv)}
                 </h3>
                 <SpecTable
                   headers={['元素', 'Enabled', 'Disabled']}
                   rows={[
                     [
                       '容器底色',
-                      <Swatch key="e" token={variantOf(st, 'enabled').bg as string | null} />,
-                      <Swatch key="d" token={variantOf(st, 'disabled').bg as string | null} />,
+                      <Swatch key="e" token={variantOf(lv, 'enabled').bg as string | null} />,
+                      <Swatch key="d" token={variantOf(lv, 'disabled').bg as string | null} />,
                     ],
                     // primary 的文字色隨 emphasis 變化，逐列展開；其餘層級只有一列
-                    ...(st === 'primary'
+                    ...(lv === 'primary'
                       ? emphases.map((em) => [
                           `文字與 icon（emphasis: ${em}）`,
-                          <Swatch key="e" token={variantOf(st, 'enabled', em).content as string} />,
-                          <Swatch key="d" token={variantOf(st, 'disabled', em).content as string} />,
+                          <Swatch key="e" token={variantOf(lv, 'enabled', em).content as string} />,
+                          <Swatch key="d" token={variantOf(lv, 'disabled', em).content as string} />,
                         ])
                       : [
                           [
                             '文字與 icon',
-                            <Swatch key="e" token={variantOf(st, 'enabled').content as string} />,
-                            <Swatch key="d" token={variantOf(st, 'disabled').content as string} />,
+                            <Swatch key="e" token={variantOf(lv, 'enabled').content as string} />,
+                            <Swatch key="d" token={variantOf(lv, 'disabled').content as string} />,
                           ],
                         ]),
                   ]}
                   minWidth={560}
                 />
-                {st === 'primary' ? (
+                {lv === 'primary' ? (
                   <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
                     三種 emphasis 的容器底色完全相同，差別只在文字色。
                     accent 用於畫面上最主要的那一個行動，charging 為充電流程專用，
                     兩者都不改變 primary 的權重層級。disabled 時 emphasis 不生效。
                   </p>
                 ) : (
-                  variantOf(st, 'enabled').note && (
+                  variantOf(lv, 'enabled').note && (
                     <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-                      {String(variantOf(st, 'enabled').note)}
+                      {String(variantOf(lv, 'enabled').note)}
                     </p>
                   )
                 )}
@@ -460,15 +460,15 @@ export default function ButtonPage() {
                     style={{ color: 'var(--text-tertiary)', marginBottom: 16 }}
                   >
                     {stt === 'enabled'
-                      ? '可點擊，各 style 呈現自身配色'
-                      : '不可點擊，所有 style 收斂為同一組 disabled 配色，emphasis 不生效'}
+                      ? '可點擊，各 level 呈現自身配色'
+                      : '不可點擊，所有 level 收斂為同一組 disabled 配色，emphasis 不生效'}
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-                    {styles.map((st) => (
+                    {levels.map((lv) => (
                       <ButtonPreview
-                        key={st}
-                        label={cap(st)}
-                        style={st}
+                        key={lv}
+                        label={cap(lv)}
+                        level={lv}
                         size="small"
                         state={stt}
                       />
@@ -480,7 +480,7 @@ export default function ButtonPage() {
             <SpecTable
               headers={['狀態', '外觀', '互動']}
               rows={[
-                ['Enabled', '依 style 呈現對應的底色與文字色；primary 另受 emphasis 影響文字色', '可點擊，觸發 onPressed'],
+                ['Enabled', '依 level 呈現對應的底色與文字色；primary 另受 emphasis 影響文字色', '可點擊，觸發 onPressed'],
                 [
                   'Disabled',
                   '三個層級一律改為 actionDisabledBg 底、actionDisabledContent 文字，emphasis 不生效',
@@ -610,7 +610,7 @@ export default function ButtonPage() {
               <CodeBlock
                 code={`USpaceButton(
   label: '確認送出',
-  style: USpaceButtonStyle.primary,
+  level: USpaceButtonLevel.primary,
   size: USpaceButtonSize.regular,
   leadingIcon: const Icon(Icons.directions_car),
   onPressed: () {},
@@ -622,7 +622,7 @@ export default function ButtonPage() {
                 title="用 emphasis 讓 primary 更醒目"
                 code={`USpaceButton(
   label: '確認',
-  style: USpaceButtonStyle.primary,
+  level: USpaceButtonLevel.primary,
   emphasis: USpaceButtonEmphasis.accent,
   onPressed: () {},
 )`}
@@ -633,7 +633,7 @@ export default function ButtonPage() {
                 title="兩側 icon + 明確 disabled"
                 code={`USpaceButton(
   label: '前往付款',
-  style: USpaceButtonStyle.secondary,
+  level: USpaceButtonLevel.secondary,
   size: USpaceButtonSize.small,
   state: USpaceButtonState.disabled,
   leadingIcon: const Icon(Icons.directions_car),
@@ -651,7 +651,7 @@ export default function ButtonPage() {
                 headers={['參數', '型別', '預設', '說明']}
                 rows={[
                   [<code key="a">label</code>, 'String', '必填', '按鈕文字'],
-                  [<code key="b">style</code>, 'USpaceButtonStyle', 'primary', '3 種行動權重'],
+                  [<code key="b">level</code>, 'USpaceButtonLevel', 'primary', '3 種行動權重'],
                   [
                     <code key="b2">emphasis</code>,
                     'USpaceButtonEmphasis',
@@ -681,9 +681,9 @@ export default function ButtonPage() {
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
             <SpecTable
-              headers={['Style', 'Emphasis', 'State', 'Background', 'Border', 'Content']}
+              headers={['Level', 'Emphasis', 'State', 'Background', 'Border', 'Content']}
               rows={buttonSpec.variants.map((row) => [
-                String(row.style),
+                String(row.level),
                 String(row.emphasis),
                 String(row.state),
                 row.bg ? <code>{String(row.bg)}</code> : <span>transparent</span>,

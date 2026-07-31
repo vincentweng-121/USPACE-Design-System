@@ -1,5 +1,5 @@
 {
-  "$comment": "USpaceButton 的 style × emphasis × size × state → token 對應表。顏色不隨 size 改變，因此 variants 只列 style × emphasis × state。",
+  "$comment": "USpaceButton 的 level × emphasis × size × state → token 對應表。顏色不隨 size 改變，因此 variants 只列 level × emphasis × state。",
   "$drives": [
     "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
     "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
@@ -10,23 +10,23 @@
   "source": "styles/button.dart",
   "figmaNode": "3611:8842 / 3611:8861",
   "dimensions": {
-    "style": ["primary", "secondary", "tertiary"],
+    "level": ["primary", "secondary", "tertiary"],
     "emphasis": ["none", "accent", "charging"],
     "size": ["regular", "small"],
     "state": ["enabled", "disabled"]
   },
   "layout": { "height": 48, "iconSize": 24, "gap": 8, "smallPaddingX": 24 },
   "variants": [
-    { "style": "primary", "emphasis": "none", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent", "border": null },
-    { "style": "primary", "emphasis": "accent", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent", "border": null, "note": "螢光綠文字，同一畫面最多一顆" },
-    { "style": "primary", "emphasis": "charging", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging", "border": null, "note": "充電流程專用的螢光綠" },
-    { "style": "primary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "primary", "emphasis": "accent", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
-    { "style": "primary", "emphasis": "charging", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
-    { "style": "secondary", "emphasis": "none", "state": "enabled", "bg": "actionSecondaryBg", "content": "actionSecondaryContent", "border": null, "note": "實心中灰底，無描邊" },
-    { "style": "secondary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
-    { "style": "tertiary", "emphasis": "none", "state": "enabled", "bg": "actionTertiaryBg", "content": "actionTertiaryContent", "border": null, "note": "實心淺灰底，無描邊" },
-    { "style": "tertiary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null }
+    { "level": "primary", "emphasis": "none", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContent", "border": null },
+    { "level": "primary", "emphasis": "accent", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentAccent", "border": null, "note": "螢光綠文字，同一畫面最多一顆" },
+    { "level": "primary", "emphasis": "charging", "state": "enabled", "bg": "actionPrimaryBg", "content": "actionPrimaryContentCharging", "border": null, "note": "充電流程專用的螢光綠" },
+    { "level": "primary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "level": "primary", "emphasis": "accent", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
+    { "level": "primary", "emphasis": "charging", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null, "note": "disabled 時 emphasis 不生效" },
+    { "level": "secondary", "emphasis": "none", "state": "enabled", "bg": "actionSecondaryBg", "content": "actionSecondaryContent", "border": null, "note": "實心中灰底，無描邊" },
+    { "level": "secondary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null },
+    { "level": "tertiary", "emphasis": "none", "state": "enabled", "bg": "actionTertiaryBg", "content": "actionTertiaryContent", "border": null, "note": "實心淺灰底，無描邊" },
+    { "level": "tertiary", "emphasis": "none", "state": "disabled", "bg": "actionDisabledBg", "content": "actionDisabledContent", "border": null }
   ],
   "$typography": "文字使用 displayM（18px/26px Medium）。Figma 標示為 16px/24px Medium + 0.6px 字距，經使用者確認採用 displayM。",
   "$deviations": [
