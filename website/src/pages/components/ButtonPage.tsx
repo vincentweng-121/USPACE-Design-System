@@ -122,6 +122,27 @@ function ButtonPreview({
   );
 }
 
+// ── 圖說編號列表 ──
+/**
+ * 對應圖片上標號的說明，接在圖片下方。
+ *
+ * 欄數隨版面寬度自動增減（auto-fit + minmax），窄螢幕會收成一欄。
+ */
+function NumberedCaptions({ items }: { items: { name: string; desc?: string }[] }) {
+  return (
+    <ol className="numbered-captions">
+      {items.map((item, i) => (
+        <li key={item.name}>
+          <strong>
+            {i + 1}. {item.name}
+          </strong>
+          {item.desc && <span>{item.desc}</span>}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 // ── 互動式展示區 ──
 type IconOption = 'none' | 'leading' | 'trailing' | 'both';
 
@@ -274,39 +295,13 @@ export default function ButtonPage() {
               alt="三種按鈕權重由重到輕：深底的 Primary、中灰底的 Secondary、淺灰底的 Tertiary"
             />
 
-            <div style={{ display: 'grid', gap: 16 }}>
-              {[
-                { style: 'primary' as Style, desc: '最高權重。畫面上最主要的那一個行動，實心底色。' },
-                { style: 'secondary' as Style, desc: '次要操作。實心中灰底，存在感低於 primary。' },
-                { style: 'tertiary' as Style, desc: '最低權重。實心淺灰底，適合取消、略過這類動作。' },
-              ].map((v) => (
-                <div
-                  key={v.style}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 24,
-                    flexWrap: 'wrap',
-                    padding: 24,
-                    borderRadius: 12,
-                    background: 'var(--page-secondary)',
-                    border: '1px solid var(--border-divider)',
-                  }}
-                >
-                  <div style={{ flexShrink: 0 }}>
-                    <ButtonPreview label={cap(v.style)} style={v.style} size="small" state="enabled" />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 220 }}>
-                    <div className="heading-sm" style={{ marginBottom: 4 }}>
-                      {cap(v.style)}
-                    </div>
-                    <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                      {v.desc}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <NumberedCaptions
+              items={[
+                { name: 'Primary', desc: '最高權重。畫面上最主要的那一個行動，實心深底。' },
+                { name: 'Secondary', desc: '次要操作。實心中灰底，存在感低於 Primary。' },
+                { name: 'Tertiary', desc: '最低權重。實心淺灰底，適合取消、略過這類動作。' },
+              ]}
+            />
           </section>
 
           {/* ── 2. Configurations ── */}
