@@ -54,10 +54,10 @@ void main() {
 
   // ── Button ──────────────────────────────────────────────
   group('USpaceButton', () {
-    const styles = {
-      'primary': USpaceButtonStyle.primary,
-      'secondary': USpaceButtonStyle.secondary,
-      'tertiary': USpaceButtonStyle.tertiary,
+    const levels = {
+      'primary': USpaceButtonLevel.primary,
+      'secondary': USpaceButtonLevel.secondary,
+      'tertiary': USpaceButtonLevel.tertiary,
     };
     const emphases = {
       'none': USpaceButtonEmphasis.none,
@@ -73,13 +73,13 @@ void main() {
     // 顏色不隨 size 改變，因此每個 style × emphasis × state 都在兩種 size 各驗一次
     for (final v in variantsOf('button.json')) {
       for (final sizeKey in sizes.keys) {
-        final label = '${v['style']} / ${v['emphasis']} / $sizeKey / ${v['state']}';
+        final label = '${v['level']} / ${v['emphasis']} / $sizeKey / ${v['state']}';
         testWidgets(label, (tester) async {
           await pump(
             tester,
             USpaceButton(
               label: 'Label',
-              style: styles[v['style']]!,
+              level: levels[v['level']]!,
               emphasis: emphases[v['emphasis']]!,
               size: sizes[sizeKey]!,
               state: v['state'] == 'enabled'
@@ -164,14 +164,14 @@ void main() {
     });
 
     // emphasis 是 primary 專用的文字色變化，不應外溢到其他層級
-    for (final style in [USpaceButtonStyle.secondary, USpaceButtonStyle.tertiary]) {
-      testWidgets('${style.name} 忽略 emphasis', (tester) async {
+    for (final level in [USpaceButtonLevel.secondary, USpaceButtonLevel.tertiary]) {
+      testWidgets('${level.name} 忽略 emphasis', (tester) async {
         for (final e in USpaceButtonEmphasis.values) {
           await pump(
             tester,
             USpaceButton(
               label: 'Label',
-              style: style,
+              level: level,
               emphasis: e,
               onPressed: () {},
             ),
@@ -180,11 +180,11 @@ void main() {
           expect(
             text.style?.color,
             tokenColor(
-              style == USpaceButtonStyle.secondary
+              level == USpaceButtonLevel.secondary
                   ? 'actionSecondaryContent'
                   : 'actionTertiaryContent',
             ),
-            reason: '${style.name} 的文字色不應隨 emphasis=${e.name} 改變',
+            reason: '${level.name} 的文字色不應隨 emphasis=${e.name} 改變',
           );
         }
       });

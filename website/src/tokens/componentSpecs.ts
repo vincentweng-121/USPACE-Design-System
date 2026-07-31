@@ -20,7 +20,7 @@ export const buttonSpec: ComponentSpec = {
   "source": "styles/button.dart",
   "figmaNode": "3611:8842 / 3611:8861",
   "dimensions": {
-    "style": [
+    "level": [
       "primary",
       "secondary",
       "tertiary"
@@ -41,7 +41,7 @@ export const buttonSpec: ComponentSpec = {
   },
   "variants": [
     {
-      "style": "primary",
+      "level": "primary",
       "emphasis": "none",
       "state": "enabled",
       "bg": "actionPrimaryBg",
@@ -49,7 +49,7 @@ export const buttonSpec: ComponentSpec = {
       "border": null
     },
     {
-      "style": "primary",
+      "level": "primary",
       "emphasis": "accent",
       "state": "enabled",
       "bg": "actionPrimaryBg",
@@ -58,7 +58,7 @@ export const buttonSpec: ComponentSpec = {
       "note": "螢光綠文字，同一畫面最多一顆"
     },
     {
-      "style": "primary",
+      "level": "primary",
       "emphasis": "charging",
       "state": "enabled",
       "bg": "actionPrimaryBg",
@@ -67,7 +67,7 @@ export const buttonSpec: ComponentSpec = {
       "note": "充電流程專用的螢光綠"
     },
     {
-      "style": "primary",
+      "level": "primary",
       "emphasis": "none",
       "state": "disabled",
       "bg": "actionDisabledBg",
@@ -75,7 +75,7 @@ export const buttonSpec: ComponentSpec = {
       "border": null
     },
     {
-      "style": "primary",
+      "level": "primary",
       "emphasis": "accent",
       "state": "disabled",
       "bg": "actionDisabledBg",
@@ -84,7 +84,7 @@ export const buttonSpec: ComponentSpec = {
       "note": "disabled 時 emphasis 不生效"
     },
     {
-      "style": "primary",
+      "level": "primary",
       "emphasis": "charging",
       "state": "disabled",
       "bg": "actionDisabledBg",
@@ -93,7 +93,7 @@ export const buttonSpec: ComponentSpec = {
       "note": "disabled 時 emphasis 不生效"
     },
     {
-      "style": "secondary",
+      "level": "secondary",
       "emphasis": "none",
       "state": "enabled",
       "bg": "actionSecondaryBg",
@@ -102,7 +102,7 @@ export const buttonSpec: ComponentSpec = {
       "note": "實心中灰底，無描邊"
     },
     {
-      "style": "secondary",
+      "level": "secondary",
       "emphasis": "none",
       "state": "disabled",
       "bg": "actionDisabledBg",
@@ -110,7 +110,7 @@ export const buttonSpec: ComponentSpec = {
       "border": null
     },
     {
-      "style": "tertiary",
+      "level": "tertiary",
       "emphasis": "none",
       "state": "enabled",
       "bg": "actionTertiaryBg",
@@ -119,7 +119,7 @@ export const buttonSpec: ComponentSpec = {
       "note": "實心淺灰底，無描邊"
     },
     {
-      "style": "tertiary",
+      "level": "tertiary",
       "emphasis": "none",
       "state": "disabled",
       "bg": "actionDisabledBg",

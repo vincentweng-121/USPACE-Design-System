@@ -6,6 +6,44 @@
 
 <!-- 新增記錄從這裡往下寫 -->
 
+### 2026-07-31 | button.dart | style 更名為 level（v0.6.0）
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE — 所有 USpaceButton 呼叫端都要改
+
+原因：這個維度表達的是行動權重的層級，不是視覺樣式。文件站的
+Configurations 面板已改稱 Level，程式端一併對齊，避免設計與工程
+講兩個名字。
+
+#### API 變更
+| 舊 | 新 |
+|----|----|
+| `USpaceButtonStyle` | `USpaceButtonLevel` |
+| `style:` | `level:` |
+| `USpaceListItem(buttonStyle:)` | `USpaceListItem(buttonLevel:)` |
+
+`tokens/components/button.json` 的維度與 variants 也由 `style` 改為 `level`，
+文件站的 Baseline tokens 表頭同步改為 Level。
+
+#### 呼叫端遷移
+```dart
+// 舊
+USpaceButton(label: '確認', style: USpaceButtonStyle.primary)
+// 新
+USpaceButton(label: '確認', level: USpaceButtonLevel.primary)
+```
+
+sed 可一次處理：
+```bash
+sed -i '' 's/USpaceButtonStyle/USpaceButtonLevel/g; s/\bstyle: USpaceButtonLevel/level: USpaceButtonLevel/g' <檔案>
+```
+
+#### 沒有變的
+token 值、視覺、emphasis 機制、size 與 state 都不受影響。這是純更名。
+
+#### 注意
+2026-07-28 曾把 `USpaceButtonLevel` 改名為 `USpaceButtonStyle`，這次改回。
+前端在三天內要改兩次同一個識別字，已向使用者說明後由其確認執行。
+
 ### 2026-07-31 | button.dart | Secondary 與 Tertiary 改為實心底色（v0.5.0）
 狀態：PUBLISHED
 ⚠️ BREAKING CHANGE — 視覺改版，前端不需改 API

@@ -10,7 +10,7 @@ import 'spacing_extension.dart';
 
 // ── Button Style ─────────────────────────────────────────────
 /// 行動權重，由重到輕三個層級。
-enum USpaceButtonStyle {
+enum USpaceButtonLevel {
   /// 實心深底（actionPrimaryBg），最高行動權重
   primary,
 
@@ -24,7 +24,7 @@ enum USpaceButtonStyle {
 // ── Button Emphasis ───────────────────────────────────────────
 /// primary 的文字色變化，用來讓同為 primary 的按鈕再拉開強調程度。
 ///
-/// 只對 [USpaceButtonStyle.primary] 的 enabled 狀態生效；
+/// 只對 [USpaceButtonLevel.primary] 的 enabled 狀態生效；
 /// secondary / tertiary 與所有 disabled 狀態都會忽略這個值。
 enum USpaceButtonEmphasis {
   /// 一般文字色（actionPrimaryContent）
@@ -50,14 +50,14 @@ enum USpaceButtonState { enabled, disabled }
 ///
 /// 來源：Figma node 3611:8842（Size: Regular）/ 3611:8861（Size: Small）
 ///
-/// 四個維度：style × emphasis × size × state，文字左右兩側皆可放 icon。
+/// 四個維度：level × emphasis × size × state，文字左右兩側皆可放 icon。
 ///
-/// style 是行動權重（primary / secondary / tertiary）；
+/// level 是行動權重（primary / secondary / tertiary）；
 /// emphasis 只改 primary 的文字色，不改變權重層級。
 ///
 /// Token mapping（顏色不隨 size 改變）：
 ///   ┌───────────┬──────────────────────┬──────────────────────────┐
-///   │ style     │ enabled              │ disabled                 │
+///   │ level     │ enabled              │ disabled                 │
 ///   ├───────────┼──────────────────────┼──────────────────────────┤
 ///   │ primary   │ bg actionPrimaryBg   │ bg actionDisabledBg      │
 ///   │           │ emphasis.none        │ actionDisabledContent    │
@@ -84,7 +84,7 @@ class USpaceButton extends StatelessWidget {
   const USpaceButton({
     super.key,
     required this.label,
-    this.style = USpaceButtonStyle.primary,
+    this.level = USpaceButtonLevel.primary,
     this.emphasis = USpaceButtonEmphasis.none,
     this.size = USpaceButtonSize.regular,
     this.state = USpaceButtonState.enabled,
@@ -97,7 +97,7 @@ class USpaceButton extends StatelessWidget {
   final String label;
 
   /// 行動權重
-  final USpaceButtonStyle style;
+  final USpaceButtonLevel level;
 
   /// primary 的文字色變化。只對 primary 的 enabled 狀態生效。
   final USpaceButtonEmphasis emphasis;
@@ -178,24 +178,24 @@ class USpaceButton extends StatelessWidget {
   /// 三個層級都是實心底色，disabled 時一律收斂為 actionDisabledBg。
   Color _backgroundColor(USpaceColorsExtension colors) {
     if (_isDisabled) return colors.actionDisabledBg;
-    return switch (style) {
-      USpaceButtonStyle.primary => colors.actionPrimaryBg,
-      USpaceButtonStyle.secondary => colors.actionSecondaryBg,
-      USpaceButtonStyle.tertiary => colors.actionTertiaryBg,
+    return switch (level) {
+      USpaceButtonLevel.primary => colors.actionPrimaryBg,
+      USpaceButtonLevel.secondary => colors.actionSecondaryBg,
+      USpaceButtonLevel.tertiary => colors.actionTertiaryBg,
     };
   }
 
   Color _contentColor(USpaceColorsExtension colors) {
     if (_isDisabled) return colors.actionDisabledContent;
-    return switch (style) {
+    return switch (level) {
       // emphasis 只改 primary 的文字色，不影響其他兩個層級
-      USpaceButtonStyle.primary => switch (emphasis) {
+      USpaceButtonLevel.primary => switch (emphasis) {
           USpaceButtonEmphasis.none => colors.actionPrimaryContent,
           USpaceButtonEmphasis.accent => colors.actionPrimaryContentAccent,
           USpaceButtonEmphasis.charging => colors.actionPrimaryContentCharging,
         },
-      USpaceButtonStyle.secondary => colors.actionSecondaryContent,
-      USpaceButtonStyle.tertiary => colors.actionTertiaryContent,
+      USpaceButtonLevel.secondary => colors.actionSecondaryContent,
+      USpaceButtonLevel.tertiary => colors.actionTertiaryContent,
     };
   }
 }
