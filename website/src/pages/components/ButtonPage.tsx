@@ -225,7 +225,7 @@ export default function ButtonPage() {
               文字色的變化屬於 emphasis，不是另一個權重層級，見下方 Configurations。
             </p>
             <AnatomyImage
-              file="button-varient.png"
+              file="button-variant.png"
               alt="三種按鈕權重由重到輕：深底的 Primary、中灰底的 Secondary、淺灰底的 Tertiary"
             />
 
