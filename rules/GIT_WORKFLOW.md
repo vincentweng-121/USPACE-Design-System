@@ -49,17 +49,41 @@ fix/anatomy-image-path
 
 ## 完整流程
 
+**開分支前一定要先把 main 拉到最新。** 這是最容易漏掉的一步，
+從舊的 main 開分支，改動會跟別人已經合併的內容打架。
+
 ```bash
-git switch -c feat/your-branch-name    # 1. 從最新的 main 開分支
-./verify_skill.sh                      # 2. 本機先跑過（與 CI 同一組檢查）
+git switch main && git pull            # 1. 先更新 main，不可省略
+git switch -c feat/your-branch-name    # 2. 從最新的 main 開分支
+./verify_skill.sh                      # 3. 本機先跑過（與 CI 同一組檢查）
 git push -u origin feat/your-branch-name
-gh pr create                           # 3. 開 PR
-# 4. 等 CI 兩個 job（flutter、web）都綠
-gh pr merge --merge --delete-branch    # 5. 合併，分支自動刪除
-# 6. 等 deploy job 跑完，開線上網址確認
+gh pr create                           # 4. 開 PR
+# 5. 等 CI 兩個 job（flutter、web）都綠
+gh pr merge --merge --delete-branch    # 6. 合併，分支自動刪除
+# 7. 等 deploy job 跑完，開線上網址確認
 ```
 
 CI 綠就可以合併，不需要另外等人核可。CI 紅燈時停下來修，**不要**合併。
+
+### 分支落後 main 時
+
+改到一半 main 有新東西進來是正常的，PR 頁面會出現
+**This branch has conflicts that must be resolved**。
+
+⚠️ **有衝突時 CI 完全不會跑**——GitHub 算不出合併結果，
+兩個 job 一次都不會觸發，PR 的檢查區塊會是空的。
+看到「沒有任何 check」不代表通過，代表根本沒跑。
+
+把 main 併回自己的分支，解完衝突再推：
+
+```bash
+git switch feat/your-branch-name
+git fetch && git merge origin/main     # 解衝突
+./verify_skill.sh                      # 解完一定要重跑
+git push
+```
+
+推上去之後 CI 才會開始跑，等它綠了再合併。
 
 ## CI 會擋下什麼
 
