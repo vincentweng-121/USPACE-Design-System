@@ -296,7 +296,7 @@ export function AnatomyImage({ file, alt }: { file: string; alt: string }) {
       <img
         src={`${import.meta.env.BASE_URL}images/${file}`}
         alt={alt}
-        style={{ maxWidth: 'min(480px, 100%)', height: 'auto' }}
+        style={{ maxWidth: '100%', height: 'auto' }}
       />
     </div>
   );

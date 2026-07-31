@@ -3,6 +3,7 @@
 
 ## 不可違反的規則
 - **版號目前為 0.x**：試做階段，`v1.0.0` 保留給第一個完整可用的版本。破壞性變更升 minor（0.3→0.4），其餘升 patch。改版號要同時改 `package.json` 與 `pubspec.yaml`，否則 `check:tokens` 會擋下。
+- **不直接推 main**：main 一有 push 就自動部署。一律走分支 → PR → CI 綠 → 合併，分支命名與完整流程見 `rules/GIT_WORKFLOW.md`。
 - **提交前跑 `./verify_skill.sh`**：token 同步、`dart analyze --fatal-infos`、`flutter test`、文件站建置四項全綠才提交。規則違反（裸 hex／寫死圓角／間距魔術數字／`FontWeight.wNNN`）由 `test/token_rules_test.dart` 擋下。
 - **Token 只改 JSON**：`styles/` 的 6 個 token .dart 與 `website/src/tokens/*.ts` 檔頭標有 `⚠️ GENERATED FILE`，一律不得手改。改 `tokens/*.json` 後執行 `npm run gen:tokens`；CI 會跑 `check:tokens` 擋下漂移。
 - **Sidebar 子項目規則**：Component 頁面若包含多種分類（例如 List Menu / Order History / Payment），**必須**拆成獨立子頁面，在 sidebar 以 `_ExpandableSubGroup` 呈現子項（同 Button 的做法）。路由 ID 格式：`<component>-<variant>`（例如 `list-menu`、`list-order`）。**禁止**將多種分類塞進同一頁。
@@ -16,6 +17,7 @@
 
 ## 錯誤記錄
 <!-- [日期] 問題 → 正確做法 -->
+- [2026-07-30] 圖片寫成 `/images/x.png` 且大小寫與實際檔名不符，本機正常但上線 404（macOS 檔案系統不分大小寫，看不出來）。→ 解剖圖一律用 `<AnatomyImage file="…" />`，路徑由元件處理；`npm run check:assets` 會擋下錯誤，已納入 CI。
 - [2026-07-28] Figma 的 Button 已改版：Secondary 由實心改為描邊、Tertiary 由漸層邊框改為純文字，且 style 的第五項名為 Tertiary 而非 Customized。→ 元件改版時要逐一讀完所有變體（本次 20 個）再動手，不可假設只是新增屬性。
 - [2026-07-28] `styles/` 的 4176 行 Dart 從未被任何工具編譯，改壞了要等工程師貼進 app 才發現。→ 已加 pubspec + CI；元件的 token 對應改由 `tokens/components/*.json` 定義，同時驅動 Flutter 測試與網站規格表，改一邊忘了另一邊會失敗。
 - [2026-07-28] website 的 token 是第三份手抄資料，已與 Dart 漂移（borderDivider 停在 grey100，Dart 早已是 transparentGrey8003）。→ Dart 與 website 一律由 tokens/*.json 產生，不再兩邊各自維護。

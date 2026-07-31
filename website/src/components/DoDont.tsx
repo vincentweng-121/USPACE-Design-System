@@ -95,7 +95,6 @@ function ExampleCard({ kind, file, alt, caption }: DoDontExample) {
   const isDo = kind === 'do';
   const color = isDo ? 'var(--positive)' : 'var(--negative)';
   const bg = isDo ? 'var(--positive-bg)' : 'var(--negative-bg)';
-  const textColor = isDo ? '#17803D' : '#C22B2B';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -137,8 +136,8 @@ function ExampleCard({ kind, file, alt, caption }: DoDontExample) {
         >
           {isDo ? <CheckIcon /> : <CrossIcon />}
         </span>
-        <p className="text-sm" style={{ margin: 0, fontSize: 15, lineHeight: '24px', color: textColor }}>
-          <strong style={{ color: textColor }}>{isDo ? 'Do' : "Don't"}</strong>　{caption}
+        <p className="text-sm" style={{ margin: 0, fontSize: 15, lineHeight: '24px', color }}>
+          <strong>{isDo ? 'Do' : "Don't"}</strong>　{caption}
         </p>
       </div>
     </div>
