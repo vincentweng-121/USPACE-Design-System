@@ -42,10 +42,10 @@
 #### 呼叫端遷移
 ```dart
 // 舊
-USpaceButton(label: '確認降鎖', style: USpaceButtonStyle.accent)
+USpaceButton(label: '確認', style: USpaceButtonStyle.accent)
 // 新
 USpaceButton(
-  label: '確認降鎖',
+  label: '確認',
   style: USpaceButtonStyle.primary,
   emphasis: USpaceButtonEmphasis.accent,
 )
