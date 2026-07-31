@@ -9,11 +9,13 @@ import { semantic } from '../../tokens/colors';
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
 
-type Style = 'accent' | 'charging' | 'primary' | 'secondary' | 'tertiary';
+type Style = 'primary' | 'secondary' | 'tertiary';
+type Emphasis = 'none' | 'accent' | 'charging';
 type Size = 'regular' | 'small';
 type State = 'enabled' | 'disabled';
 
 const styles = buttonSpec.dimensions.style as Style[];
+const emphases = buttonSpec.dimensions.emphasis as Emphasis[];
 const states = buttonSpec.dimensions.state as State[];
 const layout = buttonSpec.layout! as Record<string, number>;
 
@@ -22,10 +24,16 @@ const labelType = typographyStyles
   .flatMap((f) => f.styles.map((s) => ({ ...s, family: f.family })))
   .find((s) => s.name === 'displayM')!;
 
-/** 由 tokens/components/button.json 查出該 style × state 的 token 名稱 */
-function variantOf(style: Style, state: State) {
-  return buttonSpec.variants.find((v) => v.style === style && v.state === state)!;
+/** 由 tokens/components/button.json 查出該 style × emphasis × state 的 token 名稱 */
+function variantOf(style: Style, state: State, emphasis: Emphasis = 'none') {
+  return buttonSpec.variants.find(
+    (v) => v.style === style && v.state === state && v.emphasis === emphasis,
+  )!;
 }
+
+/** emphasis 只對 primary 生效，其餘層級一律用 none 那筆 */
+const emphasisOf = (style: Style, emphasis: Emphasis) =>
+  style === 'primary' ? emphasis : 'none';
 
 /** token 名稱 → 實際色值 */
 const colorOf = (token: string | null | undefined) =>
@@ -55,6 +63,7 @@ function ButtonPreview({
   style,
   size,
   state,
+  emphasis = 'none',
   leading = false,
   trailing = false,
 }: {
@@ -62,10 +71,11 @@ function ButtonPreview({
   style: Style;
   size: Size;
   state: State;
+  emphasis?: Emphasis;
   leading?: boolean;
   trailing?: boolean;
 }) {
-  const v = variantOf(style, state);
+  const v = variantOf(style, state, emphasisOf(style, emphasis));
   const content = colorOf(v.content as string)!;
   const border = colorOf(v.border as string | null);
 
@@ -190,7 +200,7 @@ export default function ButtonPage() {
     <div>
       <PageHero
         title="Button"
-        lead="按鈕觸發單一明確的行動。由 style、size、state 三個維度組合而成，文字左右兩側皆可放置 icon。"
+        lead="按鈕觸發單一明確的行動。權重由 style 決定，共 primary、secondary、tertiary 三級；primary 可再用 emphasis 切換文字色做更強的強調。加上 size 與 state 共四個維度，文字左右兩側皆可放置 icon。"
         meta={
           <>
             <span>
@@ -211,14 +221,13 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Variants</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              5 種樣式代表不同的行動權重，由重到輕排列。同一個畫面裡權重最高的只該有一個。
+              3 種樣式代表不同的行動權重，由重到輕排列。同一個畫面裡權重最高的只該有一個。
+              文字色的變化屬於 emphasis，不是另一個權重層級，見下方 Configurations。
             </p>
 
             <div style={{ display: 'grid', gap: 16 }}>
               {[
-                { style: 'accent' as Style, desc: '最高權重。畫面上最主要的那一個行動。' },
-                { style: 'charging' as Style, desc: '充電相關流程專用，不作為一般強調色使用。' },
-                { style: 'primary' as Style, desc: '一般操作。與 accent 同底色，靠文字色區分。' },
+                { style: 'primary' as Style, desc: '最高權重。畫面上最主要的那一個行動，實心底色。' },
                 { style: 'secondary' as Style, desc: '次要操作。透明底加描邊，保有邊界但不搶焦點。' },
                 { style: 'tertiary' as Style, desc: '最低權重。純文字，適合取消、略過這類動作。' },
               ].map((v) => (
@@ -255,7 +264,7 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              基本樣式的三個維度。互動與狀態不在此處，見下方 States。
+              基本樣式的四個維度。互動與狀態不在此處，見下方 States。
             </p>
 
             <div
@@ -267,22 +276,38 @@ export default function ButtonPage() {
               }}
             >
               <SpecimenRow n={1} title="Size" note="高度相同，Regular 滿寬、Small 貼合內容">
-                <ButtonPreview label="Small" style="accent" size="small" state="enabled" />
-                <ButtonPreview label="Regular" style="accent" size="regular" state="enabled" />
+                <ButtonPreview label="Small" style="primary" size="small" state="enabled" />
+                <ButtonPreview label="Regular" style="primary" size="regular" state="enabled" />
               </SpecimenRow>
 
-              <SpecimenRow n={2} title="Style" note="5 種樣式，此列以 Small 呈現以便並排比較">
+              <SpecimenRow n={2} title="Style" note="3 種權重，此列以 Small 呈現以便並排比較">
                 {styles.map((st) => (
                   <ButtonPreview key={st} label={cap(st)} style={st} size="small" state="enabled" />
                 ))}
               </SpecimenRow>
 
+              <SpecimenRow
+                n={3}
+                title="Emphasis"
+                note="只改 primary 的文字色，底色與權重不變；secondary / tertiary 不受影響"
+              >
+                {emphases.map((em) => (
+                  <ButtonPreview
+                    key={em}
+                    label={cap(em)}
+                    style="primary"
+                    size="small"
+                    state="enabled"
+                    emphasis={em}
+                  />
+                ))}
+              </SpecimenRow>
 
-              <SpecimenRow n={3} title="Icon" note="文字左右兩側各自獨立，可任意組合">
-                <ButtonPreview label="無 icon" style="accent" size="small" state="enabled" />
-                <ButtonPreview label="左側" style="accent" size="small" state="enabled" leading />
-                <ButtonPreview label="右側" style="accent" size="small" state="enabled" trailing />
-                <ButtonPreview label="兩側" style="accent" size="small" state="enabled" leading trailing />
+              <SpecimenRow n={4} title="Icon" note="文字左右兩側各自獨立，可任意組合">
+                <ButtonPreview label="無 icon" style="primary" size="small" state="enabled" />
+                <ButtonPreview label="左側" style="primary" size="small" state="enabled" leading />
+                <ButtonPreview label="右側" style="primary" size="small" state="enabled" trailing />
+                <ButtonPreview label="兩側" style="primary" size="small" state="enabled" leading trailing />
               </SpecimenRow>
             </div>
           </section>
@@ -296,7 +321,8 @@ export default function ButtonPage() {
             <SpecTable
               headers={['項目', '值', 'Token']}
               rows={[
-                ['樣式數', `${styles.length} 種`, '—'],
+                ['樣式數', `${styles.length} 種（Primary / Secondary / Tertiary）`, '—'],
+                ['強調層級', `${emphases.length} 種（僅 Primary 適用）`, '—'],
                 ['尺寸數', '2 種（Regular / Small）', '—'],
                 ['狀態數', `${states.length} 種（尚無 pressed）`, '—'],
                 ['高度', `${layout.height}px（固定）`, '—'],
@@ -350,7 +376,7 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Color</SectionTitle>
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              顏色只由 style 與 state 決定，不隨 size 改變。以下為亮色主題的值，
+              顏色由 style 與 state 決定，不隨 size 改變。以下為亮色主題的值，
               暗色主題由同一組語意 token 自動切換。
             </p>
 
@@ -361,17 +387,46 @@ export default function ButtonPage() {
                 </h3>
                 <SpecTable
                   headers={['元素', 'Enabled', 'Disabled']}
-                  rows={(['bg', 'border', 'content'] as const).map((part) => [
-                    part === 'bg' ? '容器底色' : part === 'border' ? '描邊' : '文字與 icon',
-                    <Swatch key="e" token={variantOf(st, 'enabled')[part] as string | null} />,
-                    <Swatch key="d" token={variantOf(st, 'disabled')[part] as string | null} />,
-                  ])}
+                  rows={[
+                    [
+                      '容器底色',
+                      <Swatch key="e" token={variantOf(st, 'enabled').bg as string | null} />,
+                      <Swatch key="d" token={variantOf(st, 'disabled').bg as string | null} />,
+                    ],
+                    [
+                      '描邊',
+                      <Swatch key="e" token={variantOf(st, 'enabled').border as string | null} />,
+                      <Swatch key="d" token={variantOf(st, 'disabled').border as string | null} />,
+                    ],
+                    // primary 的文字色隨 emphasis 變化，逐列展開；其餘層級只有一列
+                    ...(st === 'primary'
+                      ? emphases.map((em) => [
+                          `文字與 icon（emphasis: ${em}）`,
+                          <Swatch key="e" token={variantOf(st, 'enabled', em).content as string} />,
+                          <Swatch key="d" token={variantOf(st, 'disabled', em).content as string} />,
+                        ])
+                      : [
+                          [
+                            '文字與 icon',
+                            <Swatch key="e" token={variantOf(st, 'enabled').content as string} />,
+                            <Swatch key="d" token={variantOf(st, 'disabled').content as string} />,
+                          ],
+                        ]),
+                  ]}
                   minWidth={560}
                 />
-                {variantOf(st, 'enabled').note && (
+                {st === 'primary' ? (
                   <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-                    {String(variantOf(st, 'enabled').note)}
+                    三種 emphasis 的容器底色與描邊完全相同，差別只在文字色。
+                    accent 用於畫面上最主要的那一個行動，charging 為充電流程專用，
+                    兩者都不改變 primary 的權重層級。disabled 時 emphasis 不生效。
                   </p>
+                ) : (
+                  variantOf(st, 'enabled').note && (
+                    <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+                      {String(variantOf(st, 'enabled').note)}
+                    </p>
+                  )
                 )}
               </div>
             ))}
@@ -407,7 +462,9 @@ export default function ButtonPage() {
                     className="text-sm"
                     style={{ color: 'var(--text-tertiary)', marginBottom: 16 }}
                   >
-                    {stt === 'enabled' ? '可點擊，各 style 呈現自身配色' : '不可點擊，所有 style 收斂為同一組 disabled 配色'}
+                    {stt === 'enabled'
+                      ? '可點擊，各 style 呈現自身配色'
+                      : '不可點擊，所有 style 收斂為同一組 disabled 配色，emphasis 不生效'}
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
                     {styles.map((st) => (
@@ -426,10 +483,10 @@ export default function ButtonPage() {
             <SpecTable
               headers={['狀態', '外觀', '互動']}
               rows={[
-                ['Enabled', '依 style 呈現對應的底色、描邊與文字色', '可點擊，觸發 onPressed'],
+                ['Enabled', '依 style 呈現對應的底色、描邊與文字色；primary 另受 emphasis 影響文字色', '可點擊，觸發 onPressed'],
                 [
                   'Disabled',
-                  '填色樣式改為 actionDisabledBg 底；secondary 描邊改為 actionDisabledBg；文字一律 actionDisabledContent',
+                  'primary 改為 actionDisabledBg 底；secondary 描邊改為 actionDisabledBg；文字一律 actionDisabledContent，emphasis 不生效',
                   '不可點擊，onPressed 不會被呼叫',
                 ],
                 ['Pressed', '尚未定義', '—'],
@@ -497,13 +554,15 @@ export default function ButtonPage() {
             <div style={{ marginTop: 32 }}>
               <DoDont
                 dos={[
-                  '一個畫面只給一個 accent 按鈕，代表最主要的行動',
-                  'charging 只用於充電相關流程，不要當成一般強調色',
+                  '一個畫面只給一個 primary 按鈕，代表最主要的行動',
+                  'emphasis accent 用來讓那一顆 primary 更醒目，一個畫面同樣只給一顆',
+                  'emphasis charging 只用於充電相關流程，不要當成一般強調色',
                   'secondary 用於次要但仍需要邊界的操作，tertiary 用於低權重的文字動作',
                   'icon 只作輔助，按鈕語意仍以文字為主',
                 ]}
                 donts={[
-                  '不要同時使用多個 accent 按鈕，權重會互相抵銷',
+                  '不要同時使用多個 primary 按鈕，權重會互相抵銷',
+                  '不要用 emphasis 取代權重階層，它只改文字色，不會讓按鈕變得更重要',
                   '不要只放 icon 不放文字，這個元件的文字是必填',
                   '不要用 tertiary 承載主要行動，它沒有底色與邊界',
                   '不要自行改變高度，兩種 size 之外的尺寸不在規範內',
@@ -516,14 +575,14 @@ export default function ButtonPage() {
                   {
                     kind: 'do',
                     file: 'button-do-case1.png',
-                    alt: '主要行動用 accent、次要行動用 secondary 的按鈕組合範例',
-                    caption: '主要行動用 accent，次要行動用 secondary，一個畫面只有一個 accent，權重一眼可辨。',
+                    alt: '主要行動用 primary、次要行動用 secondary 的按鈕組合範例',
+                    caption: '主要行動用 primary（此處搭配 emphasis accent），次要行動用 secondary，權重一眼可辨。',
                   },
                   {
                     kind: 'dont',
                     file: 'button-dont-case1.png',
-                    alt: '兩個按鈕都使用 accent 樣式的錯誤範例',
-                    caption: '兩個按鈕都用 accent，權重無法區分，使用者不知道哪一個才是主要行動。',
+                    alt: '兩個按鈕都使用 primary 樣式的錯誤範例',
+                    caption: '兩個按鈕都用 primary，權重無法區分，使用者不知道哪一個才是主要行動。',
                   },
                 ]}
               />
@@ -554,9 +613,20 @@ export default function ButtonPage() {
               <CodeBlock
                 code={`USpaceButton(
   label: '確認送出',
-  style: USpaceButtonStyle.accent,
+  style: USpaceButtonStyle.primary,
   size: USpaceButtonSize.regular,
   leadingIcon: const Icon(Icons.directions_car),
+  onPressed: () {},
+)`}
+              />
+            </div>
+            <div style={{ marginTop: 24 }}>
+              <CodeBlock
+                title="用 emphasis 讓 primary 更醒目"
+                code={`USpaceButton(
+  label: '確認降鎖',
+  style: USpaceButtonStyle.primary,
+  emphasis: USpaceButtonEmphasis.accent,
   onPressed: () {},
 )`}
               />
@@ -584,7 +654,13 @@ export default function ButtonPage() {
                 headers={['參數', '型別', '預設', '說明']}
                 rows={[
                   [<code key="a">label</code>, 'String', '必填', '按鈕文字'],
-                  [<code key="b">style</code>, 'USpaceButtonStyle', 'accent', '5 種視覺樣式'],
+                  [<code key="b">style</code>, 'USpaceButtonStyle', 'primary', '3 種行動權重'],
+                  [
+                    <code key="b2">emphasis</code>,
+                    'USpaceButtonEmphasis',
+                    'none',
+                    'primary 的文字色變化，對 secondary / tertiary 無效',
+                  ],
                   [
                     <code key="c">size</code>,
                     'USpaceButtonSize',
@@ -608,15 +684,16 @@ export default function ButtonPage() {
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
             <SpecTable
-              headers={['Style', 'State', 'Background', 'Border', 'Content']}
+              headers={['Style', 'Emphasis', 'State', 'Background', 'Border', 'Content']}
               rows={buttonSpec.variants.map((row) => [
                 String(row.style),
+                String(row.emphasis),
                 String(row.state),
                 row.bg ? <code>{String(row.bg)}</code> : <span>transparent</span>,
                 row.border ? <code>{String(row.border)}</code> : <span>—</span>,
                 <code key="c">{String(row.content)}</code>,
               ])}
-              minWidth={620}
+              minWidth={720}
             />
           </section>
         </div>
