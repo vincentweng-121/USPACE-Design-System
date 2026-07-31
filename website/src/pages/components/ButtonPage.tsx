@@ -1,7 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import DoDont from '../../components/DoDont';
+import DoDont, { DoDontExamples } from '../../components/DoDont';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import { AnatomyImage } from '../../components/spec';
@@ -330,7 +330,7 @@ export default function ButtonPage() {
               按鈕由四個部件組成。除文字外，其餘皆為選用。
             </p>
             <AnatomyImage
-              file="Anatomy-Button.png"
+              file="button-anatomy.png"
               alt="按鈕的四個組成部件：容器、左側 icon、文字、右側 icon"
             />
 
@@ -448,6 +448,11 @@ export default function ButtonPage() {
             <p className="text-md text-muted" style={{ marginBottom: 32 }}>
               兩種尺寸的差別只有寬度行為與水平內距，高度與其餘數值完全相同。
             </p>
+            <AnatomyImage
+              file="button-measurements.png"
+              alt="Regular 與 Small 兩種尺寸的按鈕量測標示"
+            />
+
             <SpecTable
               headers={['項目', 'Regular', 'Small', 'Token']}
               rows={[
@@ -473,7 +478,20 @@ export default function ButtonPage() {
             />
           </section>
 
-          {/* ── 8. Usage ── */}
+          {/* ── 8. Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
+              觸控熱區與容器可視邊界一致，不另外擴張。固定高度 {layout.height}px
+              已超過最小建議值 44px，Regular 與 Small 兩種尺寸皆滿足，不需額外處理。
+            </p>
+            <AnatomyImage
+              file="button-toucharea.png"
+              alt="按鈕的觸控熱區範圍，與容器可視邊界一致"
+            />
+          </section>
+
+          {/* ── 9. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
             <div style={{ marginTop: 32 }}>
@@ -492,9 +510,27 @@ export default function ButtonPage() {
                 ]}
               />
             </div>
+            <div style={{ marginTop: 16 }}>
+              <DoDontExamples
+                items={[
+                  {
+                    kind: 'do',
+                    file: 'button-do-case1.png',
+                    alt: '主要行動用 accent、次要行動用 secondary 的按鈕組合範例',
+                    caption: '主要行動用 accent，次要行動用 secondary，一個畫面只有一個 accent，權重一眼可辨。',
+                  },
+                  {
+                    kind: 'dont',
+                    file: 'button-dont-case1.png',
+                    alt: '兩個按鈕都使用 accent 樣式的錯誤範例',
+                    caption: '兩個按鈕都用 accent，權重無法區分，使用者不知道哪一個才是主要行動。',
+                  },
+                ]}
+              />
+            </div>
           </section>
 
-          {/* ── 9. Accessibility ── */}
+          {/* ── 10. Accessibility ── */}
           <section className="section">
             <SectionTitle>Accessibility</SectionTitle>
             <ul
