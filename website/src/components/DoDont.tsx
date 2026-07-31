@@ -67,6 +67,84 @@ function List({ kind, title, items }: { kind: 'do' | 'dont'; title: string; item
   );
 }
 
+// ── Usage 區塊的 Do / Don't 圖例：截圖 + 說明 ──
+export type DoDontExample = {
+  kind: 'do' | 'dont';
+  file: string;
+  alt: string;
+  caption: string;
+};
+
+export function DoDontExamples({ items }: { items: DoDontExample[] }) {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: 16,
+      }}
+    >
+      {items.map((item, i) => (
+        <ExampleCard key={i} {...item} />
+      ))}
+    </div>
+  );
+}
+
+function ExampleCard({ kind, file, alt, caption }: DoDontExample) {
+  const isDo = kind === 'do';
+  const color = isDo ? 'var(--positive)' : 'var(--negative)';
+  const bg = isDo ? 'var(--positive-bg)' : 'var(--negative-bg)';
+  const textColor = isDo ? '#17803D' : '#C22B2B';
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div
+        style={{
+          border: `1px solid ${color}`,
+          borderRadius: 12,
+          overflow: 'hidden',
+          background: 'var(--page-secondary)',
+        }}
+      >
+        <img
+          src={`${import.meta.env.BASE_URL}images/${file}`}
+          alt={alt}
+          style={{ display: 'block', width: '100%', height: 'auto' }}
+        />
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: 10,
+          padding: '12px 16px',
+          borderRadius: 10,
+          background: bg,
+        }}
+      >
+        <span
+          aria-hidden
+          style={{
+            color,
+            flexShrink: 0,
+            width: 16,
+            height: 24,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {isDo ? <CheckIcon /> : <CrossIcon />}
+        </span>
+        <p className="text-sm" style={{ margin: 0, fontSize: 15, lineHeight: '24px', color: textColor }}>
+          <strong style={{ color: textColor }}>{isDo ? 'Do' : "Don't"}</strong>　{caption}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function CheckIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>

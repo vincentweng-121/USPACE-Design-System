@@ -267,3 +267,37 @@ export function ColorTable({
     </div>
   );
 }
+
+// ── 解剖圖（圖片版）──
+/**
+ * 以圖片呈現的解剖圖。
+ *
+ * 站台部署在子路徑下，圖片路徑一律要帶 BASE_URL；
+ * 直接寫 `/images/...` 在本機看得到、上線會 404。
+ * 這個元件把路徑處理包起來，呼叫端只需要給檔名。
+ *
+ * ⚠️ 檔名大小寫必須與 website/public/images/ 下的實際檔案完全一致。
+ * macOS 本機不分大小寫，寫錯不會有徵兆，但 GitHub Pages 會 404。
+ * `npm run check:assets` 會檢查這件事。
+ */
+export function AnatomyImage({ file, alt }: { file: string; alt: string }) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 'clamp(32px, 6vw, 64px) 24px',
+        borderRadius: 12,
+        background: 'var(--page-secondary)',
+        border: '1px solid var(--border-divider)',
+        marginBottom: 32,
+      }}
+    >
+      <img
+        src={`${import.meta.env.BASE_URL}images/${file}`}
+        alt={alt}
+        style={{ maxWidth: 'min(480px, 100%)', height: 'auto' }}
+      />
+    </div>
+  );
+}
