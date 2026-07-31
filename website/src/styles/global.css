@@ -287,6 +287,30 @@ code {
   border-bottom: none;
 }
 
+/* ── 明暗雙版圖片 ───────────────────────────────────────────
+   說明圖有 -light / -dark 兩個檔案，兩張都渲染，由這裡決定顯示哪一張。
+   主題可手動切換，所以不能用 prefers-color-scheme 媒體查詢。
+   預設顯示 light，避免 data-theme 尚未寫入時兩張都出現。
+   ───────────────────────────────────────────────────────── */
+
+/* display 一律由 CSS 決定：呼叫端若用行內 style 設 display，
+   會蓋過這裡的切換規則，兩張圖就會同時出現。 */
+.theme-light-only {
+  display: block;
+}
+
+.theme-dark-only {
+  display: none;
+}
+
+[data-theme='dark'] .theme-light-only {
+  display: none;
+}
+
+[data-theme='dark'] .theme-dark-only {
+  display: block;
+}
+
 /* ── 圖說編號列表 ───────────────────────────────────────────
    接在說明圖下方，對應圖片上的標號。欄數隨版面寬度自動增減。
    ───────────────────────────────────────────────────────── */

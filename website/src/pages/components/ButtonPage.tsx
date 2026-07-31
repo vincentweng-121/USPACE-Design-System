@@ -6,9 +6,9 @@ import DoDont, { DoDontExamples } from '../../components/DoDont';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import { AnatomyImage } from '../../components/spec';
-import { semantic } from '../../tokens/colors';
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
+import { colorOf, cap } from '../../utils';
 
 type Level = 'primary' | 'secondary' | 'tertiary';
 type Emphasis = 'none' | 'accent' | 'charging';
@@ -35,12 +35,6 @@ function variantOf(level: Level, state: State, emphasis: Emphasis = 'none') {
 /** emphasis 只對 primary 生效，其餘層級一律用 none 那筆 */
 const emphasisOf = (level: Level, emphasis: Emphasis) =>
   level === 'primary' ? emphasis : 'none';
-
-/** token 名稱 → 實際色值 */
-const colorOf = (token: string | null | undefined) =>
-  token ? (semantic as Record<string, string>)[token] : undefined;
-
-const cap = (v: string) => v.charAt(0).toUpperCase() + v.slice(1);
 
 // ── icon 佔位框 ──
 /**
@@ -144,7 +138,7 @@ function NumberedCaptions({ items }: { items: { name: string; desc?: string }[] 
 }
 
 // ── 互動式展示區 ──
-type IconOption = 'none' | 'leading' | 'trailing' | 'both';
+type IconOption = 'none' | 'leading' | 'trailing';
 
 /** 一組 radio。點選後由呼叫端更新狀態，預覽即時反映。 */
 function ControlGroup<T extends string>({
@@ -197,8 +191,8 @@ function Playground() {
             level={level}
             size={size}
             state="enabled"
-            leading={icon === 'leading' || icon === 'both'}
-            trailing={icon === 'trailing' || icon === 'both'}
+            leading={icon === 'leading'}
+            trailing={icon === 'trailing'}
           />
         </div>
       </div>
@@ -230,7 +224,6 @@ function Playground() {
             { value: 'none', label: 'None' },
             { value: 'leading', label: 'Leading' },
             { value: 'trailing', label: 'Trailing' },
-            { value: 'both', label: 'Both' },
           ]}
         />
       </div>
@@ -266,7 +259,7 @@ export default function ButtonPage() {
     <div>
       <PageHero
         title="Button"
-        lead="按鈕觸發單一明確的行動。權重由 level 決定，共 primary、secondary、tertiary 三級；primary 可再用 emphasis 切換文字色做更強的強調。加上 size 與 state 共四個維度，文字左右兩側皆可放置 icon。"
+        lead="按鈕觸發單一明確的行動。權重由 level 決定，共 primary、secondary、tertiary 三級；primary 可再用 emphasis 切換文字色做更強的強調。加上 size 與 state 共四個維度，icon 可放在文字左側或右側，擇一。"
         meta={
           <>
             <span>
@@ -291,7 +284,7 @@ export default function ButtonPage() {
               文字色的變化屬於 emphasis，不是另一個權重層級，見下方 Configurations。
             </p>
             <AnatomyImage
-              file="button-variant.png"
+              image="button-variant"
               alt="三種按鈕權重由重到輕：深底的 Primary、中灰底的 Secondary、淺灰底的 Tertiary"
             />
 
@@ -358,7 +351,7 @@ export default function ButtonPage() {
               按鈕由四個部件組成。除文字外，其餘皆為選用。
             </p>
             <AnatomyImage
-              file="button-anatomy.png"
+              image="button-anatomy"
               alt="按鈕的四個組成部件：容器、左側 icon、文字、右側 icon"
             />
 
@@ -368,7 +361,7 @@ export default function ButtonPage() {
                 ['1', '容器 Container', '必要', '底色與圓角由 level 決定；三個層級皆無描邊，高度固定 48'],
                 ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
                 ['3', '文字 Label', '必要', '按鈕語意的唯一承載者，不可省略'],
-                ['4', 'Trailing icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
+                ['4', 'Trailing icon', '選用', `${layout.iconSize}px，顏色與文字相同；與 Leading 擇一，不同時出現`],
               ]}
               minWidth={560}
             />
@@ -503,7 +496,7 @@ export default function ButtonPage() {
               兩種尺寸的差別只有寬度行為與水平內距，高度與其餘數值完全相同。
             </p>
             <AnatomyImage
-              file="button-measurements.png"
+              image="button-measurements"
               alt="Regular 與 Small 兩種尺寸的按鈕量測標示"
             />
 
@@ -540,7 +533,7 @@ export default function ButtonPage() {
               已超過最小建議值 44px，Regular 與 Small 兩種尺寸皆滿足，不需額外處理。
             </p>
             <AnatomyImage
-              file="button-toucharea.png"
+              image="button-toucharea"
               alt="按鈕的觸控熱區範圍，與容器可視邊界一致"
             />
           </section>
@@ -555,7 +548,7 @@ export default function ButtonPage() {
                   'emphasis accent 用來讓那一顆 primary 更醒目，一個畫面同樣只給一顆',
                   'emphasis charging 只用於充電相關流程，不要當成一般強調色',
                   'secondary 用於次要操作，tertiary 用於取消、略過這類低權重動作',
-                  'icon 只作輔助，按鈕語意仍以文字為主',
+                  'icon 只放單側，左右擇一；語意仍以文字為主',
                 ]}
                 donts={[
                   '不要同時使用多個 primary 按鈕，權重會互相抵銷',
@@ -566,20 +559,52 @@ export default function ButtonPage() {
                 ]}
               />
             </div>
-            <div style={{ marginTop: 16 }}>
+            <div style={{ display: 'grid', gap: 32, marginTop: 16 }}>
               <DoDontExamples
                 items={[
                   {
                     kind: 'do',
-                    file: 'button-do-case1.png',
+                    image: 'button-do-case1',
                     alt: '主要行動用 primary、次要行動用 secondary 的按鈕組合範例',
                     caption: '主要行動用 primary（此處搭配 emphasis accent），次要行動用 secondary，權重一眼可辨。',
                   },
                   {
                     kind: 'dont',
-                    file: 'button-dont-case1.png',
+                    image: 'button-dont-case1',
                     alt: '兩個按鈕都使用 primary 樣式的錯誤範例',
                     caption: '兩個按鈕都用 primary，權重無法區分，使用者不知道哪一個才是主要行動。',
+                  },
+                ]}
+              />
+              <DoDontExamples
+                items={[
+                  {
+                    kind: 'do',
+                    image: 'button-do-case2',
+                    alt: '只在文字左側放一個 icon 的按鈕',
+                    caption: 'icon 只放單側。左側 icon 補充行動的性質，視線仍然落在文字上。',
+                  },
+                  {
+                    kind: 'dont',
+                    image: 'button-dont-case2',
+                    alt: '文字左右兩側都放 icon 的按鈕',
+                    caption: '不要兩側都放 icon。左右各一個會把文字夾在中間，反而看不出重點在哪。',
+                  },
+                ]}
+              />
+              <DoDontExamples
+                items={[
+                  {
+                    kind: 'do',
+                    image: 'button-do-case3',
+                    alt: 'icon 搭配文字的按鈕',
+                    caption: 'icon 一律搭配文字。語意由文字承載，icon 只是輔助。',
+                  },
+                  {
+                    kind: 'dont',
+                    image: 'button-dont-case3',
+                    alt: '只有 icon 沒有文字的按鈕',
+                    caption: '不要只放 icon。這個元件的文字是必填，少了文字讀屏軟體也讀不出這顆按鈕在做什麼。',
                   },
                 ]}
               />
@@ -630,13 +655,12 @@ export default function ButtonPage() {
             </div>
             <div style={{ marginTop: 24 }}>
               <CodeBlock
-                title="兩側 icon + 明確 disabled"
+                title="單側 icon + 明確 disabled"
                 code={`USpaceButton(
   label: '前往付款',
   level: USpaceButtonLevel.secondary,
   size: USpaceButtonSize.small,
   state: USpaceButtonState.disabled,
-  leadingIcon: const Icon(Icons.directions_car),
   trailingIcon: const Icon(Icons.chevron_right),
   onPressed: () {},
 )`}

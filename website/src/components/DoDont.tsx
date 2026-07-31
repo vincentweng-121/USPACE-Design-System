@@ -1,3 +1,4 @@
+import { ThemedImage } from './spec';
 /**
  * Usage 區塊的 Do / Don't 清單。
  * 對應 Porsche Design System 元件頁 Usage 分頁的結構。
@@ -71,7 +72,8 @@ function List({ kind, title, items }: { kind: 'do' | 'dont'; title: string; item
 // ── Usage 區塊的 Do / Don't 圖例：截圖 + 說明 ──
 export type DoDontExample = {
   kind: 'do' | 'dont';
-  file: string;
+  /** 不含 -light / -dark 與副檔名的基底名稱 */
+  image: string;
   alt: string;
   caption: string;
 };
@@ -92,7 +94,7 @@ export function DoDontExamples({ items }: { items: DoDontExample[] }) {
   );
 }
 
-function ExampleCard({ kind, file, alt, caption }: DoDontExample) {
+function ExampleCard({ kind, image, alt, caption }: DoDontExample) {
   const isDo = kind === 'do';
   const color = isDo ? 'var(--positive)' : 'var(--negative)';
   const bg = isDo ? 'var(--positive-bg)' : 'var(--negative-bg)';
@@ -107,11 +109,8 @@ function ExampleCard({ kind, file, alt, caption }: DoDontExample) {
           background: 'var(--page-secondary)',
         }}
       >
-        <img
-          src={`${import.meta.env.BASE_URL}images/${file}`}
-          alt={alt}
-          style={{ display: 'block', width: '100%', height: 'auto' }}
-        />
+        {/* display 交給 .theme-*-only 決定，這裡不設，否則會蓋掉主題切換 */}
+        <ThemedImage image={image} alt={alt} style={{ width: '100%', height: 'auto' }} />
       </div>
       <div
         style={{

@@ -17,6 +17,3 @@ export function slugify(text: string): string {
     .replace(/\s+/g, '-');
 }
 
-/** 字串陣列 → Segmented 的 options */
-export const asOptions = <T extends string>(values: readonly T[]) =>
-  values.map((v) => ({ value: v, label: v }));
