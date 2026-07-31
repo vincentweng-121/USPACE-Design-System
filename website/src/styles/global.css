@@ -287,6 +287,83 @@ code {
   border-bottom: none;
 }
 
+/* ── 維度矩陣 ───────────────────────────────────────────────
+   樣式參考 Montage 文件站的 Variants 區塊：左側是維度名稱，
+   右側並排該維度的所有選項，每個選項在下方標注名稱。
+   不編號、不寫長敘述，讓元件本身說明差異。
+   ───────────────────────────────────────────────────────── */
+
+.dimension-matrix {
+  border: 1px solid var(--border-divider);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.dimension-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border-bottom: 1px solid var(--border-divider);
+}
+
+.dimension-row:last-child {
+  border-bottom: none;
+}
+
+.dimension-label {
+  padding: 24px 20px;
+  background: var(--surface-sunken);
+  border-right: 1px solid var(--border-divider);
+  color: var(--text-primary);
+  font-size: 15px;
+}
+
+/* 維度的補充說明，例如「高度相同，只差寬度行為」 */
+.dimension-label span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-tertiary);
+}
+
+.dimension-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px 20px;
+}
+
+.dimension-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+}
+
+/* 滿寬的選項（Regular size）獨佔一列 */
+.dimension-option[data-full='true'] {
+  flex: 1 1 100%;
+}
+
+.dimension-option figcaption {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 720px) {
+  .dimension-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dimension-label {
+    border-right: none;
+    border-bottom: 1px solid var(--border-divider);
+    padding: 16px 20px;
+  }
+}
+
 /* ── 捲軸 ── */
 
 ::-webkit-scrollbar {

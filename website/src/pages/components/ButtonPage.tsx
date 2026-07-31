@@ -110,65 +110,46 @@ function ButtonPreview({
   );
 }
 
-// ── 編號圓圈 ──
-function Badge({ n }: { n: number }) {
-  return (
-    <span
-      aria-hidden
-      style={{
-        flexShrink: 0,
-        width: 26,
-        height: 26,
-        borderRadius: '50%',
-        border: '1px solid var(--border-strong)',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: 12,
-        color: 'var(--text-secondary)',
-        background: 'var(--page-secondary)',
-      }}
-    >
-      {n}
-    </span>
-  );
-}
-
-// ── 變體展示列 ──
-function SpecimenRow({
-  n,
-  title,
+// ── 維度矩陣 ──
+/**
+ * 一個維度一列：左側是維度名稱與補充說明，右側並排所有選項。
+ * 結構參考 Montage 文件站的 Variants 區塊。
+ */
+function DimensionRow({
+  name,
   note,
   children,
 }: {
-  n: number;
-  title: string;
-  note: string;
+  name: string;
+  note?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        gap: 20,
-        padding: n === 1 ? '8px 0 28px' : '28px 0',
-      }}
-    >
-      <div style={{ marginTop: 2 }}>
-        <Badge n={n} />
+    <div className="dimension-row">
+      <div className="dimension-label">
+        {name}
+        {note && <span>{note}</span>}
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div className="heading-sm" style={{ marginBottom: 2 }}>
-          {title}
-        </div>
-        <div className="text-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 16 }}>
-          {note}
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
-          {children}
-        </div>
-      </div>
+      <div className="dimension-options">{children}</div>
     </div>
+  );
+}
+
+/** 單一選項：元件本體 + 下方的選項名稱 */
+function DimensionOption({
+  caption,
+  full = false,
+  children,
+}: {
+  caption: string;
+  full?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <figure className="dimension-option" data-full={full}>
+      {children}
+      <figcaption>{caption}</figcaption>
+    </figure>
   );
 }
 
@@ -271,48 +252,59 @@ export default function ButtonPage() {
               基本樣式的四個維度。互動與狀態不在此處，見下方 States。
             </p>
 
-            <div
-              style={{
-                padding: 'clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px)',
-                borderRadius: 12,
-                background: 'var(--page-secondary)',
-                border: '1px solid var(--border-divider)',
-              }}
-            >
-              <SpecimenRow n={1} title="Size" note="高度相同，Regular 滿寬、Small 貼合內容">
-                <ButtonPreview label="Small" style="primary" size="small" state="enabled" />
-                <ButtonPreview label="Regular" style="primary" size="regular" state="enabled" />
-              </SpecimenRow>
+            <div className="dimension-matrix">
+              <DimensionRow name="Size" note="高度相同，只差寬度行為">
+                <DimensionOption caption="Small">
+                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" />
+                </DimensionOption>
+                <DimensionOption caption="Regular" full>
+                  <ButtonPreview label="Label" style="primary" size="regular" state="enabled" />
+                </DimensionOption>
+              </DimensionRow>
 
-              <SpecimenRow n={2} title="Style" note="3 種權重，此列以 Small 呈現以便並排比較">
+              <DimensionRow name="Style" note="三種行動權重，由重到輕">
                 {styles.map((st) => (
-                  <ButtonPreview key={st} label={cap(st)} style={st} size="small" state="enabled" />
+                  <DimensionOption key={st} caption={cap(st)}>
+                    <ButtonPreview label="Label" style={st} size="small" state="enabled" />
+                  </DimensionOption>
                 ))}
-              </SpecimenRow>
+              </DimensionRow>
 
-              <SpecimenRow
-                n={3}
-                title="Emphasis"
-                note="只改 primary 的文字色，底色與權重不變；secondary / tertiary 不受影響"
-              >
+              <DimensionRow name="Emphasis" note="只改 Primary 的文字色，權重不變">
                 {emphases.map((em) => (
+                  <DimensionOption key={em} caption={cap(em)}>
+                    <ButtonPreview
+                      label="Label"
+                      style="primary"
+                      size="small"
+                      state="enabled"
+                      emphasis={em}
+                    />
+                  </DimensionOption>
+                ))}
+              </DimensionRow>
+
+              <DimensionRow name="Icon option" note="左右兩側各自獨立，可任意組合">
+                <DimensionOption caption="None">
+                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" />
+                </DimensionOption>
+                <DimensionOption caption="Leading icon">
+                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" leading />
+                </DimensionOption>
+                <DimensionOption caption="Trailing icon">
+                  <ButtonPreview label="Label" style="primary" size="small" state="enabled" trailing />
+                </DimensionOption>
+                <DimensionOption caption="Both">
                   <ButtonPreview
-                    key={em}
-                    label={cap(em)}
+                    label="Label"
                     style="primary"
                     size="small"
                     state="enabled"
-                    emphasis={em}
+                    leading
+                    trailing
                   />
-                ))}
-              </SpecimenRow>
-
-              <SpecimenRow n={4} title="Icon" note="文字左右兩側各自獨立，可任意組合">
-                <ButtonPreview label="無 icon" style="primary" size="small" state="enabled" />
-                <ButtonPreview label="左側" style="primary" size="small" state="enabled" leading />
-                <ButtonPreview label="右側" style="primary" size="small" state="enabled" trailing />
-                <ButtonPreview label="兩側" style="primary" size="small" state="enabled" leading trailing />
-              </SpecimenRow>
+                </DimensionOption>
+              </DimensionRow>
             </div>
           </section>
 
