@@ -39,9 +39,6 @@ export default function ListPage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              ListItem 由 leading、內容、trailing 三段組成。下方依序展示 5 種 trailing 型別。
-            </p>
             <div style={{
               padding: 'clamp(16px, 4vw, 32px)', borderRadius: 16, width: '100%',
               background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',

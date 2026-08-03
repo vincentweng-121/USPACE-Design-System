@@ -225,9 +225,6 @@ export default function ModalPage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              Modal 依內容型別分為 4 種 category，容器與底部按鈕的結構相同，只有中間內容區不同。
-            </p>
             <SpecBox>
               <SpecimenRow n={1} title="Category" note="縮小呈現以便並排比較，實際寬度為 390">
                 {(['list', 'textarea', 'image', 'null'] as Category[]).map((c) => (
