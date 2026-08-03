@@ -120,9 +120,6 @@ export default function TabPage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              基本樣式的維度。選取狀態不在此處，見下方 States。
-            </p>
             <SpecBox>
               <SpecimenRow n={1} title="Type" note="5 種型別，用途與尺寸各不相同">
                 {tabTypes.map((t) => (
@@ -144,9 +141,6 @@ export default function TabPage() {
 
           <section className="section">
             <SectionTitle>Color</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              5 種 type × 2 種 state的 token 對應。以下為亮色主題的值，暗色主題由同一組語意 token 自動切換。
-            </p>
             <ConfidenceNote confidence={tabSpec.confidence} source={tabSpec.source} />
             <ColorTable
               variants={tabSpec.variants}
@@ -158,9 +152,6 @@ export default function TabPage() {
 
           <section className="section">
             <SectionTitle>States</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              除 Input 外，每種 type 都有選取與未選取兩個狀態。
-            </p>
 
             <SpecBox>
               <StateRow first title="Active 選取" note="Tab 系列用 contentPrimary 底，Filter 改用 actionPrimaryBg">

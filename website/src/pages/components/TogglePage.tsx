@@ -68,9 +68,6 @@ export default function TogglePage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              基本樣式的維度。互動與狀態不在此處，見下方 States。
-            </p>
             <SpecBox>
               <SpecimenRow n={1} title="Value" note="開關的兩個值，thumb 位置與 track 色同步改變">
                 <TogglePreview value={false} />
@@ -81,9 +78,6 @@ export default function TogglePage() {
 
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              由兩個部件組成，兩者皆為必要。
-            </p>
 
             <AnatomyFigure>
               <AnatomyMarker n={1} />
@@ -105,9 +99,6 @@ export default function TogglePage() {
 
           <section className="section">
             <SectionTitle>Color</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              以下為亮色主題的值，暗色主題由同一組語意 token 自動切換。
-            </p>
             <SpecTable
               headers={['Value', 'State', 'Track', 'Thumb', 'Opacity']}
               rows={toggleSpec.variants.map((v) => [
@@ -123,9 +114,6 @@ export default function TogglePage() {
 
           <section className="section">
             <SectionTitle>States</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              兩個值各有 enabled 與 disabled，共四種組合。
-            </p>
 
             <SpecBox>
               <StateRow

@@ -75,9 +75,6 @@ export default function HeaderPage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              3 種 type，分別對應全頁、底部彈出與彈窗。差別在圓角、GrabBar 與標題對齊。
-            </p>
             <SpecBox>
               <SpecimenRow n={1} title="Type" note="以深色機殼呈現，token 取 dark 主題值">
                 {types.map((t) => (

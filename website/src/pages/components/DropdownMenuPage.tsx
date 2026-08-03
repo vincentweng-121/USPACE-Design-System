@@ -86,9 +86,6 @@ export default function DropdownMenuPage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              收合狀態下的 3 種可用性。展開後的面板見下方 States。
-            </p>
             <SpecBox>
               <SpecimenRow n={1} title="Availability" note="Incomplete 與 Error 的差別在提示文字，觸發區外觀相同">
                 {(['enabled', 'incomplete', 'error'] as Availability[]).map((a) => (

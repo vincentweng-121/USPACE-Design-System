@@ -66,9 +66,6 @@ export default function TextFieldPage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              9 種 status 涵蓋輸入的完整生命週期，從未填寫到錯誤修正。
-            </p>
             <SpecBox>
               <SpecimenRow n={1} title="Status" note="每個 status 的實際樣貌，含邊框、文字與提示文字的差異">
                 {(text_fieldSpec.dimensions.status as string[]).map((st) => (
@@ -90,9 +87,6 @@ export default function TextFieldPage() {
 
           <section className="section">
             <SectionTitle>Color</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              9 種 status的 token 對應。以下為亮色主題的值，暗色主題由同一組語意 token 自動切換。
-            </p>
             <ConfidenceNote confidence={text_fieldSpec.confidence} source={text_fieldSpec.source} />
             <ColorTable
               variants={text_fieldSpec.variants}

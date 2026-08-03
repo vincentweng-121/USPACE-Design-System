@@ -117,9 +117,6 @@ export default function ChipPage() {
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              基本樣式的三個維度。Chip 為純展示標籤，不接受點擊，因此沒有互動狀態。
-            </p>
             <SpecBox>
               <SpecimenRow n={1} title="Level" note="4 種樣式。Outline 為透明底加品牌漸層文字">
                 {levels.map((l) => (
@@ -152,9 +149,6 @@ export default function ChipPage() {
 
           <section className="section">
             <SectionTitle>Color</SectionTitle>
-            <p className="text-md text-muted" style={{ marginBottom: 32 }}>
-              4 種 level的 token 對應。以下為亮色主題的值，暗色主題由同一組語意 token 自動切換。
-            </p>
             <ConfidenceNote confidence={chipSpec.confidence} source={chipSpec.source} />
             <ColorTable
               variants={chipSpec.variants}
