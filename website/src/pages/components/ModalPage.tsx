@@ -1,8 +1,8 @@
 import SectionTitle from '../../components/SectionTitle';
-import { modalSpec } from '../../tokens/componentSpecs';
+import {} from '../../tokens/componentSpecs';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending, Playground, PendingImage, type PlaygroundDimension, TokensSpecs } from '../../components/spec';
+import { Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semantic, palette } from '../../tokens/colors';
 import { glass, elevation } from '../../tokens/scalars';
 
@@ -244,12 +244,6 @@ export default function ModalPage() {
               dimensions={playgroundDimensions}
               render={(v) => <ModalPreview category={v.category as Category} showBottomBar={v.bottomBar === 'show'} showNotice={v.notice === 'show'} />}
             />
-          </section>
-
-          {/* ── Tokens & specs ── */}
-          <section className="section">
-            <SectionTitle>Tokens &amp; specs</SectionTitle>
-            <TokensSpecs spec={modalSpec} />
           </section>
 
           <section className="section">

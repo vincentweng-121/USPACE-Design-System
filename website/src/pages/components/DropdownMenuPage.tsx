@@ -1,8 +1,8 @@
 import SectionTitle from '../../components/SectionTitle';
-import { dropdown_menuSpec } from '../../tokens/componentSpecs';
+import {} from '../../tokens/componentSpecs';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending, Playground, PendingImage, type PlaygroundDimension, TokensSpecs } from '../../components/spec';
+import { Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semantic } from '../../tokens/colors';
 
 // ── Types ──────────────────────────────────────────────────
@@ -103,12 +103,6 @@ export default function DropdownMenuPage() {
               dimensions={playgroundDimensions}
               render={(v) => <DropdownPreview availability={v.availability as Availability} />}
             />
-          </section>
-
-          {/* ── Tokens & specs ── */}
-          <section className="section">
-            <SectionTitle>Tokens &amp; specs</SectionTitle>
-            <TokensSpecs spec={dropdown_menuSpec} />
           </section>
 
           <section className="section">

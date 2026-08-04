@@ -1,6 +1,6 @@
 name: uspace_design_system
 description: USPACE Design System — Flutter token 與元件實作
-version: 0.7.4
+version: 0.7.5
 publish_to: none
 
 environment:

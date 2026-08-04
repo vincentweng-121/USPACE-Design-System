@@ -7,7 +7,7 @@
  * 擋三類會讓文件站前後不一致的問題：
  *
  * 1. 缺少必要區塊 / 順序不符
- *    每個元件頁都要有同樣的九個區塊。少一塊時讀者無從判斷是「還沒做」
+ *    每個元件頁都要有同樣的八個區塊。少一塊時讀者無從判斷是「還沒做」
  *    還是「這個元件不適用」，而規則寫在文件裡沒有人會每次去對。
  *
  * 2. Configurations 直接寫死顏色
@@ -32,7 +32,6 @@ const PAGES = join(ROOT, 'website/src/pages/components');
 const REQUIRED = [
   'Variants',
   'Configurations',
-  'Tokens &amp; specs',
   'Anatomy',
   'Color',
   'States',

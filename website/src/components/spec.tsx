@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { colorOf, cap } from '../utils';
-import SpecTable from './SpecTable';
 
 /**
  * 元件說明頁的共用區塊。
@@ -515,60 +514,3 @@ export function PendingImage({ expects, note }: { expects: string; note?: string
   );
 }
 
-// ── Tokens & specs ──────────────────────────────────────────
-/**
- * 不隨變體改變的共通規格。
- *
- * 內容全部從元件的 token JSON 推導：`dimensions` 給出每個維度有幾種、
- * `layout` 給出尺寸類的數值。沒有 layout 的元件顯示待補，不填推測值。
- *
- * 這裡刻意不放顏色——顏色一律在 Color 區塊說明，避免同一件事寫兩處。
- */
-export function TokensSpecs({
-  spec,
-  labels = {},
-  units = {},
-  extraRows = [],
-}: {
-  spec: { dimensions?: Record<string, string[]>; layout?: Record<string, unknown> };
-  /** 維度或 layout 欄位的中文名，沒給就用原 key */
-  labels?: Record<string, string>;
-  /** layout 數值的單位，預設 px */
-  units?: Record<string, string>;
-  extraRows?: (string | number | React.ReactNode)[][];
-}) {
-  const rows: (string | number | React.ReactNode)[][] = [];
-
-  for (const [key, values] of Object.entries(spec.dimensions ?? {})) {
-    rows.push([labels[key] ?? cap(key), `${values.length} 種`, values.join(' / ')]);
-  }
-
-  // toggle 的 track / thumb 是巢狀的，攤平成「track 寬 × 高」一列
-  for (const [key, value] of Object.entries(spec.layout ?? {})) {
-    const unit = units[key] ?? 'px';
-    if (value !== null && typeof value === 'object') {
-      const v = value as Record<string, number>;
-      rows.push([labels[key] ?? cap(key), Object.values(v).join(' × ') + unit, Object.keys(v).join(' × ')]);
-    } else {
-      rows.push([labels[key] ?? cap(key), `${value}${unit}`, '—']);
-    }
-  }
-
-  rows.push(...extraRows);
-
-  if (!rows.length) {
-    return <Pending what="共通規格" why="這個元件的 token JSON 還沒有 layout 資料，尚無可列的尺寸規格。" />;
-  }
-
-  return (
-    <>
-      <SpecTable headers={['項目', '值', '內容']} rows={rows} minWidth={620} />
-      {!spec.layout && (
-        <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-          尺寸類的規格（高度、內距、圓角等）尚未寫進{' '}
-          <code>tokens/components/</code> 的 layout，補上後這張表會自動出現。
-        </p>
-      )}
-    </>
-  );
-}

@@ -93,12 +93,6 @@ export default function HeaderPage() {
             />
           </section>
 
-          {/* ── Tokens & specs ── */}
-          <section className="section">
-            <SectionTitle>Tokens &amp; specs</SectionTitle>
-            <Pending what="共通規格" why="這個元件還沒有對應的 token JSON，尚無可列的規格。" />
-          </section>
-
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
             <div>

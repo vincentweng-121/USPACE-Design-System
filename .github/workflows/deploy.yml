@@ -47,6 +47,8 @@ jobs:
       # 擋住「元件頁少區塊」或「Configurations 混進顏色」
       - name: Check page structure
         run: npm run check:pages
+      - name: Check changelog
+        run: npm run check:changelog
       - name: Install and Build
         working-directory: website
         run: |
