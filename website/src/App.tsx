@@ -66,6 +66,19 @@ export default function App() {
           <Route path="components/floating-button" element={<ComingSoonPage title="Floating Button" />} />
           <Route path="components/bottom-bar" element={<ComingSoonPage title="Bottom Bar" />} />
           <Route path="components/divider" element={<ComingSoonPage title="Divider" />} />
+          <Route path="components/action-area" element={<ComingSoonPage title="Action Area" />} />
+          <Route path="components/avatar" element={<ComingSoonPage title="Avatar" />} />
+          <Route path="components/card" element={<ComingSoonPage title="Card" />} />
+          <Route path="components/category" element={<ComingSoonPage title="Category" />} />
+          <Route path="components/checkbox" element={<ComingSoonPage title="Checkbox" />} />
+          <Route path="components/icon-button" element={<ComingSoonPage title="Icon Button" />} />
+          <Route path="components/menu" element={<ComingSoonPage title="Menu" />} />
+          <Route path="components/pagination" element={<ComingSoonPage title="Pagination" />} />
+          <Route path="components/progress-indicator" element={<ComingSoonPage title="Progress Indicator" />} />
+          <Route path="components/radio" element={<ComingSoonPage title="Radio" />} />
+          <Route path="components/skeleton" element={<ComingSoonPage title="Skeleton" />} />
+          <Route path="components/thumbnail" element={<ComingSoonPage title="Thumbnail" />} />
+          <Route path="components/toast" element={<ComingSoonPage title="Toast" />} />
 
           {/* Styles */}
           <Route path="styles" element={<Navigate to="/styles/color" replace />} />
