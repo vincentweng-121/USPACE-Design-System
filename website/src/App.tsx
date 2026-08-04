@@ -77,6 +77,7 @@ export default function App() {
           <Route path="components/progress-indicator" element={<ComingSoonPage title="Progress Indicator" />} />
           <Route path="components/radio" element={<ComingSoonPage title="Radio" />} />
           <Route path="components/skeleton" element={<ComingSoonPage title="Skeleton" />} />
+          <Route path="components/tab-bar" element={<ComingSoonPage title="Tab Bar" />} />
           <Route path="components/thumbnail" element={<ComingSoonPage title="Thumbnail" />} />
           <Route path="components/toast" element={<ComingSoonPage title="Toast" />} />
 
