@@ -8,13 +8,16 @@
 ## 最短版本
 
 1. **不要直接推 `main`。** main 一有 push 就自動部署到線上。
+   每一項工作都開新分支，即使當下沒有其他分支在跑。
 2. **開分支前先 `git switch main && git pull`。** 從舊的 main 開分支會產生衝突，
    而有衝突時 CI 一次都不會跑。
 3. 開分支，名字用 `feat/…`、`fix/…`、`docs/…`、`chore/…`、`refactor/…`，
    後面接 2–4 個小寫英文字、用 `-` 分隔（例：`fix/anatomy-image-path`）。
 4. 本機跑 `./verify_skill.sh`，五項全綠再推。
-5. 開 PR，等 CI 的 `flutter` 與 `web` 兩個 job 都綠，才合併。
+5. 開 PR，等 CI 的 `flutter` 與 `web` 兩個 job 都綠。
    **看到「沒有任何 check」不是通過，是根本沒跑**，多半是分支落後了。
+6. **CI 綠之後就停下來，不要自己合併。** PR 開著等每日同步時段，
+   由維護者一次合併當天所有綠燈的 PR。急件請直接說明。
 
 ## 從 GitHub 網頁介面編輯
 
