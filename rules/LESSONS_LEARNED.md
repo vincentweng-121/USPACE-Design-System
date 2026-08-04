@@ -7,7 +7,7 @@
 - **提交前跑 `./verify_skill.sh`**：token 同步、`dart analyze --fatal-infos`、`flutter test`、文件站建置四項全綠才提交。規則違反（裸 hex／寫死圓角／間距魔術數字／`FontWeight.wNNN`）由 `test/token_rules_test.dart` 擋下。
 - **Token 只改 JSON**：`styles/` 的 6 個 token .dart 與 `website/src/tokens/*.ts` 檔頭標有 `⚠️ GENERATED FILE`，一律不得手改。改 `tokens/*.json` 後執行 `npm run gen:tokens`；CI 會跑 `check:tokens` 擋下漂移。
 - **元件頁必須包含九個區塊**，順序固定：Variants → Configurations → Tokens & specs → Anatomy → Color → States → Measurements → Touch areas → Usage。內容還沒有的用 `PendingImage` 或 `Pending` 佔位，不可整段省略——少一塊讀者不知道是還沒做還是不適用。各頁專屬的補充區塊接在 Usage 之後。
-- **Configurations 只講配置，不講顏色**：尺寸、型別、狀態、icon 位置這類結構性的差異放這裡；顏色一律在 Color 區塊說明。示意圖需要著色時用中性色（`--text-primary` 等），不要用 accent 或任何語意色票，否則同一件事會有兩個說法且容易不同步。
+- **Configurations 只講配置，畫面必須是黑灰白**：只放結構性的維度（尺寸、有無 icon、有無按鈕）。**任何切換後會渲染出非中性色的維度都要移出**，改在 Color 區塊說明，預覽固定用中性的那一個變體。差異本身就是顏色的維度（Chip 的 level、Toggle 的 value、TextField 的 status）屬於 States 與 Color，不屬於 Configurations。判斷依據是 **token 解出來的 palette 名稱**是否為 grey / white / black / transparent 開頭，不是原始碼裡有沒有寫顏色——顏色多半是預覽元件查 token 得到的，字面上看不到。`npm run check:pages` 會實際推導並擋下。
 - **說明圖一律明暗成對**：Figma artboard 以 `scale: 2` 匯出（960×700），檔名為 `<基底>-light.png` 與 `<基底>-dark.png`，**不做去背**，整張圖直接用。頁面只給基底名稱：`<AnatomyImage image="button-anatomy" />`。少補一版 `npm run check:assets` 會擋下。
 - **Sidebar 子項目規則**：Component 頁面若包含多種分類（例如 List Menu / Order History / Payment），**必須**拆成獨立子頁面，在 sidebar 以 `_ExpandableSubGroup` 呈現子項（同 Button 的做法）。路由 ID 格式：`<component>-<variant>`（例如 `list-menu`、`list-order`）。**禁止**將多種分類塞進同一頁。
 - 所有 component / style 的 source of truth 為 `styles/` 目錄。
@@ -20,6 +20,7 @@
 
 ## 錯誤記錄
 <!-- [日期] 問題 → 正確做法 -->
+- [2026-08-04] 被要求「Configurations 拿掉 accent 顏色」時，只在區塊的 JSX 文字裡搜 accent，改掉唯一一處就宣告完成。Chip 的綠色其實是 `<ChipPreview>` 依 level 從 token 查出來的，區塊文字裡一個顏色字都沒有；自己寫的 CI 檢查也沿用同一個錯誤定義，回報「通過」反而增加了誤判的信心。→ 驗證顏色一律推導 token 的實際解值，不看原始碼字面。
 - [2026-07-31] 說明圖曾以泛洪去背成透明 PNG，容差稍大就會連 tertiary 的 grey100 底一起挖掉，Modal 的白卡也保不住。→ 已廢除去背規則與 `tools/make-transparent.mjs`，改為明暗兩版整張直出。
 - [2026-07-30] 圖片寫成 `/images/x.png` 且大小寫與實際檔名不符，本機正常但上線 404（macOS 檔案系統不分大小寫，看不出來）。→ 圖片一律用 `<AnatomyImage image="…" />`，路徑由元件處理；`npm run check:assets` 會擋下錯誤，已納入 CI。
 - [2026-07-28] Figma 的 Button 已改版：Secondary 由實心改為描邊、Tertiary 由漸層邊框改為純文字，且 style 的第五項名為 Tertiary 而非 Customized。→ 元件改版時要逐一讀完所有變體（本次 20 個）再動手，不可假設只是新增屬性。
