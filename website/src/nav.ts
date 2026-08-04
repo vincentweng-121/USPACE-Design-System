@@ -81,6 +81,7 @@ export const nav: NavGroup[] = [
     items: [
       { to: '/help/changelog', label: 'Changelog', keywords: '變更 版本 release' },
       { to: '/help/status', label: 'Status', keywords: '進度 狀態 skill status' },
+      { to: '/help/roadmap', label: 'Roadmap', keywords: '甘特圖 排程 進度 gantt schedule' },
     ],
   },
 ];

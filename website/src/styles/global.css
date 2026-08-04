@@ -445,3 +445,137 @@ code {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── 甘特圖 ─────────────────────────────────────────────────
+   左側項目名稱固定寬，右側週次用 grid 等分；
+   窄螢幕時整張表橫向捲動，不壓縮欄寬。
+   ───────────────────────────────────────────────────────── */
+
+.gantt {
+  border: 1px solid var(--border-divider);
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+.gantt-head,
+.gantt-row {
+  display: grid;
+  grid-template-columns: 200px minmax(560px, 1fr);
+  align-items: center;
+  min-width: 760px;
+  border-bottom: 1px solid var(--border-divider);
+}
+
+.gantt-row:last-child {
+  border-bottom: none;
+}
+
+.gantt-head {
+  background: var(--surface-sunken);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.gantt-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  border-right: 1px solid var(--border-divider);
+}
+
+.gantt-head .gantt-name {
+  color: var(--text-secondary);
+}
+
+.gantt-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 週次欄與長條共用同一組格線，長條才對得準 */
+.gantt-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  align-items: center;
+  min-height: 44px;
+}
+
+.gantt-week {
+  padding: 12px 4px;
+  text-align: center;
+  font-size: 12px;
+  border-left: 1px solid var(--border-divider);
+}
+
+.gantt-week:first-child {
+  border-left: none;
+}
+
+/* 今天所在的那一週 */
+.gantt-week[data-today='true'] {
+  color: var(--text-primary);
+  font-weight: 600;
+  background: var(--nav-active);
+}
+
+.gantt-cell {
+  height: 100%;
+  border-left: 1px solid var(--border-divider);
+}
+
+.gantt-cell:first-child {
+  border-left: none;
+}
+
+.gantt-bar {
+  grid-row: 1;
+  margin: 0 4px;
+  padding: 5px 10px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+/* ── 狀態篩選 ── */
+
+.gantt-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.gantt-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--border-divider);
+  border-radius: 999px;
+  background: var(--page-primary);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.gantt-filter[data-active='true'] {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--page-primary);
+}
+
+.gantt-filter-count {
+  font-size: 12px;
+  opacity: 0.7;
+}
