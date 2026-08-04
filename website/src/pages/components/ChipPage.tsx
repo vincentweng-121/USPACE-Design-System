@@ -2,7 +2,7 @@ import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { chipSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
+import { Pending, ColorTable, ConfidenceNote, Playground, PendingImage, type PlaygroundDimension, TokensSpecs } from '../../components/spec';
 import { semantic, palette, gradients } from '../../tokens/colors';
 
 type ChipLevel = 'Accent' | 'Primary' | 'Secondary' | 'Outline';
@@ -134,6 +134,12 @@ export default function ChipPage() {
               dimensions={playgroundDimensions}
               render={(v) => <ChipPreview label="Label" level={v.level as ChipLevel} size={v.size as ChipSize} icon={v.icon === 'leading'} />}
             />
+          </section>
+
+          {/* ── Tokens & specs ── */}
+          <section className="section">
+            <SectionTitle>Tokens &amp; specs</SectionTitle>
+            <TokensSpecs spec={chipSpec} />
           </section>
 
           <section className="section">

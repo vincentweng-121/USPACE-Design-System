@@ -1,8 +1,9 @@
 import SectionTitle from '../../components/SectionTitle';
+import { listSpec } from '../../tokens/componentSpecs';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending, PendingImage } from '../../components/spec';
-import { semantic, palette } from '../../tokens/colors';
+import { Pending, PendingImage, TokensSpecs } from '../../components/spec';
+import { semantic } from '../../tokens/colors';
 
 function MiniToggle({ value }: { value: boolean }) {
   return (
@@ -97,15 +98,21 @@ export default function ListPage() {
                   <div style={{
                     width: 28, height: 28, borderRadius: '50%',
                     border: 'none',
-                    background: semantic.contentAccent,
+                    background: 'var(--text-primary)',
                     cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.15s' }}>
-                    <span style={{ color: palette.black, fontSize: 16 }}>✓</span>
+                    <span style={{ color: 'var(--page-primary)', fontSize: 16 }}>✓</span>
                   </div>
                 </div>
               </div>
               </div>
             </div>
+          </section>
+
+          {/* ── Tokens & specs ── */}
+          <section className="section">
+            <SectionTitle>Tokens &amp; specs</SectionTitle>
+            <TokensSpecs spec={listSpec} />
           </section>
 
           <section className="section">

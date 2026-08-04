@@ -2,7 +2,7 @@ import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { tabSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, SpecBox, StateRow, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
+import { Pending, ColorTable, ConfidenceNote, SpecBox, StateRow, Playground, PendingImage, type PlaygroundDimension, TokensSpecs } from '../../components/spec';
 import { colorOf } from '../../utils';
 import { semantic } from '../../tokens/colors';
 
@@ -137,6 +137,12 @@ export default function TabPage() {
               dimensions={playgroundDimensions}
               render={(v) => <TabPreview type={v.type as TabType} label="Label" isActive={v.state === 'active'} />}
             />
+          </section>
+
+          {/* ── Tokens & specs ── */}
+          <section className="section">
+            <SectionTitle>Tokens &amp; specs</SectionTitle>
+            <TokensSpecs spec={tabSpec} />
           </section>
 
           <section className="section">

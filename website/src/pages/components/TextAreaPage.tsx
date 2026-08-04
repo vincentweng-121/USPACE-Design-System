@@ -2,7 +2,7 @@ import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { text_areaSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
+import { Pending, ColorTable, ConfidenceNote, Playground, PendingImage, type PlaygroundDimension, TokensSpecs } from '../../components/spec';
 import { colorOf } from '../../utils';
 
 // ── Playground ─────────────────────────────────────────────
@@ -82,6 +82,12 @@ export default function TextAreaPage() {
               dimensions={playgroundDimensions}
               render={(v) => <StatusPreview status={v.status} />}
             />
+          </section>
+
+          {/* ── Tokens & specs ── */}
+          <section className="section">
+            <SectionTitle>Tokens &amp; specs</SectionTitle>
+            <TokensSpecs spec={text_areaSpec} />
           </section>
 
           <section className="section">

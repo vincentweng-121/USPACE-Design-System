@@ -3,7 +3,7 @@ import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { toggleSpec } from '../../tokens/componentSpecs';
 import SpecTable from '../../components/SpecTable';
-import { SpecBox, StateRow, Swatch, Badge, AnatomyFigure, AnatomyMarker, Playground, PendingImage, Pending, type PlaygroundDimension } from '../../components/spec';
+import { SpecBox, StateRow, Swatch, Badge, AnatomyFigure, AnatomyMarker, Playground, PendingImage, Pending, type PlaygroundDimension, TokensSpecs } from '../../components/spec';
 import { colorOf } from '../../utils';
 
 const { track, thumb } = toggleSpec.layout! as Record<
@@ -77,6 +77,12 @@ export default function TogglePage() {
               dimensions={playgroundDimensions}
               render={(v) => <TogglePreview value={v.value === 'on'} disabled={v.enabled === 'disabled'} />}
             />
+          </section>
+
+          {/* ── Tokens & specs ── */}
+          <section className="section">
+            <SectionTitle>Tokens &amp; specs</SectionTitle>
+            <TokensSpecs spec={toggleSpec} />
           </section>
 
           <section className="section">

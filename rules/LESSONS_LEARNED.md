@@ -6,6 +6,8 @@
 - **不直接推 main**：main 一有 push 就自動部署。一律走分支 → PR → CI 綠 → 合併，分支命名與完整流程見 `rules/GIT_WORKFLOW.md`。
 - **提交前跑 `./verify_skill.sh`**：token 同步、`dart analyze --fatal-infos`、`flutter test`、文件站建置四項全綠才提交。規則違反（裸 hex／寫死圓角／間距魔術數字／`FontWeight.wNNN`）由 `test/token_rules_test.dart` 擋下。
 - **Token 只改 JSON**：`styles/` 的 6 個 token .dart 與 `website/src/tokens/*.ts` 檔頭標有 `⚠️ GENERATED FILE`，一律不得手改。改 `tokens/*.json` 後執行 `npm run gen:tokens`；CI 會跑 `check:tokens` 擋下漂移。
+- **元件頁必須包含九個區塊**，順序固定：Variants → Configurations → Tokens & specs → Anatomy → Color → States → Measurements → Touch areas → Usage。內容還沒有的用 `PendingImage` 或 `Pending` 佔位，不可整段省略——少一塊讀者不知道是還沒做還是不適用。各頁專屬的補充區塊接在 Usage 之後。
+- **Configurations 只講配置，不講顏色**：尺寸、型別、狀態、icon 位置這類結構性的差異放這裡；顏色一律在 Color 區塊說明。示意圖需要著色時用中性色（`--text-primary` 等），不要用 accent 或任何語意色票，否則同一件事會有兩個說法且容易不同步。
 - **說明圖一律明暗成對**：Figma artboard 以 `scale: 2` 匯出（960×700），檔名為 `<基底>-light.png` 與 `<基底>-dark.png`，**不做去背**，整張圖直接用。頁面只給基底名稱：`<AnatomyImage image="button-anatomy" />`。少補一版 `npm run check:assets` 會擋下。
 - **Sidebar 子項目規則**：Component 頁面若包含多種分類（例如 List Menu / Order History / Payment），**必須**拆成獨立子頁面，在 sidebar 以 `_ExpandableSubGroup` 呈現子項（同 Button 的做法）。路由 ID 格式：`<component>-<variant>`（例如 `list-menu`、`list-order`）。**禁止**將多種分類塞進同一頁。
 - 所有 component / style 的 source of truth 為 `styles/` 目錄。
