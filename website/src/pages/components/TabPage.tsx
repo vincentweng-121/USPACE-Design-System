@@ -2,7 +2,7 @@ import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { tabSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, SpecBox, SpecimenRow, StateRow } from '../../components/spec';
+import { Pending, ColorTable, ConfidenceNote, SpecBox, StateRow, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { colorOf } from '../../utils';
 import { semantic } from '../../tokens/colors';
 
@@ -104,6 +104,12 @@ function TabPreview({ type, label, isActive = false }: { type: TabType; label: s
 }
 
 
+// ── Playground 的維度 ──
+const playgroundDimensions: PlaygroundDimension[] = [
+  { key: 'type', label: 'Type', options: (['Tab_icon', 'Tab_Graphic', 'Tab', 'Filter', 'Input'] as TabType[]).map((t) => ({ value: t, label: t })) },
+  { key: 'state', label: 'State', options: [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }] },
+];
+
 export default function TabPage() {
   const [tab, setTab] = usePageTab();
 
@@ -118,15 +124,19 @@ export default function TabPage() {
       {tab === 'design' && (
         <div>
 
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="tab-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <SpecBox>
-              <SpecimenRow n={1} title="Type" note="5 種型別，用途與尺寸各不相同">
-                {tabTypes.map((t) => (
-                  <TabPreview key={t.value} type={t.value} label={t.label} />
-                ))}
-              </SpecimenRow>
-            </SpecBox>
+            <Playground
+              name="tab"
+              dimensions={playgroundDimensions}
+              render={(v) => <TabPreview type={v.type as TabType} label="Label" isActive={v.state === 'active'} />}
+            />
           </section>
 
           <section className="section">
@@ -182,6 +192,7 @@ export default function TabPage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="tab-measurements" note="標出高度、內距、間距的量測圖。" />
             <div className="spec-table" >
   <div>
               <table style={{ minWidth: 600 }}>
@@ -215,8 +226,18 @@ export default function TabPage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="tab-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don't 圖例"
+              why="Button 頁是三組對照圖（tab-do-caseN / tab-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>三種用途各司其職</strong>：Tab 系列涵蓋三種用途：Tab（頁籤切換）、Filter（篩選條件）、Input（已選輸入標籤）。</li>

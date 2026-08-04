@@ -3,15 +3,7 @@ import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { toggleSpec } from '../../tokens/componentSpecs';
 import SpecTable from '../../components/SpecTable';
-import {
-  SpecBox,
-  SpecimenRow,
-  StateRow,
-  Swatch,
-  Badge,
-  AnatomyFigure,
-  AnatomyMarker,
-} from '../../components/spec';
+import { SpecBox, StateRow, Swatch, Badge, AnatomyFigure, AnatomyMarker, Playground, PendingImage, Pending, type PlaygroundDimension } from '../../components/spec';
 import { colorOf } from '../../utils';
 
 const { track, thumb } = toggleSpec.layout! as Record<
@@ -52,6 +44,12 @@ function TogglePreview({ value, disabled = false }: { value: boolean; disabled?:
   );
 }
 
+// ── Playground 的維度 ──
+const playgroundDimensions: PlaygroundDimension[] = [
+  { key: 'value', label: 'Value', options: [{ value: 'off', label: 'Off' }, { value: 'on', label: 'On' }] },
+  { key: 'enabled', label: 'State', options: [{ value: 'enabled', label: 'Enabled' }, { value: 'disabled', label: 'Disabled' }] },
+];
+
 export default function TogglePage() {
   const [tab, setTab] = usePageTab();
 
@@ -66,14 +64,19 @@ export default function TogglePage() {
       {tab === 'design' && (
         <div>
 
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="toggle-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <SpecBox>
-              <SpecimenRow n={1} title="Value" note="開關的兩個值，thumb 位置與 track 色同步改變">
-                <TogglePreview value={false} />
-                <TogglePreview value />
-              </SpecimenRow>
-            </SpecBox>
+            <Playground
+              name="toggle"
+              dimensions={playgroundDimensions}
+              render={(v) => <TogglePreview value={v.value === 'on'} disabled={v.enabled === 'disabled'} />}
+            />
           </section>
 
           <section className="section">
@@ -149,6 +152,7 @@ export default function TogglePage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="toggle-measurements" note="標出高度、內距、間距的量測圖。" />
             <div className="spec-table" >
   <div>
               <table style={{ minWidth: 400 }}>
@@ -178,8 +182,18 @@ export default function TogglePage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="toggle-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don't 圖例"
+              why="Button 頁是三組對照圖（toggle-do-caseN / toggle-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>Thumb 為 34x20 pill shape（非圓形），區別於系統 Switch</strong></li>

@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { DoDontExamples } from '../../components/DoDont';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
-import { AnatomyImage } from '../../components/spec';
+import { AnatomyImage, NumberedCaptions, Playground, type PlaygroundDimension } from '../../components/spec';
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
 import { colorOf, cap } from '../../utils';
@@ -116,120 +115,33 @@ function ButtonPreview({
   );
 }
 
-// ── 圖說編號列表 ──
-/**
- * 對應圖片上標號的說明，接在圖片下方。
- *
- * 欄數隨版面寬度自動增減（auto-fit + minmax），窄螢幕會收成一欄。
- */
-function NumberedCaptions({ items }: { items: { name: string; desc?: string }[] }) {
-  return (
-    <ol className="numbered-captions">
-      {items.map((item, i) => (
-        <li key={item.name}>
-          <strong>
-            {i + 1}. {item.name}
-          </strong>
-          {item.desc && <span>{item.desc}</span>}
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-// ── 互動式展示區 ──
-type IconOption = 'none' | 'leading' | 'trailing';
-
-/** 一組 radio。點選後由呼叫端更新狀態，預覽即時反映。 */
-function ControlGroup<T extends string>({
-  name,
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  name: string;
-  label: string;
-  value: T;
-  options: { value: T; label: string }[];
-  onChange: (v: T) => void;
-}) {
-  return (
-    <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
-      <legend className="control-group-label">{label}</legend>
-      {options.map((opt) => (
-        <label key={opt.value} className="control-option">
-          <input
-            type="radio"
-            name={name}
-            value={opt.value}
-            checked={value === opt.value}
-            onChange={() => onChange(opt.value)}
-          />
-          {opt.label}
-        </label>
-      ))}
-    </fieldset>
-  );
-}
-
-/**
- * 左側即時預覽 + 右側控制卡。
- * 結構參考 Montage 文件站的 Variants 區塊。
- */
-function Playground() {
-  const [size, setSize] = useState<Size>('regular');
-  const [level, setLevel] = useState<Level>('primary');
-  const [icon, setIcon] = useState<IconOption>('none');
-
-  return (
-    <div className="playground">
-      <div className="playground-preview">
-        <div>
-          <ButtonPreview
-            label="Label"
-            level={level}
-            size={size}
-            state="enabled"
-            leading={icon === 'leading'}
-            trailing={icon === 'trailing'}
-          />
-        </div>
-      </div>
-
-      <div className="playground-controls">
-        <ControlGroup
-          name="button-size"
-          label="Size"
-          value={size}
-          onChange={setSize}
-          options={[
-            { value: 'regular', label: 'Regular' },
-            { value: 'small', label: 'Small' },
-          ]}
-        />
-        <ControlGroup
-          name="button-level"
-          label="Level"
-          value={level}
-          onChange={setLevel}
-          options={levels.map((lv) => ({ value: lv, label: cap(lv) }))}
-        />
-        <ControlGroup
-          name="button-icon"
-          label="Icon option"
-          value={icon}
-          onChange={setIcon}
-          options={[
-            { value: 'none', label: 'None' },
-            { value: 'leading', label: 'Leading' },
-            { value: 'trailing', label: 'Trailing' },
-          ]}
-        />
-      </div>
-    </div>
-  );
-}
+// ── Playground 的維度 ──
+// icon 不是 token 維度（token 只管顏色），所以手寫；
+// emphasis 只改文字色、不改變權重，放進來會讓人以為是第四個層級，故不列入。
+const playgroundDimensions: PlaygroundDimension[] = [
+  {
+    key: 'size',
+    label: 'Size',
+    options: [
+      { value: 'regular', label: 'Regular' },
+      { value: 'small', label: 'Small' },
+    ],
+  },
+  {
+    key: 'level',
+    label: 'Level',
+    options: levels.map((lv) => ({ value: lv, label: cap(lv) })),
+  },
+  {
+    key: 'icon',
+    label: 'Icon option',
+    options: [
+      { value: 'none', label: 'None' },
+      { value: 'leading', label: 'Leading' },
+      { value: 'trailing', label: 'Trailing' },
+    ],
+  },
+];
 
 // ── 色票方塊 ──
 function Swatch({ token }: { token: string | null }) {
@@ -297,7 +209,20 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
 
-            <Playground />
+            <Playground
+              name="button"
+              dimensions={playgroundDimensions}
+              render={(v) => (
+                <ButtonPreview
+                  label="Label"
+                  level={v.level as Level}
+                  size={v.size as Size}
+                  state="enabled"
+                  leading={v.icon === 'leading'}
+                  trailing={v.icon === 'trailing'}
+                />
+              )}
+            />
           </section>
 
           {/* ── 3. Tokens & specs ── */}

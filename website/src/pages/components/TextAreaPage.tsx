@@ -2,7 +2,7 @@ import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { text_areaSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, SpecBox, SpecimenRow } from '../../components/spec';
+import { Pending, ColorTable, ConfidenceNote, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { colorOf } from '../../utils';
 
 // ── Playground ─────────────────────────────────────────────
@@ -50,6 +50,11 @@ function StatusPreview({ status }: { status: string }) {
 
 
 // ── Page ───────────────────────────────────────────────────
+// ── Playground 的維度 ──
+const playgroundDimensions: PlaygroundDimension[] = [
+  { key: 'status', label: 'Status', options: (text_areaSpec.dimensions.status as string[]).map((s) => ({ value: s, label: s })) },
+];
+
 export default function TextAreaPage() {
   const [tab, setTab] = usePageTab();
 
@@ -64,15 +69,19 @@ export default function TextAreaPage() {
       {tab === 'design' && (
         <div>
 
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="text-area-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <SpecBox>
-              <SpecimenRow n={1} title="Status" note="每個 status 的實際樣貌，含邊框、文字與提示文字的差異">
-                {(text_areaSpec.dimensions.status as string[]).map((st) => (
-                  <StatusPreview key={st} status={st} />
-                ))}
-              </SpecimenRow>
-            </SpecBox>
+            <Playground
+              name="text-area"
+              dimensions={playgroundDimensions}
+              render={(v) => <StatusPreview status={v.status} />}
+            />
           </section>
 
           <section className="section">
@@ -113,6 +122,7 @@ export default function TextAreaPage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="text-area-measurements" note="標出高度、內距、間距的量測圖。" />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>Container</strong>: height 144px, borderRadius 20px</li>
@@ -129,8 +139,18 @@ export default function TextAreaPage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="text-area-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don't 圖例"
+              why="Button 頁是三組對照圖（text-area-do-caseN / text-area-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>多行文字輸入元件</strong>：用於需要較長文字的場景（備註、描述、回饋等）。</li>

@@ -2,14 +2,13 @@ import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { chipSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, SpecBox, SpecimenRow } from '../../components/spec';
+import { Pending, ColorTable, ConfidenceNote, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semantic, palette, gradients } from '../../tokens/colors';
 
 type ChipLevel = 'Accent' | 'Primary' | 'Secondary' | 'Outline';
 type ChipSize = 'Regular' | 'Small';
 
 const levels: ChipLevel[] = ['Accent', 'Primary', 'Secondary', 'Outline'];
-const sizes: ChipSize[] = ['Regular', 'Small'];
 
 function StarIcon({ color }: { color: string }) {
   return (
@@ -101,6 +100,13 @@ function ChipPreview({
 }
 
 
+// ── Playground 的維度 ──
+const playgroundDimensions: PlaygroundDimension[] = [
+  { key: 'level', label: 'Level', options: levels.map((l) => ({ value: l, label: l })) },
+  { key: 'size', label: 'Size', options: [{ value: 'Regular', label: 'Regular' }, { value: 'Small', label: 'Small' }] },
+  { key: 'icon', label: 'Icon option', options: [{ value: 'none', label: 'None' }, { value: 'leading', label: 'Leading' }] },
+];
+
 export default function ChipPage() {
   const [tab, setTab] = usePageTab();
 
@@ -115,26 +121,19 @@ export default function ChipPage() {
       {tab === 'design' && (
         <div>
 
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="chip-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <SpecBox>
-              <SpecimenRow n={1} title="Level" note="4 種樣式。Outline 為透明底加品牌漸層文字">
-                {levels.map((l) => (
-                  <ChipPreview key={l} label={l} level={l} />
-                ))}
-              </SpecimenRow>
-
-              <SpecimenRow n={2} title="Size" note="Regular 使用 labelM，Small 使用 10px Semibold">
-                {sizes.map((sz) => (
-                  <ChipPreview key={sz} label={sz} level="Accent" size={sz} />
-                ))}
-              </SpecimenRow>
-
-              <SpecimenRow n={3} title="Icon" note="可選的前置 icon，20px，置於文字左側">
-                <ChipPreview label="無 icon" level="Accent" />
-                <ChipPreview label="有 icon" level="Accent" icon />
-              </SpecimenRow>
-            </SpecBox>
+            <Playground
+              name="chip"
+              dimensions={playgroundDimensions}
+              render={(v) => <ChipPreview label="Label" level={v.level as ChipLevel} size={v.size as ChipSize} icon={v.icon === 'leading'} />}
+            />
           </section>
 
           <section className="section">
@@ -169,6 +168,7 @@ export default function ChipPage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="chip-measurements" note="標出高度、內距、間距的量測圖。" />
             <div className="spec-table" >
   <div>
               <table style={{ minWidth: 600 }}>
@@ -199,8 +199,18 @@ export default function ChipPage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="chip-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don't 圖例"
+              why="Button 頁是三組對照圖（chip-do-caseN / chip-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>純展示標籤，不可點擊</strong>：Chip 用於顯示分類、狀態、標記等資訊，不具備互動行為。若需可互動的 chip，應使用 <code>USpaceTab</code>（Filter / Input type）。</li>

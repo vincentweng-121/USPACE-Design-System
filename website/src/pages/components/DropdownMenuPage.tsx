@@ -1,7 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending, SpecBox, SpecimenRow } from '../../components/spec';
+import { Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semantic } from '../../tokens/colors';
 
 // ── Types ──────────────────────────────────────────────────
@@ -70,6 +70,11 @@ function DropdownPreview({ availability }: { availability: Availability }) {
 
 
 // ── Page ───────────────────────────────────────────────────
+// ── Playground 的維度 ──
+const playgroundDimensions: PlaygroundDimension[] = [
+  { key: 'availability', label: 'Availability', options: (['enabled', 'incomplete', 'error'] as Availability[]).map((a) => ({ value: a, label: a })) },
+];
+
 export default function DropdownMenuPage() {
   const [tab, setTab] = usePageTab();
 
@@ -84,15 +89,19 @@ export default function DropdownMenuPage() {
       {tab === 'design' && (
         <div>
 
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="dropdown-menu-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <SpecBox>
-              <SpecimenRow n={1} title="Availability" note="Incomplete 與 Error 的差別在提示文字，觸發區外觀相同">
-                {(['enabled', 'incomplete', 'error'] as Availability[]).map((a) => (
-                  <DropdownPreview key={a} availability={a} />
-                ))}
-              </SpecimenRow>
-            </SpecBox>
+            <Playground
+              name="dropdown-menu"
+              dimensions={playgroundDimensions}
+              render={(v) => <DropdownPreview availability={v.availability as Availability} />}
+            />
           </section>
 
           <section className="section">
@@ -130,6 +139,7 @@ export default function DropdownMenuPage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="dropdown-menu-measurements" note="標出高度、內距、間距的量測圖。" />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>Trigger</strong>: height 48px, borderRadius 1000, padding horizontal 20px</li>
@@ -144,8 +154,18 @@ export default function DropdownMenuPage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="dropdown-menu-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don't 圖例"
+              why="Button 頁是三組對照圖（dropdown-menu-do-caseN / dropdown-menu-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>與 TextField 共用視覺語言</strong>：同高度 48px、StadiumBorder，降低使用者認知負擔。</li>
