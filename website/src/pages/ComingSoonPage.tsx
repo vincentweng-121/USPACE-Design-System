@@ -13,7 +13,6 @@ type Item = { name: string; phases: { style: Phase; content: Phase; final: Phase
 
 /** roadmap 的英文名與選單標籤對不上的少數幾個 */
 const ALIAS: Record<string, string> = {
-  'bottom bar': 'tab bar',
   radio: 'radiobox',
 };
 
