@@ -1,7 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending, SpecBox, SpecimenRow } from '../../components/spec';
+import { Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semantic, palette } from '../../tokens/colors';
 import { glass, elevation } from '../../tokens/scalars';
 
@@ -209,6 +209,13 @@ function ModalPreview({ category, showBottomBar, showNotice }: {
 // ── Playground ─────────────────────────────────────────────
 
 // ── Page ───────────────────────────────────────────────────
+// ── Playground 的維度 ──
+const playgroundDimensions: PlaygroundDimension[] = [
+  { key: 'category', label: 'Content category', options: (['listItem', 'textArea', 'image', 'none'] as Category[]).map((c) => ({ value: c, label: c })) },
+  { key: 'bottomBar', label: 'Bottom bar', options: [{ value: 'show', label: 'Show' }, { value: 'hide', label: 'Hide' }] },
+  { key: 'notice', label: 'Notice text', options: [{ value: 'hide', label: 'Hide' }, { value: 'show', label: 'Show' }] },
+];
+
 export default function ModalPage() {
   const [tab, setTab] = usePageTab();
 
@@ -223,22 +230,19 @@ export default function ModalPage() {
       {tab === 'design' && (
         <div>
 
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="modal-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <SpecBox>
-              <SpecimenRow n={1} title="Category" note="縮小呈現以便並排比較，實際寬度為 390">
-                {(['list', 'textarea', 'image', 'null'] as Category[]).map((c) => (
-                  <div key={c} style={{ width: 240, flexShrink: 0 }}>
-                    <div className="text-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 8 }}>
-                      {c}
-                    </div>
-                    <div style={{ transform: 'scale(0.62)', transformOrigin: 'top left', height: 300, overflow: 'hidden' }}>
-                      <ModalPreview category={c} showBottomBar showNotice={false} />
-                    </div>
-                  </div>
-                ))}
-              </SpecimenRow>
-            </SpecBox>
+            <Playground
+              name="modal"
+              dimensions={playgroundDimensions}
+              render={(v) => <ModalPreview category={v.category as Category} showBottomBar={v.bottomBar === 'show'} showNotice={v.notice === 'show'} />}
+            />
           </section>
 
           <section className="section">
@@ -277,6 +281,7 @@ export default function ModalPage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="modal-measurements" note="標出高度、內距、間距的量測圖。" />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>Container</strong>: width 390px (iPhone), top borderRadius 20px</li>
@@ -295,8 +300,18 @@ export default function ModalPage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="modal-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don't 圖例"
+              why="Button 頁是三組對照圖（modal-do-caseN / modal-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>底部彈出式互動</strong>：底部彈出式 Modal，用於需要使用者注意但不離開當前頁面的場景。</li>

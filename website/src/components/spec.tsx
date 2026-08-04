@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { colorOf, cap } from '../utils';
 
 /**
@@ -339,6 +340,176 @@ export function AnatomyImage({ image, alt }: { image: string; alt: string }) {
           objectFit: 'contain',
         }}
       />
+    </div>
+  );
+}
+
+// ── 互動式展示區 ────────────────────────────────────────────
+/**
+ * 一組 radio。點選後由呼叫端更新狀態，預覽即時反映。
+ */
+function ControlGroup({
+  name,
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  name: string;
+  label: string;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+}) {
+  return (
+    <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
+      <legend className="control-group-label">{label}</legend>
+      {options.map((opt) => (
+        <label key={opt.value} className="control-option">
+          <input
+            type="radio"
+            name={name}
+            value={opt.value}
+            checked={value === opt.value}
+            onChange={() => onChange(opt.value)}
+          />
+          {opt.label}
+        </label>
+      ))}
+    </fieldset>
+  );
+}
+
+/** Playground 的一個維度：左側控制卡的一組 radio */
+export type PlaygroundDimension = {
+  /** render 取值時的 key */
+  key: string;
+  /** 控制卡上顯示的群組名稱 */
+  label: string;
+  options: { value: string; label: string }[];
+};
+
+/**
+ * 把 token JSON 的 dimensions 直接轉成 Playground 的維度。
+ *
+ * 大部分元件頁的維度就是 token 定義的那幾個，不需要另外寫一份；
+ * 需要排除或補充時再自行組 PlaygroundDimension 陣列。
+ */
+export function dimensionsOf(
+  dimensions: Record<string, string[]>,
+  labels: Record<string, string> = {},
+): PlaygroundDimension[] {
+  return Object.entries(dimensions).map(([key, values]) => ({
+    key,
+    label: labels[key] ?? cap(key),
+    options: values.map((v) => ({ value: v, label: cap(v) })),
+  }));
+}
+
+/**
+ * 左側即時預覽 + 右側控制卡。
+ *
+ * 各元件頁共用同一個實作，差別只在傳入的維度與 render。
+ * 結構參考 Montage 文件站的 Variants 區塊。
+ */
+export function Playground({
+  dimensions,
+  render,
+  name = 'playground',
+}: {
+  dimensions: PlaygroundDimension[];
+  render: (values: Record<string, string>) => React.ReactNode;
+  /** radio 的 name 前綴，同一頁有多個 Playground 時必須不同 */
+  name?: string;
+}) {
+  const [values, setValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(dimensions.map((d) => [d.key, d.options[0].value])),
+  );
+
+  return (
+    <div className="playground">
+      <div className="playground-preview">
+        <div>{render(values)}</div>
+      </div>
+
+      <div className="playground-controls">
+        {dimensions.map((d) => (
+          <ControlGroup
+            key={d.key}
+            name={`${name}-${d.key}`}
+            label={d.label}
+            value={values[d.key]}
+            options={d.options}
+            onChange={(v) => setValues((prev) => ({ ...prev, [d.key]: v }))}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── 圖說編號列表 ────────────────────────────────────────────
+/**
+ * 對應圖片上標號的說明，接在圖片下方。
+ * 欄數隨版面寬度自動增減，窄螢幕會收成一欄。
+ */
+export function NumberedCaptions({ items }: { items: { name: string; desc?: string }[] }) {
+  return (
+    <ol className="numbered-captions">
+      {items.map((item, i) => (
+        <li key={item.name}>
+          <strong>
+            {i + 1}. {item.name}
+          </strong>
+          {item.desc && <span>{item.desc}</span>}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+// ── 待補的說明圖 ────────────────────────────────────────────
+/**
+ * 尺寸與 AnatomyImage 完全相同的佔位框，直接寫出還缺哪兩個檔案。
+ *
+ * 這樣頁面骨架先立起來，缺的是圖而不是版面；補圖時把
+ * PendingImage 換成 AnatomyImage 即可。
+ *
+ * 屬性刻意不叫 image：那是 check:assets 用來確認「檔案必須存在」的
+ * 標記，這裡的檔案正好相反，是還沒有的。
+ */
+export function PendingImage({ expects, note }: { expects: string; note?: string }) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10,
+        width: '100%',
+        height: 400,
+        padding: 24,
+        borderRadius: 12,
+        background: 'var(--page-secondary)',
+        border: '1px dashed var(--border-strong)',
+        marginBottom: 32,
+        textAlign: 'center',
+      }}
+    >
+      <div className="heading-sm" style={{ color: 'var(--text-primary)' }}>
+        說明圖待補
+      </div>
+      <p className="text-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+        需要 <code>{expects}-light.png</code> 與 <code>{expects}-dark.png</code>
+        <br />
+        Figma artboard 480×350，以 scale 2 匯出成 960×700
+      </p>
+      {note && (
+        <p className="text-sm" style={{ margin: 0, color: 'var(--text-tertiary)' }}>
+          {note}
+        </p>
+      )}
     </div>
   );
 }

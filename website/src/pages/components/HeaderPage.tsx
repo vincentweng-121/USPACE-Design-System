@@ -1,7 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending, SpecBox, SpecimenRow } from '../../components/spec';
+import { Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semanticDark } from '../../tokens/colors';
 
 const types = ['FullPage', 'Floating', 'Modal'] as const;
@@ -59,6 +59,11 @@ function HeaderPreview({ type }: { type: (typeof types)[number] }) {
   );
 }
 
+// ── Playground 的維度 ──
+const playgroundDimensions: PlaygroundDimension[] = [
+  { key: 'type', label: 'Type', options: types.map((t) => ({ value: t, label: t })) },
+];
+
 export default function HeaderPage() {
   const [tab, setTab] = usePageTab();
 
@@ -73,15 +78,19 @@ export default function HeaderPage() {
       {tab === 'design' && (
         <div>
 
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="header-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
-            <SpecBox>
-              <SpecimenRow n={1} title="Type" note="以深色機殼呈現，token 取 dark 主題值">
-                {types.map((t) => (
-                  <HeaderPreview key={t} type={t} />
-                ))}
-              </SpecimenRow>
-            </SpecBox>
+            <Playground
+              name="header"
+              dimensions={playgroundDimensions}
+              render={(v) => <HeaderPreview type={v.type as (typeof types)[number]} />}
+            />
           </section>
 
           <section className="section">
@@ -116,6 +125,7 @@ export default function HeaderPage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="header-measurements" note="標出高度、內距、間距的量測圖。" />
             <div className="spec-table" >
   <div>
               <table style={{ minWidth: 500 }}>
@@ -147,8 +157,18 @@ export default function HeaderPage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="header-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don't 圖例"
+              why="Button 頁是三組對照圖（header-do-caseN / header-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>3 種 Type 對應不同導航層級</strong>：FullPage 為頂層頁面、Floating 為可拖拉底部彈出、Modal 為對話框。</li>

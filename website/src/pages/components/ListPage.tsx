@@ -1,7 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending } from '../../components/spec';
+import { Pending, PendingImage } from '../../components/spec';
 import { semantic, palette } from '../../tokens/colors';
 
 function MiniToggle({ value }: { value: boolean }) {
@@ -36,6 +36,12 @@ export default function ListPage() {
 
       {tab === 'design' && (
         <div>
+
+          {/* ── Variants ── */}
+          <section className="section">
+            <SectionTitle>Variants</SectionTitle>
+            <PendingImage expects="list-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+          </section>
 
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
@@ -137,6 +143,7 @@ export default function ListPage() {
 
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
+            <PendingImage expects="list-measurements" note="標出高度、內距、間距的量測圖。" />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>ListHeading</strong>: pt=32, pb=8, bodyS textSecondary</li>
@@ -148,8 +155,18 @@ export default function ListPage() {
             </div>
           </section>
 
+          {/* ── Touch areas ── */}
+          <section className="section">
+            <SectionTitle>Touch areas</SectionTitle>
+            <PendingImage expects="list-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+          </section>
+
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
+            <Pending
+              what="Do / Don&apos;t 圖例"
+              why="Button 頁是三組對照圖（list-do-caseN / list-dont-caseN）。這裡的 Figma artboard 尚未產出。"
+            />
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>資訊展示單元</strong>：ListItem 是 USPACE 中最常用的資訊展示單元，用於設定頁、選單、歷史紀錄等。</li>

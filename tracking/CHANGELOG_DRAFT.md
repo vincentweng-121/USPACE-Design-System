@@ -759,3 +759,41 @@ TS palette 僅新增 `transparentWhite5`、`neonLime700`，無移除、無值變
 - 新增：所有樣式的 Secondary variants（getter，共 12 個）
 - 舊引用需全專案 find & replace
 來源：/Users/macpro-121/Desktop/typography.json
+
+### 2026-08-04 | 文件站 | Button 頁的結構複用到其餘元件頁（v0.7.0）
+狀態：PUBLISHED
+
+僅影響文件站，`styles/` 與 token 未變動。
+
+#### 共用元件（website/src/components/spec.tsx）
+| 元件 | 用途 |
+|------|------|
+| `Playground` | 左側即時預覽 + 右側 radio 控制卡，資料驅動 |
+| `dimensionsOf` | 把 token JSON 的 `dimensions` 直接轉成控制卡的維度 |
+| `NumberedCaptions` | 圖片下方對應標號的說明列表 |
+| `PendingImage` | 與 `AnatomyImage` 同尺寸的佔位框，直接寫出還缺哪兩個檔案 |
+
+Button 頁原本各自實作的 `Playground` / `ControlGroup` / `NumberedCaptions`
+已移除，改用共用版本，行為不變。
+
+#### 元件頁結構統一
+9 個元件頁補上 Button 頁的區塊順序：
+Variants → Configurations → Anatomy → Color → States → Measurements →
+Touch areas → Usage →（各頁專屬區塊）
+
+- **Configurations 改為互動式**：8 頁的靜態 `SpecimenRow` 換成 `Playground`，
+  維度取自各元件的 token JSON。List 頁的 Configurations 是手工組的複合示意，
+  沒有可參數化的預覽元件，維持原樣。
+- **Variants / Touch areas**：新區塊，內容待補
+- **Measurements**：補上量測圖的位置，說明表格不動
+- **Usage**：補上 Do/Don't 圖例的待補標記
+
+#### 待補清單
+每頁三張說明圖，9 頁共 27 組（54 個檔案）：
+`<slug>-variant`、`<slug>-measurements`、`<slug>-toucharea`，
+各需 `-light.png` 與 `-dark.png`。Figma artboard 480×350，scale 2 匯出成 960×700。
+
+另有 9 頁的 Do/Don't 圖例待補（`<slug>-do-caseN` / `<slug>-dont-caseN`）。
+
+Anatomy 維持各頁既有的程式繪製圖——那是可用的內容，不是缺口，
+等對應的 Figma artboard 產出後再換成圖片。
