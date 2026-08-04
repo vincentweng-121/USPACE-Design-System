@@ -1,0 +1,521 @@
+{
+  "$comment": "元件設計進度。狀態由 phases 的 done 推導，不另外存一份字串，避免兩邊對不上。 某一步完成時把對應的 done 改成 true 即可。",
+  "$source": "元件設計進度甘特圖.csv，2026-08-04 匯入",
+  "weeks": [
+    "8/10",
+    "8/17",
+    "8/24",
+    "8/31",
+    "9/7",
+    "9/14",
+    "9/21",
+    "9/28",
+    "10/5\r"
+  ],
+  "items": [
+    {
+      "name": "首頁（home）",
+      "phases": {
+        "style": {
+          "due": null,
+          "done": true
+        },
+        "content": {
+          "due": "8/17",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "按鈕（button）",
+      "phases": {
+        "style": {
+          "due": null,
+          "done": true
+        },
+        "content": {
+          "due": "8/17",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "標籤（chips）",
+      "phases": {
+        "style": {
+          "due": "8/10",
+          "done": false
+        },
+        "content": {
+          "due": "8/24",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        0,
+        2
+      ]
+    },
+    {
+      "name": "動作區（action area）",
+      "phases": {
+        "style": {
+          "due": "8/10",
+          "done": false
+        },
+        "content": {
+          "due": "8/24",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        0,
+        2
+      ]
+    },
+    {
+      "name": "下拉選單（dropdown menu）",
+      "phases": {
+        "style": {
+          "due": "8/10",
+          "done": false
+        },
+        "content": {
+          "due": "8/24",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        0,
+        2
+      ]
+    },
+    {
+      "name": "圖標按鈕（icon button）",
+      "phases": {
+        "style": {
+          "due": "8/17",
+          "done": false
+        },
+        "content": {
+          "due": "8/31",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        1,
+        3
+      ]
+    },
+    {
+      "name": "列表（list）",
+      "phases": {
+        "style": {
+          "due": "8/17",
+          "done": false
+        },
+        "content": {
+          "due": "8/31",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        1,
+        3
+      ]
+    },
+    {
+      "name": "底部導航（tab Bar）",
+      "phases": {
+        "style": {
+          "due": "8/24",
+          "done": false
+        },
+        "content": {
+          "due": "9/7",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "模組（modal）",
+      "phases": {
+        "style": {
+          "due": "8/24",
+          "done": false
+        },
+        "content": {
+          "due": "9/7",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "進度條（progress indicator）",
+      "phases": {
+        "style": {
+          "due": "8/31",
+          "done": false
+        },
+        "content": {
+          "due": "9/14",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        3,
+        5
+      ]
+    },
+    {
+      "name": "多選框（checkbox）",
+      "phases": {
+        "style": {
+          "due": "8/31",
+          "done": false
+        },
+        "content": {
+          "due": "9/14",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        3,
+        5
+      ]
+    },
+    {
+      "name": "單選框（radiobox）",
+      "phases": {
+        "style": {
+          "due": "8/31",
+          "done": false
+        },
+        "content": {
+          "due": "9/14",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        3,
+        5
+      ]
+    },
+    {
+      "name": "開關（switch）",
+      "phases": {
+        "style": {
+          "due": "8/31",
+          "done": false
+        },
+        "content": {
+          "due": "9/14",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        3,
+        5
+      ]
+    },
+    {
+      "name": "文字輸入框（text field）",
+      "phases": {
+        "style": {
+          "due": "8/31",
+          "done": false
+        },
+        "content": {
+          "due": "9/14",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        3,
+        5
+      ]
+    },
+    {
+      "name": "文字輸入區（text area）",
+      "phases": {
+        "style": {
+          "due": "8/31",
+          "done": false
+        },
+        "content": {
+          "due": "9/14",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        3,
+        5
+      ]
+    },
+    {
+      "name": "頁首（header）",
+      "phases": {
+        "style": {
+          "due": "9/7",
+          "done": false
+        },
+        "content": {
+          "due": "9/21",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        4,
+        6
+      ]
+    },
+    {
+      "name": "頭像（avatar）",
+      "phases": {
+        "style": {
+          "due": "9/7",
+          "done": false
+        },
+        "content": {
+          "due": "9/21",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        4,
+        6
+      ]
+    },
+    {
+      "name": "卡片（card）",
+      "phases": {
+        "style": {
+          "due": "9/7",
+          "done": false
+        },
+        "content": {
+          "due": "9/21",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        4,
+        6
+      ]
+    },
+    {
+      "name": "縮圖（thumbnail）",
+      "phases": {
+        "style": {
+          "due": "9/14",
+          "done": false
+        },
+        "content": {
+          "due": "9/28",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        5,
+        7
+      ]
+    },
+    {
+      "name": "浮動訊息（toast）",
+      "phases": {
+        "style": {
+          "due": "9/14",
+          "done": false
+        },
+        "content": {
+          "due": "9/28",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        5,
+        7
+      ]
+    },
+    {
+      "name": "骨架（skeleton）",
+      "phases": {
+        "style": {
+          "due": "9/14",
+          "done": false
+        },
+        "content": {
+          "due": "9/28",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        5,
+        7
+      ]
+    },
+    {
+      "name": "目錄（category）",
+      "phases": {
+        "style": {
+          "due": "9/21",
+          "done": false
+        },
+        "content": {
+          "due": "10/5",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        6,
+        8
+      ]
+    },
+    {
+      "name": "頁面控制（pagination）",
+      "phases": {
+        "style": {
+          "due": "9/21",
+          "done": false
+        },
+        "content": {
+          "due": "10/5",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        6,
+        8
+      ]
+    },
+    {
+      "name": "選單（menu）",
+      "phases": {
+        "style": {
+          "due": "9/21",
+          "done": false
+        },
+        "content": {
+          "due": "10/5",
+          "done": false
+        },
+        "final": {
+          "due": null,
+          "done": false
+        }
+      },
+      "span": [
+        6,
+        8
+      ]
+    }
+  ]
+}

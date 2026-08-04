@@ -32,6 +32,7 @@ import TogglePage from './pages/components/TogglePage';
 // ── Help & Support（原 Resources）──
 import ChangelogPage from './pages/resources/ChangelogPage';
 import StatusPage from './pages/resources/StatusPage';
+import RoadmapPage from './pages/resources/RoadmapPage';
 
 import './styles/global.css';
 
@@ -82,6 +83,7 @@ export default function App() {
           <Route path="help" element={<Navigate to="/help/changelog" replace />} />
           <Route path="help/changelog" element={<ChangelogPage />} />
           <Route path="help/status" element={<StatusPage />} />
+          <Route path="help/roadmap" element={<RoadmapPage />} />
 
           {/* ── 舊路徑轉址，避免既有連結失效 ── */}
           <Route path="foundations" element={<Navigate to="/styles/color" replace />} />
