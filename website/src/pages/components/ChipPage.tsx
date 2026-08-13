@@ -15,10 +15,11 @@ import { typographyStyles } from '../../tokens/typography';
 import { chipSpec } from '../../tokens/componentSpecs';
 import { colorOf, cap } from '../../utils';
 
-type Level = 'accent' | 'primary' | 'secondary' | 'outline';
+type Style = 'filled' | 'outlined' | 'text';
+type Level = 'accent' | 'primary' | 'secondary';
 type Size = 'regular' | 'small';
 
-const levels = chipSpec.dimensions.level as Level[];
+const styles = chipSpec.dimensions.style as Style[];
 const layout = chipSpec.layout! as Record<string, number>;
 
 /** Regular 的文字使用 labelM；Small 沒有對應 token，見下方 smallType */
@@ -32,22 +33,30 @@ const labelType = typographyStyles
  */
 const smallType = { size: 10, lineHeight: 14, weight: 600 };
 
-/** 由 tokens/components/chip.json 查出該 level 的 token 名稱 */
-const variantOf = (level: Level) => chipSpec.variants.find((v) => v.level === level)!;
+/**
+ * 由 tokens/components/chip.json 查出該組合的 token 名稱。
+ * outlined 與 text 不吃 level，規格檔就不帶 level 欄位，這裡也不比對。
+ */
+const variantOf = (style: Style, level: Level) =>
+  chipSpec.variants.find(
+    (v) => v.style === style && (v.level === undefined || v.level === level),
+  )!;
 
 // ── 依 token 渲染的 Chip ──
 function ChipPreview({
   label,
-  level,
+  style,
+  level = 'secondary',
   size = 'regular',
   icon = false,
 }: {
   label: string;
-  level: Level;
+  style: Style;
+  level?: Level;
   size?: Size;
   icon?: boolean;
 }) {
-  const v = variantOf(level);
+  const v = variantOf(style, level);
   const isRegular = size === 'regular';
   const t = isRegular ? labelType : smallType;
 
@@ -96,11 +105,16 @@ function ChipPreview({
 }
 
 // ── Playground 的維度 ──
-// 與 Button 頁同一條規則：Configurations 只講尺寸與元素配置。
-// Level 不列入——Chip 的 level 差異就是顏色（accent 與 primary 在某一個主題下是螢光綠），
-// 顏色一律在 Color 區塊說明。預覽固定用中性的 secondary。
+// 與 Button 頁同一條規則：Configurations 只講形狀、尺寸與元素配置。
+// style 是形狀，三個值都解不出顏色，可以放；level 是顏色（accent 為螢光綠，
+// primary 在 dark 也是螢光綠），一律留給 Color 區塊，預覽固定用中性的 secondary。
 // icon 不是 token 維度（token 只管顏色），所以手寫。
 const playgroundDimensions: PlaygroundDimension[] = [
+  {
+    key: 'style',
+    label: 'Style',
+    options: styles.map((s) => ({ value: s, label: cap(s) })),
+  },
   {
     key: 'size',
     label: 'Size',
@@ -126,7 +140,7 @@ export default function ChipPage() {
     <div>
       <PageHero
         title="Chip"
-        lead="Chip 是純展示的標籤，用來標記狀態或分類，本身不可點擊。視覺權重由 level 決定，共 accent、primary、secondary、outline 四種；加上 regular 與 small 兩種 size，並可在文字左側加一個 icon。"
+        lead="Chip 是純展示的標籤，用來標記狀態或分類，本身不可點擊。形狀由 style 決定，共 filled、outlined、text 三種；filled 再由 level 決定底色，共 accent、primary、secondary 三級。加上 regular 與 small 兩種 size，並可在文字左側加一個 icon。"
         meta={
           <>
             <span>
@@ -148,15 +162,15 @@ export default function ChipPage() {
             <SectionTitle>Variants</SectionTitle>
             <PendingImage
               expects="chip-variant"
-              note="一張圖並排四個 level，圖上標號 1、2、3、4，對應下方說明。"
+              note="一張圖並排三種 style，filled 再展開三個 level，圖上標號對應下方說明。"
             />
 
             <NumberedCaptions
               items={[
-                { name: 'Accent', desc: '最高視覺權重。螢光綠底，用於需要一眼看到的標記。' },
-                { name: 'Primary', desc: '預設樣式。淺色底，適用於一般分類與狀態。' },
-                { name: 'Secondary', desc: '次要資訊。灰底，存在感低於 Primary。' },
-                { name: 'Outline', desc: '最低存在感。透明底加一圈中性色描邊，適合放在已經有底色的區塊上。' },
+                { name: 'Filled', desc: '實心底色，存在感最強。底色由 level 決定。' },
+                { name: 'Outlined', desc: '透明底加一圈中性色描邊。適合放在已經有底色的區塊上。' },
+                { name: 'Text', desc: '無底無框，只有文字。存在感最低，內距與 filled 相同。' },
+                { name: 'Level（僅 filled）', desc: 'Accent 螢光綠底最搶眼、Primary 淺色底為預設、Secondary 灰底用於輔助資訊。' },
               ]}
             />
           </section>
@@ -171,6 +185,7 @@ export default function ChipPage() {
               render={(v) => (
                 <ChipPreview
                   label="Label"
+                  style={v.style as Style}
                   level="secondary"
                   size={v.size as Size}
                   icon={v.icon === 'leading'}
@@ -203,22 +218,22 @@ export default function ChipPage() {
             <SectionTitle>Color</SectionTitle>
 
             <SpecTable
-              headers={['Level', '容器底色', '描邊', '文字與 icon']}
-              rows={levels.map((lv) => {
-                const v = variantOf(lv);
-                return [
-                  cap(lv),
-                  <Swatch key="bg" token={v.bg as string | null} />,
-                  <Swatch key="bd" token={v.border as string | null} />,
-                  <Swatch key="ct" token={v.content as string | null} />,
-                ];
-              })}
+              headers={['Style', 'Level', '容器底色', '描邊', '文字與 icon']}
+              rows={chipSpec.variants.map((v) => [
+                cap(String(v.style)),
+                v.level ? cap(String(v.level)) : '不吃 level',
+                <Swatch key="bg" token={v.bg as string | null} />,
+                <Swatch key="bd" token={v.border as string | null} />,
+                <Swatch key="ct" token={v.content as string | null} />,
+              ])}
               minWidth={560}
             />
             <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-              四個 level 的文字都是 <code>{String(variantOf('accent').content)}</code>，
-              差異在容器：前三個給底色，Outline 改為透明底加一圈{' '}
-              <code>{String(variantOf('outline').border)}</code> 描邊。
+              文字與 icon 一律是 <code>{String(variantOf('filled', 'accent').content)}</code>，
+              不隨 style 或 level 改變。顏色差異只在容器：filled 依 level 上底色，
+              outlined 改為透明底加一圈 <code>{String(variantOf('outlined', 'accent').border)}</code>{' '}
+              描邊，text 兩者都沒有。這也是 Configurations 可以直接切換 style 的原因——
+              三種形狀本身都不帶顏色。
             </p>
           </section>
 
@@ -306,9 +321,10 @@ export default function ChipPage() {
                 需要可互動的標籤時使用 <code>USpaceTab</code>（filter / input type）。
               </li>
               <li>
-                <strong>四個 level 對應不同視覺權重</strong>：Accent 用於需要突出的標記，
-                同一畫面不要出現多個；Primary 為預設；Secondary 用於輔助資訊；
-                Outline 用於已經有底色、再加底色會糊掉的區塊。
+                <strong>先選形狀，再選顏色</strong>：Filled 用於需要被看到的標記，
+                Outlined 用於已經有底色、再加底色會糊掉的區塊，Text 用於一整排標籤時
+                減少視覺噪音。選了 filled 才需要決定 level：Accent 最搶眼，
+                同一畫面不要出現多個；Primary 為預設；Secondary 用於輔助資訊。
               </li>
               <li>
                 <strong>Small 用於資訊密集處</strong>：列表、卡片這類一次出現多個標籤的地方用
@@ -328,7 +344,7 @@ export default function ChipPage() {
               <li>Chip 不可點擊，讀屏軟體只會讀到文字內容，不會被當成按鈕朗讀。</li>
               <li>icon 為裝飾性元素，語意由文字承載，缺少文字時讀屏軟體無法傳達這個標籤的意義。</li>
               <li>
-                Outline 是透明底，文字對比度直接受背後的底色影響。放在深淺不一的背景上時需自行確認可讀性。
+                Outlined 與 Text 都是透明底，文字對比度直接受背後的底色影響。放在深淺不一的背景上時需自行確認可讀性。
               </li>
               <li>
                 Small 的文字為 {smallType.size}px，低於一般建議的最小字級。只用於資訊密集處，
@@ -363,11 +379,16 @@ export default function ChipPage() {
             </div>
             <div style={{ marginTop: 24 }}>
               <CodeBlock
-                title="列表裡的小尺寸標籤"
+                title="描邊與純文字：不需要傳 level"
                 code={`USpaceChip(
   label: 'VIP',
-  level: USpaceChipLevel.outline,
+  style: USpaceChipStyle.outlined,
   size: USpaceChipSize.small,
+)
+
+USpaceChip(
+  label: '已結束',
+  style: USpaceChipStyle.text,
 )`}
               />
             </div>
@@ -380,7 +401,18 @@ export default function ChipPage() {
                 headers={['參數', '型別', '預設', '說明']}
                 rows={[
                   [<code key="a">label</code>, 'String', '必填', 'Chip 文字'],
-                  [<code key="b">level</code>, 'USpaceChipLevel', 'accent', '4 種視覺權重'],
+                  [
+                    <code key="b0">style</code>,
+                    'USpaceChipStyle',
+                    'filled',
+                    '容器形狀：filled / outlined / text',
+                  ],
+                  [
+                    <code key="b">level</code>,
+                    'USpaceChipLevel',
+                    'accent',
+                    '容器底色，只在 style 為 filled 時生效',
+                  ],
                   [
                     <code key="c">size</code>,
                     'USpaceChipSize',
@@ -409,9 +441,10 @@ export default function ChipPage() {
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
             <SpecTable
-              headers={['Level', 'Background', 'Border', 'Content', '備註']}
+              headers={['Style', 'Level', 'Background', 'Border', 'Content', '備註']}
               rows={chipSpec.variants.map((row) => [
-                cap(String(row.level)),
+                cap(String(row.style)),
+                row.level ? cap(String(row.level)) : '—',
                 row.bg ? <code>{String(row.bg)}</code> : <span>transparent</span>,
                 row.border ? <code>{String(row.border)}</code> : <span>—</span>,
                 row.content ? <code>{String(row.content)}</code> : <span>—</span>,
@@ -425,9 +458,10 @@ export default function ChipPage() {
             <SectionTitle>Notes</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
-                <strong>Outline</strong>：透明底，邊框為 <code>contentPrimary</code>，
-                文字與其他 level 同為 <code>textPrimary</code>。2026-08-13 由品牌漸層改為中性色，
-                Figma 尚無對應設計稿，來源為使用者確認。
+                <strong>style 與 level 是兩個維度</strong>：level 只在 <code>filled</code> 時生效，
+                <code>outlined</code> 與 <code>text</code> 傳任何 level 都不影響外觀，
+                widget test 有對應斷言。2026-08-13 由使用者確認重整，原本 outline 混在 level 裡，
+                且用的是品牌漸層；現在 outlined 改為中性色，並補上 text。Figma 尚無對應設計稿。
               </li>
               <li>
                 <strong>Small</strong>：字體 {smallType.size}px / {smallType.lineHeight}px Semibold，

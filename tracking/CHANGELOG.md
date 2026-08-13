@@ -13,20 +13,31 @@
 
 ## v0.8.0 | 2026-08-13
 
-### chip.dart | Outline 由品牌漸層改為中性色
+### chip.dart | 形狀與顏色拆成兩個維度，新增 text style
 狀態：PUBLISHED
 ⚠️ BREAKING CHANGE
 
-- `USpaceChipLevel.outline` 的外觀改變：原本是 neonLime200 邊框加 limeLinear
-  漸層文字，現在是透明底 + `contentPrimary` 邊框 + `textPrimary` 文字。
-  API 沒有變動，但畫面上已經在用 outline chip 的地方外觀會跟著變。
-- 四個 level 的文字色與 icon 色因此完全一致，`_iconColor` 不再分岔，
-  chip.dart 不再引用 `USpacePalette`，ShaderMask 一併移除。
-- `chip.json` 的 variants 新增 `border` 欄位，四個 level 都填。
-  `component_token_test.dart` 隨之加強：原本只斷言「outline 有邊框」，
-  現在逐一比對邊框色票與文字色票，改錯 token 會被擋下。
-- 文件站的 Color 表與 Baseline tokens 表新增描邊欄位，Outline 的說明、
-  無障礙提醒與 Notes 同步改寫。
+- **`USpaceChipLevel.outline` 已移除**。原本 level 的四個值裡，outline 講的是
+  形狀，其餘三個講的是顏色，兩者並非同一種東西。現在拆成兩個獨立維度：
+  新的 `USpaceChipStyle`（`filled` / `outlined` / `text`）決定形狀，
+  `USpaceChipLevel`（`accent` / `primary` / `secondary`）只在 filled 時決定底色。
+  用 `USpaceChipLevel.outline` 的程式碼會編譯失敗，改為
+  `style: USpaceChipStyle.outlined` 即可，不需要再傳 level。
+- **新增 `text` style**：無底無框，只有文字。內距與 filled 相同，
+  三種形狀可以直接互換而不影響版面。
+- **`outlined` 改為中性色**：原本是 neonLime200 邊框加 limeLinear 漸層文字，
+  現在是透明底 + `contentPrimary` 邊框 + `textPrimary` 文字。文字色與 icon 色
+  因此完全統一，`_iconColor` 不再分岔，chip.dart 不再引用 `USpacePalette`，
+  ShaderMask 一併移除。
+- `chip.json` 改為 style × level 的 5 筆組合並新增 `border` 欄位。
+  outlined 與 text 刻意不帶 level 欄位，測試與文件站都靠這個缺席判斷
+  「這個組合與 level 無關」。
+- `component_token_test.dart` 加強兩處：原本只斷言「outline 有邊框」，現在逐一
+  比對每個組合的底色、邊框色與文字色；另外新增兩個測試，確認 outlined 與 text
+  傳任何 level 都不改變外觀。
+- 文件站的 Configurations 現在可以直接切換三種形狀——這是拆維度真正的收穫，
+  形狀本身不帶顏色，符合「Configurations 只講配置」的規則。Color 表、
+  Baseline tokens 表、Variants 說明、使用建議與 API 表同步改寫。
 - 來源：2026-08-13 使用者確認。Figma 尚無對應設計稿，已記在 `chip.json`
   的 `$deviations`。
 - `limeLinear` 漸層 token 保留在 `gradients.json` 與 colors extension，

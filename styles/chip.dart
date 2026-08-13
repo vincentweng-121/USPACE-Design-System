@@ -4,19 +4,31 @@ import 'typography_extension.dart';
 import 'radius_extension.dart';
 import 'spacing_extension.dart';
 
+// ── Chip Style ─────────────────────────────────────────────
+/// 容器的形狀。與 level 是兩個獨立的維度：style 決定有沒有底、有沒有框，
+/// level 只在 filled 時決定底色。
+enum USpaceChipStyle {
+  /// Filled: 依 level 上底色，無描邊
+  filled,
+
+  /// Outlined: 透明底 + contentPrimary 描邊，不吃 level
+  outlined,
+
+  /// Text: 無底無框，只有文字，不吃 level。內距與 filled 相同
+  text,
+}
+
 // ── Chip Level ─────────────────────────────────────────────
+/// 只在 style 為 filled 時生效，決定容器底色。
 enum USpaceChipLevel {
-  /// Accent: chipBgAccent bg, textPrimary text
+  /// Accent: chipBgAccent bg
   accent,
 
-  /// Primary: chipBgPrimary bg, textPrimary text
+  /// Primary: chipBgPrimary bg
   primary,
 
-  /// Secondary: chipBgSecondary bg, textPrimary text
+  /// Secondary: chipBgSecondary bg
   secondary,
-
-  /// Outline: transparent bg, contentPrimary border, textPrimary text
-  outline,
 }
 
 // ── Chip Size ──────────────────────────────────────────────
@@ -35,13 +47,16 @@ enum USpaceChipSize {
 ///
 /// 來源：Figma node 1327:19329
 ///
-/// 支援 4 levels × 2 sizes，可選 leading icon。
+/// 支援 3 styles × 3 levels × 2 sizes，可選 leading icon。
 ///
 /// Token mapping:
-///   Accent:    bg = chipBgAccent,    text = textPrimary
-///   Primary:   bg = chipBgPrimary,   text = textPrimary
-///   Secondary: bg = chipBgSecondary, text = textPrimary
-///   Outline:   border = contentPrimary,  text = textPrimary
+///   filled   + accent    → bg = chipBgAccent
+///   filled   + primary   → bg = chipBgPrimary
+///   filled   + secondary → bg = chipBgSecondary
+///   outlined             → 透明底 + border = contentPrimary
+///   text                 → 無底無框
+///
+/// 文字一律 textPrimary，icon 一律 contentPrimary，不隨 style 或 level 改變。
 ///
 /// Layout:
 ///   Regular: rounded=100, labelM (14px/20px)
@@ -54,12 +69,14 @@ enum USpaceChipSize {
 /// ⚠️ Chip 為純展示標籤，不可點擊、不接受 onTap。
 /// 若需要可點擊的 chip 行為，請使用 USpaceTab (filter / input type)。
 ///
-/// Outline 為透明底加中性色邊框，四個 level 的文字色相同。
-/// 2026-08-13 經使用者確認由品牌漸層改為中性色，Figma 尚無對應設計稿。
+/// 2026-08-13 經使用者確認重整：原本 level 裡的 outline 其實是形狀而非顏色，
+/// 已拆成獨立的 style 維度並補上 text。outlined 由品牌漸層改為中性色。
+/// Figma 尚無對應設計稿。
 class USpaceChip extends StatelessWidget {
   const USpaceChip({
     super.key,
     required this.label,
+    this.style = USpaceChipStyle.filled,
     this.level = USpaceChipLevel.accent,
     this.size = USpaceChipSize.regular,
     this.leadingIcon,
@@ -68,7 +85,10 @@ class USpaceChip extends StatelessWidget {
   /// 顯示文字
   final String label;
 
-  /// Chip 層級
+  /// 容器形狀
+  final USpaceChipStyle style;
+
+  /// 容器底色，只在 style 為 filled 時生效
   final USpaceChipLevel level;
 
   /// Chip 尺寸
@@ -86,9 +106,9 @@ class USpaceChip extends StatelessWidget {
     return Container(
       padding: _padding,
       decoration: BoxDecoration(
-        color: level != USpaceChipLevel.outline ? _bgColor(colors) : null,
+        color: style == USpaceChipStyle.filled ? _bgColor(colors) : null,
         borderRadius: BorderRadius.circular(USpaceRadius.full),
-        border: level == USpaceChipLevel.outline
+        border: style == USpaceChipStyle.outlined
             ? Border.all(color: colors.contentPrimary)
             : null,
       ),
@@ -134,8 +154,6 @@ class USpaceChip extends StatelessWidget {
         return colors.chipBgPrimary;
       case USpaceChipLevel.secondary:
         return colors.chipBgSecondary;
-      case USpaceChipLevel.outline:
-        return Colors.transparent;
     }
   }
 

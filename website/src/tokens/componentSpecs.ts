@@ -197,11 +197,15 @@ export const chipSpec: ComponentSpec = {
   "source": "styles/chip.dart",
   "figmaNode": "1327:19329",
   "dimensions": {
+    "style": [
+      "filled",
+      "outlined",
+      "text"
+    ],
     "level": [
       "accent",
       "primary",
-      "secondary",
-      "outline"
+      "secondary"
     ],
     "size": [
       "regular",
@@ -210,29 +214,39 @@ export const chipSpec: ComponentSpec = {
   },
   "variants": [
     {
+      "style": "filled",
       "level": "accent",
       "bg": "chipBgAccent",
-      "content": "textPrimary",
-      "border": null
+      "border": null,
+      "content": "textPrimary"
     },
     {
+      "style": "filled",
       "level": "primary",
       "bg": "chipBgPrimary",
-      "content": "textPrimary",
-      "border": null
+      "border": null,
+      "content": "textPrimary"
     },
     {
+      "style": "filled",
       "level": "secondary",
       "bg": "chipBgSecondary",
-      "content": "textPrimary",
-      "border": null
+      "border": null,
+      "content": "textPrimary"
     },
     {
-      "level": "outline",
+      "style": "outlined",
       "bg": null,
-      "content": "textPrimary",
       "border": "contentPrimary",
-      "note": "透明底，邊框與文字皆為中性色；四個 level 的文字色相同"
+      "content": "textPrimary",
+      "note": "透明底加中性色描邊，不吃 level"
+    },
+    {
+      "style": "text",
+      "bg": null,
+      "border": null,
+      "content": "textPrimary",
+      "note": "無底無框，內距與 filled 相同，不吃 level"
     }
   ],
   "layout": {
