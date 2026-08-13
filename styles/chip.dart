@@ -11,7 +11,7 @@ enum USpaceChipStyle {
   /// Filled: 依 level 上底色，無描邊
   filled,
 
-  /// Outlined: 透明底 + contentPrimary 描邊，不吃 level
+  /// Outlined: 透明底 + contentSecondary 描邊，不吃 level
   outlined,
 
   /// Text: 無底無框，只有文字，不吃 level。內距與 filled 相同
@@ -53,7 +53,7 @@ enum USpaceChipSize {
 ///   filled   + accent    → bg = chipBgAccent
 ///   filled   + primary   → bg = chipBgPrimary
 ///   filled   + secondary → bg = chipBgSecondary
-///   outlined             → 透明底 + border = contentPrimary
+///   outlined             → 透明底 + border = contentSecondary
 ///   text                 → 無底無框
 ///
 /// 文字一律 textPrimary，icon 一律 contentPrimary，不隨 style 或 level 改變。
@@ -109,7 +109,7 @@ class USpaceChip extends StatelessWidget {
         color: style == USpaceChipStyle.filled ? _bgColor(colors) : null,
         borderRadius: BorderRadius.circular(USpaceRadius.full),
         border: style == USpaceChipStyle.outlined
-            ? Border.all(color: colors.contentPrimary)
+            ? Border.all(color: colors.contentSecondary)
             : null,
       ),
       child: Row(

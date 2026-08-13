@@ -353,29 +353,39 @@ function ControlGroup({
   label,
   value,
   options,
+  isDisabled,
   onChange,
 }: {
   name: string;
   label: string;
   value: string;
   options: { value: string; label: string }[];
+  isDisabled: (optionValue: string) => boolean;
   onChange: (v: string) => void;
 }) {
   return (
     <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
       <legend className="control-group-label">{label}</legend>
-      {options.map((opt) => (
-        <label key={opt.value} className="control-option">
-          <input
-            type="radio"
-            name={name}
-            value={opt.value}
-            checked={value === opt.value}
-            onChange={() => onChange(opt.value)}
-          />
-          {opt.label}
-        </label>
-      ))}
+      {options.map((opt) => {
+        const disabled = isDisabled(opt.value);
+        return (
+          <label
+            key={opt.value}
+            className="control-option"
+            style={disabled ? { opacity: 0.4, cursor: 'not-allowed' } : undefined}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={opt.value}
+              checked={value === opt.value}
+              disabled={disabled}
+              onChange={() => onChange(opt.value)}
+            />
+            {opt.label}
+          </label>
+        );
+      })}
     </fieldset>
   );
 }
@@ -387,6 +397,14 @@ export type PlaygroundDimension = {
   /** 控制卡上顯示的群組名稱 */
   label: string;
   options: { value: string; label: string }[];
+  /**
+   * 依其他維度的當前值決定這個選項能不能選。
+   *
+   * 用於元件本身不存在的組合——例如 Chip 的 small 沒有 leading icon。
+   * 停用而不是整個藏起來：藏起來讀者會以為那個選項不存在，
+   * 停用才看得出「有這個選項，但這個尺寸下不適用」。
+   */
+  disabled?: (values: Record<string, string>) => boolean;
 };
 
 /**
@@ -426,6 +444,29 @@ export function Playground({
     Object.fromEntries(dimensions.map((d) => [d.key, d.options[0].value])),
   );
 
+  const isDisabled = (d: PlaygroundDimension, optionValue: string) =>
+    d.disabled?.({ ...values, [d.key]: optionValue }) ?? false;
+
+  /**
+   * 切換後可能讓另一個維度的當前值變成不合法（例如選了 small，
+   * 而 icon 停在 leading）。這裡把落在停用選項上的維度退回第一個還能選的值，
+   * 否則預覽會顯示一個元件根本做不出來的組合。
+   */
+  const applyChange = (key: string, value: string) => {
+    setValues((prev) => {
+      const next = { ...prev, [key]: value };
+      for (const d of dimensions) {
+        if (d.disabled?.({ ...next, [d.key]: next[d.key] })) {
+          const fallback = d.options.find(
+            (o) => !d.disabled!({ ...next, [d.key]: o.value }),
+          );
+          if (fallback) next[d.key] = fallback.value;
+        }
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="playground">
       <div className="playground-preview">
@@ -440,7 +481,8 @@ export function Playground({
             label={d.label}
             value={values[d.key]}
             options={d.options}
-            onChange={(v) => setValues((prev) => ({ ...prev, [d.key]: v }))}
+            isDisabled={(optionValue) => isDisabled(d, optionValue)}
+            onChange={(v) => applyChange(d.key, v)}
           />
         ))}
       </div>

@@ -26,9 +26,19 @@
 - **新增 `text` style**：無底無框，只有文字。內距與 filled 相同，
   三種形狀可以直接互換而不影響版面。
 - **`outlined` 改為中性色**：原本是 neonLime200 邊框加 limeLinear 漸層文字，
-  現在是透明底 + `contentPrimary` 邊框 + `textPrimary` 文字。文字色與 icon 色
+  現在是透明底 + `contentSecondary` 邊框 + `textPrimary` 文字。文字色與 icon 色
   因此完全統一，`_iconColor` 不再分岔，chip.dart 不再引用 `USpacePalette`，
   ShaderMask 一併移除。
+  描邊色先前依口述暫定為 `contentPrimary`，後續比對 Figma node 3808:9321
+  （chip-variant-light）確認實際為 `Content/Secondary` #777777，已照 Figma 修正。
+- **Configurations 的 Leading 選項在 Small 下停用**：Figma 只畫了 regular 的
+  icon 版本。`Playground` 新增 `disabled` 判斷，並在切換後把落在停用選項上的
+  維度退回可用值，避免預覽出現元件做不出來的組合。停用而非隱藏，讀者才看得出
+  「有這個選項，只是這個尺寸不適用」。widget 目前仍會渲染 small + icon，
+  尚未在程式碼層擋下。
+- 比對 Figma node 3808:9321 確認 regular 有 icon 時的間距（左 8 / 右 12 /
+  間距 2 / icon 20 / 高 22）與現有實作完全相符，未做調整。該畫板是 2 倍放大的
+  說明圖，換算後才對得上。
 - `chip.json` 改為 style × level 的 5 筆組合並新增 `border` 欄位。
   outlined 與 text 刻意不帶 level 欄位，測試與文件站都靠這個缺席判斷
   「這個組合與 level 無關」。

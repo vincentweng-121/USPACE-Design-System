@@ -237,7 +237,7 @@ export const chipSpec: ComponentSpec = {
     {
       "style": "outlined",
       "bg": null,
-      "border": "contentPrimary",
+      "border": "contentSecondary",
       "content": "textPrimary",
       "note": "透明底加中性色描邊，不吃 level"
     },

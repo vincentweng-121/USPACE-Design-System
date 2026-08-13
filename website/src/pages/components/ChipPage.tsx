@@ -126,10 +126,13 @@ const playgroundDimensions: PlaygroundDimension[] = [
   {
     key: 'icon',
     label: 'Icon option',
+    // small 沒有 leading icon，Figma 只畫了 regular 的 icon 版本。
+    // 停用而不是隱藏，讀者才看得出這個選項存在、只是這個尺寸下不適用。
     options: [
       { value: 'none', label: 'None' },
-      { value: 'leading', label: 'Leading' },
+      { value: 'leading', label: 'Leading（Small 不適用）' },
     ],
+    disabled: (v) => v.icon === 'leading' && v.size === 'small',
   },
 ];
 
@@ -458,10 +461,16 @@ USpaceChip(
             <SectionTitle>Notes</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
+                <strong>small 沒有 leading icon</strong>：Figma 的元件只畫了 regular 的 icon 版本，
+                文件站的 Configurations 會把這個組合停用。widget 目前仍會渲染 small + icon，
+                尚未在程式碼層擋下。
+              </li>
+              <li>
                 <strong>style 與 level 是兩個維度</strong>：level 只在 <code>filled</code> 時生效，
                 <code>outlined</code> 與 <code>text</code> 傳任何 level 都不影響外觀，
                 widget test 有對應斷言。2026-08-13 由使用者確認重整，原本 outline 混在 level 裡，
-                且用的是品牌漸層；現在 outlined 改為中性色，並補上 text。Figma 尚無對應設計稿。
+                且用的是品牌漸層；現在 outlined 改為中性色，並補上 text。outlined 的描邊色
+                已比對 Figma node 3808:9321 確認為 <code>contentSecondary</code>。
               </li>
               <li>
                 <strong>Small</strong>：字體 {smallType.size}px / {smallType.lineHeight}px Semibold，
