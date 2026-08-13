@@ -202,6 +202,10 @@ export const chipSpec: ComponentSpec = {
       "primary",
       "secondary",
       "outline"
+    ],
+    "size": [
+      "regular",
+      "small"
     ]
   },
   "variants": [
@@ -226,7 +230,18 @@ export const chipSpec: ComponentSpec = {
       "content": null,
       "note": "透明底 + neonLime200 邊框 + 漸層文字，無對應 semantic token"
     }
-  ]
+  ],
+  "layout": {
+    "iconSize": 20,
+    "gap": 2,
+    "paddingY": 1,
+    "regularPaddingX": 12,
+    "regularPaddingLeftWithIcon": 8,
+    "regularPaddingRightWithIcon": 12,
+    "smallPaddingX": 8,
+    "smallPaddingLeftWithIcon": 6,
+    "smallPaddingRightWithIcon": 8
+  }
 };
 
 export const tabSpec: ComponentSpec = {

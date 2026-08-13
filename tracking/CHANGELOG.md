@@ -11,6 +11,28 @@
 
 ---
 
+## v0.7.6 | 2026-08-13
+
+### 文件站 | Chip 頁改用 Button 頁的呈現邏輯，Accessibility 納入必要區塊
+狀態：PUBLISHED
+
+- Chip 頁全面對齊 Button 頁：Hero 補上來源與 Figma node、Variants 補四個 level 的
+  逐項說明、Anatomy 補部件表、Color 改用 Swatch 表並改由 `chip.json` 產生、
+  States 改為與 Button 同格式的表、Measurements 改用 `SpecTable` 且數值改讀
+  `chip.json` 的 layout、Develop 分頁補上 Examples 與 API，Baseline tokens 由手抄
+  改為從 variants 產生。此前 Develop 分頁的 token 表與 Measurements 的數值都是手抄，
+  與 `chip.json`、`chip.dart` 各自為政，已是第三份副本。
+- Configurations 的規則不變且已由 `check:pages` 把關：只呈現 size 與元素配置，
+  level 因為差異就是顏色（accent 為螢光綠、outline 為品牌漸層）而不列入，
+  預覽固定用中性的 secondary。
+- `tokens/components/chip.json` 新增 `layout` 與 `size` 維度，數值照抄
+  `styles/chip.dart` 的 `_padding`，讓文件站不再手抄尺寸。
+- 元件頁的必要區塊由八個改為九個，新增 Accessibility。其餘八頁先以 `Pending`
+  佔位，`check:pages` 同步更新。
+- 修正 Outline 漸層的文件錯誤：`chip.dart` 註解與文件站原本寫
+  neonLime200 → neonLime800，實作與 `gradients.json` 的 `limeLinear` 都是
+  neonLime200 → neonLime700。
+
 ## v0.7.5 | 2026-08-04
 
 ### 文件站 | 移除 Tokens & specs，Changelog 與 Status 改讀原始檔

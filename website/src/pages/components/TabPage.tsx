@@ -248,6 +248,16 @@ export default function TabPage() {
               </ul>
             </div>
           </section>
+
+          {/* ── Accessibility ── */}
+          <section className="section">
+            <SectionTitle>Accessibility</SectionTitle>
+            <Pending
+              what="Accessibility"
+              why="無障礙說明尚未撰寫。需先確認觸控目標尺寸、讀屏軟體的朗讀內容與對比度是否達標，避免寫出未經驗證的保證。"
+            />
+          </section>
+
         </div>
       )}
 

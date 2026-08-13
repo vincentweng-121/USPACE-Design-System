@@ -1,110 +1,166 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
+import CodeBlock from '../../components/CodeBlock';
+import SpecTable from '../../components/SpecTable';
+import {
+  NumberedCaptions,
+  Playground,
+  PendingImage,
+  Swatch,
+  type PlaygroundDimension,
+} from '../../components/spec';
+import { typographyStyles } from '../../tokens/typography';
 import { chipSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
-import { semantic, palette, gradients } from '../../tokens/colors';
+import { palette, gradients } from '../../tokens/colors';
+import { colorOf, cap } from '../../utils';
 
-type ChipLevel = 'Accent' | 'Primary' | 'Secondary' | 'Outline';
-type ChipSize = 'Regular' | 'Small';
+type Level = 'accent' | 'primary' | 'secondary' | 'outline';
+type Size = 'regular' | 'small';
 
+const levels = chipSpec.dimensions.level as Level[];
+const layout = chipSpec.layout! as Record<string, number>;
 
-function StarIcon({ color }: { color: string }) {
+/** Regular 的文字使用 labelM；Small 沒有對應 token，見下方 smallType */
+const labelType = typographyStyles
+  .flatMap((f) => f.styles.map((s) => ({ ...s, family: f.family })))
+  .find((s) => s.name === 'labelM')!;
+
+/**
+ * Small 的 10px/14px Semibold 在 TypographyExtension 裡沒有對應樣式，
+ * chip.dart 是 inline 定義的。這裡照抄同一組數值，並在 Measurements 標明無 token。
+ */
+const smallType = { size: 10, lineHeight: 14, weight: 600 };
+
+/** 由 tokens/components/chip.json 查出該 level 的 token 名稱 */
+const variantOf = (level: Level) => chipSpec.variants.find((v) => v.level === level)!;
+
+// ── icon 佔位框 ──
+/**
+ * 虛線方框，代表「這裡放一個 icon」。與 Button 頁同一個理由：
+ * 文件站不指定具體圖示，否則讀者會以為那是規範的一部分。
+ */
+function IconPlaceholder({ color, size }: { color: string; size: number }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <path d="M10 2l2.35 4.76 5.25.77-3.8 3.7.9 5.24L10 13.77l-4.7 2.7.9-5.24-3.8-3.7 5.25-.77L10 2z"
-        stroke={color} strokeWidth="1.5" strokeLinejoin="round" fill="none"/>
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden>
+      <rect
+        x="1"
+        y="1"
+        width="18"
+        height="18"
+        rx="1.33"
+        stroke={color}
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        strokeDasharray="4 4"
+      />
     </svg>
   );
 }
 
-function getChipStyle(level: ChipLevel, size: ChipSize, hasIcon: boolean): React.CSSProperties {
-  const isRegular = size === 'Regular';
-  const base: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    borderRadius: 100,
-    fontFamily: '"PingFang TC", sans-serif',
-    whiteSpace: 'nowrap',
-    cursor: 'default',
-    transition: 'all 0.15s',
-    fontSize: isRegular ? 14 : 10,
-    lineHeight: isRegular ? '20px' : '14px',
-    fontWeight: isRegular ? 400 : 600,
-    gap: hasIcon ? 2 : 0,
-  };
-
-  // Padding
-  if (isRegular) {
-    base.paddingTop = 1;
-    base.paddingBottom = 1;
-    base.paddingLeft = hasIcon ? 8 : 12;
-    base.paddingRight = hasIcon ? 12 : 12;
-  } else {
-    base.paddingTop = 1;
-    base.paddingBottom = 1;
-    base.paddingLeft = hasIcon ? 6 : 8;
-    base.paddingRight = hasIcon ? 8 : 8;
-  }
-
-  // token 對應來源：styles/chip.dart 的 _bgColor / _iconColor
-  switch (level) {
-    case 'Accent':
-      return { ...base, background: semantic.chipBgAccent, color: 'var(--text-primary)' };
-    case 'Primary':
-      return { ...base, background: semantic.chipBgPrimary, color: 'var(--text-primary)', border: '1px solid var(--border-divider)' };
-    case 'Secondary':
-      return { ...base, background: semantic.chipBgSecondary, color: 'var(--text-primary)' };
-    case 'Outline':
-      // 品牌漸層色，無對應 semantic token（見 chip.dart 註解）
-      return { ...base, background: 'transparent', border: `1px solid ${palette.neonLime200}`, color: 'transparent' };
-  }
-}
-
-function GradientText({ children, size }: { children: string; size: ChipSize }) {
+/** Outline 的文字是品牌漸層，無對應 semantic token（見 chip.dart 的 ShaderMask） */
+function GradientText({ children, size }: { children: string; size: Size }) {
+  const t = size === 'regular' ? labelType : smallType;
   return (
-    <span style={{
-      background: gradients.limeLinear,
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      fontSize: size === 'Regular' ? 14 : 10,
-      lineHeight: size === 'Regular' ? '20px' : '14px',
-      fontWeight: size === 'Regular' ? 400 : 600,
-    }}>
+    <span
+      style={{
+        background: gradients.limeLinear,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        fontSize: t.size,
+        lineHeight: `${t.lineHeight}px`,
+        fontWeight: t.weight,
+      }}
+    >
       {children}
     </span>
   );
 }
 
-/** 依 token 渲染的 Chip。無互動，供規格展示用。 */
+// ── 依 token 渲染的 Chip ──
 function ChipPreview({
   label,
   level,
-  size = 'Regular',
+  size = 'regular',
   icon = false,
 }: {
   label: string;
-  level: ChipLevel;
-  size?: ChipSize;
+  level: Level;
+  size?: Size;
   icon?: boolean;
 }) {
-  const style = getChipStyle(level, size, icon);
-  const iconColor = level === 'Outline' ? palette.neonLime200 : 'var(--text-primary)';
+  const v = variantOf(level);
+  const isOutline = level === 'outline';
+  const isRegular = size === 'regular';
+  const t = isRegular ? labelType : smallType;
+
+  // 有無 icon 的左右內距不同，數值取自 chip.json 的 layout
+  const padLeft = icon
+    ? isRegular
+      ? layout.regularPaddingLeftWithIcon
+      : layout.smallPaddingLeftWithIcon
+    : isRegular
+      ? layout.regularPaddingX
+      : layout.smallPaddingX;
+  const padRight = icon
+    ? isRegular
+      ? layout.regularPaddingRightWithIcon
+      : layout.smallPaddingRightWithIcon
+    : isRegular
+      ? layout.regularPaddingX
+      : layout.smallPaddingX;
+
+  const contentColor = isOutline
+    ? palette.neonLime200
+    : (colorOf(v.content as string) ?? 'var(--text-primary)');
+
   return (
-    <div style={style}>
-      {icon && <StarIcon color={iconColor} />}
-      {level === 'Outline' ? <GradientText size={size}>{label}</GradientText> : label}
+    <div
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: icon ? layout.gap : 0,
+        padding: `${layout.paddingY}px ${padRight}px ${layout.paddingY}px ${padLeft}px`,
+        borderRadius: 100,
+        background: isOutline ? 'transparent' : (colorOf(v.bg as string) ?? 'transparent'),
+        border: isOutline ? `1px solid ${palette.neonLime200}` : '1px solid transparent',
+        color: contentColor,
+        fontSize: t.size,
+        lineHeight: `${t.lineHeight}px`,
+        fontWeight: t.weight,
+        fontFamily: '"PingFang TC", sans-serif',
+        whiteSpace: 'nowrap',
+        cursor: 'default',
+      }}
+    >
+      {icon && <IconPlaceholder color={contentColor} size={layout.iconSize} />}
+      {isOutline ? <GradientText size={size}>{label}</GradientText> : label}
     </div>
   );
 }
 
-
 // ── Playground 的維度 ──
-// Level 不在這裡：四個 level 的差異就是顏色（Accent 是螢光綠、Outline 是漸層），
-// Configurations 只講配置，顏色一律在 Color 區塊說明。預覽固定用中性的 Secondary。
+// 與 Button 頁同一條規則：Configurations 只講尺寸與元素配置。
+// Level 不列入——Chip 四個 level 的差異就是顏色（accent 是螢光綠、outline 是品牌漸層），
+// 顏色一律在 Color 區塊說明。預覽固定用中性的 secondary。
+// icon 不是 token 維度（token 只管顏色），所以手寫。
 const playgroundDimensions: PlaygroundDimension[] = [
-  { key: 'size', label: 'Size', options: [{ value: 'Regular', label: 'Regular' }, { value: 'Small', label: 'Small' }] },
-  { key: 'icon', label: 'Icon option', options: [{ value: 'none', label: 'None' }, { value: 'leading', label: 'Leading' }] },
+  {
+    key: 'size',
+    label: 'Size',
+    options: [
+      { value: 'regular', label: 'Regular' },
+      { value: 'small', label: 'Small' },
+    ],
+  },
+  {
+    key: 'icon',
+    label: 'Icon option',
+    options: [
+      { value: 'none', label: 'None' },
+      { value: 'leading', label: 'Leading' },
+    ],
+  },
 ];
 
 export default function ChipPage() {
@@ -114,161 +170,319 @@ export default function ChipPage() {
     <div>
       <PageHero
         title="Chip"
-        lead="展示標籤元件，支援 4 種 Level（Accent / Primary / Secondary / Outline）與 2 種 Size（Regular / Small），適用於狀態標示與分類。"
+        lead="Chip 是純展示的標籤，用來標記狀態或分類，本身不可點擊。視覺權重由 level 決定，共 accent、primary、secondary、outline 四種；加上 regular 與 small 兩種 size，並可在文字左側加一個 icon。"
+        meta={
+          <>
+            <span>
+              來源 <code>{chipSpec.source}</code>
+            </span>
+            <span>
+              Figma <code>{chipSpec.figmaNode}</code>
+            </span>
+          </>
+        }
       />
+
       <PageTabs active={tab} onChange={setTab} />
 
       {tab === 'design' && (
         <div>
-
-          {/* ── Variants ── */}
+          {/* ── 1. Variants ── */}
           <section className="section">
             <SectionTitle>Variants</SectionTitle>
-            <PendingImage expects="chip-variant" note="一張圖並排所有變體，圖上標號 1、2、3…，下方用 NumberedCaptions 逐項說明。" />
+            <PendingImage
+              expects="chip-variant"
+              note="一張圖並排四個 level，圖上標號 1、2、3、4，對應下方說明。"
+            />
+
+            <NumberedCaptions
+              items={[
+                { name: 'Accent', desc: '最高視覺權重。螢光綠底，用於需要一眼看到的標記。' },
+                { name: 'Primary', desc: '預設樣式。淺色底，適用於一般分類與狀態。' },
+                { name: 'Secondary', desc: '次要資訊。灰底，存在感低於 Primary。' },
+                { name: 'Outline', desc: '品牌標記。透明底加漸層邊框與漸層文字，專用於品牌相關內容。' },
+              ]}
+            />
           </section>
 
+          {/* ── 2. Configurations ── */}
           <section className="section">
             <SectionTitle>Configurations</SectionTitle>
+
             <Playground
               name="chip"
               dimensions={playgroundDimensions}
-              render={(v) => <ChipPreview label="Label" level="Secondary" size={v.size as ChipSize} icon={v.icon === 'leading'} />}
+              render={(v) => (
+                <ChipPreview
+                  label="Label"
+                  level="secondary"
+                  size={v.size as Size}
+                  icon={v.icon === 'leading'}
+                />
+              )}
             />
           </section>
 
+          {/* ── 3. Anatomy ── */}
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
-            <div>
-              <Pending
-                what="Anatomy"
-                why="部件拆解圖尚未製作。需先確認各部位的正式名稱與必要性，避免自行命名。"
-              />
-            </div>
+            <PendingImage
+              expects="chip-anatomy"
+              note="標出三個部件的拆解圖，編號與下表一致。"
+            />
+
+            <SpecTable
+              headers={['', '部件', '必要性', '說明']}
+              rows={[
+                ['1', '容器 Container', '必要', `底色由 level 決定；圓角固定 100px，垂直內距 ${layout.paddingY}px`],
+                ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同；只放左側，右側不放 icon`],
+                ['3', '文字 Label', '必要', 'Chip 語意的唯一承載者，不可省略'],
+              ]}
+              minWidth={560}
+            />
           </section>
 
+          {/* ── 4. Color ── */}
           <section className="section">
             <SectionTitle>Color</SectionTitle>
-            <ConfidenceNote confidence={chipSpec.confidence} source={chipSpec.source} />
-            <ColorTable
-              variants={chipSpec.variants}
-              dimensionKeys={['level']}
-              partKeys={['bg', 'content']}
-              partLabels={{ bg: '容器底色', border: '描邊', content: '文字與 icon', text: '輸入文字', hint: '提示文字', type: 'Type', state: 'State', status: 'Status', level: 'Level' }}
+
+            <SpecTable
+              headers={['Level', '容器底色', '文字與 icon']}
+              rows={levels.map((lv) => {
+                const v = variantOf(lv);
+                return [
+                  cap(lv),
+                  <Swatch key="bg" token={v.bg as string | null} />,
+                  <Swatch key="ct" token={v.content as string | null} />,
+                ];
+              })}
+              minWidth={560}
             />
+            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+              Outline 兩欄都是「—」，因為它沒有對應的 semantic token：底色為透明，邊框用{' '}
+              <code>neonLime200</code>，文字用 <code>limeLinear</code> 漸層（neonLime200 →
+              neonLime700）直接取自 palette。四個 level 的文字都是{' '}
+              <code>{String(variantOf('accent').content)}</code>，顏色差異只在容器底色。
+            </p>
           </section>
 
+          {/* ── 5. States ── */}
           <section className="section">
             <SectionTitle>States</SectionTitle>
-            <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-              <ul style={{ paddingLeft: 20 }}>
-                <li><strong>Static</strong>：Chip 為靜態元件，無互動狀態。不支援 hover、pressed、disabled 等狀態變化。</li>
-              </ul>
-            </div>
+
+            <SpecTable
+              headers={['狀態', '外觀', '互動']}
+              rows={[
+                ['Static', '依 level 呈現對應的底色與文字色，不隨互動改變', '不可點擊，元件不接受 onTap'],
+                ['Hover / Pressed', '不適用', '—'],
+                ['Disabled', '不適用', '—'],
+              ]}
+              minWidth={620}
+            />
+            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              Chip 是靜態標籤，沒有互動狀態。需要可點擊的標籤時請改用{' '}
+              <code>USpaceTab</code> 的 filter 或 input type，不要自行為 Chip 外包一層點擊區。
+            </p>
           </section>
 
+          {/* ── 6. Measurements ── */}
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
-            <PendingImage expects="chip-measurements" note="標出高度、內距、間距的量測圖。" />
-            <div className="spec-table" >
-  <div>
-              <table style={{ minWidth: 600 }}>
-                <thead>
-                  <tr>
-                    {['Size', 'Radius', 'Padding (with icon)', 'Padding (no icon)', 'Font', 'Icon'].map(h => (
-                      <th key={h}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Regular', '100px', 'pl=8 pr=12 gap=2', 'px=12', 'labelM (14px/20px Regular)', '20px'],
-                    ['Small', '100px', 'pl=6 pr=8 gap=2', 'px=8', '10px/14px Semibold', '20px'],
-                  ].map(([sz, r, padIcon, padNo, font, icon]) => (
-                    <tr key={sz}>
-                      <td>{sz}</td>
-                      <td>{r}</td>
-                      <td><code>{padIcon}</code></td>
-                      <td><code>{padNo}</code></td>
-                      <td>{font}</td>
-                      <td>{icon}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-  </div>
-            </div>
+            <PendingImage expects="chip-measurements" note="標出內距、圓角、icon 尺寸與間距的量測圖。" />
+
+            <SpecTable
+              headers={['項目', 'Regular', 'Small', 'Token']}
+              rows={[
+                ['高度', '貼合內容', '貼合內容', '—'],
+                [
+                  '水平內距（無 icon）',
+                  `${layout.regularPaddingX}px`,
+                  `${layout.smallPaddingX}px`,
+                  <code key="p">USpaceSpacing.spacer{layout.regularPaddingX} / spacer{layout.smallPaddingX}</code>,
+                ],
+                [
+                  '水平內距（有 icon）',
+                  `左 ${layout.regularPaddingLeftWithIcon} / 右 ${layout.regularPaddingRightWithIcon}`,
+                  `左 ${layout.smallPaddingLeftWithIcon} / 右 ${layout.smallPaddingRightWithIcon}`,
+                  <code key="pi">部分無 token</code>,
+                ],
+                ['垂直內距', `${layout.paddingY}px`, `${layout.paddingY}px`, '—'],
+                [
+                  'icon 與文字間距',
+                  `${layout.gap}px`,
+                  `${layout.gap}px`,
+                  <code key="g">USpaceSpacing.spacer{layout.gap}</code>,
+                ],
+                ['icon 尺寸', `${layout.iconSize}px`, `${layout.iconSize}px`, '—'],
+                ['圓角', '100px', '100px', <code key="r">USpaceRadius.full</code>],
+                [
+                  '文字',
+                  `${labelType.size}px / ${labelType.lineHeight}px Regular`,
+                  `${smallType.size}px / ${smallType.lineHeight}px Semibold`,
+                  <code key="t">{labelType.name} / 無 token</code>,
+                ],
+              ]}
+              minWidth={620}
+            />
+            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              垂直內距 {layout.paddingY}px 與 Small 有 icon 時的左內距{' '}
+              {layout.smallPaddingLeftWithIcon}px 是 Figma 的元件特定值，spacing token 沒有這兩個級距，
+              chip.dart 直接寫死。Small 的文字 {smallType.size}px / {smallType.lineHeight}px Semibold
+              同樣沒有對應的 typography token。
+            </p>
           </section>
 
-          {/* ── Touch areas ── */}
+          {/* ── 7. Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <PendingImage expects="chip-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+            <p className="text-md text-muted" style={{ margin: 0 }}>
+              Chip 不可點擊，沒有觸控熱區。它的高度低於 44px 的觸控目標建議值，這也是它不該被
+              當成按鈕使用的原因之一。
+            </p>
           </section>
 
+          {/* ── 8. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
-            <Pending
-              what="Do / Don't 圖例"
-              why="Button 頁是三組對照圖（chip-do-caseN / chip-dont-caseN）。這裡的 Figma artboard 尚未產出。"
-            />
-            <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-              <ul style={{ paddingLeft: 20 }}>
-                <li><strong>純展示標籤，不可點擊</strong>：Chip 用於顯示分類、狀態、標記等資訊，不具備互動行為。若需可互動的 chip，應使用 <code>USpaceTab</code>（Filter / Input type）。</li>
-                <li><strong>4 Level 對應不同視覺語意</strong>：Accent（強調）使用螢光綠背景，適用於需要突出的標記；Primary（一般白底）為預設樣式；Secondary（次要灰底）適用於輔助資訊；Outline（特殊漸層邊框）使用 neonLime 漸層文字和邊框，用於品牌相關標記。</li>
-                <li><strong>Outline 的品牌識別</strong>：Outline Level 使用 neonLime 漸層文字（neonLime200 → neonLime800）和漸層邊框，專為品牌相關標記設計，視覺上具有高辨識度。</li>
-                <li><strong>2 Size 適應不同資訊密度</strong>：Regular 適用於一般場景；Small 適用於資訊密集的列表或卡片中，以更小的尺寸減少視覺佔用。</li>
-              </ul>
-            </div>
+            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+              <li>
+                <strong>純展示，不可點擊</strong>：Chip 用來顯示分類、狀態、標記，不具備互動行為。
+                需要可互動的標籤時使用 <code>USpaceTab</code>（filter / input type）。
+              </li>
+              <li>
+                <strong>四個 level 對應不同視覺權重</strong>：Accent 用於需要突出的標記，
+                同一畫面不要出現多個；Primary 為預設；Secondary 用於輔助資訊；
+                Outline 保留給品牌相關標記。
+              </li>
+              <li>
+                <strong>Small 用於資訊密集處</strong>：列表、卡片這類一次出現多個標籤的地方用
+                Small，其餘情況用 Regular。同一個列表裡不要混用兩種 size。
+              </li>
+              <li>
+                <strong>icon 只放左側</strong>：Chip 沒有 trailing icon。icon 是輔助，
+                語意仍然由文字承載。
+              </li>
+            </ul>
+          </section>
+
+          {/* ── 9. Accessibility ── */}
+          <section className="section">
+            <SectionTitle>Accessibility</SectionTitle>
+            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+              <li>Chip 不可點擊，讀屏軟體只會讀到文字內容，不會被當成按鈕朗讀。</li>
+              <li>icon 為裝飾性元素，語意由文字承載，缺少文字時讀屏軟體無法傳達這個標籤的意義。</li>
+              <li>
+                Outline 的文字是漸層色，對比度會隨背景變化。放在深淺不一的背景上時需自行確認可讀性。
+              </li>
+              <li>
+                Small 的文字為 {smallType.size}px，低於一般建議的最小字級。只用於資訊密集處，
+                不要用它承載關鍵資訊。
+              </li>
+            </ul>
           </section>
         </div>
       )}
 
       {tab === 'develop' && (
         <div>
-
           <section className="section">
-            <SectionTitle>Baseline tokens</SectionTitle>
-            <div className="spec-table" >
-  <div>
-              <table style={{ minWidth: 600 }}>
-                <thead>
-                  <tr>
-                    {['Level', 'Background', 'Text Color', 'Border'].map(h => (
-                      <th key={h}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Accent', 'chipBgAccent', 'textPrimary', '—'],
-                    ['Primary', 'chipBgPrimary', 'textPrimary', '—'],
-                    ['Secondary', 'chipBgSecondary', 'textPrimary', '—'],
-                    ['Outline', '—', 'gradient (neonLime200 → neonLime800)', 'neonLime200'],
-                  ].map(([level, bg, text, border], i) => (
-                    <tr key={i}>
-                      <td>{level}</td>
-                      <td><code>{bg}</code></td>
-                      <td><code>{text}</code></td>
-                      <td><code>{border}</code></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-  </div>
+            <SectionTitle>Examples</SectionTitle>
+            <div>
+              <CodeBlock
+                code={`USpaceChip(
+  label: '充電中',
+  level: USpaceChipLevel.accent,
+)`}
+              />
+            </div>
+            <div style={{ marginTop: 24 }}>
+              <CodeBlock
+                title="加上 leading icon"
+                code={`USpaceChip(
+  label: '快充',
+  level: USpaceChipLevel.secondary,
+  leadingIcon: const Icon(Icons.bolt),
+)`}
+              />
+            </div>
+            <div style={{ marginTop: 24 }}>
+              <CodeBlock
+                title="列表裡的小尺寸標籤"
+                code={`USpaceChip(
+  label: 'VIP',
+  level: USpaceChipLevel.outline,
+  size: USpaceChipSize.small,
+)`}
+              />
             </div>
           </section>
 
           <section className="section">
-            <SectionTitle>Notes</SectionTitle>
-            <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-              <ul style={{ paddingLeft: 20 }}>
-                <li><strong>Non-interactive</strong>: Chip 為純展示標籤，不可點擊。若需可互動 chip，請使用 <code>USpaceTab</code>（filter / input type）</li>
-                <li><strong>Outline</strong>: 文字使用 ShaderMask 漸層（neonLime200 → neonLime800），border 為 neonLime200</li>
-                <li><strong>Small</strong>: 字體 10px/14px Semibold（displayXXS），typography extension 中尚無此定義，chip.dart 內 inline 定義</li>
-                <li><strong>Leading icon</strong>: 20×20，Outline 時 icon 色為 neonLime200，其餘為 contentPrimary</li>
-                <li><strong>Surface</strong>: Figma 有 White/Gray surface 區分，不影響 chip 本身色值</li>
-              </ul>
+            <SectionTitle>API</SectionTitle>
+            <div>
+              <SpecTable
+                headers={['參數', '型別', '預設', '說明']}
+                rows={[
+                  [<code key="a">label</code>, 'String', '必填', 'Chip 文字'],
+                  [<code key="b">level</code>, 'USpaceChipLevel', 'accent', '4 種視覺權重'],
+                  [
+                    <code key="c">size</code>,
+                    'USpaceChipSize',
+                    'regular',
+                    'regular 一般 / small 資訊密集處',
+                  ],
+                  [
+                    <code key="d">leadingIcon</code>,
+                    'Widget?',
+                    'null',
+                    `文字左側 icon，建議 ${layout.iconSize}×${layout.iconSize}`,
+                  ],
+                ]}
+                minWidth={560}
+              />
+              <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+                沒有 <code>onTap</code>。Chip 不包 GestureDetector，這是刻意的設計。
+              </p>
             </div>
+          </section>
+
+          <section className="section">
+            <SectionTitle>Baseline tokens</SectionTitle>
+            <p className="text-sm text-muted" style={{ margin: '0 0 16px' }}>
+              此表由 <code>tokens/components/chip.json</code> 產生，
+              並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
+            </p>
+            <SpecTable
+              headers={['Level', 'Background', 'Content', '備註']}
+              rows={chipSpec.variants.map((row) => [
+                cap(String(row.level)),
+                row.bg ? <code>{String(row.bg)}</code> : <span>transparent</span>,
+                row.content ? <code>{String(row.content)}</code> : <span>—</span>,
+                row.note ? String(row.note) : '—',
+              ])}
+              minWidth={720}
+            />
+          </section>
+
+          <section className="section">
+            <SectionTitle>Notes</SectionTitle>
+            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+              <li>
+                <strong>Outline</strong>：文字用 ShaderMask 套 <code>limeLinear</code> 漸層
+                （neonLime200 → neonLime700），邊框為 neonLime200。兩者都直接取 palette，無 semantic token。
+              </li>
+              <li>
+                <strong>Small</strong>：字體 {smallType.size}px / {smallType.lineHeight}px Semibold，
+                TypographyExtension 中尚無此樣式，chip.dart 內 inline 定義。
+              </li>
+              <li>
+                <strong>Leading icon</strong>：{layout.iconSize}×{layout.iconSize}，
+                Outline 時 icon 色為 neonLime200，其餘為 contentPrimary。
+              </li>
+              <li>
+                <strong>Surface</strong>：Figma 有 White / Gray surface 區分，不影響 chip 本身色值。
+              </li>
+            </ul>
           </section>
         </div>
       )}

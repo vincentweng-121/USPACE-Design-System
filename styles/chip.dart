@@ -16,7 +16,7 @@ enum USpaceChipLevel {
   /// Secondary: chipBgSecondary bg, textPrimary text
   secondary,
 
-  /// Outline: neonLime200 border, gradient text (neonLime200 → neonLime800)
+  /// Outline: neonLime200 border, gradient text (neonLime200 → neonLime700)
   outline,
 }
 
@@ -43,7 +43,7 @@ enum USpaceChipSize {
 ///   Primary:   bg = chipBgPrimary,   text = textPrimary
 ///   Secondary: bg = chipBgSecondary, text = textPrimary
 ///   Outline:   border = USpacePalette.neonLime200,
-///              text = gradient (neonLime200 → neonLime800)
+///              text = gradient (neonLime200 → neonLime700)
 ///
 /// Layout:
 ///   Regular: rounded=100, labelM (14px/20px)
@@ -78,7 +78,7 @@ class USpaceChip extends StatelessWidget {
   /// 前置圖示 widget（建議 20×20）
   final Widget? leadingIcon;
 
-  // ── Outline gradient: neonLime200 → neonLime800 ──
+  // ── Outline gradient: neonLime200 → neonLime700 ──
   static const _outlineTextGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
