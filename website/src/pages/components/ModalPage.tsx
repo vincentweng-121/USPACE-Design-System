@@ -2,7 +2,7 @@ import SectionTitle from '../../components/SectionTitle';
 import {} from '../../tokens/componentSpecs';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
+import { IconPlaceholder, Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semantic, palette } from '../../tokens/colors';
 import { glass, elevation } from '../../tokens/scalars';
 
@@ -19,31 +19,11 @@ function CloseIcon() {
   );
 }
 
-function BusinessIcon() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <rect x="5" y="8" width="22" height="18" rx="3" stroke="var(--text-secondary)" strokeWidth="1.5" fill="none"/>
-      <path d="M11 8V6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2" stroke="var(--text-secondary)" strokeWidth="1.5" fill="none"/>
-      <line x1="5" y1="16" x2="27" y2="16" stroke="var(--text-secondary)" strokeWidth="1.5"/>
-    </svg>
-  );
-}
-
 function CheckIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="10" fill="var(--accent)" />
       <polyline points="8,12.5 11,15.5 16.5,9" stroke={palette.black} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-    </svg>
-  );
-}
-
-function NoticeIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="7" stroke="var(--text-secondary)" strokeWidth="1.2"/>
-      <line x1="8" y1="5" x2="8" y2="9" stroke="var(--text-secondary)" strokeWidth="1.2" strokeLinecap="round"/>
-      <circle cx="8" cy="11.5" r="0.8" fill="var(--text-secondary)"/>
     </svg>
   );
 }
@@ -65,7 +45,7 @@ function ListItem({ title, showCheck, showTopDivider = false }: {
         padding: '16px 0',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1 }}>
-          <BusinessIcon />
+          <IconPlaceholder color="var(--text-secondary)" size={32} />
           <span style={{
             fontSize: 18, lineHeight: '26px',
             fontFamily: '"PingFang TC", sans-serif',
@@ -167,7 +147,7 @@ function ModalPreview({ category, showBottomBar, showNotice }: {
               <div style={{
                 display: 'flex', gap: 8, alignItems: 'flex-start',
               }}>
-                <NoticeIcon />
+                <IconPlaceholder color="var(--text-secondary)" size={16} />
                 <span style={{
                   fontSize: 12, lineHeight: '16px',
                   fontFamily: '"PingFang TC", sans-serif',

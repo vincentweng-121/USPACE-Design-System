@@ -4,6 +4,7 @@ import PageHero from '../../components/PageHero';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import {
+  IconPlaceholder,
   NumberedCaptions,
   Playground,
   PendingImage,
@@ -34,29 +35,6 @@ const smallType = { size: 10, lineHeight: 14, weight: 600 };
 
 /** 由 tokens/components/chip.json 查出該 level 的 token 名稱 */
 const variantOf = (level: Level) => chipSpec.variants.find((v) => v.level === level)!;
-
-// ── icon 佔位框 ──
-/**
- * 虛線方框，代表「這裡放一個 icon」。與 Button 頁同一個理由：
- * 文件站不指定具體圖示，否則讀者會以為那是規範的一部分。
- */
-function IconPlaceholder({ color, size }: { color: string; size: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden>
-      <rect
-        x="1"
-        y="1"
-        width="18"
-        height="18"
-        rx="1.33"
-        stroke={color}
-        strokeWidth="2"
-        strokeMiterlimit="10"
-        strokeDasharray="4 4"
-      />
-    </svg>
-  );
-}
 
 /** Outline 的文字是品牌漸層，無對應 semantic token（見 chip.dart 的 ShaderMask） */
 function GradientText({ children, size }: { children: string; size: Size }) {

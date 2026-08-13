@@ -29,6 +29,11 @@
   `styles/chip.dart` 的 `_padding`，讓文件站不再手抄尺寸。
 - 元件頁的必要區塊由八個改為九個，新增 Accessibility。其餘八頁先以 `Pending`
   佔位，`check:pages` 同步更新。
+- 「可擺放 icon 的位置」統一為虛線方框，抽成 `spec.tsx` 的 `IconPlaceholder`。
+  原本 Button 與 Chip 各有一份複製品，Tab 的 icon 畫成驚嘆號圓框、graphic 畫成
+  帶字母 P 的方塊，Modal 的標題與提示畫成公事包與驚嘆號——這些圖示都不是規範的
+  一部分，讀者卻會以為是。元件行為固定的圖示（關閉鈕、勾選、收合箭頭）維持照實畫。
+  `check:pages` 新增第四項檢查，擋下各頁自己複製虛線框。
 - 修正 Outline 漸層的文件錯誤：`chip.dart` 註解與文件站原本寫
   neonLime200 → neonLime800，實作與 `gradients.json` 的 `limeLinear` 都是
   neonLime200 → neonLime700。

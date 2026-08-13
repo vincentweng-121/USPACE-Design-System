@@ -514,3 +514,45 @@ export function PendingImage({ expects, note }: { expects: string; note?: string
   );
 }
 
+
+// ── 可擺放 icon 的位置 ──────────────────────────────────────
+/**
+ * 虛線方框，代表「這裡可以放一個 icon」。
+ *
+ * 來源：Figma node 3746:15802。
+ *
+ * 預覽裡凡是由使用者自行傳入、可替換的 icon 位置，一律用這個方框，
+ * 不畫任何具體圖示——畫了星星或驚嘆號，讀者會以為那個圖示是規範的一部分，
+ * 佔位框只表達尺寸與位置。
+ *
+ * 相對的，元件行為固定的圖示（關閉鈕、勾選、收合箭頭）要照實畫：
+ * 那是元件規範本身，換成方框反而看不出那裡是什麼。
+ *
+ * 顏色預設跟著文字走，與各元件 Anatomy 表寫的「顏色與文字相同」一致。
+ */
+export function IconPlaceholder({
+  size = 24,
+  color = 'currentColor',
+}: {
+  size?: number;
+  color?: string;
+}) {
+  // 邊框寬度與虛線間隔跟著 viewBox 一起縮放，各頁不必自行調整
+  const inset = 1;
+  const side = 24 - inset * 2;
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect
+        x={inset}
+        y={inset}
+        width={side}
+        height={side}
+        rx="1.33"
+        stroke={color}
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        strokeDasharray="4 4"
+      />
+    </svg>
+  );
+}

@@ -4,7 +4,13 @@ import PageHero from '../../components/PageHero';
 import { DoDontExamples } from '../../components/DoDont';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
-import { AnatomyImage, NumberedCaptions, Playground, type PlaygroundDimension } from '../../components/spec';
+import {
+  AnatomyImage,
+  IconPlaceholder,
+  NumberedCaptions,
+  Playground,
+  type PlaygroundDimension,
+} from '../../components/spec';
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
 import { colorOf, cap } from '../../utils';
@@ -34,33 +40,6 @@ function variantOf(level: Level, state: State, emphasis: Emphasis = 'none') {
 /** emphasis 只對 primary 生效，其餘層級一律用 none 那筆 */
 const emphasisOf = (level: Level, emphasis: Emphasis) =>
   level === 'primary' ? emphasis : 'none';
-
-// ── icon 佔位框 ──
-/**
- * 虛線方框，代表「這裡放一個 icon」。
- *
- * 來源：Figma node 3746:15802。文件站不該指定某個具體圖示，
- * 否則讀者會以為那是規範的一部分；佔位框只表達尺寸與位置。
- *
- * 顏色跟著文字走，與 Anatomy 表寫的「顏色與文字相同」一致。
- */
-function IconPlaceholder({ color }: { color: string }) {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect
-        x="1"
-        y="1"
-        width="22"
-        height="22"
-        rx="1.33"
-        stroke={color}
-        strokeWidth="2"
-        strokeMiterlimit="10"
-        strokeDasharray="4 4"
-      />
-    </svg>
-  );
-}
 
 // ── 依 token 渲染的按鈕 ──
 function ButtonPreview({
@@ -108,9 +87,9 @@ function ButtonPreview({
         cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
       }}
     >
-      {leading && <IconPlaceholder color={content} />}
+      {leading && <IconPlaceholder color={content} size={layout.iconSize} />}
       {label}
-      {trailing && <IconPlaceholder color={content} />}
+      {trailing && <IconPlaceholder color={content} size={layout.iconSize} />}
     </button>
   );
 }
