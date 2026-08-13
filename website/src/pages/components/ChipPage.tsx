@@ -4,6 +4,7 @@ import PageHero from '../../components/PageHero';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import {
+  AnatomyImage,
   IconPlaceholder,
   NumberedCaptions,
   Playground,
@@ -60,18 +61,15 @@ function ChipPreview({
   const isRegular = size === 'regular';
   const t = isRegular ? labelType : smallType;
 
-  // 有無 icon 的左右內距不同，數值取自 chip.json 的 layout
-  const padLeft = icon
-    ? isRegular
-      ? layout.regularPaddingLeftWithIcon
-      : layout.smallPaddingLeftWithIcon
+  // small 沒有 icon 版本，widget 也會忽略傳進來的 icon，這裡跟著一致
+  const showsIcon = icon && isRegular;
+  const padLeft = showsIcon
+    ? layout.regularPaddingLeftWithIcon
     : isRegular
       ? layout.regularPaddingX
       : layout.smallPaddingX;
-  const padRight = icon
-    ? isRegular
-      ? layout.regularPaddingRightWithIcon
-      : layout.smallPaddingRightWithIcon
+  const padRight = showsIcon
+    ? layout.regularPaddingRightWithIcon
     : isRegular
       ? layout.regularPaddingX
       : layout.smallPaddingX;
@@ -84,7 +82,7 @@ function ChipPreview({
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: icon ? layout.gap : 0,
+        gap: showsIcon ? layout.gap : 0,
         padding: `${layout.paddingY}px ${padRight}px ${layout.paddingY}px ${padLeft}px`,
         borderRadius: 100,
         background: colorOf(v.bg as string | null) ?? 'transparent',
@@ -98,7 +96,7 @@ function ChipPreview({
         cursor: 'default',
       }}
     >
-      {icon && <IconPlaceholder color={contentColor} size={layout.iconSize} />}
+      {showsIcon && <IconPlaceholder color={contentColor} size={layout.iconSize} />}
       {label}
     </div>
   );
@@ -163,9 +161,9 @@ export default function ChipPage() {
           {/* ── 1. Variants ── */}
           <section className="section">
             <SectionTitle>Variants</SectionTitle>
-            <PendingImage
-              expects="chip-variant"
-              note="一張圖並排三種 style，filled 再展開三個 level，圖上標號對應下方說明。"
+            <AnatomyImage
+              image="chip-variant"
+              alt="三種 Chip 形狀由重到輕：灰底的 Filled、透明底加描邊的 Outlined、無底無框的 Text"
             />
 
             <NumberedCaptions
@@ -209,7 +207,7 @@ export default function ChipPage() {
               headers={['', '部件', '必要性', '說明']}
               rows={[
                 ['1', '容器 Container', '必要', `底色與描邊由 level 決定；圓角固定 100px，垂直內距 ${layout.paddingY}px`],
-                ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同；只放左側，右側不放 icon`],
+                ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同；只放左側，且僅 regular 支援`],
                 ['3', '文字 Label', '必要', 'Chip 語意的唯一承載者，不可省略'],
               ]}
               minWidth={560}
@@ -277,17 +275,17 @@ export default function ChipPage() {
                 [
                   '水平內距（有 icon）',
                   `左 ${layout.regularPaddingLeftWithIcon} / 右 ${layout.regularPaddingRightWithIcon}`,
-                  `左 ${layout.smallPaddingLeftWithIcon} / 右 ${layout.smallPaddingRightWithIcon}`,
-                  <code key="pi">部分無 token</code>,
+                  '不適用（無 icon 版本）',
+                  <code key="pi">USpaceSpacing.spacer{layout.regularPaddingLeftWithIcon} / spacer{layout.regularPaddingRightWithIcon}</code>,
                 ],
                 ['垂直內距', `${layout.paddingY}px`, `${layout.paddingY}px`, '—'],
                 [
                   'icon 與文字間距',
                   `${layout.gap}px`,
-                  `${layout.gap}px`,
+                  '不適用',
                   <code key="g">USpaceSpacing.spacer{layout.gap}</code>,
                 ],
-                ['icon 尺寸', `${layout.iconSize}px`, `${layout.iconSize}px`, '—'],
+                ['icon 尺寸', `${layout.iconSize}px`, '不適用', '—'],
                 ['圓角', '100px', '100px', <code key="r">USpaceRadius.full</code>],
                 [
                   '文字',
@@ -299,10 +297,10 @@ export default function ChipPage() {
               minWidth={620}
             />
             <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-              垂直內距 {layout.paddingY}px 與 Small 有 icon 時的左內距{' '}
-              {layout.smallPaddingLeftWithIcon}px 是 Figma 的元件特定值，spacing token 沒有這兩個級距，
-              chip.dart 直接寫死。Small 的文字 {smallType.size}px / {smallType.lineHeight}px Semibold
-              同樣沒有對應的 typography token。
+              Small 不支援 leading icon，因此沒有「有 icon」的內距——widget 收到 leadingIcon
+              也會忽略。垂直內距 {layout.paddingY}px 是 Figma 的元件特定值，spacing token 沒有
+              這個級距，chip.dart 直接寫死。Small 的文字 {smallType.size}px /{' '}
+              {smallType.lineHeight}px Semibold 同樣沒有對應的 typography token。
             </p>
           </section>
 
@@ -461,9 +459,9 @@ USpaceChip(
             <SectionTitle>Notes</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
-                <strong>small 沒有 leading icon</strong>：Figma 的元件只畫了 regular 的 icon 版本，
-                文件站的 Configurations 會把這個組合停用。widget 目前仍會渲染 small + icon，
-                尚未在程式碼層擋下。
+                <strong>small 沒有 leading icon</strong>：Figma 的元件只畫了 regular 的 icon 版本。
+                widget 收到 <code>leadingIcon</code> 但 size 為 small 時會直接忽略，
+                文件站的 Configurations 也會把這個組合停用，兩邊行為一致。
               </li>
               <li>
                 <strong>style 與 level 是兩個維度</strong>：level 只在 <code>filled</code> 時生效，
@@ -477,8 +475,8 @@ USpaceChip(
                 TypographyExtension 中尚無此樣式，chip.dart 內 inline 定義。
               </li>
               <li>
-                <strong>Leading icon</strong>：{layout.iconSize}×{layout.iconSize}，
-                icon 色一律為 contentPrimary，不隨 level 改變。
+                <strong>Leading icon</strong>：{layout.iconSize}×{layout.iconSize}，僅 regular 支援，
+                icon 色一律為 contentPrimary，不隨 style 或 level 改變。
               </li>
               <li>
                 <strong>Surface</strong>：Figma 有 White / Gray surface 區分，不影響 chip 本身色值。

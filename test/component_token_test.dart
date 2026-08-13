@@ -313,6 +313,38 @@ void main() {
       });
     }
 
+    // small 沒有 icon 版本。少了這個，widget 照畫 icon 也不會有人發現
+    testWidgets('small 忽略 leadingIcon', (tester) async {
+      await pump(
+        tester,
+        const USpaceChip(
+          label: 'Tag',
+          size: USpaceChipSize.small,
+          leadingIcon: Icon(Icons.star),
+        ),
+      );
+      expect(
+        find.descendant(of: find.byType(USpaceChip), matching: find.byType(Icon)),
+        findsNothing,
+        reason: 'small 不支援 leading icon，傳了也不該畫出來',
+      );
+    });
+
+    testWidgets('regular 仍然畫 leadingIcon', (tester) async {
+      await pump(
+        tester,
+        const USpaceChip(
+          label: 'Tag',
+          leadingIcon: Icon(Icons.star),
+        ),
+      );
+      expect(
+        find.descendant(of: find.byType(USpaceChip), matching: find.byType(Icon)),
+        findsOneWidget,
+        reason: 'regular 的 leading icon 不該被這個規則影響',
+      );
+    });
+
     // level 只在 filled 生效。少了這個，把 level 誤接到 outlined 的底色也不會被發現
     for (final style in [USpaceChipStyle.outlined, USpaceChipStyle.text]) {
       testWidgets('${style.name} 忽略 level', (tester) async {

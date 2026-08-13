@@ -256,9 +256,7 @@ export const chipSpec: ComponentSpec = {
     "regularPaddingX": 12,
     "regularPaddingLeftWithIcon": 8,
     "regularPaddingRightWithIcon": 12,
-    "smallPaddingX": 8,
-    "smallPaddingLeftWithIcon": 6,
-    "smallPaddingRightWithIcon": 8
+    "smallPaddingX": 8
   }
 };
 

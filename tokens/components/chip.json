@@ -20,16 +20,15 @@
     "regularPaddingX": 12,
     "regularPaddingLeftWithIcon": 8,
     "regularPaddingRightWithIcon": 12,
-    "smallPaddingX": 8,
-    "smallPaddingLeftWithIcon": 6,
-    "smallPaddingRightWithIcon": 8
+    "smallPaddingX": 8
   },
-  "$layoutSource": "styles/chip.dart 的 _padding 與 _iconColor：垂直 1px 與 small 左側 6px 是 Figma 元件特定值，無對應 spacing token，其餘取自 USpaceSpacing。2026-08-13 比對 Figma node 3808:9321（2 倍放大的說明圖）確認 regular 有 icon 時左 8 / 右 12 / 間距 2 / icon 20 / 高 22，與此處數值相符。",
+  "$layoutSource": "styles/chip.dart 的 _padding 與 _iconColor：垂直 1px 是 Figma 元件特定值，無對應 spacing token，其餘取自 USpaceSpacing。small 不支援 leading icon，因此沒有「有 icon」的內距。2026-08-13 比對 Figma node 3808:9321（2 倍放大的說明圖）確認 regular 有 icon 時左 8 / 右 12 / 間距 2 / icon 20 / 高 22，與此處數值相符。",
   "$typography": "Regular 使用 labelM（14px/20px Regular）。Small 為 10px/14px Semibold，TypographyExtension 尚無此樣式，chip.dart 內 inline 定義。",
   "$deviations": [
     "2026-08-13 經使用者確認重整：原本 level 的四個值裡，outline 講的是形狀而其餘三個講的是顏色，兩者並非同一種東西。改為 style（filled / outlined / text）與 level（accent / primary / secondary）兩個獨立維度，level 只在 filled 時生效。",
     "2026-08-13 outlined 由品牌漸層改為中性色。邊框最初依使用者口述定為 contentPrimary，隨後比對 Figma node 3808:9321（chip-variant-light）確認實際使用 Content/Secondary(#777777) = contentSecondary，已照 Figma 修正。文字為 textPrimary，與 Figma 的 Text/Primary(#323237) 相符。",
     "2026-08-13 經使用者確認：新增 text style，無底無框，內距與 filled 相同以便三種形狀直接互換。",
+    "2026-08-13 經使用者確認：small 不支援 leading icon（Figma 只畫了 regular 的 icon 版本），widget 收到也會忽略，原本 small 有 icon 的內距 6/8 一併移除。",
     "拆維度與新增 text 這兩項，Figma 元件本身尚無對應設計稿，來源為使用者確認；outlined 的色票與 regular 的間距已比對 Figma node 3808:9321 確認。"
   ],
   "$variantsNote": "outlined 與 text 不吃 level，因此不帶 level 欄位——測試與文件站都靠這個缺席判斷「這個組合與 level 無關」。",

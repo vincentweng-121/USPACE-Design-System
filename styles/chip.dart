@@ -37,7 +37,7 @@ enum USpaceChipSize {
   /// Typography: labelM (14px/20px Regular)
   regular,
 
-  /// Small: py=1, with icon pl=6 pr=8 gap=2, without icon px=8
+  /// Small: py=1, px=8。不支援 leading icon，傳了也會被忽略
   /// Typography: 10px/14px Semibold (displayXXS — not in TypographyExtension)
   small,
 }
@@ -62,9 +62,8 @@ enum USpaceChipSize {
 ///   Regular: rounded=100, labelM (14px/20px)
 ///     - with icon: pl=8 pr=12 gap=2, icon 20px
 ///     - without icon: px=12
-///   Small: rounded=100, 10px/14px Semibold
-///     - with icon: pl=6 pr=8 gap=2, icon 20px
-///     - without icon: px=8
+///   Small: rounded=100, 10px/14px Semibold, px=8
+///     - 不支援 leading icon（Figma 只有 regular 的 icon 版本）
 ///
 /// ⚠️ Chip 為純展示標籤，不可點擊、不接受 onTap。
 /// 若需要可點擊的 chip 行為，請使用 USpaceTab (filter / input type)。
@@ -94,8 +93,11 @@ class USpaceChip extends StatelessWidget {
   /// Chip 尺寸
   final USpaceChipSize size;
 
-  /// 前置圖示 widget（建議 20×20）
+  /// 前置圖示 widget（建議 20×20）。size 為 small 時忽略
   final Widget? leadingIcon;
+
+  /// small 沒有 icon 版本，傳了也不畫——否則會做出 Figma 上不存在的組合
+  bool get _showsIcon => leadingIcon != null && size != USpaceChipSize.small;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +117,7 @@ class USpaceChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (leadingIcon != null) ...[
+          if (_showsIcon) ...[
             IconTheme(
               data: IconThemeData(
                 color: _iconColor(colors),
@@ -131,18 +133,16 @@ class USpaceChip extends StatelessWidget {
     );
   }
 
-  // Figma 元件特定值：vertical 1px、small left 6px 無對應 spacing token
+  // Figma 元件特定值：vertical 1px 無對應 spacing token
   EdgeInsets get _padding {
-    final hasIcon = leadingIcon != null;
     switch (size) {
       case USpaceChipSize.regular:
-        return hasIcon
+        return _showsIcon
             ? const EdgeInsets.only(left: USpaceSpacing.spacer8, right: USpaceSpacing.spacer12, top: 1, bottom: 1)
             : const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer12, vertical: 1);
       case USpaceChipSize.small:
-        return hasIcon
-            ? const EdgeInsets.only(left: 6, right: USpaceSpacing.spacer8, top: 1, bottom: 1)
-            : const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer8, vertical: 1);
+        // icon 已被忽略，左右一律 8
+        return const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer8, vertical: 1);
     }
   }
 

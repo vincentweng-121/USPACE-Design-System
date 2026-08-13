@@ -31,11 +31,17 @@
   ShaderMask 一併移除。
   描邊色先前依口述暫定為 `contentPrimary`，後續比對 Figma node 3808:9321
   （chip-variant-light）確認實際為 `Content/Secondary` #777777，已照 Figma 修正。
-- **Configurations 的 Leading 選項在 Small 下停用**：Figma 只畫了 regular 的
-  icon 版本。`Playground` 新增 `disabled` 判斷，並在切換後把落在停用選項上的
-  維度退回可用值，避免預覽出現元件做不出來的組合。停用而非隱藏，讀者才看得出
-  「有這個選項，只是這個尺寸不適用」。widget 目前仍會渲染 small + icon，
-  尚未在程式碼層擋下。
+- **Small 不再支援 leading icon**：Figma 只畫了 regular 的 icon 版本。
+  widget 收到 `leadingIcon` 但 size 為 small 時直接忽略，`chip.json` 的
+  `smallPaddingLeftWithIcon` / `smallPaddingRightWithIcon` 一併移除，
+  small 的左右內距固定 8。新增兩個測試：small 傳 icon 不該畫出來、
+  regular 傳 icon 仍要畫。
+- **Configurations 的 Leading 選項在 Small 下停用**：`Playground` 新增
+  `disabled` 判斷，並在切換後把落在停用選項上的維度退回可用值，避免預覽出現
+  元件做不出來的組合。停用而非隱藏，讀者才看得出「有這個選項，只是這個尺寸
+  不適用」。
+- **Variants 的說明圖補上**：從 Figma node 3808:9321 與 3873:15187 以 scale 2
+  匯出 `chip-variant-light.png` 與 `chip-variant-dark.png`，佔位框換成正式圖。
 - 比對 Figma node 3808:9321 確認 regular 有 icon 時的間距（左 8 / 右 12 /
   間距 2 / icon 20 / 高 22）與現有實作完全相符，未做調整。該畫板是 2 倍放大的
   說明圖，換算後才對得上。
