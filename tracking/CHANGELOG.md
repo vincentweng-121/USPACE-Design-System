@@ -11,6 +11,15 @@
 
 ---
 
+## v0.8.1 | 2026-08-13
+
+### 文件站 | Chip 頁 Variants 移除沒有對應標號的第四項說明
+狀態：PUBLISHED
+
+- 說明圖上只有 1、2、3 三個標號，對應 filled / outlined / text 三種形狀，
+  但圖說列了第四項「Level（僅 filled）」。編號與圖對不起來，讀者會去圖上找
+  一個不存在的 4。level 的說明本來就在 Color 區塊與 Usage 區塊，這裡移除。
+
 ## v0.8.0 | 2026-08-13
 
 ### chip.dart | 形狀與顏色拆成兩個維度，新增 text style
