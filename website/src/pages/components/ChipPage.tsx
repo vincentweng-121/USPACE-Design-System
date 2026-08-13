@@ -8,7 +8,6 @@ import { semantic, palette, gradients } from '../../tokens/colors';
 type ChipLevel = 'Accent' | 'Primary' | 'Secondary' | 'Outline';
 type ChipSize = 'Regular' | 'Small';
 
-const levels: ChipLevel[] = ['Accent', 'Primary', 'Secondary', 'Outline'];
 
 function StarIcon({ color }: { color: string }) {
   return (
@@ -101,8 +100,9 @@ function ChipPreview({
 
 
 // ── Playground 的維度 ──
+// Level 不在這裡：四個 level 的差異就是顏色（Accent 是螢光綠、Outline 是漸層），
+// Configurations 只講配置，顏色一律在 Color 區塊說明。預覽固定用中性的 Secondary。
 const playgroundDimensions: PlaygroundDimension[] = [
-  { key: 'level', label: 'Level', options: levels.map((l) => ({ value: l, label: l })) },
   { key: 'size', label: 'Size', options: [{ value: 'Regular', label: 'Regular' }, { value: 'Small', label: 'Small' }] },
   { key: 'icon', label: 'Icon option', options: [{ value: 'none', label: 'None' }, { value: 'leading', label: 'Leading' }] },
 ];
@@ -132,7 +132,7 @@ export default function ChipPage() {
             <Playground
               name="chip"
               dimensions={playgroundDimensions}
-              render={(v) => <ChipPreview label="Label" level={v.level as ChipLevel} size={v.size as ChipSize} icon={v.icon === 'leading'} />}
+              render={(v) => <ChipPreview label="Label" level="Secondary" size={v.size as ChipSize} icon={v.icon === 'leading'} />}
             />
           </section>
 

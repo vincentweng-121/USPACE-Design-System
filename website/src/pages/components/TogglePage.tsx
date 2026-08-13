@@ -45,8 +45,9 @@ function TogglePreview({ value, disabled = false }: { value: boolean; disabled?:
 }
 
 // ── Playground 的維度 ──
+// Value 不在這裡：ON 的軌道是螢光綠，OFF 才是中性灰。
+// Configurations 只講配置，開關兩個值的顏色差異在 Color 區塊說明。
 const playgroundDimensions: PlaygroundDimension[] = [
-  { key: 'value', label: 'Value', options: [{ value: 'off', label: 'Off' }, { value: 'on', label: 'On' }] },
   { key: 'enabled', label: 'State', options: [{ value: 'enabled', label: 'Enabled' }, { value: 'disabled', label: 'Disabled' }] },
 ];
 
@@ -75,7 +76,7 @@ export default function TogglePage() {
             <Playground
               name="toggle"
               dimensions={playgroundDimensions}
-              render={(v) => <TogglePreview value={v.value === 'on'} disabled={v.enabled === 'disabled'} />}
+              render={(v) => <TogglePreview value={false} disabled={v.enabled === 'disabled'} />}
             />
           </section>
 

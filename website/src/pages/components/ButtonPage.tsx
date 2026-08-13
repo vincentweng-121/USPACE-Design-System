@@ -225,40 +225,6 @@ export default function ButtonPage() {
             />
           </section>
 
-          {/* ── 3. Tokens & specs ── */}
-          <section className="section">
-            <SectionTitle>Tokens &amp; specs</SectionTitle>
-            <SpecTable
-              headers={['項目', '值', 'Token']}
-              rows={[
-                ['樣式數', `${levels.length} 種（Primary / Secondary / Tertiary）`, '—'],
-                ['強調層級', `${emphases.length} 種（僅 Primary 適用）`, '—'],
-                ['尺寸數', '2 種（Regular / Small）', '—'],
-                ['狀態數', `${states.length} 種（尚無 pressed）`, '—'],
-                ['高度', `${layout.height}px（固定）`, '—'],
-                ['圓角', '1000px', <code key="r">USpaceRadius.full</code>],
-                [
-                  '文字',
-                  `${labelType.family} ${labelType.size}px / ${labelType.lineHeight}px Medium`,
-                  <code key="t">{labelType.name}</code>,
-                ],
-                ['icon 尺寸', `${layout.iconSize}px`, '—'],
-                [
-                  'icon 與文字間距',
-                  `${layout.gap}px`,
-                  <code key="g">USpaceSpacing.spacer{layout.gap}</code>,
-                ],
-              ]}
-              minWidth={620}
-            />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-              Figma 標示文字為 16px / 24px Medium 並帶 0.6px 字距。經確認採用既有的{' '}
-              <code>{labelType.name}</code> token，因此實作為 {labelType.size}px /{' '}
-              {labelType.lineHeight}px 且無字距。也因為行高變為 {labelType.lineHeight}，
-              高度改以固定 {layout.height}px 置中，而非由垂直內距推算。
-            </p>
-          </section>
-
           {/* ── 4. Anatomy ── */}
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
@@ -421,10 +387,21 @@ export default function ButtonPage() {
                 ],
                 ['icon 尺寸', `${layout.iconSize}px`, `${layout.iconSize}px`, '—'],
                 ['圓角', '1000px', '1000px', <code key="r">USpaceRadius.full</code>],
-                
+                [
+                  '文字',
+                  `${labelType.family} ${labelType.size}px / ${labelType.lineHeight}px Medium`,
+                  `${labelType.family} ${labelType.size}px / ${labelType.lineHeight}px Medium`,
+                  <code key="t">{labelType.name}</code>,
+                ],
               ]}
               minWidth={620}
             />
+            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              Figma 標示文字為 16px / 24px Medium 並帶 0.6px 字距。經確認採用既有的{' '}
+              <code>{labelType.name}</code> token，因此實作為 {labelType.size}px /{' '}
+              {labelType.lineHeight}px 且無字距。也因為行高變為 {labelType.lineHeight}，
+              高度改以固定 {layout.height}px 置中，而非由垂直內距推算。
+            </p>
           </section>
 
           {/* ── 8. Touch areas ── */}

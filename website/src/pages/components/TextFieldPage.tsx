@@ -7,18 +7,33 @@ import { colorOf } from '../../utils';
 
 // ── Playground ─────────────────────────────────────────────
 /** 依 token 渲染的輸入框。無互動，供規格展示用。 */
-function StatusPreview({ status }: { status: string }) {
+function StatusPreview({
+  status,
+  showLabel = true,
+  showHint = true,
+  showButton = false,
+}: {
+  status: string;
+  /** 上方欄位標題 */
+  showLabel?: boolean;
+  /** 下方提示文字 */
+  showHint?: boolean;
+  /** 尾端的行動按鈕 */
+  showButton?: boolean;
+}) {
   const v = text_fieldSpec.variants.find((x) => x.status === status)!;
   const isPlaceholder = ['default', 'active'].includes(status);
 
   return (
     <div style={{ width: 260, flexShrink: 0 }}>
-      <div
-        className="text-sm"
-        style={{ color: 'var(--text-tertiary)', marginBottom: 6, paddingLeft: 8 }}
-      >
-        {status}
-      </div>
+      {showLabel && (
+        <div
+          className="text-sm"
+          style={{ color: 'var(--text-tertiary)', marginBottom: 6, paddingLeft: 8 }}
+        >
+          {status}
+        </div>
+      )}
       <div
         style={{
           height: 48,
@@ -36,14 +51,33 @@ function StatusPreview({ status }: { status: string }) {
           color: colorOf(v.text as string),
         }}
       >
-        {isPlaceholder ? 'Placeholder' : 'Input text'}
+        <span style={{ flex: 1, minWidth: 0 }}>
+          {isPlaceholder ? 'Placeholder' : 'Input text'}
+        </span>
+        {showButton && (
+          <span
+            style={{
+              flexShrink: 0,
+              marginLeft: 12,
+              padding: '4px 14px',
+              borderRadius: 1000,
+              background: 'var(--text-primary)',
+              color: 'var(--page-primary)',
+              fontSize: 13,
+            }}
+          >
+            送出
+          </span>
+        )}
       </div>
-      <div
-        className="text-sm"
-        style={{ color: colorOf(v.hint as string), marginTop: 6, paddingLeft: 8 }}
-      >
-        Hint text
-      </div>
+      {showHint && (
+        <div
+          className="text-sm"
+          style={{ color: colorOf(v.hint as string), marginTop: 6, paddingLeft: 8 }}
+        >
+          Hint text
+        </div>
+      )}
     </div>
   );
 }
@@ -51,8 +85,34 @@ function StatusPreview({ status }: { status: string }) {
 
 // ── Page ───────────────────────────────────────────────────
 // ── Playground 的維度 ──
+// status 不在這裡：它是「狀態」不是「配置」，而且 active / typing / error
+// 會渲染出綠色或紅色邊框。九種狀態在 States 與 Color 區塊已完整說明。
+// 這裡只放真正可配置的結構，預覽固定用 default（1px 中性灰邊框）。
 const playgroundDimensions: PlaygroundDimension[] = [
-  { key: 'status', label: 'Status', options: (text_fieldSpec.dimensions.status as string[]).map((s) => ({ value: s, label: s })) },
+  {
+    key: 'label',
+    label: 'Label',
+    options: [
+      { value: 'show', label: '有' },
+      { value: 'hide', label: '無' },
+    ],
+  },
+  {
+    key: 'hint',
+    label: 'Hint text',
+    options: [
+      { value: 'show', label: '有' },
+      { value: 'hide', label: '無' },
+    ],
+  },
+  {
+    key: 'button',
+    label: 'Trailing button',
+    options: [
+      { value: 'hide', label: '無' },
+      { value: 'show', label: '有' },
+    ],
+  },
 ];
 
 export default function TextFieldPage() {
@@ -80,7 +140,14 @@ export default function TextFieldPage() {
             <Playground
               name="text-field"
               dimensions={playgroundDimensions}
-              render={(v) => <StatusPreview status={v.status} />}
+              render={(v) => (
+                <StatusPreview
+                  status="default"
+                  showLabel={v.label === 'show'}
+                  showHint={v.hint === 'show'}
+                  showButton={v.button === 'show'}
+                />
+              )}
             />
           </section>
 

@@ -44,6 +44,11 @@ jobs:
       # 擋住「本機看得到、上線 404」的圖片路徑與大小寫錯誤
       - name: Check asset references
         run: npm run check:assets
+      # 擋住「元件頁少區塊」或「Configurations 混進顏色」
+      - name: Check page structure
+        run: npm run check:pages
+      - name: Check changelog
+        run: npm run check:changelog
       - name: Install and Build
         working-directory: website
         run: |

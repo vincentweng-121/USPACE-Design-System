@@ -38,6 +38,12 @@ run "產生檔與 tokens/*.json 同步" \
 run "靜態資源引用（路徑與大小寫）" \
   npm run --silent check:assets
 
+run "元件頁結構（區塊齊全、Configurations 不含顏色）" \
+  npm run --silent check:pages
+
+run "版號已寫進變更紀錄" \
+  npm run --silent check:changelog
+
 run "Dart 靜態分析" \
   dart analyze --fatal-infos
 
