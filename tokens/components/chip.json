@@ -25,10 +25,13 @@
   },
   "$layoutSource": "styles/chip.dart 的 _padding 與 _iconColor：垂直 1px 與 small 左側 6px 是 Figma 元件特定值，無對應 spacing token，其餘取自 USpaceSpacing。",
   "$typography": "Regular 使用 labelM（14px/20px Regular）。Small 為 10px/14px Semibold，TypographyExtension 尚無此樣式，chip.dart 內 inline 定義。",
+  "$deviations": [
+    "2026-08-13 經使用者確認改版：outline 由品牌漸層改為中性色，邊框 contentPrimary、文字 textPrimary，不再使用 neonLime200 邊框與 limeLinear 漸層文字。Figma 尚無對應設計稿，來源為使用者口頭確認。"
+  ],
   "variants": [
-    { "level": "accent", "bg": "chipBgAccent", "content": "textPrimary" },
-    { "level": "primary", "bg": "chipBgPrimary", "content": "textPrimary" },
-    { "level": "secondary", "bg": "chipBgSecondary", "content": "textPrimary" },
-    { "level": "outline", "bg": null, "content": null, "note": "透明底 + neonLime200 邊框 + 漸層文字，無對應 semantic token" }
+    { "level": "accent", "bg": "chipBgAccent", "content": "textPrimary", "border": null },
+    { "level": "primary", "bg": "chipBgPrimary", "content": "textPrimary", "border": null },
+    { "level": "secondary", "bg": "chipBgSecondary", "content": "textPrimary", "border": null },
+    { "level": "outline", "bg": null, "content": "textPrimary", "border": "contentPrimary", "note": "透明底，邊框與文字皆為中性色；四個 level 的文字色相同" }
   ]
 }

@@ -13,7 +13,6 @@ import {
 } from '../../components/spec';
 import { typographyStyles } from '../../tokens/typography';
 import { chipSpec } from '../../tokens/componentSpecs';
-import { palette, gradients } from '../../tokens/colors';
 import { colorOf, cap } from '../../utils';
 
 type Level = 'accent' | 'primary' | 'secondary' | 'outline';
@@ -36,25 +35,6 @@ const smallType = { size: 10, lineHeight: 14, weight: 600 };
 /** 由 tokens/components/chip.json 查出該 level 的 token 名稱 */
 const variantOf = (level: Level) => chipSpec.variants.find((v) => v.level === level)!;
 
-/** Outline 的文字是品牌漸層，無對應 semantic token（見 chip.dart 的 ShaderMask） */
-function GradientText({ children, size }: { children: string; size: Size }) {
-  const t = size === 'regular' ? labelType : smallType;
-  return (
-    <span
-      style={{
-        background: gradients.limeLinear,
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        fontSize: t.size,
-        lineHeight: `${t.lineHeight}px`,
-        fontWeight: t.weight,
-      }}
-    >
-      {children}
-    </span>
-  );
-}
-
 // ── 依 token 渲染的 Chip ──
 function ChipPreview({
   label,
@@ -68,7 +48,6 @@ function ChipPreview({
   icon?: boolean;
 }) {
   const v = variantOf(level);
-  const isOutline = level === 'outline';
   const isRegular = size === 'regular';
   const t = isRegular ? labelType : smallType;
 
@@ -88,9 +67,8 @@ function ChipPreview({
       ? layout.regularPaddingX
       : layout.smallPaddingX;
 
-  const contentColor = isOutline
-    ? palette.neonLime200
-    : (colorOf(v.content as string) ?? 'var(--text-primary)');
+  const contentColor = colorOf(v.content as string)!;
+  const borderColor = colorOf(v.border as string | null);
 
   return (
     <div
@@ -100,8 +78,8 @@ function ChipPreview({
         gap: icon ? layout.gap : 0,
         padding: `${layout.paddingY}px ${padRight}px ${layout.paddingY}px ${padLeft}px`,
         borderRadius: 100,
-        background: isOutline ? 'transparent' : (colorOf(v.bg as string) ?? 'transparent'),
-        border: isOutline ? `1px solid ${palette.neonLime200}` : '1px solid transparent',
+        background: colorOf(v.bg as string | null) ?? 'transparent',
+        border: `1px solid ${borderColor ?? 'transparent'}`,
         color: contentColor,
         fontSize: t.size,
         lineHeight: `${t.lineHeight}px`,
@@ -112,14 +90,14 @@ function ChipPreview({
       }}
     >
       {icon && <IconPlaceholder color={contentColor} size={layout.iconSize} />}
-      {isOutline ? <GradientText size={size}>{label}</GradientText> : label}
+      {label}
     </div>
   );
 }
 
 // ── Playground 的維度 ──
 // 與 Button 頁同一條規則：Configurations 只講尺寸與元素配置。
-// Level 不列入——Chip 四個 level 的差異就是顏色（accent 是螢光綠、outline 是品牌漸層），
+// Level 不列入——Chip 的 level 差異就是顏色（accent 與 primary 在某一個主題下是螢光綠），
 // 顏色一律在 Color 區塊說明。預覽固定用中性的 secondary。
 // icon 不是 token 維度（token 只管顏色），所以手寫。
 const playgroundDimensions: PlaygroundDimension[] = [
@@ -178,7 +156,7 @@ export default function ChipPage() {
                 { name: 'Accent', desc: '最高視覺權重。螢光綠底，用於需要一眼看到的標記。' },
                 { name: 'Primary', desc: '預設樣式。淺色底，適用於一般分類與狀態。' },
                 { name: 'Secondary', desc: '次要資訊。灰底，存在感低於 Primary。' },
-                { name: 'Outline', desc: '品牌標記。透明底加漸層邊框與漸層文字，專用於品牌相關內容。' },
+                { name: 'Outline', desc: '最低存在感。透明底加一圈中性色描邊，適合放在已經有底色的區塊上。' },
               ]}
             />
           </section>
@@ -212,7 +190,7 @@ export default function ChipPage() {
             <SpecTable
               headers={['', '部件', '必要性', '說明']}
               rows={[
-                ['1', '容器 Container', '必要', `底色由 level 決定；圓角固定 100px，垂直內距 ${layout.paddingY}px`],
+                ['1', '容器 Container', '必要', `底色與描邊由 level 決定；圓角固定 100px，垂直內距 ${layout.paddingY}px`],
                 ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同；只放左側，右側不放 icon`],
                 ['3', '文字 Label', '必要', 'Chip 語意的唯一承載者，不可省略'],
               ]}
@@ -225,22 +203,22 @@ export default function ChipPage() {
             <SectionTitle>Color</SectionTitle>
 
             <SpecTable
-              headers={['Level', '容器底色', '文字與 icon']}
+              headers={['Level', '容器底色', '描邊', '文字與 icon']}
               rows={levels.map((lv) => {
                 const v = variantOf(lv);
                 return [
                   cap(lv),
                   <Swatch key="bg" token={v.bg as string | null} />,
+                  <Swatch key="bd" token={v.border as string | null} />,
                   <Swatch key="ct" token={v.content as string | null} />,
                 ];
               })}
               minWidth={560}
             />
             <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-              Outline 兩欄都是「—」，因為它沒有對應的 semantic token：底色為透明，邊框用{' '}
-              <code>neonLime200</code>，文字用 <code>limeLinear</code> 漸層（neonLime200 →
-              neonLime700）直接取自 palette。四個 level 的文字都是{' '}
-              <code>{String(variantOf('accent').content)}</code>，顏色差異只在容器底色。
+              四個 level 的文字都是 <code>{String(variantOf('accent').content)}</code>，
+              差異在容器：前三個給底色，Outline 改為透明底加一圈{' '}
+              <code>{String(variantOf('outline').border)}</code> 描邊。
             </p>
           </section>
 
@@ -330,7 +308,7 @@ export default function ChipPage() {
               <li>
                 <strong>四個 level 對應不同視覺權重</strong>：Accent 用於需要突出的標記，
                 同一畫面不要出現多個；Primary 為預設；Secondary 用於輔助資訊；
-                Outline 保留給品牌相關標記。
+                Outline 用於已經有底色、再加底色會糊掉的區塊。
               </li>
               <li>
                 <strong>Small 用於資訊密集處</strong>：列表、卡片這類一次出現多個標籤的地方用
@@ -350,7 +328,7 @@ export default function ChipPage() {
               <li>Chip 不可點擊，讀屏軟體只會讀到文字內容，不會被當成按鈕朗讀。</li>
               <li>icon 為裝飾性元素，語意由文字承載，缺少文字時讀屏軟體無法傳達這個標籤的意義。</li>
               <li>
-                Outline 的文字是漸層色，對比度會隨背景變化。放在深淺不一的背景上時需自行確認可讀性。
+                Outline 是透明底，文字對比度直接受背後的底色影響。放在深淺不一的背景上時需自行確認可讀性。
               </li>
               <li>
                 Small 的文字為 {smallType.size}px，低於一般建議的最小字級。只用於資訊密集處，
@@ -431,10 +409,11 @@ export default function ChipPage() {
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
             <SpecTable
-              headers={['Level', 'Background', 'Content', '備註']}
+              headers={['Level', 'Background', 'Border', 'Content', '備註']}
               rows={chipSpec.variants.map((row) => [
                 cap(String(row.level)),
                 row.bg ? <code>{String(row.bg)}</code> : <span>transparent</span>,
+                row.border ? <code>{String(row.border)}</code> : <span>—</span>,
                 row.content ? <code>{String(row.content)}</code> : <span>—</span>,
                 row.note ? String(row.note) : '—',
               ])}
@@ -446,8 +425,9 @@ export default function ChipPage() {
             <SectionTitle>Notes</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
-                <strong>Outline</strong>：文字用 ShaderMask 套 <code>limeLinear</code> 漸層
-                （neonLime200 → neonLime700），邊框為 neonLime200。兩者都直接取 palette，無 semantic token。
+                <strong>Outline</strong>：透明底，邊框為 <code>contentPrimary</code>，
+                文字與其他 level 同為 <code>textPrimary</code>。2026-08-13 由品牌漸層改為中性色，
+                Figma 尚無對應設計稿，來源為使用者確認。
               </li>
               <li>
                 <strong>Small</strong>：字體 {smallType.size}px / {smallType.lineHeight}px Semibold，
@@ -455,7 +435,7 @@ export default function ChipPage() {
               </li>
               <li>
                 <strong>Leading icon</strong>：{layout.iconSize}×{layout.iconSize}，
-                Outline 時 icon 色為 neonLime200，其餘為 contentPrimary。
+                icon 色一律為 contentPrimary，不隨 level 改變。
               </li>
               <li>
                 <strong>Surface</strong>：Figma 有 White / Gray surface 區分，不影響 chip 本身色值。

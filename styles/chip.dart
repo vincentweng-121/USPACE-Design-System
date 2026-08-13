@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'uspace_colors_extension.dart';
-import 'uspace_palette.dart';
 import 'typography_extension.dart';
 import 'radius_extension.dart';
 import 'spacing_extension.dart';
@@ -16,7 +15,7 @@ enum USpaceChipLevel {
   /// Secondary: chipBgSecondary bg, textPrimary text
   secondary,
 
-  /// Outline: neonLime200 border, gradient text (neonLime200 → neonLime700)
+  /// Outline: transparent bg, contentPrimary border, textPrimary text
   outline,
 }
 
@@ -42,8 +41,7 @@ enum USpaceChipSize {
 ///   Accent:    bg = chipBgAccent,    text = textPrimary
 ///   Primary:   bg = chipBgPrimary,   text = textPrimary
 ///   Secondary: bg = chipBgSecondary, text = textPrimary
-///   Outline:   border = USpacePalette.neonLime200,
-///              text = gradient (neonLime200 → neonLime700)
+///   Outline:   border = contentPrimary,  text = textPrimary
 ///
 /// Layout:
 ///   Regular: rounded=100, labelM (14px/20px)
@@ -56,7 +54,8 @@ enum USpaceChipSize {
 /// ⚠️ Chip 為純展示標籤，不可點擊、不接受 onTap。
 /// 若需要可點擊的 chip 行為，請使用 USpaceTab (filter / input type)。
 ///
-/// Outline gradient text: neonLime200 (#00EEB7) → neonLime700 (#B4E002)。
+/// Outline 為透明底加中性色邊框，四個 level 的文字色相同。
+/// 2026-08-13 經使用者確認由品牌漸層改為中性色，Figma 尚無對應設計稿。
 class USpaceChip extends StatelessWidget {
   const USpaceChip({
     super.key,
@@ -78,13 +77,6 @@ class USpaceChip extends StatelessWidget {
   /// 前置圖示 widget（建議 20×20）
   final Widget? leadingIcon;
 
-  // ── Outline gradient: neonLime200 → neonLime700 ──
-  static const _outlineTextGradient = LinearGradient(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-    colors: [USpacePalette.neonLime200, USpacePalette.neonLime700],
-  );
-
   @override
   Widget build(BuildContext context) {
     final colors = context.uColors;
@@ -96,9 +88,8 @@ class USpaceChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: level != USpaceChipLevel.outline ? _bgColor(colors) : null,
         borderRadius: BorderRadius.circular(USpaceRadius.full),
-        // Outline chip border 直接使用 palette（品牌漸層色，無對應 semantic token）
         border: level == USpaceChipLevel.outline
-            ? Border.all(color: USpacePalette.neonLime200)
+            ? Border.all(color: colors.contentPrimary)
             : null,
       ),
       child: Row(
@@ -114,9 +105,7 @@ class USpaceChip extends StatelessWidget {
             ),
             const SizedBox(width: USpaceSpacing.spacer2),
           ],
-          level == USpaceChipLevel.outline
-              ? _buildGradientText(typo)
-              : Text(label, style: _textStyle(colors, typo)),
+          Text(label, style: _textStyle(colors, typo)),
         ],
       ),
     );
@@ -150,12 +139,7 @@ class USpaceChip extends StatelessWidget {
     }
   }
 
-  Color _iconColor(USpaceColorsExtension colors) {
-    // Outline chip icon 直接使用 palette（品牌漸層色，無對應 semantic token）
-    return level == USpaceChipLevel.outline
-        ? USpacePalette.neonLime200
-        : colors.contentPrimary;
-  }
+  Color _iconColor(USpaceColorsExtension colors) => colors.contentPrimary;
 
   TextStyle _textStyle(USpaceColorsExtension colors, AppTypographyExtension typo) {
     final color = colors.textPrimary;
@@ -171,22 +155,5 @@ class USpaceChip extends StatelessWidget {
           height: 14 / 10,
         ).copyWith(color: color);
     }
-  }
-
-  Widget _buildGradientText(AppTypographyExtension typo) {
-    final style = size == USpaceChipSize.regular
-        ? typo.labelM
-        : const TextStyle(
-            fontFamily: 'PingFangTC',
-            fontSize: 10,
-            fontWeight: AppTypographyExtension.semibold,
-            height: 14 / 10,
-          );
-
-    return ShaderMask(
-      shaderCallback: (bounds) => _outlineTextGradient.createShader(bounds),
-      blendMode: BlendMode.srcIn,
-      child: Text(label, style: style),
-    );
   }
 }

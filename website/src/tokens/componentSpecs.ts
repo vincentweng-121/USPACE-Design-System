@@ -212,23 +212,27 @@ export const chipSpec: ComponentSpec = {
     {
       "level": "accent",
       "bg": "chipBgAccent",
-      "content": "textPrimary"
+      "content": "textPrimary",
+      "border": null
     },
     {
       "level": "primary",
       "bg": "chipBgPrimary",
-      "content": "textPrimary"
+      "content": "textPrimary",
+      "border": null
     },
     {
       "level": "secondary",
       "bg": "chipBgSecondary",
-      "content": "textPrimary"
+      "content": "textPrimary",
+      "border": null
     },
     {
       "level": "outline",
       "bg": null,
-      "content": null,
-      "note": "透明底 + neonLime200 邊框 + 漸層文字，無對應 semantic token"
+      "content": "textPrimary",
+      "border": "contentPrimary",
+      "note": "透明底，邊框與文字皆為中性色；四個 level 的文字色相同"
     }
   ],
   "layout": {

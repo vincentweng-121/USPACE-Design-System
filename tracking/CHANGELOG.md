@@ -11,6 +11,27 @@
 
 ---
 
+## v0.8.0 | 2026-08-13
+
+### chip.dart | Outline 由品牌漸層改為中性色
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- `USpaceChipLevel.outline` 的外觀改變：原本是 neonLime200 邊框加 limeLinear
+  漸層文字，現在是透明底 + `contentPrimary` 邊框 + `textPrimary` 文字。
+  API 沒有變動，但畫面上已經在用 outline chip 的地方外觀會跟著變。
+- 四個 level 的文字色與 icon 色因此完全一致，`_iconColor` 不再分岔，
+  chip.dart 不再引用 `USpacePalette`，ShaderMask 一併移除。
+- `chip.json` 的 variants 新增 `border` 欄位，四個 level 都填。
+  `component_token_test.dart` 隨之加強：原本只斷言「outline 有邊框」，
+  現在逐一比對邊框色票與文字色票，改錯 token 會被擋下。
+- 文件站的 Color 表與 Baseline tokens 表新增描邊欄位，Outline 的說明、
+  無障礙提醒與 Notes 同步改寫。
+- 來源：2026-08-13 使用者確認。Figma 尚無對應設計稿，已記在 `chip.json`
+  的 `$deviations`。
+- `limeLinear` 漸層 token 保留在 `gradients.json` 與 colors extension，
+  目前沒有元件使用。
+
 ## v0.7.6 | 2026-08-13
 
 ### 文件站 | Chip 頁改用 Button 頁的呈現邏輯，Accessibility 納入必要區塊

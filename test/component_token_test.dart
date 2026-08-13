@@ -270,7 +270,6 @@ void main() {
 
         if (v['bg'] == null) {
           expect(decoration.color, isNull, reason: '${v['level']} 應為透明底');
-          expect(decoration.border, isNotNull, reason: '${v['level']} 應有邊框');
         } else {
           expect(
             decoration.color,
@@ -278,6 +277,26 @@ void main() {
             reason: '${v['level']} 的底色應為 ${v['bg']}',
           );
         }
+
+        // 邊框：有 border token 的要照 token 上色，沒有的不該畫框
+        if (v['border'] == null) {
+          expect(decoration.border, isNull, reason: '${v['level']} 不應有邊框');
+        } else {
+          expect(
+            (decoration.border as Border).top.color,
+            tokenColor(v['border'] as String),
+            reason: '${v['level']} 的邊框應為 ${v['border']}',
+          );
+        }
+
+        final text = tester.widget<Text>(
+          find.descendant(of: find.byType(USpaceChip), matching: find.byType(Text)).first,
+        );
+        expect(
+          text.style?.color,
+          tokenColor(v['content'] as String),
+          reason: '${v['level']} 的文字應為 ${v['content']}',
+        );
       });
     }
   });
