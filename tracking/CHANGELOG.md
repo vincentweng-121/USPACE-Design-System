@@ -11,6 +11,81 @@
 
 ---
 
+## v0.8.0 | 2026-08-13
+
+### chip.dart | 形狀與顏色拆成兩個維度，新增 text style
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- **`USpaceChipLevel.outline` 已移除**。原本 level 的四個值裡，outline 講的是
+  形狀，其餘三個講的是顏色，兩者並非同一種東西。現在拆成兩個獨立維度：
+  新的 `USpaceChipStyle`（`filled` / `outlined` / `text`）決定形狀，
+  `USpaceChipLevel`（`accent` / `primary` / `secondary`）只在 filled 時決定底色。
+  用 `USpaceChipLevel.outline` 的程式碼會編譯失敗，改為
+  `style: USpaceChipStyle.outlined` 即可，不需要再傳 level。
+- **新增 `text` style**：無底無框，只有文字。內距與 filled 相同，
+  三種形狀可以直接互換而不影響版面。
+- **`outlined` 改為中性色**：原本是 neonLime200 邊框加 limeLinear 漸層文字，
+  現在是透明底 + `contentSecondary` 邊框 + `textPrimary` 文字。文字色與 icon 色
+  因此完全統一，`_iconColor` 不再分岔，chip.dart 不再引用 `USpacePalette`，
+  ShaderMask 一併移除。
+  描邊色先前依口述暫定為 `contentPrimary`，後續比對 Figma node 3808:9321
+  （chip-variant-light）確認實際為 `Content/Secondary` #777777，已照 Figma 修正。
+- **Small 不再支援 leading icon**：Figma 只畫了 regular 的 icon 版本。
+  widget 收到 `leadingIcon` 但 size 為 small 時直接忽略，`chip.json` 的
+  `smallPaddingLeftWithIcon` / `smallPaddingRightWithIcon` 一併移除，
+  small 的左右內距固定 8。新增兩個測試：small 傳 icon 不該畫出來、
+  regular 傳 icon 仍要畫。
+- **Configurations 的 Leading 選項在 Small 下停用**：`Playground` 新增
+  `disabled` 判斷，並在切換後把落在停用選項上的維度退回可用值，避免預覽出現
+  元件做不出來的組合。停用而非隱藏，讀者才看得出「有這個選項，只是這個尺寸
+  不適用」。
+- **Variants 的說明圖補上**：從 Figma node 3808:9321 與 3873:15187 以 scale 2
+  匯出 `chip-variant-light.png` 與 `chip-variant-dark.png`，佔位框換成正式圖。
+- 比對 Figma node 3808:9321 確認 regular 有 icon 時的間距（左 8 / 右 12 /
+  間距 2 / icon 20 / 高 22）與現有實作完全相符，未做調整。該畫板是 2 倍放大的
+  說明圖，換算後才對得上。
+- `chip.json` 改為 style × level 的 5 筆組合並新增 `border` 欄位。
+  outlined 與 text 刻意不帶 level 欄位，測試與文件站都靠這個缺席判斷
+  「這個組合與 level 無關」。
+- `component_token_test.dart` 加強兩處：原本只斷言「outline 有邊框」，現在逐一
+  比對每個組合的底色、邊框色與文字色；另外新增兩個測試，確認 outlined 與 text
+  傳任何 level 都不改變外觀。
+- 文件站的 Configurations 現在可以直接切換三種形狀——這是拆維度真正的收穫，
+  形狀本身不帶顏色，符合「Configurations 只講配置」的規則。Color 表、
+  Baseline tokens 表、Variants 說明、使用建議與 API 表同步改寫。
+- 來源：2026-08-13 使用者確認。Figma 尚無對應設計稿，已記在 `chip.json`
+  的 `$deviations`。
+- `limeLinear` 漸層 token 保留在 `gradients.json` 與 colors extension，
+  目前沒有元件使用。
+
+## v0.7.6 | 2026-08-13
+
+### 文件站 | Chip 頁改用 Button 頁的呈現邏輯，Accessibility 納入必要區塊
+狀態：PUBLISHED
+
+- Chip 頁全面對齊 Button 頁：Hero 補上來源與 Figma node、Variants 補四個 level 的
+  逐項說明、Anatomy 補部件表、Color 改用 Swatch 表並改由 `chip.json` 產生、
+  States 改為與 Button 同格式的表、Measurements 改用 `SpecTable` 且數值改讀
+  `chip.json` 的 layout、Develop 分頁補上 Examples 與 API，Baseline tokens 由手抄
+  改為從 variants 產生。此前 Develop 分頁的 token 表與 Measurements 的數值都是手抄，
+  與 `chip.json`、`chip.dart` 各自為政，已是第三份副本。
+- Configurations 的規則不變且已由 `check:pages` 把關：只呈現 size 與元素配置，
+  level 因為差異就是顏色（accent 為螢光綠、outline 為品牌漸層）而不列入，
+  預覽固定用中性的 secondary。
+- `tokens/components/chip.json` 新增 `layout` 與 `size` 維度，數值照抄
+  `styles/chip.dart` 的 `_padding`，讓文件站不再手抄尺寸。
+- 元件頁的必要區塊由八個改為九個，新增 Accessibility。其餘八頁先以 `Pending`
+  佔位，`check:pages` 同步更新。
+- 「可擺放 icon 的位置」統一為虛線方框，抽成 `spec.tsx` 的 `IconPlaceholder`。
+  原本 Button 與 Chip 各有一份複製品，Tab 的 icon 畫成驚嘆號圓框、graphic 畫成
+  帶字母 P 的方塊，Modal 的標題與提示畫成公事包與驚嘆號——這些圖示都不是規範的
+  一部分，讀者卻會以為是。元件行為固定的圖示（關閉鈕、勾選、收合箭頭）維持照實畫。
+  `check:pages` 新增第四項檢查，擋下各頁自己複製虛線框。
+- 修正 Outline 漸層的文件錯誤：`chip.dart` 註解與文件站原本寫
+  neonLime200 → neonLime800，實作與 `gradients.json` 的 `limeLinear` 都是
+  neonLime200 → neonLime700。
+
 ## v0.7.5 | 2026-08-04
 
 ### 文件站 | 移除 Tokens & specs，Changelog 與 Status 改讀原始檔

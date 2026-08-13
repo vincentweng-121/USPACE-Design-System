@@ -197,36 +197,67 @@ export const chipSpec: ComponentSpec = {
   "source": "styles/chip.dart",
   "figmaNode": "1327:19329",
   "dimensions": {
+    "style": [
+      "filled",
+      "outlined",
+      "text"
+    ],
     "level": [
       "accent",
       "primary",
-      "secondary",
-      "outline"
+      "secondary"
+    ],
+    "size": [
+      "regular",
+      "small"
     ]
   },
   "variants": [
     {
+      "style": "filled",
       "level": "accent",
       "bg": "chipBgAccent",
+      "border": null,
       "content": "textPrimary"
     },
     {
+      "style": "filled",
       "level": "primary",
       "bg": "chipBgPrimary",
+      "border": null,
       "content": "textPrimary"
     },
     {
+      "style": "filled",
       "level": "secondary",
       "bg": "chipBgSecondary",
+      "border": null,
       "content": "textPrimary"
     },
     {
-      "level": "outline",
+      "style": "outlined",
       "bg": null,
-      "content": null,
-      "note": "透明底 + neonLime200 邊框 + 漸層文字，無對應 semantic token"
+      "border": "contentSecondary",
+      "content": "textPrimary",
+      "note": "透明底加中性色描邊，不吃 level"
+    },
+    {
+      "style": "text",
+      "bg": null,
+      "border": null,
+      "content": "textPrimary",
+      "note": "無底無框，內距與 filled 相同，不吃 level"
     }
-  ]
+  ],
+  "layout": {
+    "iconSize": 20,
+    "gap": 2,
+    "paddingY": 1,
+    "regularPaddingX": 12,
+    "regularPaddingLeftWithIcon": 8,
+    "regularPaddingRightWithIcon": 12,
+    "smallPaddingX": 8
+  }
 };
 
 export const tabSpec: ComponentSpec = {

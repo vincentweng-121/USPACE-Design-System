@@ -256,12 +256,25 @@ void main() {
       'accent': USpaceChipLevel.accent,
       'primary': USpaceChipLevel.primary,
       'secondary': USpaceChipLevel.secondary,
-      'outline': USpaceChipLevel.outline,
+    };
+    const styles = {
+      'filled': USpaceChipStyle.filled,
+      'outlined': USpaceChipStyle.outlined,
+      'text': USpaceChipStyle.text,
     };
 
     for (final v in variantsOf('chip.json')) {
-      testWidgets('${v['level']}', (tester) async {
-        await pump(tester, USpaceChip(label: 'Tag', level: levels[v['level']]!));
+      // outlined 與 text 不吃 level，規格檔就不帶這個欄位；level 傳什麼都不該影響結果
+      final name = v['level'] == null ? '${v['style']}' : '${v['style']} / ${v['level']}';
+      testWidgets(name, (tester) async {
+        await pump(
+          tester,
+          USpaceChip(
+            label: 'Tag',
+            style: styles[v['style']]!,
+            level: levels[v['level']] ?? USpaceChipLevel.accent,
+          ),
+        );
 
         final container = tester.widget<Container>(
           find.descendant(of: find.byType(USpaceChip), matching: find.byType(Container)).first,
@@ -269,15 +282,85 @@ void main() {
         final decoration = container.decoration as BoxDecoration;
 
         if (v['bg'] == null) {
-          expect(decoration.color, isNull, reason: '${v['level']} 應為透明底');
-          expect(decoration.border, isNotNull, reason: '${v['level']} 應有邊框');
+          expect(decoration.color, isNull, reason: '$name 應為透明底');
         } else {
           expect(
             decoration.color,
             tokenColor(v['bg'] as String),
-            reason: '${v['level']} 的底色應為 ${v['bg']}',
+            reason: '$name 的底色應為 ${v['bg']}',
           );
         }
+
+        // 邊框：有 border token 的要照 token 上色，沒有的不該畫框
+        if (v['border'] == null) {
+          expect(decoration.border, isNull, reason: '$name 不應有邊框');
+        } else {
+          expect(
+            (decoration.border as Border).top.color,
+            tokenColor(v['border'] as String),
+            reason: '$name 的邊框應為 ${v['border']}',
+          );
+        }
+
+        final text = tester.widget<Text>(
+          find.descendant(of: find.byType(USpaceChip), matching: find.byType(Text)).first,
+        );
+        expect(
+          text.style?.color,
+          tokenColor(v['content'] as String),
+          reason: '$name 的文字應為 ${v['content']}',
+        );
+      });
+    }
+
+    // small 沒有 icon 版本。少了這個，widget 照畫 icon 也不會有人發現
+    testWidgets('small 忽略 leadingIcon', (tester) async {
+      await pump(
+        tester,
+        const USpaceChip(
+          label: 'Tag',
+          size: USpaceChipSize.small,
+          leadingIcon: Icon(Icons.star),
+        ),
+      );
+      expect(
+        find.descendant(of: find.byType(USpaceChip), matching: find.byType(Icon)),
+        findsNothing,
+        reason: 'small 不支援 leading icon，傳了也不該畫出來',
+      );
+    });
+
+    testWidgets('regular 仍然畫 leadingIcon', (tester) async {
+      await pump(
+        tester,
+        const USpaceChip(
+          label: 'Tag',
+          leadingIcon: Icon(Icons.star),
+        ),
+      );
+      expect(
+        find.descendant(of: find.byType(USpaceChip), matching: find.byType(Icon)),
+        findsOneWidget,
+        reason: 'regular 的 leading icon 不該被這個規則影響',
+      );
+    });
+
+    // level 只在 filled 生效。少了這個，把 level 誤接到 outlined 的底色也不會被發現
+    for (final style in [USpaceChipStyle.outlined, USpaceChipStyle.text]) {
+      testWidgets('${style.name} 忽略 level', (tester) async {
+        final decorations = <BoxDecoration>[];
+        for (final level in USpaceChipLevel.values) {
+          await pump(tester, USpaceChip(label: 'Tag', style: style, level: level));
+          final container = tester.widget<Container>(
+            find.descendant(of: find.byType(USpaceChip), matching: find.byType(Container)).first,
+          );
+          decorations.add(container.decoration as BoxDecoration);
+        }
+        expect(
+          decorations.every((d) => d.color == decorations.first.color),
+          isTrue,
+          reason: '${style.name} 的底色不該隨 level 改變',
+        );
       });
     }
   });

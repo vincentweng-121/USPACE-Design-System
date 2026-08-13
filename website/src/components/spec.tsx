@@ -353,29 +353,39 @@ function ControlGroup({
   label,
   value,
   options,
+  isDisabled,
   onChange,
 }: {
   name: string;
   label: string;
   value: string;
   options: { value: string; label: string }[];
+  isDisabled: (optionValue: string) => boolean;
   onChange: (v: string) => void;
 }) {
   return (
     <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
       <legend className="control-group-label">{label}</legend>
-      {options.map((opt) => (
-        <label key={opt.value} className="control-option">
-          <input
-            type="radio"
-            name={name}
-            value={opt.value}
-            checked={value === opt.value}
-            onChange={() => onChange(opt.value)}
-          />
-          {opt.label}
-        </label>
-      ))}
+      {options.map((opt) => {
+        const disabled = isDisabled(opt.value);
+        return (
+          <label
+            key={opt.value}
+            className="control-option"
+            style={disabled ? { opacity: 0.4, cursor: 'not-allowed' } : undefined}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={opt.value}
+              checked={value === opt.value}
+              disabled={disabled}
+              onChange={() => onChange(opt.value)}
+            />
+            {opt.label}
+          </label>
+        );
+      })}
     </fieldset>
   );
 }
@@ -387,6 +397,14 @@ export type PlaygroundDimension = {
   /** 控制卡上顯示的群組名稱 */
   label: string;
   options: { value: string; label: string }[];
+  /**
+   * 依其他維度的當前值決定這個選項能不能選。
+   *
+   * 用於元件本身不存在的組合——例如 Chip 的 small 沒有 leading icon。
+   * 停用而不是整個藏起來：藏起來讀者會以為那個選項不存在，
+   * 停用才看得出「有這個選項，但這個尺寸下不適用」。
+   */
+  disabled?: (values: Record<string, string>) => boolean;
 };
 
 /**
@@ -426,6 +444,29 @@ export function Playground({
     Object.fromEntries(dimensions.map((d) => [d.key, d.options[0].value])),
   );
 
+  const isDisabled = (d: PlaygroundDimension, optionValue: string) =>
+    d.disabled?.({ ...values, [d.key]: optionValue }) ?? false;
+
+  /**
+   * 切換後可能讓另一個維度的當前值變成不合法（例如選了 small，
+   * 而 icon 停在 leading）。這裡把落在停用選項上的維度退回第一個還能選的值，
+   * 否則預覽會顯示一個元件根本做不出來的組合。
+   */
+  const applyChange = (key: string, value: string) => {
+    setValues((prev) => {
+      const next = { ...prev, [key]: value };
+      for (const d of dimensions) {
+        if (d.disabled?.({ ...next, [d.key]: next[d.key] })) {
+          const fallback = d.options.find(
+            (o) => !d.disabled!({ ...next, [d.key]: o.value }),
+          );
+          if (fallback) next[d.key] = fallback.value;
+        }
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="playground">
       <div className="playground-preview">
@@ -440,7 +481,8 @@ export function Playground({
             label={d.label}
             value={values[d.key]}
             options={d.options}
-            onChange={(v) => setValues((prev) => ({ ...prev, [d.key]: v }))}
+            isDisabled={(optionValue) => isDisabled(d, optionValue)}
+            onChange={(v) => applyChange(d.key, v)}
           />
         ))}
       </div>
@@ -514,3 +556,45 @@ export function PendingImage({ expects, note }: { expects: string; note?: string
   );
 }
 
+
+// ── 可擺放 icon 的位置 ──────────────────────────────────────
+/**
+ * 虛線方框，代表「這裡可以放一個 icon」。
+ *
+ * 來源：Figma node 3746:15802。
+ *
+ * 預覽裡凡是由使用者自行傳入、可替換的 icon 位置，一律用這個方框，
+ * 不畫任何具體圖示——畫了星星或驚嘆號，讀者會以為那個圖示是規範的一部分，
+ * 佔位框只表達尺寸與位置。
+ *
+ * 相對的，元件行為固定的圖示（關閉鈕、勾選、收合箭頭）要照實畫：
+ * 那是元件規範本身，換成方框反而看不出那裡是什麼。
+ *
+ * 顏色預設跟著文字走，與各元件 Anatomy 表寫的「顏色與文字相同」一致。
+ */
+export function IconPlaceholder({
+  size = 24,
+  color = 'currentColor',
+}: {
+  size?: number;
+  color?: string;
+}) {
+  // 邊框寬度與虛線間隔跟著 viewBox 一起縮放，各頁不必自行調整
+  const inset = 1;
+  const side = 24 - inset * 2;
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect
+        x={inset}
+        y={inset}
+        width={side}
+        height={side}
+        rx="1.33"
+        stroke={color}
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        strokeDasharray="4 4"
+      />
+    </svg>
+  );
+}

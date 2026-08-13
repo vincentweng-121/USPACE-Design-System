@@ -2,9 +2,8 @@ import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { tabSpec } from '../../tokens/componentSpecs';
-import { Pending, ColorTable, ConfidenceNote, SpecBox, StateRow, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
+import { Pending, ColorTable, ConfidenceNote, IconPlaceholder, SpecBox, StateRow, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { colorOf } from '../../utils';
-import { semantic } from '../../tokens/colors';
 
 type TabType = 'Tab_icon' | 'Tab_Graphic' | 'Tab' | 'Filter' | 'Input';
 
@@ -15,29 +14,6 @@ const tabTypes: { value: TabType; label: string }[] = [
   { value: 'Filter', label: 'Filter' },
   { value: 'Input', label: 'Input' },
 ];
-
-function InfoIcon({ color }: { color: string }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="8" stroke={color} strokeWidth="1.5"/>
-      <line x1="10" y1="9" x2="10" y2="14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
-      <circle cx="10" cy="6.5" r="1" fill={color}/>
-    </svg>
-  );
-}
-
-function GraphicIcon() {
-  return (
-    <div style={{
-      width: 31.5, height: 31.5, borderRadius: 8,
-      background: semantic.contentPrimary, display: 'flex',
-      alignItems: 'center', justifyContent: 'center',
-      fontSize: 14, color: semantic.textInverse, fontWeight: 600,
-    }}>
-      P
-    </div>
-  );
-}
 
 function CloseIcon({ color }: { color: string }) {
   return (
@@ -95,8 +71,8 @@ function TabPreview({ type, label, isActive = false }: { type: TabType; label: s
   const color = colorOf(tabVariant(type, isActive).content as string)!;
   return (
     <div style={getTabStyle(type, isActive)}>
-      {type === 'Tab_icon' && <InfoIcon color={color} />}
-      {type === 'Tab_Graphic' && <GraphicIcon />}
+      {type === 'Tab_icon' && <IconPlaceholder color={color} size={20} />}
+      {type === 'Tab_Graphic' && <IconPlaceholder color={color} size={31.5} />}
       <span style={{ padding: type === 'Tab_Graphic' ? '0 0 0 8px' : undefined }}>{label}</span>
       {type === 'Input' && <CloseIcon color={color} />}
     </div>
@@ -248,6 +224,16 @@ export default function TabPage() {
               </ul>
             </div>
           </section>
+
+          {/* ── Accessibility ── */}
+          <section className="section">
+            <SectionTitle>Accessibility</SectionTitle>
+            <Pending
+              what="Accessibility"
+              why="無障礙說明尚未撰寫。需先確認觸控目標尺寸、讀屏軟體的朗讀內容與對比度是否達標，避免寫出未經驗證的保證。"
+            />
+          </section>
+
         </div>
       )}
 

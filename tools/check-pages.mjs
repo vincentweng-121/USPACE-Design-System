@@ -4,10 +4,10 @@
  *
  *   node tools/check-pages.mjs
  *
- * 擋三類會讓文件站前後不一致的問題：
+ * 擋四類會讓文件站前後不一致的問題：
  *
  * 1. 缺少必要區塊 / 順序不符
- *    每個元件頁都要有同樣的八個區塊。少一塊時讀者無從判斷是「還沒做」
+ *    每個元件頁都要有同樣的九個區塊。少一塊時讀者無從判斷是「還沒做」
  *    還是「這個元件不適用」，而規則寫在文件裡沒有人會每次去對。
  *
  * 2. Configurations 直接寫死顏色
@@ -18,6 +18,10 @@
  *    區塊裡一個顏色字都沒有，綠色是 <ChipPreview> 依 level 從 token 查出來的。
  *    所以這裡不看區塊文字，改看「playgroundDimensions 暴露的維度，切換後
  *    會不會解出非中性色票」。
+ *
+ * 4. 頁面自己畫「可擺放 icon 的位置」
+ *    這個佔位框只能有一份，來源是 spec.tsx 的 IconPlaceholder。各頁自己複製
+ *    一份的話，尺寸與虛線間隔會慢慢走鐘；Button 與 Chip 就各有過一份。
  *
  * 中性 = palette 名稱為 grey / white / black / transparent 開頭。
  */
@@ -38,6 +42,7 @@ const REQUIRED = [
   'Measurements',
   'Touch areas',
   'Usage',
+  'Accessibility',
 ];
 
 /** Configurations 區塊裡不該直接出現的顏色寫法 */
@@ -158,7 +163,16 @@ for (const file of files) {
     }
   }
 
-  // 3. Configurations 的維度會不會渲染出非中性色
+  // 3. 自己畫的 icon 佔位框
+  //    虛線描邊是這個框的特徵；元件固定部件（關閉鈕、勾、箭頭）都是實線，不會誤判。
+  if (/strokeDasharray/.test(text)) {
+    problems.push(
+      `${file}\n    頁面自己畫了虛線佔位框\n` +
+        `    可擺放 icon 的位置一律用 spec.tsx 的 <IconPlaceholder />，不要各頁複製一份`,
+    );
+  }
+
+  // 4. Configurations 的維度會不會渲染出非中性色
   const specName = SPEC_OF[file.replace('.tsx', '')];
   const spec = specName && specs.get(specName);
   if (spec) {
