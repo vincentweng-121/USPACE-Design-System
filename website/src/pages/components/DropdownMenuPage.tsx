@@ -416,7 +416,8 @@ export default function DropdownMenuPage() {
               </li>
               <li>
                 Placeholder 的色票是 {String(variantOf('default').content)}，對比度低，
-                不可拿來當 Label 用——欄位名稱一律放在上方的 Label。
+                不可拿來當 Label 用——欄位名稱一律放在上方的 Label。停用文字用的是另一個
+                較深的 {String(variantOf('nonEditable').content)}，兩者不再同色。
               </li>
             </ul>
           </section>
@@ -535,10 +536,10 @@ export default function DropdownMenuPage() {
                 node 2141:11030 的結果。
               </li>
               <li>
-                <strong>inputTextDisabled 待確認</strong>：Figma 的 Input/Text-Disabled 是
-                #A6A6A6（grey400），但目前 token 是 grey200(#D9D9D9)，與 placeholder 同色。
-                nonEditable 先沿用既有 token；這個 token 同時被 TextField 與 TextArea 使用，
-                不宜單方面更動。
+                <strong>inputTextDisabled 已對齊 Figma</strong>：2026-08-14 由 grey200 改為
+                grey400（#A6A6A6）。原值與 placeholder 同色，停用與未填看起來一樣。
+                這個 token 同時被 TextField 與 TextArea 使用，那兩個元件的 disabled 與
+                nonEditable 也跟著變深。
               </li>
               <li>
                 <strong>面板尚未比對</strong>：展開後的選單面板不在該 Figma node 內，

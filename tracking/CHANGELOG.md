@@ -45,12 +45,20 @@ enum 完全是兩套名字。
   States 補六個實際預覽與行為表、Measurements 改用 `SpecTable` 且數值讀規格檔、
   Develop 分頁補 Examples 與 API。Configurations 依規則只放 Label 與 Hint
   的顯示與否——status 會渲染出螢光綠與紅色，屬於 States 與 Color。
-- ⚠️ **待確認**：Figma 的 Input/Text-Disabled 是 #A6A6A6（grey400），但
-  `inputTextDisabled` 目前是 grey200(#D9D9D9)，與 placeholder 同色。
-  nonEditable 先沿用既有 token；該 token 同時被 TextField 與 TextArea 使用，
-  不宜單方面更動。
 - 展開後的選單面板不在該 Figma node 內，圓角 20 / 內距 16、20 / 間距 8
-  沿用既有實作，尚未比對。
+  沿用既有實作，尚未比對——使用者確認目前還沒有面板的設計稿。
+
+### semantic-colors | inputTextDisabled 由 grey200 改為 grey400
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- 對齊 Figma 的 Input/Text-Disabled #A6A6A6。原值 grey200(#D9D9D9) 與
+  `inputTextPlaceholder` 同色，停用的欄位與還沒填的欄位看起來一模一樣。
+- **影響三個元件共五個狀態**：TextField 的 disabled 與 nonEditable、
+  TextArea 的 disabled 與 nonEditable、DropdownMenu 的 nonEditable。
+  這些狀態的文字會變深，不需要改任何呼叫端程式碼。
+- dark 值維持 white：Figma 尚無 dark 模式的依據，這次不動沒有證據的部分。
+- 來源：2026-08-14 使用者確認。
 
 ## v0.8.0 | 2026-08-13
 
