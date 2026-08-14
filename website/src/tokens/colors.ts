@@ -124,7 +124,7 @@ export const semanticLight = {
   inputText: palette.grey800,
   inputTextError: palette.red500,
   inputTextPlaceholder: palette.grey200,
-  inputTextDisabled: palette.grey200,
+  inputTextDisabled: palette.grey400,
 
   // Chip
   chipBgPrimary: palette.white,
@@ -402,7 +402,7 @@ export const semanticGroups = [
       { name: 'inputText', lightToken: 'grey800', darkToken: 'white', light: palette.grey800, dark: palette.white },
       { name: 'inputTextError', lightToken: 'red500', darkToken: 'white', light: palette.red500, dark: palette.white },
       { name: 'inputTextPlaceholder', lightToken: 'grey200', darkToken: 'white', light: palette.grey200, dark: palette.white },
-      { name: 'inputTextDisabled', lightToken: 'grey200', darkToken: 'white', light: palette.grey200, dark: palette.white },
+      { name: 'inputTextDisabled', lightToken: 'grey400', darkToken: 'white', light: palette.grey400, dark: palette.white },
     ],
   },
   {

@@ -274,7 +274,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     inputText:            USpacePalette.grey800,
     inputTextError:       USpacePalette.red500,
     inputTextPlaceholder: USpacePalette.grey200,
-    inputTextDisabled:    USpacePalette.grey200,
+    inputTextDisabled:    USpacePalette.grey400,
     // Chip
     chipBgPrimary:   USpacePalette.white,
     chipBgSecondary: USpacePalette.grey100,
