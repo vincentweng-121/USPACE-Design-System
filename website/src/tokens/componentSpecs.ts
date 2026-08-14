@@ -648,6 +648,7 @@ export const dropdown_menuSpec: ComponentSpec = {
     "radius": 1000,
     "paddingX": 20,
     "iconSize": 16,
+    "contentIconGap": 8,
     "labelPaddingX": 8,
     "labelGap": 4,
     "hintGap": 4
