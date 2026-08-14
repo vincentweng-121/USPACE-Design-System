@@ -258,7 +258,9 @@ export const chipSpec: ComponentSpec = {
     "regularPaddingX": 12,
     "regularPaddingLeftWithIcon": 8,
     "regularPaddingRightWithIcon": 12,
-    "smallPaddingX": 8
+    "regularPaddingWithTrailingIcon": 8,
+    "smallPaddingX": 8,
+    "minTapTarget": 44
   }
 };
 

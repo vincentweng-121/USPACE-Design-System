@@ -49,26 +49,29 @@ function ChipPreview({
   level = 'secondary',
   size = 'regular',
   icon = false,
+  trailing = false,
 }: {
   label: string;
   style: Style;
   level?: Level;
   size?: Size;
   icon?: boolean;
+  trailing?: boolean;
 }) {
   const v = variantOf(style, level);
   const isRegular = size === 'regular';
   const t = isRegular ? labelType : smallType;
 
-  // small 沒有 icon 版本，widget 也會忽略傳進來的 icon，這裡跟著一致
+  // small 兩側都沒有 icon 版本，widget 也會忽略傳進來的 icon，這裡跟著一致
   const showsIcon = icon && isRegular;
+  const showsTrailing = trailing && isRegular;
   const padLeft = showsIcon
     ? layout.regularPaddingLeftWithIcon
     : isRegular
       ? layout.regularPaddingX
       : layout.smallPaddingX;
-  const padRight = showsIcon
-    ? layout.regularPaddingRightWithIcon
+  const padRight = showsTrailing
+    ? layout.regularPaddingWithTrailingIcon
     : isRegular
       ? layout.regularPaddingX
       : layout.smallPaddingX;
@@ -81,7 +84,7 @@ function ChipPreview({
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: showsIcon ? layout.gap : 0,
+        gap: showsIcon || showsTrailing ? layout.gap : 0,
         padding: `${layout.paddingY}px ${padRight}px ${layout.paddingY}px ${padLeft}px`,
         borderRadius: 100,
         background: colorOf(v.bg as string | null) ?? 'transparent',
@@ -97,6 +100,7 @@ function ChipPreview({
     >
       {showsIcon && <IconPlaceholder color={contentColor} size={layout.iconSize} />}
       {label}
+      {showsTrailing && <IconPlaceholder color={contentColor} size={layout.iconSize} />}
     </div>
   );
 }
@@ -123,13 +127,15 @@ const playgroundDimensions: PlaygroundDimension[] = [
   {
     key: 'icon',
     label: 'Icon option',
-    // small 沒有 leading icon，Figma 只畫了 regular 的 icon 版本。
+    // small 兩側都不支援 icon，Figma 只畫了 regular 的 icon 版本。
     // 停用而不是隱藏，讀者才看得出這個選項存在、只是這個尺寸下不適用。
     options: [
       { value: 'none', label: 'None' },
       { value: 'leading', label: 'Leading（Small 不適用）' },
+      { value: 'trailing', label: 'Trailing（Small 不適用）' },
+      { value: 'both', label: 'Both（Small 不適用）' },
     ],
-    disabled: (v) => v.icon === 'leading' && v.size === 'small',
+    disabled: (v) => v.icon !== 'none' && v.size === 'small',
   },
 ];
 
@@ -140,7 +146,7 @@ export default function ChipPage() {
     <div>
       <PageHero
         title="Chip"
-        lead="Chip 是純展示的標籤，用來標記狀態或分類，本身不可點擊。形狀由 style 決定，共 filled、outlined、text 三種；filled 再由 level 決定底色，共 accent、primary、secondary 三級。加上 regular 與 small 兩種 size，並可在文字左側加一個 icon。"
+        lead="Chip 用來標記狀態、分類，或作為同一頁面內的篩選條件。傳入 onTap 就可以點擊，不傳則是純展示標籤。形狀由 style 決定，共 filled、outlined、text 三種；filled 再由 level 決定底色，共 accent、primary、secondary 三級。加上 regular 與 small 兩種 size，文字左右各可放一個 icon。"
         meta={
           <>
             <span>
@@ -187,7 +193,8 @@ export default function ChipPage() {
                   style={v.style as Style}
                   level="secondary"
                   size={v.size as Size}
-                  icon={v.icon === 'leading'}
+                  icon={v.icon === 'leading' || v.icon === 'both'}
+                  trailing={v.icon === 'trailing' || v.icon === 'both'}
                 />
               )}
             />
@@ -205,8 +212,9 @@ export default function ChipPage() {
               headers={['', '部件', '必要性', '說明']}
               rows={[
                 ['1', '容器 Container', '必要', `底色與描邊由 level 決定；圓角固定 100px，垂直內距 ${layout.paddingY}px`],
-                ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同；只放左側，且僅 regular 支援`],
+                ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同，僅 regular 支援。可放 icon 或圖示`],
                 ['3', '文字 Label', '必要', 'Chip 語意的唯一承載者，不可省略'],
+                ['4', 'Trailing icon', '選用', `${layout.iconSize}px，僅 regular 支援。X 用於移除、下箭頭用於展開更多選項`],
               ]}
               minWidth={560}
             />
@@ -243,15 +251,20 @@ export default function ChipPage() {
             <SpecTable
               headers={['狀態', '外觀', '互動']}
               rows={[
-                ['Static', '依 level 呈現對應的底色與文字色，不隨互動改變', '不可點擊，元件不接受 onTap'],
+                ['純展示（不傳 onTap）', '依 style 與 level 呈現，不隨互動改變', '不可點擊，不包 GestureDetector'],
+                ['可點擊（傳 onTap）', '外觀與純展示完全相同', `可點擊，觸控熱區垂直外擴至 ${layout.minTapTarget}px`],
+                ['選中 / 未選中', '目前用 style 與 level 表達，沒有獨立的選中狀態', '由呼叫端切換'],
+                ['Hover / Pressed', '尚未定義', '—'],
                 ['Hover / Pressed', '不適用', '—'],
                 ['Disabled', '不適用', '—'],
               ]}
               minWidth={620}
             />
             <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-              Chip 是靜態標籤，沒有互動狀態。需要可點擊的標籤時請改用{' '}
-              <code>USpaceTab</code> 的 filter 或 input type，不要自行為 Chip 外包一層點擊區。
+              可點擊與純展示的外觀完全一樣，差別只在有沒有傳 <code>onTap</code>。
+              目前沒有獨立的「選中」狀態——篩選條件被選取時，由呼叫端切換 style 或 level
+              來表達（例如未選用 outlined、選中改 filled）。Figma 尚未畫選中狀態，
+              等設計稿產出後再補成正式的維度。
             </p>
           </section>
 
@@ -279,10 +292,22 @@ export default function ChipPage() {
                   <code key="p">USpaceSpacing.spacer{layout.regularPaddingX} / spacer{layout.smallPaddingX}</code>,
                 ],
                 [
-                  '水平內距（有 icon）',
+                  '水平內距（有 leading icon）',
                   `左 ${layout.regularPaddingLeftWithIcon} / 右 ${layout.regularPaddingRightWithIcon}`,
                   '不適用（無 icon 版本）',
                   <code key="pi">USpaceSpacing.spacer{layout.regularPaddingLeftWithIcon} / spacer{layout.regularPaddingRightWithIcon}</code>,
+                ],
+                [
+                  '水平內距（有 trailing icon）',
+                  `左 ${layout.regularPaddingX} / 右 ${layout.regularPaddingWithTrailingIcon}`,
+                  '不適用（無 icon 版本）',
+                  <code key="pt">USpaceSpacing.spacer{layout.regularPaddingX} / spacer{layout.regularPaddingWithTrailingIcon}</code>,
+                ],
+                [
+                  '觸控熱區（傳 onTap 時）',
+                  `高 ${layout.minTapTarget}px`,
+                  `高 ${layout.minTapTarget}px`,
+                  '—',
                 ],
                 ['垂直內距', `${layout.paddingY}px`, `${layout.paddingY}px`, '—'],
                 [
@@ -303,8 +328,9 @@ export default function ChipPage() {
               minWidth={620}
             />
             <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-              Small 不支援 leading icon，因此沒有「有 icon」的內距——widget 收到 leadingIcon
-              也會忽略。垂直內距 {layout.paddingY}px 是 Figma 的元件特定值，spacing token 沒有
+              Small 兩側都不支援 icon，因此沒有「有 icon」的內距——widget 收到也會忽略。
+              Trailing 側的內距 {layout.regularPaddingWithTrailingIcon} 是 leading 規則的鏡像推導，
+              Figma 尚未畫 trailing 版本，待設計稿產出後校對。垂直內距 {layout.paddingY}px 是 Figma 的元件特定值，spacing token 沒有
               這個級距，chip.dart 直接寫死。Small 的文字 {smallType.size}px /{' '}
               {smallType.lineHeight}px Semibold 同樣沒有對應的 typography token。
             </p>
@@ -314,9 +340,11 @@ export default function ChipPage() {
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
             <p className="text-md text-muted" style={{ margin: 0 }}>
-              Chip 不可點擊，沒有觸控熱區。Regular 高 {layout.heightRegular}px、Small 高{' '}
-              {layout.heightSmall}px，都遠低於 44px 的觸控目標建議值，這也是它不該被當成按鈕
-              使用的原因之一。
+              純展示的 Chip 沒有觸控熱區。傳了 <code>onTap</code> 之後，熱區會垂直外擴到{' '}
+              {layout.minTapTarget}px——Regular 視覺上只有 {layout.heightRegular}px、Small
+              只有 {layout.heightSmall}px，遠低於觸控目標建議值，不外擴會很難點。
+              視覺高度不變，但可點擊的 Chip 在版面上會佔 {layout.minTapTarget}px 高，
+              與純展示的 Chip 並排時要留意對齊。
             </p>
           </section>
 
@@ -325,8 +353,15 @@ export default function ChipPage() {
             <SectionTitle>Usage</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
-                <strong>純展示，不可點擊</strong>：Chip 用來顯示分類、狀態、標記，不具備互動行為。
-                需要可互動的標籤時使用 <code>USpaceTab</code>（filter / input type）。
+                <strong>什麼時候用 Chip、什麼時候用 Tab</strong>：Chip 是
+                <strong>同一個頁面內的篩選條件，可以複選</strong>——選了之後畫面上的內容被篩選，
+                但還在同一頁。<code>USpaceTab</code> 的 filter 是
+                <strong>點擊後切換分頁，因此只能單選</strong>。
+                要「選了以後換一頁」用 Tab，要「在同一頁疊加條件」用 Chip。
+              </li>
+              <li>
+                <strong>右側 icon 表達可以對這個標籤做的事</strong>：X 用於移除已套用的條件，
+                下箭頭用於展開更多選項。沒有動作就不要放右側 icon——它會讓人以為可以點。
               </li>
               <li>
                 <strong>先選形狀，再選顏色</strong>：Filled 用於需要被看到的標記，
@@ -349,7 +384,15 @@ export default function ChipPage() {
           <section className="section">
             <SectionTitle>Accessibility</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
-              <li>Chip 不可點擊，讀屏軟體只會讀到文字內容，不會被當成按鈕朗讀。</li>
+              <li>
+                純展示的 Chip 讀屏軟體只會讀到文字，不會被當成按鈕朗讀；傳了{' '}
+                <code>onTap</code> 之後才是可操作的元素。
+              </li>
+              <li>
+                可點擊時熱區垂直外擴到 {layout.minTapTarget}px，達到觸控目標建議值。
+                右側的 X 沒有自己的獨立熱區——點整顆 Chip 都會觸發 <code>onTap</code>，
+                需要「點 X 才移除、點本體是別的行為」時，這個元件目前做不到。
+              </li>
               <li>icon 為裝飾性元素，語意由文字承載，缺少文字時讀屏軟體無法傳達這個標籤的意義。</li>
               <li>
                 Outlined 與 Text 都是透明底，文字對比度直接受背後的底色影響。放在深淺不一的背景上時需自行確認可讀性。
@@ -400,6 +443,33 @@ USpaceChip(
 )`}
               />
             </div>
+            <div style={{ marginTop: 24 }}>
+              <CodeBlock
+                title="可移除的篩選條件：右側放 X"
+                code={`USpaceChip(
+  label: '快充',
+  style: USpaceChipStyle.filled,
+  level: USpaceChipLevel.secondary,
+  trailingIcon: const Icon(Icons.close),
+  onTap: () => removeFilter('fast-charge'),
+)`}
+              />
+            </div>
+            <div style={{ marginTop: 24 }}>
+              <CodeBlock
+                title="選中與未選中：目前用 style 表達"
+                code={`// Figma 尚未定義選中狀態，先由呼叫端切換 style
+USpaceChip(
+  label: '有空位',
+  style: isSelected
+      ? USpaceChipStyle.filled
+      : USpaceChipStyle.outlined,
+  level: USpaceChipLevel.secondary,
+  trailingIcon: const Icon(Icons.expand_more),
+  onTap: () => toggleFilter('available'),
+)`}
+              />
+            </div>
           </section>
 
           <section className="section">
@@ -431,13 +501,26 @@ USpaceChip(
                     <code key="d">leadingIcon</code>,
                     'Widget?',
                     'null',
-                    `文字左側 icon，建議 ${layout.iconSize}×${layout.iconSize}`,
+                    `文字左側 icon 或圖示，建議 ${layout.iconSize}×${layout.iconSize}，僅 regular 支援`,
+                  ],
+                  [
+                    <code key="d2">trailingIcon</code>,
+                    'Widget?',
+                    'null',
+                    ' 文字右側 icon，例如移除用的 X 或展開用的下箭頭，僅 regular 支援',
+                  ],
+                  [
+                    <code key="d3">onTap</code>,
+                    'VoidCallback?',
+                    'null',
+                    '傳了才可點擊，熱區垂直外擴至 44px；不傳則是純展示標籤',
                   ],
                 ]}
                 minWidth={560}
               />
               <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-                沒有 <code>onTap</code>。Chip 不包 GestureDetector，這是刻意的設計。
+                不傳 <code>onTap</code> 時完全不包 GestureDetector，維持純展示標籤的行為；
+                版面上也不會佔用外擴的 44px。
               </p>
             </div>
           </section>
@@ -469,6 +552,17 @@ USpaceChip(
                 <strong>small 沒有 leading icon</strong>：Figma 的元件只畫了 regular 的 icon 版本。
                 widget 收到 <code>leadingIcon</code> 但 size 為 small 時會直接忽略，
                 文件站的 Configurations 也會把這個組合停用，兩邊行為一致。
+              </li>
+              <li>
+                <strong>可點擊是 2026-08-14 新增的</strong>：Chip 原本明確不可點擊。開放之後
+                與 <code>USpaceTab</code> 的分界為——Chip 是同一頁面內的篩選條件、可複選；
+                Tab 點擊後切換分頁、只能單選。Figma 的 Chip 元件目前只有 Leading Icon /
+                Size / Surface / Level 四個維度，沒有畫 trailing icon，也沒有點擊或選中狀態，
+                因此 trailing 的內距是 leading 規則的鏡像推導，待設計稿產出後校對。
+              </li>
+              <li>
+                <strong>整顆 Chip 共用一個熱區</strong>：右側的 X 沒有自己的 onTap。
+                需要「點 X 移除、點本體做別的事」時，這個元件目前做不到。
               </li>
               <li>
                 <strong>style 與 level 是兩個維度</strong>：level 只在 <code>filled</code> 時生效，
