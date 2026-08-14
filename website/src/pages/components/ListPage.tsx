@@ -2,6 +2,7 @@ import SectionTitle from '../../components/SectionTitle';
 import {} from '../../tokens/componentSpecs';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
+import { touch } from '../../tokens/scalars';
 import { Pending, PendingImage } from '../../components/spec';
 import { semantic } from '../../tokens/colors';
 
@@ -159,7 +160,7 @@ export default function ListPage() {
           {/* ── Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <PendingImage expects="list-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+            <PendingImage expects="list-toucharea" note={`標出觸控熱區範圍，並確認是否達到 ${touch.minTarget}px 最小建議值。`} />
           </section>
 
           <section className="section">

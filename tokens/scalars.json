@@ -25,5 +25,8 @@
   },
   "elevation": {
     "shadowBlur": { "value": "30", "doc": "Modal / popup 陰影模糊半徑" }
+  },
+  "touch": {
+    "minTarget": { "value": "40", "doc": "觸控目標最小高度。視覺尺寸小於此值的可點擊元件要外擴熱區補足。2026-08-14 經使用者確認由 44 改為 40，全元件通用" }
   }
 }

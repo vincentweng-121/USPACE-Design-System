@@ -3,6 +3,7 @@ import 'uspace_colors_extension.dart';
 import 'typography_extension.dart';
 import 'radius_extension.dart';
 import 'spacing_extension.dart';
+import 'touch_target.dart';
 
 // ── Chip Style ─────────────────────────────────────────────
 /// 容器的形狀。與 level 是兩個獨立的維度：style 決定有沒有底、有沒有框，
@@ -71,7 +72,8 @@ enum USpaceChipSize {
 ///   傳入 onTap 即可點擊，用於同一頁面的篩選條件（可複選、可移除）。
 ///   不傳則為純展示標籤，不包 GestureDetector。
 ///
-///   可點擊時觸控熱區垂直外擴至 44px（視覺高度不變，但在版面上會佔 44px）。
+///   可點擊時觸控熱區垂直外擴至 USpaceTouchTarget.minTarget
+///   （視覺高度不變，但在版面上會佔到那個高度）。
 ///   Chip 本身只有 22px，遠低於觸控目標建議值。
 ///
 /// ⚠️ 與 USpaceTab 的分界（2026-08-14 使用者確認）：
@@ -121,8 +123,8 @@ class USpaceChip extends StatelessWidget {
   bool get _showsLeading => leadingIcon != null && size != USpaceChipSize.small;
   bool get _showsTrailing => trailingIcon != null && size != USpaceChipSize.small;
 
-  /// 觸控目標的最小高度。Chip 的視覺高度遠低於這個值，可點擊時靠外擴補足
-  static const double minTapTarget = 44;
+  /// 觸控目標的最小高度沿用全域的 [USpaceTouchTarget.minTarget]，
+  /// 不在元件內自訂——改成 40 之後所有元件要一起變
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +165,7 @@ class USpaceChip extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: minTapTarget),
+        constraints: const BoxConstraints(minHeight: USpaceTouchTarget.minTarget),
         child: Center(widthFactor: 1, child: chip),
       ),
     );

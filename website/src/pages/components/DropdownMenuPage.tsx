@@ -12,6 +12,7 @@ import {
 } from '../../components/spec';
 import { typographyStyles } from '../../tokens/typography';
 import { dropdown_menuSpec as spec } from '../../tokens/componentSpecs';
+import { touch } from '../../tokens/scalars';
 import { colorOf } from '../../utils';
 
 type Status = 'default' | 'complete' | 'selecting' | 'incomplete' | 'error' | 'nonEditable';
@@ -364,10 +365,10 @@ export default function DropdownMenuPage() {
             <SectionTitle>Touch areas</SectionTitle>
             <PendingImage
               expects="dropdown-menu-toucharea"
-              note="標出觸控熱區範圍，並確認展開後的選項列是否達到 44px 最小建議值。"
+              note={`標出觸控熱區範圍，並確認展開後的選項列是否達到 ${touch.minTarget}px 最小建議值。`}
             />
             <p className="text-md text-muted" style={{ margin: 0 }}>
-              輸入列高度 {layout.height}px，超過觸控目標最小 44px 的建議值。整條輸入列都是
+              輸入列高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。整條輸入列都是
               熱區，不只 Chevron。
             </p>
           </section>
@@ -403,7 +404,7 @@ export default function DropdownMenuPage() {
           <section className="section">
             <SectionTitle>Accessibility</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
-              <li>輸入列高度 {layout.height}px，超過觸控目標最小 44px 的建議值。</li>
+              <li>輸入列高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。</li>
               <li>
                 nonEditable、incomplete 與 error 同時關閉展開行為，不會出現「看起來能點卻沒反應」
                 或「看起來不能點卻展開了」。

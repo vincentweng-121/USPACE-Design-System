@@ -31,6 +31,7 @@ export 'elevation_extension.dart';
 export 'glass_extension.dart';
 export 'radius_extension.dart';
 export 'spacing_extension.dart';
+export 'touch_target.dart';
 export 'typography_extension.dart';
 export 'uspace_colors_extension.dart';
 export 'uspace_palette.dart';

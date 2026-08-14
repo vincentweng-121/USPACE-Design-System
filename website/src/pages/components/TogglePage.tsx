@@ -1,6 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
+import { touch } from '../../tokens/scalars';
 import { toggleSpec } from '../../tokens/componentSpecs';
 import SpecTable from '../../components/SpecTable';
 import { SpecBox, StateRow, Swatch, Badge, AnatomyFigure, AnatomyMarker, Playground, PendingImage, Pending, type PlaygroundDimension } from '../../components/spec';
@@ -186,7 +187,7 @@ export default function TogglePage() {
           {/* ── Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <PendingImage expects="toggle-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+            <PendingImage expects="toggle-toucharea" note={`標出觸控熱區範圍，並確認是否達到 ${touch.minTarget}px 最小建議值。`} />
           </section>
 
           <section className="section">

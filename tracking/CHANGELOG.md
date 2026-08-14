@@ -11,6 +11,37 @@
 
 ---
 
+## v0.11.0 | 2026-08-14
+
+### scalars | 觸控目標最小尺寸統一為 40，全元件通用
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- `tokens/scalars.json` 新增 `touch.minTarget`，值為 **40**（原本各處寫死 44）。
+  產生出 `styles/touch_target.dart` 的 `USpaceTouchTarget.minTarget` 與
+  `website/src/tokens/scalars.ts` 的 `touch.minTarget`。
+- Chip 移除自己的 `minTapTarget` 常數，改用全域值；`chip.json` 也不再存這個數字。
+  這類全元件共用的值放在元件規格檔裡，下次要改就得改很多份。
+- 文件站十個元件頁裡寫死的 44px 全部改為引用 token，包含各頁「觸控熱區待補圖」
+  的說明文字。
+- 設計稿的圖之後會由使用者更新。
+
+### chip.dart | Small 只作為內容標籤
+狀態：PUBLISHED
+
+- 慣例確立：**Small 只作為內容標籤，不可點擊；Regular 兩種用法都支援。**
+  Small 本來就不支援兩側 icon，也放不下移除用的 X，兩條規則一致。
+- 寫進 Chip 頁的 States 表與 Usage、`chip.json` 的 `$deviations`，
+  以及 `rules/LESSONS_LEARNED.md`。程式碼未強制擋下 small + onTap——
+  這是慣例而非硬性限制，硬擋會變成無聲失敗。
+
+### 文件站 | Configurations 選項移除「（Small 不適用）」字樣
+狀態：PUBLISHED
+
+- 選項本來就會在 Small 時變成停用狀態，停用本身已經傳達了「這裡不能選」，
+  標籤再寫一次是重複。
+- 順手移除 `ModalPage.tsx` 一行沒有任何作用的空 import。
+
 ## v0.10.0 | 2026-08-14
 
 ### chip.dart | 開放點擊與 trailing icon，可作為同頁篩選條件

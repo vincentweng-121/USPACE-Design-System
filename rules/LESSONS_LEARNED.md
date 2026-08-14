@@ -8,6 +8,8 @@
 - **Token 只改 JSON**：`styles/` 的 6 個 token .dart 與 `website/src/tokens/*.ts` 檔頭標有 `⚠️ GENERATED FILE`，一律不得手改。改 `tokens/*.json` 後執行 `npm run gen:tokens`；CI 會跑 `check:tokens` 擋下漂移。
 - **元件頁必須包含九個區塊**，順序固定：Variants → Configurations → Anatomy → Color → States → Measurements → Touch areas → Usage → Accessibility。內容還沒有的用 `PendingImage` 或 `Pending` 佔位，不可整段省略——少一塊讀者不知道是還沒做還是不適用。各頁專屬的補充區塊接在 Accessibility 之後。
 - **Configurations 只講配置，畫面必須是黑灰白**：只放結構性的維度（尺寸、有無 icon、有無按鈕）。**任何切換後會渲染出非中性色的維度都要移出**，改在 Color 區塊說明，預覽固定用中性的那一個變體。差異本身就是顏色的維度（Chip 的 level、Toggle 的 value、TextField 的 status）屬於 States 與 Color，不屬於 Configurations。判斷依據是 **token 解出來的 palette 名稱**是否為 grey / white / black / transparent 開頭，不是原始碼裡有沒有寫顏色——顏色多半是預覽元件查 token 得到的，字面上看不到。`npm run check:pages` 會實際推導並擋下。
+- **觸控目標最小尺寸統一為 `USpaceTouchTarget.minTarget`**（來源 `tokens/scalars.json` 的 `touch.minTarget`，2026-08-14 由 44 改為 40）。全元件通用，不要在元件裡各寫一個數字，也不要在文件裡寫死 px 值。視覺高度小於它的可點擊元件要外擴熱區補足。
+- **Chip 的 Small 只作為內容標籤，慣例上不可點擊**；Regular 兩種用法都支援。Small 同時也不支援兩側 icon。
 - **Chip 與 Tab(filter) 的分界**（2026-08-14 使用者確認）：`USpaceChip` 傳 `onTap` 後可點擊，用於**同一個頁面內的篩選條件，可以複選**；`USpaceTab` 的 `filter` type 是**點擊後切換分頁，因此只能單選**。判準是「選完之後還在不在同一頁」。兩者外觀相近，寫文件或選元件時先問這一句。
 - **可擺放 icon 的位置一律用虛線方框**：預覽裡凡是由使用者自行傳入、可替換的 icon 或圖形位置（Button 的 leading / trailing icon、Chip 的 leading icon、Tab 的 icon 與 graphic、Modal 的標題 icon 與提示 icon），一律用 `spec.tsx` 的 `<IconPlaceholder size={n} color={c} />`，**不畫任何具體圖示**——畫了星星或驚嘆號，讀者會以為那個圖示是規範的一部分。相對的，元件行為固定的圖示（關閉鈕的 ×、選取的勾、收合的箭頭）要照實畫，那是元件規範本身。頁面不得自行複製一份虛線方框，`npm run check:pages` 會擋下。
 - **說明圖一律明暗成對**：Figma artboard 以 `scale: 2` 匯出（960×700），檔名為 `<基底>-light.png` 與 `<基底>-dark.png`，**不做去背**，整張圖直接用。頁面只給基底名稱：`<AnatomyImage image="button-anatomy" />`。少補一版 `npm run check:assets` 會擋下。

@@ -13,6 +13,7 @@ import {
 } from '../../components/spec';
 import { typographyStyles } from '../../tokens/typography';
 import { chipSpec } from '../../tokens/componentSpecs';
+import { touch } from '../../tokens/scalars';
 import { colorOf, cap } from '../../utils';
 
 type Style = 'filled' | 'outlined' | 'text';
@@ -128,12 +129,13 @@ const playgroundDimensions: PlaygroundDimension[] = [
     key: 'icon',
     label: 'Icon option',
     // small 兩側都不支援 icon，Figma 只畫了 regular 的 icon 版本。
-    // 停用而不是隱藏，讀者才看得出這個選項存在、只是這個尺寸下不適用。
+    // 停用而不是隱藏，讀者才看得出這個選項存在、只是這個尺寸下不適用；
+    // 選項文字不再重複寫「Small 不適用」——停用狀態本身就講清楚了。
     options: [
       { value: 'none', label: 'None' },
-      { value: 'leading', label: 'Leading（Small 不適用）' },
-      { value: 'trailing', label: 'Trailing（Small 不適用）' },
-      { value: 'both', label: 'Both（Small 不適用）' },
+      { value: 'leading', label: 'Leading' },
+      { value: 'trailing', label: 'Trailing' },
+      { value: 'both', label: 'Both' },
     ],
     disabled: (v) => v.icon !== 'none' && v.size === 'small',
   },
@@ -252,7 +254,8 @@ export default function ChipPage() {
               headers={['狀態', '外觀', '互動']}
               rows={[
                 ['純展示（不傳 onTap）', '依 style 與 level 呈現，不隨互動改變', '不可點擊，不包 GestureDetector'],
-                ['可點擊（傳 onTap）', '外觀與純展示完全相同', `可點擊，觸控熱區垂直外擴至 ${layout.minTapTarget}px`],
+                ['Small', '只作為內容標籤', '慣例上不可點擊'],
+                ['可點擊（傳 onTap）', '外觀與純展示完全相同', `可點擊，觸控熱區垂直外擴至 ${touch.minTarget}px`],
                 ['選中 / 未選中', '目前用 style 與 level 表達，沒有獨立的選中狀態', '由呼叫端切換'],
                 ['Hover / Pressed', '尚未定義', '—'],
                 ['Hover / Pressed', '不適用', '—'],
@@ -305,8 +308,8 @@ export default function ChipPage() {
                 ],
                 [
                   '觸控熱區（傳 onTap 時）',
-                  `高 ${layout.minTapTarget}px`,
-                  `高 ${layout.minTapTarget}px`,
+                  `高 ${touch.minTarget}px`,
+                  `高 ${touch.minTarget}px`,
                   '—',
                 ],
                 ['垂直內距', `${layout.paddingY}px`, `${layout.paddingY}px`, '—'],
@@ -341,9 +344,9 @@ export default function ChipPage() {
             <SectionTitle>Touch areas</SectionTitle>
             <p className="text-md text-muted" style={{ margin: 0 }}>
               純展示的 Chip 沒有觸控熱區。傳了 <code>onTap</code> 之後，熱區會垂直外擴到{' '}
-              {layout.minTapTarget}px——Regular 視覺上只有 {layout.heightRegular}px、Small
+              {touch.minTarget}px——Regular 視覺上只有 {layout.heightRegular}px、Small
               只有 {layout.heightSmall}px，遠低於觸控目標建議值，不外擴會很難點。
-              視覺高度不變，但可點擊的 Chip 在版面上會佔 {layout.minTapTarget}px 高，
+              視覺高度不變，但可點擊的 Chip 在版面上會佔 {touch.minTarget}px 高，
               與純展示的 Chip 並排時要留意對齊。
             </p>
           </section>
@@ -358,6 +361,11 @@ export default function ChipPage() {
                 但還在同一頁。<code>USpaceTab</code> 的 filter 是
                 <strong>點擊後切換分頁，因此只能單選</strong>。
                 要「選了以後換一頁」用 Tab，要「在同一頁疊加條件」用 Chip。
+              </li>
+              <li>
+                <strong>Small 只作為內容標籤</strong>：慣例上不可點擊，用於列表、卡片這類
+                一次出現多個標籤的地方。要做可點擊的篩選條件一律用 Regular——Small 兩側
+                不支援 icon，也放不下移除用的 X。
               </li>
               <li>
                 <strong>右側 icon 表達可以對這個標籤做的事</strong>：X 用於移除已套用的條件，
@@ -389,7 +397,7 @@ export default function ChipPage() {
                 <code>onTap</code> 之後才是可操作的元素。
               </li>
               <li>
-                可點擊時熱區垂直外擴到 {layout.minTapTarget}px，達到觸控目標建議值。
+                可點擊時熱區垂直外擴到 {touch.minTarget}px，達到觸控目標建議值。
                 右側的 X 沒有自己的獨立熱區——點整顆 Chip 都會觸發 <code>onTap</code>，
                 需要「點 X 才移除、點本體是別的行為」時，這個元件目前做不到。
               </li>
@@ -513,14 +521,14 @@ USpaceChip(
                     <code key="d3">onTap</code>,
                     'VoidCallback?',
                     'null',
-                    '傳了才可點擊，熱區垂直外擴至 44px；不傳則是純展示標籤',
+                    `傳了才可點擊，熱區垂直外擴至 ${touch.minTarget}px；不傳則是純展示標籤`,
                   ],
                 ]}
                 minWidth={560}
               />
               <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
                 不傳 <code>onTap</code> 時完全不包 GestureDetector，維持純展示標籤的行為；
-                版面上也不會佔用外擴的 44px。
+                版面上也不會佔用外擴的 {touch.minTarget}px。
               </p>
             </div>
           </section>
