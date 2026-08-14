@@ -365,6 +365,122 @@ void main() {
     }
   });
 
+  // ── DropdownMenu ────────────────────────────────────────
+  group('USpaceDropdownMenu', () {
+    const statuses = {
+      'default': USpaceDropdownMenuStatus.defaultStatus,
+      'complete': USpaceDropdownMenuStatus.complete,
+      'selecting': USpaceDropdownMenuStatus.selecting,
+      'incomplete': USpaceDropdownMenuStatus.incomplete,
+      'error': USpaceDropdownMenuStatus.error,
+      'nonEditable': USpaceDropdownMenuStatus.nonEditable,
+    };
+
+    // showHint 維持 false：hint 只該由 incomplete / error 自己觸發，
+    // 傳 true 會讓每個狀態都畫出 hint，就驗不到「哪些狀態該有 hint」
+    Widget menuOf(String statusKey) => USpaceDropdownMenu<String>(
+          label: 'Label',
+          placeholder: 'Placeholder',
+          hint: 'Hint',
+          items: const ['A'],
+          itemLabelBuilder: (_) => 'Input',
+          selectedItem: 'A',
+          status: statuses[statusKey]!,
+        );
+
+    Color colorOfText(WidgetTester tester, String text) =>
+        tester.widget<Text>(find.text(text)).style!.color!;
+
+    for (final v in variantsOf('dropdown_menu.json')) {
+      final status = v['status'] as String;
+
+      testWidgets(status, (tester) async {
+        await pump(tester, menuOf(status));
+
+        final decoration = tester
+            .widget<Container>(find
+                .descendant(
+                  of: find.byType(USpaceDropdownMenu<String>),
+                  matching: find.byType(Container),
+                )
+                .first)
+            .decoration as BoxDecoration;
+
+        expect(decoration.color, tokenColor(v['bg'] as String),
+            reason: '$status 的底色應為 ${v['bg']}');
+
+        if (v['border'] == null) {
+          expect(decoration.border, isNull, reason: '$status 不應有邊框');
+        } else {
+          expect((decoration.border as Border).top.color,
+              tokenColor(v['border'] as String),
+              reason: '$status 的邊框應為 ${v['border']}');
+        }
+
+        expect(colorOfText(tester, 'Label'), tokenColor(v['label'] as String),
+            reason: '$status 的 label 應為 ${v['label']}');
+
+        // placeholder 系的狀態顯示 placeholder，其餘顯示選取值
+        final contentText =
+            (status == 'default' || status == 'incomplete') ? 'Placeholder' : 'Input';
+        expect(colorOfText(tester, contentText), tokenColor(v['content'] as String),
+            reason: '$status 的內容文字應為 ${v['content']}');
+
+        expect(
+            tester
+                .widget<Icon>(find.descendant(
+                  of: find.byType(USpaceDropdownMenu<String>),
+                  matching: find.byType(Icon),
+                ))
+                .color,
+            tokenColor(v['icon'] as String),
+            reason: '$status 的 chevron 應為 ${v['icon']}');
+
+        if (v['hint'] == null) {
+          expect(find.text('Hint'), findsNothing,
+              reason: '$status 不該顯示 hint');
+        } else {
+          expect(colorOfText(tester, 'Hint'), tokenColor(v['hint'] as String),
+              reason: '$status 的 hint 應為 ${v['hint']}');
+        }
+      });
+    }
+
+    // 展開測試用另一組 fixture：不給 selectedItem，且項目文字就是 item 本身，
+    // 這樣 'Item A' 只會在展開的面板裡出現，數量變化才代表選單真的開了
+    Widget expandableOf(String statusKey) => USpaceDropdownMenu<String>(
+          label: 'Label',
+          placeholder: 'Placeholder',
+          items: const ['Item A'],
+          itemLabelBuilder: (item) => item,
+          status: statuses[statusKey]!,
+        );
+
+    // 這三個狀態點下去不該展開；少了這個，把 nonEditable 漏出 _toggle 的
+    // 擋阻清單也不會有人發現
+    for (final status in ['incomplete', 'error', 'nonEditable']) {
+      testWidgets('$status 不可展開', (tester) async {
+        await pump(tester, expandableOf(status));
+        await tester.tap(find.byType(GestureDetector));
+        await tester.pumpAndSettle();
+        expect(find.text('Item A'), findsNothing,
+            reason: '$status 點擊後不該展開選單');
+      });
+    }
+
+    for (final status in ['default', 'complete', 'selecting']) {
+      testWidgets('$status 可以展開', (tester) async {
+        await pump(tester, expandableOf(status));
+        expect(find.text('Item A'), findsNothing,
+            reason: '展開前面板不該存在，否則下一行的斷言沒有意義');
+        await tester.tap(find.byType(GestureDetector));
+        await tester.pumpAndSettle();
+        expect(find.text('Item A'), findsOneWidget,
+            reason: '$status 點擊後應展開選單');
+      });
+    }
+  });
+
   // ── 主題接線 ────────────────────────────────────────────
   group('USpaceTheme', () {
     testWidgets('light 主題提供兩個 ThemeExtension', (tester) async {
