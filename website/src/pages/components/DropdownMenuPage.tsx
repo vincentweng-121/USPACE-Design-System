@@ -4,6 +4,7 @@ import PageHero from '../../components/PageHero';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import {
+  AnatomyImage,
   NumberedCaptions,
   Playground,
   PendingImage,
@@ -179,21 +180,22 @@ export default function DropdownMenuPage() {
           {/* ── 1. Variants ── */}
           <section className="section">
             <SectionTitle>Variants</SectionTitle>
-            <PendingImage
-              expects="dropdown-menu-variant"
-              note="一張圖並排六個 status，圖上標號 1～6，對應下方說明。"
+            <AnatomyImage
+              image="dropdown-menu-variant"
+              alt="三種組成：只有 Label 與 placeholder、Label 與選取值、再加上下方的 Hint"
             />
 
             <NumberedCaptions
               items={[
-                { name: 'Default', desc: '尚未選取。顯示 placeholder，沒有邊框。' },
-                { name: 'Complete', desc: '已選取。顯示選取的值。' },
-                { name: 'Incomplete', desc: '必填未填。維持 placeholder，下方出現紅字提示。' },
-                { name: 'Error', desc: '已選取但值不合法。顯示選取值，下方出現紅字提示。' },
-                { name: 'Non-editable', desc: '唯讀。文字轉為停用色，點擊不會展開。' },
-                { name: 'Selecting', desc: '選單展開中。六種狀態裡唯一有邊框的。' },
+                { name: '尚未選取', desc: '顯示 placeholder。Label 在上方，右側是收合的 chevron。' },
+                { name: '已選取', desc: '同樣的結構，內容換成選取的值，文字色也跟著變深。' },
+                { name: '帶提示文字', desc: '下方多一行 Hint。必填未填與驗證失敗時一定會出現，此時是紅字。' },
               ]}
             />
+            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+              這張圖講的是<strong>組成</strong>——哪些部位會出現。六種 status 各自的顏色與行為
+              在下方的 States 區塊。
+            </p>
           </section>
 
           {/* ── 2. Configurations ── */}
@@ -216,18 +218,19 @@ export default function DropdownMenuPage() {
           {/* ── 3. Anatomy ── */}
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
-            <PendingImage
-              expects="dropdown-menu-anatomy"
-              note="標出四個部件的拆解圖，編號與下表一致。"
+            <AnatomyImage
+              image="dropdown-menu-anatomy"
+              alt="下拉選單的五個部件：輸入列容器、Label、Hint、內容文字、右側的 chevron"
             />
 
             <SpecTable
               headers={['', '部件', '必要性', '說明']}
               rows={[
-                ['1', 'Label', '選用', `欄位名稱，左右內距 ${layout.labelPaddingX}px，與輸入列間距 ${layout.labelGap}px`],
-                ['2', '輸入列 Trigger', '必要', `高度固定 ${layout.height}px，圓角 ${layout.radius}，左右內距 ${layout.paddingX}px`],
-                ['3', 'Chevron', '必要', `${layout.iconSize}px，靠右，展開時旋轉 180°`],
-                ['4', 'Hint', '選用', `說明或錯誤提示，與輸入列間距 ${layout.hintGap}px；incomplete 與 error 一定會顯示`],
+                ['1', '輸入列 Trigger', '必要', `高度固定 ${layout.height}px，圓角 ${layout.radius}，左右內距 ${layout.paddingX}px`],
+                ['2', 'Label', '選用', `欄位名稱，左右內距 ${layout.labelPaddingX}px，與輸入列間距 ${layout.labelGap}px`],
+                ['3', 'Hint', '選用', `說明或錯誤提示，與輸入列間距 ${layout.hintGap}px；incomplete 與 error 一定會顯示`],
+                ['4', '內容文字', '必要', '尚未選取時是 placeholder，選取後換成選取的值'],
+                ['5', 'Chevron', '必要', `${layout.iconSize}px，靠右，與內容文字間距 ${layout.contentIconGap}px，展開時旋轉 180°`],
               ]}
               minWidth={560}
             />
@@ -305,9 +308,9 @@ export default function DropdownMenuPage() {
           {/* ── 6. Measurements ── */}
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
-            <PendingImage
-              expects="dropdown-menu-measurements"
-              note="標出高度、內距、間距的量測圖。"
+            <AnatomyImage
+              image="dropdown-menu-measurements"
+              alt="上方標出輸入列高度 48 與左右內距 20，下方標出 Label 與 Hint 和輸入列之間的間距"
             />
 
             <SpecTable
@@ -336,6 +339,11 @@ export default function DropdownMenuPage() {
                   <code key="hg">USpaceSpacing.spacer{layout.hintGap}</code>,
                 ],
                 ['Chevron 尺寸', `${layout.iconSize}px`, '—'],
+                [
+                  '內容文字與 Chevron 間距',
+                  `${layout.contentIconGap}px`,
+                  <code key="cg">USpaceSpacing.spacer{layout.contentIconGap}</code>,
+                ],
                 [
                   'Label 文字',
                   `${labelType.size}px / ${labelType.lineHeight}px Regular`,

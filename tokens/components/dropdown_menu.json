@@ -10,18 +10,26 @@
   "source": "styles/dropdown_menu.dart",
   "figmaNode": "2141:11030",
   "dimensions": {
-    "status": ["default", "complete", "selecting", "incomplete", "error", "nonEditable"]
+    "status": [
+      "default",
+      "complete",
+      "selecting",
+      "incomplete",
+      "error",
+      "nonEditable"
+    ]
   },
   "layout": {
     "height": 48,
     "radius": 1000,
     "paddingX": 20,
     "iconSize": 16,
+    "contentIconGap": 8,
     "labelPaddingX": 8,
     "labelGap": 4,
     "hintGap": 4
   },
-  "$layoutSource": "Figma node 2141:11029 的子節點座標：Label 高 16、Input 高 48（y=20 故間距 4）、Hint y=72（故間距 4）。Input 內 Content x=20、ChevronDown x=314 於 350 寬容器（右內距同為 20）、icon 16×16。圓角取 Number/Full=1000。",
+  "$layoutSource": "Figma node 2141:11029 的子節點座標：Label 高 16、Input 高 48（y=20 故間距 4）、Hint y=72（故間距 4）。Input 內 Content x=20 寬 286（右緣 306）、ChevronDown x=314 於 350 寬容器，故內容與 icon 間距 8、右內距 20、icon 16×16。圓角取 Number/Full=1000。2026-08-14 以量測圖 node 3915:20448 覆核：高度 48、左右內距 20、內容與 icon 間距 8 都相符。",
   "$typography": {
     "label": "labelS（PingFang TC 12/16）— Figma 標記 🇹🇼 標籤｜Label/S",
     "content": "labelM（PingFang TC 14/20）— Figma 標記 🇹🇼 標籤｜Label/M",
@@ -30,15 +38,70 @@
   "$panel": "展開後的選單面板（圓角 20、內距 16/20、項目間距 8）不在 node 2141:11030 內，該 node 只畫了六個收合狀態。面板數值沿用 dropdown_menu.dart 既有實作，尚未比對 Figma。",
   "$deviations": [
     "2026-08-14 導入時比對 Figma 發現六處偏差，已修正實作：(1) 缺 nonEditable 狀態；(2) chevron 用 contentSecondary，Figma 的 SVG 為 #323237 @ 15% 即 contentTertiary；(3) selecting 未畫 inputBorderActive 邊框；(4) label 字體用 bodyS(14/20)，Figma 為 Label/S(12/16) 即 labelS；(5) 內容字體用 bodyM(16/24)，Figma 為 Label/M(14/20) 即 labelM；(6) 文字色由「有沒有選取」決定，改為由 status 決定。",
-    "2026-08-14 經使用者確認：inputTextDisabled 由 grey200 改為 grey400，對齊 Figma 的 Input/Text-Disabled #A6A6A6。原值與 inputTextPlaceholder 同為 grey200，停用與未填看起來一樣。此變更同時影響 text_field 與 text_area 的 disabled / nonEditable。"
+    "2026-08-14 經使用者確認：inputTextDisabled 由 grey200 改為 grey400，對齊 Figma 的 Input/Text-Disabled #A6A6A6。原值與 inputTextPlaceholder 同為 grey200，停用與未填看起來一樣。此變更同時影響 text_field 與 text_area 的 disabled / nonEditable。",
+    "⚠️ 2026-08-14 量測圖 node 3915:20448 把 Label 與 Hint 的間距標成 8，但該圖上兩條標示帶（3930:22000、3930:22009）本身的高度都是 4，元件實例 3915:21941 的子節點座標算出來也是 4。以幾何為準採用 4，圖上的數字待設計修正。"
   ],
   "$variantsNote": "bg 與 label 六個狀態都相同，仍逐列填寫，讓測試逐一比對而不是靠共用預設值蒙混過關。",
   "variants": [
-    { "status": "default", "bg": "inputBgDefault", "border": null, "label": "inputText", "content": "inputTextPlaceholder", "icon": "contentTertiary", "hint": null, "note": "尚未選取，顯示 placeholder" },
-    { "status": "complete", "bg": "inputBgDefault", "border": null, "label": "inputText", "content": "inputText", "icon": "contentTertiary", "hint": null, "note": "已選取，顯示選取值" },
-    { "status": "selecting", "bg": "inputBgDefault", "border": "inputBorderActive", "label": "inputText", "content": "inputText", "icon": "contentTertiary", "hint": null, "note": "選單展開中，唯一有邊框的狀態" },
-    { "status": "incomplete", "bg": "inputBgDefault", "border": null, "label": "inputText", "content": "inputTextPlaceholder", "icon": "contentTertiary", "hint": "inputTextError", "note": "必填未填，維持 placeholder 並顯示紅字提示" },
-    { "status": "error", "bg": "inputBgDefault", "border": null, "label": "inputText", "content": "inputText", "icon": "contentTertiary", "hint": "inputTextError", "note": "已選取但值不合法，顯示紅字提示" },
-    { "status": "nonEditable", "bg": "inputBgDefault", "border": null, "label": "inputText", "content": "inputTextDisabled", "icon": "contentTertiary", "hint": null, "note": "唯讀，不可展開" }
+    {
+      "status": "default",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextPlaceholder",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "尚未選取，顯示 placeholder"
+    },
+    {
+      "status": "complete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "已選取，顯示選取值"
+    },
+    {
+      "status": "selecting",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "選單展開中，唯一有邊框的狀態"
+    },
+    {
+      "status": "incomplete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextPlaceholder",
+      "icon": "contentTertiary",
+      "hint": "inputTextError",
+      "note": "必填未填，維持 placeholder 並顯示紅字提示"
+    },
+    {
+      "status": "error",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": "inputTextError",
+      "note": "已選取但值不合法，顯示紅字提示"
+    },
+    {
+      "status": "nonEditable",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextDisabled",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "唯讀，不可展開"
+    }
   ]
 }
