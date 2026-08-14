@@ -370,7 +370,7 @@ void main() {
       final size = tester.getSize(find.byType(USpaceChip));
       expect(
         size.height,
-        greaterThanOrEqualTo(USpaceChip.minTapTarget),
+        greaterThanOrEqualTo(USpaceTouchTarget.minTarget),
         reason: 'Chip 視覺只有 22px，可點擊時熱區要外擴到 44px',
       );
     });
@@ -380,7 +380,7 @@ void main() {
       final size = tester.getSize(find.byType(USpaceChip));
       expect(
         size.height,
-        lessThan(USpaceChip.minTapTarget),
+        lessThan(USpaceTouchTarget.minTarget),
         reason: '純展示標籤不該因為熱區規則而佔掉 44px',
       );
     });

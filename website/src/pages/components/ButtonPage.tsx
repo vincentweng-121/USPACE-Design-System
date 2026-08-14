@@ -13,6 +13,7 @@ import {
 } from '../../components/spec';
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
+import { touch } from '../../tokens/scalars';
 import { colorOf, cap } from '../../utils';
 
 type Level = 'primary' | 'secondary' | 'tertiary';
@@ -454,7 +455,7 @@ export default function ButtonPage() {
               className="text-md text-muted"
               style={{ paddingLeft: 20, display: 'grid', gap: 10 }}
             >
-              <li>固定高度 {layout.height}px，超過觸控目標最小 44px 的建議值。</li>
+              <li>固定高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。</li>
               <li>disabled 同時移除點擊行為，不會出現「看起來不能按卻按得下去」的狀況。</li>
               <li>icon 為裝飾性元素，語意由文字承載，讀屏軟體只會讀到 label。</li>
               <li>tertiary 的淺灰底與頁面背景相近，放在深淺不一的背景上時需自行確認邊界是否可辨。</li>

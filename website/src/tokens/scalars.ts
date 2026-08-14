@@ -28,6 +28,10 @@ export const elevation = {
   shadowBlur: 30,
 } as const;
 
+export const touch = {
+  minTarget: 40,
+} as const;
+
 export const glass = {
   fillColor: 'rgba(255,255,255,0.20)',
   fillColorDart: 'Color(0x33FFFFFF)',

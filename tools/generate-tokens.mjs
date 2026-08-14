@@ -504,6 +504,12 @@ function tsScalars() {
   }
   out.push('} as const;', '');
 
+  out.push('export const touch = {');
+  for (const [name, t] of Object.entries(scalars.touch)) {
+    out.push(`  ${name}: ${t.value},`);
+  }
+  out.push('} as const;', '');
+
   const fill = scalars.glass.fillColor.value.match(/Color\((0x[0-9A-Fa-f]{8})\)/)[1];
   out.push('export const glass = {');
   out.push(`  fillColor: '${toCss(fill)}',`);
@@ -661,6 +667,20 @@ const outputs = [
         '                   TODO: 替換為 UIVisualEffectView platform view',
         '  iOS < 26       → BackdropFilter + Gaussian blur',
         '  Android / Web  → BackdropFilter + Gaussian blur',
+      ],
+    }),
+  ],
+  [
+    'styles/touch_target.dart',
+    dartScalarClass({
+      group: 'touch',
+      className: 'USpaceTouchTarget',
+      groupTitle: 'Touch target',
+      doc: [
+        'USPACE Design System Touch Target Tokens',
+        '',
+        '可點擊元件的最小觸控尺寸。視覺高度小於這個值時，',
+        '熱區要外擴補足——外觀不變，但版面上會佔到這個高度。',
       ],
     }),
   ],

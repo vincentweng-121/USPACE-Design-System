@@ -23,8 +23,7 @@
     "regularPaddingLeftWithIcon": 8,
     "regularPaddingRightWithIcon": 12,
     "regularPaddingWithTrailingIcon": 8,
-    "smallPaddingX": 8,
-    "minTapTarget": 44
+    "smallPaddingX": 8
   },
   "$layoutSource": "styles/chip.dart 的 _padding 與 _iconColor：垂直 1px 是 Figma 元件特定值，無對應 spacing token，其餘取自 USpaceSpacing。small 不支援 leading icon，因此沒有「有 icon」的內距。2026-08-13 比對 Figma node 3808:9321（2 倍放大的說明圖）確認 regular 有 icon 時左 8 / 右 12 / 間距 2 / icon 20 / 高 22，與此處數值相符。2026-08-14 由 Figma node 3915:15452（chip-Measurements-light）補上兩個高度：regular 22（icon 20 + 上下各 1）、small 16（文字行高 14 + 上下各 1），兩者都是內容撐出來的結果，不是寫死的高度。",
   "$typography": "Regular 使用 labelM（14px/20px Regular）。Small 為 10px/14px Semibold，TypographyExtension 尚無此樣式，chip.dart 內 inline 定義。",

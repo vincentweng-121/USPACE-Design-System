@@ -1,10 +1,9 @@
 import SectionTitle from '../../components/SectionTitle';
-import {} from '../../tokens/componentSpecs';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
 import { IconPlaceholder, Pending, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { semantic, palette } from '../../tokens/colors';
-import { glass, elevation } from '../../tokens/scalars';
+import { glass, elevation, touch } from '../../tokens/scalars';
 
 // ── Types ──────────────────────────────────────────────────
 type Category = 'list' | 'textarea' | 'image' | 'null';
@@ -284,7 +283,7 @@ export default function ModalPage() {
           {/* ── Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <PendingImage expects="modal-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+            <PendingImage expects="modal-toucharea" note={`標出觸控熱區範圍，並確認是否達到 ${touch.minTarget}px 最小建議值。`} />
           </section>
 
           <section className="section">

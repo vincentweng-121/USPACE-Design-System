@@ -1,6 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
+import { touch } from '../../tokens/scalars';
 import { tabSpec } from '../../tokens/componentSpecs';
 import { Pending, ColorTable, ConfidenceNote, IconPlaceholder, SpecBox, StateRow, Playground, PendingImage, type PlaygroundDimension } from '../../components/spec';
 import { colorOf } from '../../utils';
@@ -205,7 +206,7 @@ export default function TabPage() {
           {/* ── Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <PendingImage expects="tab-toucharea" note="標出觸控熱區範圍，並確認是否達到 44px 最小建議值。" />
+            <PendingImage expects="tab-toucharea" note={`標出觸控熱區範圍，並確認是否達到 ${touch.minTarget}px 最小建議值。`} />
           </section>
 
           <section className="section">
