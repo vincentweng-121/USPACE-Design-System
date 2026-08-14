@@ -8,7 +8,6 @@ import {
   IconPlaceholder,
   NumberedCaptions,
   Playground,
-  PendingImage,
   Swatch,
   type PlaygroundDimension,
 } from '../../components/spec';
@@ -198,9 +197,9 @@ export default function ChipPage() {
           {/* ── 3. Anatomy ── */}
           <section className="section">
             <SectionTitle>Anatomy</SectionTitle>
-            <PendingImage
-              expects="chip-anatomy"
-              note="標出三個部件的拆解圖，編號與下表一致。"
+            <AnatomyImage
+              image="chip-anatomy"
+              alt="Chip 的三個部件：容器、左側 icon 佔位框、文字，圖上分別標號 1、2、3"
             />
 
             <SpecTable
@@ -260,12 +259,20 @@ export default function ChipPage() {
           {/* ── 6. Measurements ── */}
           <section className="section">
             <SectionTitle>Measurements</SectionTitle>
-            <PendingImage expects="chip-measurements" note="標出內距、圓角、icon 尺寸與間距的量測圖。" />
+            <AnatomyImage
+              image="chip-measurements"
+              alt="上方為 Small 的高度 16 與左右內距 8，下方為 Regular 有 icon 時的高度 22、左內距 8、icon 20、間距 2、右內距 12"
+            />
 
             <SpecTable
               headers={['項目', 'Regular', 'Small', 'Token']}
               rows={[
-                ['高度', '貼合內容', '貼合內容', '—'],
+                [
+                  '高度',
+                  `${layout.heightRegular}px`,
+                  `${layout.heightSmall}px`,
+                  '—',
+                ],
                 [
                   '水平內距（無 icon）',
                   `${layout.regularPaddingX}px`,
@@ -308,8 +315,9 @@ export default function ChipPage() {
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
             <p className="text-md text-muted" style={{ margin: 0 }}>
-              Chip 不可點擊，沒有觸控熱區。它的高度低於 44px 的觸控目標建議值，這也是它不該被
-              當成按鈕使用的原因之一。
+              Chip 不可點擊，沒有觸控熱區。Regular 高 {layout.heightRegular}px、Small 高{' '}
+              {layout.heightSmall}px，都遠低於 44px 的觸控目標建議值，這也是它不該被當成按鈕
+              使用的原因之一。
             </p>
           </section>
 

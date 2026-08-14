@@ -11,6 +11,21 @@
 
 ---
 
+## v0.9.1 | 2026-08-14
+
+### 文件站 | Chip 頁補上 Anatomy 與 Measurements 說明圖
+狀態：PUBLISHED
+
+- 從 Figma node 3873:15212 / 3873:15271（anatomy）與 3915:15452 / 3915:15757
+  （measurements）以 scale 2 匯出四張 960×700 的圖，兩個佔位框換成正式圖。
+  Chip 頁至此沒有待補圖了。
+- Measurements 圖標出了兩個先前沒有的數值：**Regular 高 22、Small 高 16**。
+  `chip.json` 的 layout 補上 `heightRegular` 與 `heightSmall`，
+  Measurements 表的「高度」欄由「貼合內容」改為實際數值。
+  兩者都是內容撐出來的結果——regular 是 icon 20 加上下各 1，
+  small 是文字行高 14 加上下各 1——不是寫死的高度。
+- Touch areas 的說明改為引用實際高度，不再只說「低於 44px」。
+
 ## v0.8.0 | 2026-08-13
 
 ### chip.dart | 形狀與顏色拆成兩個維度，新增 text style
