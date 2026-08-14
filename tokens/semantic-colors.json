@@ -87,7 +87,7 @@
         "inputText": { "light": "grey800", "dark": "white" },
         "inputTextError": { "light": "red500", "dark": "white" },
         "inputTextPlaceholder": { "light": "grey200", "dark": "white" },
-        "inputTextDisabled": { "light": "grey200", "dark": "white" }
+        "inputTextDisabled": { "light": "grey400", "dark": "white", "note": "2026-08-14 由 grey200 改為 grey400，對齊 Figma 的 Input/Text-Disabled #A6A6A6。原值與 inputTextPlaceholder 同為 grey200，停用與未填看起來一樣。dark 值 Figma 尚無依據，維持原狀。" }
       }
     },
     {

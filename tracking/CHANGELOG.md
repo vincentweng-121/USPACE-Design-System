@@ -25,6 +25,62 @@
   兩者都是內容撐出來的結果——regular 是 icon 20 加上下各 1，
   small 是文字行高 14 加上下各 1——不是寫死的高度。
 - Touch areas 的說明改為引用實際高度，不再只說「低於 44px」。
+## v0.9.0 | 2026-08-14
+
+### dropdown_menu.dart | 依 Figma 導入，補上 nonEditable 並修正六處偏差
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+逐一讀取 Figma node 2141:11030 的六個 status 變數後導入。原本的規格檔是空殼
+（`variants: []`、`confidence: skeleton`），實作與 Figma 有六處對不上，文件站的
+狀態名稱甚至寫成 Default / Active / Filled / Disabled / Error——與程式碼的
+enum 完全是兩套名字。
+
+- **新增 `nonEditable` 狀態**：Figma 畫了六個 status，程式碼只有五個。
+  新狀態為唯讀，文字轉 `inputTextDisabled`，且點擊不展開。
+- **文字尺寸變了**（視覺會變）：Label 由 `bodyS`(14/20) 改為 `labelS`(12/16)，
+  內容由 `bodyM`(16/24) 改為 `labelM`(14/20)。Figma 標的是 Label/S 與 Label/M，
+  原本的註解寫「bodyS / 12px」「bodyM / 14px」，但那兩個 token 實際是 14 與 16，
+  註解與 token 值本身就矛盾。
+- **chevron 由 `contentSecondary` 改為 `contentTertiary`**：Figma 匯出的 SVG 是
+  `fill="#323237"` 搭 `fill-opacity="0.15"`，即 grey800 @ 15%。
+- **selecting 補上邊框**：Figma 的 selecting 有 `inputBorderActive` 螢光綠邊框，
+  實作漏了，六個狀態長得一模一樣。
+- **文字色改由 status 決定**：原本看「有沒有 selectedItem」，於是 incomplete
+  傳了值就不再顯示 placeholder，與 Figma 定義的語意不符。
+- `dropdown_menu.json` 從空殼補成六個 status × 七個部位的完整對應，
+  並記錄 layout（高度 48、圓角 1000、內距 20、icon 16、Label/Hint 內距 8、
+  上下間距各 4，取自 node 2141:11029 的子節點座標）。
+- `component_token_test.dart` 新增 10 個測試：六個 status 逐一比對底色、描邊、
+  Label、內容、chevron 與 hint；另外驗證 incomplete / error / nonEditable
+  點擊不展開，而 default / complete / selecting 會展開。
+- 文件站整頁改用 Button 頁的呈現邏輯：Hero 補來源與 Figma node、Variants 補
+  六項說明、Anatomy 補部件表、Color 與 Baseline tokens 改由規格檔產生、
+  States 補六個實際預覽與行為表、Measurements 改用 `SpecTable` 且數值讀規格檔、
+  Develop 分頁補 Examples 與 API。Configurations 依規則只放 Label 與 Hint
+  的顯示與否——status 會渲染出螢光綠與紅色，屬於 States 與 Color。
+- 展開後的選單面板不在該 Figma node 內，圓角 20 / 內距 16、20 / 間距 8
+  沿用既有實作，尚未比對——使用者確認目前還沒有面板的設計稿。
+
+### semantic-colors | inputTextDisabled 由 grey200 改為 grey400
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- 對齊 Figma 的 Input/Text-Disabled #A6A6A6。原值 grey200(#D9D9D9) 與
+  `inputTextPlaceholder` 同色，停用的欄位與還沒填的欄位看起來一模一樣。
+- **影響三個元件共五個狀態**：TextField 的 disabled 與 nonEditable、
+  TextArea 的 disabled 與 nonEditable、DropdownMenu 的 nonEditable。
+  這些狀態的文字會變深，不需要改任何呼叫端程式碼。
+- dark 值維持 white：Figma 尚無 dark 模式的依據，這次不動沒有證據的部分。
+- 來源：2026-08-14 使用者確認。
+## v0.8.1 | 2026-08-13
+
+### 文件站 | Chip 頁 Variants 移除沒有對應標號的第四項說明
+狀態：PUBLISHED
+
+- 說明圖上只有 1、2、3 三個標號，對應 filled / outlined / text 三種形狀，
+  但圖說列了第四項「Level（僅 filled）」。編號與圖對不起來，讀者會去圖上找
+  一個不存在的 4。level 的說明本來就在 Color 區塊與 Usage 區塊，這裡移除。
 
 ## v0.8.0 | 2026-08-13
 

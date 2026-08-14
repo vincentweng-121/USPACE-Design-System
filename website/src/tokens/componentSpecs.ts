@@ -570,17 +570,87 @@ export const dropdown_menuSpec: ComponentSpec = {
   "component": "USpaceDropdownMenu",
   "source": "styles/dropdown_menu.dart",
   "figmaNode": "2141:11030",
-  "confidence": "skeleton",
   "dimensions": {
     "status": [
       "default",
-      "selecting",
       "complete",
+      "selecting",
       "incomplete",
-      "error"
+      "error",
+      "nonEditable"
     ]
   },
-  "variants": []
+  "variants": [
+    {
+      "status": "default",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextPlaceholder",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "尚未選取，顯示 placeholder"
+    },
+    {
+      "status": "complete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "已選取，顯示選取值"
+    },
+    {
+      "status": "selecting",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "選單展開中，唯一有邊框的狀態"
+    },
+    {
+      "status": "incomplete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextPlaceholder",
+      "icon": "contentTertiary",
+      "hint": "inputTextError",
+      "note": "必填未填，維持 placeholder 並顯示紅字提示"
+    },
+    {
+      "status": "error",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": "inputTextError",
+      "note": "已選取但值不合法，顯示紅字提示"
+    },
+    {
+      "status": "nonEditable",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextDisabled",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "唯讀，不可展開"
+    }
+  ],
+  "layout": {
+    "height": 48,
+    "radius": 1000,
+    "paddingX": 20,
+    "iconSize": 16,
+    "labelPaddingX": 8,
+    "labelGap": 4,
+    "hintGap": 4
+  }
 };
 
 export const componentSpecs = { button: buttonSpec, toggle: toggleSpec, chip: chipSpec, tab: tabSpec, text_field: text_fieldSpec, text_area: text_areaSpec, list: listSpec, modal: modalSpec, dropdown_menu: dropdown_menuSpec };
