@@ -39,7 +39,7 @@
   "$deviations": [
     "2026-08-14 導入時比對 Figma 發現六處偏差，已修正實作：(1) 缺 nonEditable 狀態；(2) chevron 用 contentSecondary，Figma 的 SVG 為 #323237 @ 15% 即 contentTertiary；(3) selecting 未畫 inputBorderActive 邊框；(4) label 字體用 bodyS(14/20)，Figma 為 Label/S(12/16) 即 labelS；(5) 內容字體用 bodyM(16/24)，Figma 為 Label/M(14/20) 即 labelM；(6) 文字色由「有沒有選取」決定，改為由 status 決定。",
     "2026-08-14 經使用者確認：inputTextDisabled 由 grey200 改為 grey400，對齊 Figma 的 Input/Text-Disabled #A6A6A6。原值與 inputTextPlaceholder 同為 grey200，停用與未填看起來一樣。此變更同時影響 text_field 與 text_area 的 disabled / nonEditable。",
-    "⚠️ 2026-08-14 量測圖 node 3915:20448 把 Label 與 Hint 的間距標成 8，但該圖上兩條標示帶（3930:22000、3930:22009）本身的高度都是 4，元件實例 3915:21941 的子節點座標算出來也是 4。以幾何為準採用 4，圖上的數字待設計修正。"
+    "2026-08-14 量測圖 node 3915:20448 曾把 Label 與 Hint 的間距標成 8，與標示帶本身的高度 4 及元件座標不符。經使用者確認為圖上筆誤，設計稿已更正為 4，圖也重新匯出。程式與規格檔自始維持 4，未受影響。"
   ],
   "$variantsNote": "bg 與 label 六個狀態都相同，仍逐列填寫，讓測試逐一比對而不是靠共用預設值蒙混過關。",
   "variants": [
