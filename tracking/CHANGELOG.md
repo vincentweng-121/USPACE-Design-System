@@ -11,6 +11,42 @@
 
 ---
 
+## v0.10.0 | 2026-08-14
+
+### chip.dart | 開放點擊與 trailing icon，可作為同頁篩選條件
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+Chip 原本明確定位為「純展示標籤，不可點擊」，程式碼與文件多處寫著
+「需要可互動的標籤請改用 USpaceTab」。2026-08-14 經使用者確認改變這個定位。
+
+- **新增 `onTap`**：傳了才可點擊，不傳則完全不包 GestureDetector，
+  純展示標籤的行為與版面佔位都不變。
+- **新增 `trailingIcon`**：例如移除用的 X、展開更多選項用的下箭頭。
+  與 `leadingIcon` 一樣只有 regular 支援，small 傳了會忽略。
+  leading 側可放 icon 或圖示（插畫）。
+- **可點擊時觸控熱區垂直外擴至 44px**：Chip 視覺上只有 22px（small 16px），
+  遠低於觸控目標建議值。視覺高度不變，但版面上會佔 44px——與純展示的 Chip
+  並排時要留意對齊。
+- **與 `USpaceTab` 的分界**（寫進兩個元件的文件與 `rules/LESSONS_LEARNED.md`）：
+  Chip 是**同一個頁面內的篩選條件，可以複選**；Tab 的 filter 是**點擊後切換分頁，
+  因此只能單選**。判準是「選完之後還在不在同一頁」。
+- `chip.json` 新增 `regularPaddingWithTrailingIcon` 與 `minTapTarget`。
+- `component_token_test.dart` 新增 7 個測試：不傳 onTap 不包 GestureDetector、
+  傳了收得到點擊、可點擊時高度達 44、不可點擊時不佔 44、regular 畫得出 trailing、
+  small 忽略 trailing、兩側可同時放 icon。
+- 文件站的 Configurations 補上 Trailing 與 Both 兩個選項（small 下停用），
+  Anatomy 補第四個部件，States、Usage、Accessibility、Measurements 與
+  Develop 分頁全部改寫。
+
+⚠️ **尚未比對 Figma**：Chip 元件（node 1327:19329）目前只有 Leading Icon /
+Size / Surface / Level 四個維度，沒有畫 trailing icon，也沒有點擊或選中狀態。
+trailing 側的內距 8 是 leading 規則的鏡像推導。選中狀態目前由呼叫端切換
+style 或 level 表達，不是獨立維度。設計稿產出後需要回頭校對。
+
+⚠️ **右側 icon 沒有獨立熱區**：整顆 Chip 共用一個 `onTap`。需要「點 X 移除、
+點本體做別的事」時，這個元件目前做不到。
+
 ## v0.9.1 | 2026-08-14
 
 ### 文件站 | Chip 頁補上 Anatomy 與 Measurements 說明圖

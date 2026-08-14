@@ -217,6 +217,7 @@ export default function TabPage() {
             <div style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               <ul style={{ paddingLeft: 20 }}>
                 <li><strong>三種用途各司其職</strong>：Tab 系列涵蓋三種用途：Tab（頁籤切換）、Filter（篩選條件）、Input（已選輸入標籤）。</li>
+                <li><strong>Filter 與 Chip 的分界</strong>：Tab 的 Filter 是<strong>點擊後切換分頁，因此只能單選</strong>；<code>USpaceChip</code> 的可點擊版本是<strong>同一個頁面內的篩選條件，可以複選</strong>。要「選了以後換一頁」用這裡的 Filter，要「在同一頁疊加條件」用 Chip。</li>
                 <li><strong>圖示/圖形前綴增強辨識</strong>：Tab_icon / Tab_Graphic 提供圖示/圖形前綴，增強辨識度。</li>
                 <li><strong>Active 狀態對比鮮明</strong>：Active 狀態用深色填充、白字，與 Default 的淺底形成強烈對比。</li>
                 <li><strong>Filter 使用 pill shape</strong>：Filter 使用 pill shape（radius 1000），文字有 maxWidth 截斷避免破版。</li>

@@ -345,6 +345,88 @@ void main() {
       );
     });
 
+    // ── 互動 ──
+    testWidgets('不傳 onTap 時不可點擊', (tester) async {
+      await pump(tester, const USpaceChip(label: 'Tag'));
+      expect(
+        find.descendant(
+          of: find.byType(USpaceChip),
+          matching: find.byType(GestureDetector),
+        ),
+        findsNothing,
+        reason: '純展示標籤不該包 GestureDetector',
+      );
+    });
+
+    testWidgets('傳 onTap 時可點擊', (tester) async {
+      var taps = 0;
+      await pump(tester, USpaceChip(label: 'Tag', onTap: () => taps++));
+      await tester.tap(find.byType(USpaceChip));
+      expect(taps, 1, reason: '傳了 onTap 就該收得到點擊');
+    });
+
+    testWidgets('可點擊時觸控熱區至少 44px', (tester) async {
+      await pump(tester, USpaceChip(label: 'Tag', onTap: () {}));
+      final size = tester.getSize(find.byType(USpaceChip));
+      expect(
+        size.height,
+        greaterThanOrEqualTo(USpaceChip.minTapTarget),
+        reason: 'Chip 視覺只有 22px，可點擊時熱區要外擴到 44px',
+      );
+    });
+
+    testWidgets('不可點擊時不佔用外擴的高度', (tester) async {
+      await pump(tester, const USpaceChip(label: 'Tag'));
+      final size = tester.getSize(find.byType(USpaceChip));
+      expect(
+        size.height,
+        lessThan(USpaceChip.minTapTarget),
+        reason: '純展示標籤不該因為熱區規則而佔掉 44px',
+      );
+    });
+
+    testWidgets('regular 畫得出 trailing icon', (tester) async {
+      await pump(
+        tester,
+        const USpaceChip(label: 'Tag', trailingIcon: Icon(Icons.close)),
+      );
+      expect(
+        find.descendant(of: find.byType(USpaceChip), matching: find.byType(Icon)),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('small 忽略 trailing icon', (tester) async {
+      await pump(
+        tester,
+        const USpaceChip(
+          label: 'Tag',
+          size: USpaceChipSize.small,
+          trailingIcon: Icon(Icons.close),
+        ),
+      );
+      expect(
+        find.descendant(of: find.byType(USpaceChip), matching: find.byType(Icon)),
+        findsNothing,
+        reason: 'small 兩側都不支援 icon，規則要與 leading 一致',
+      );
+    });
+
+    testWidgets('兩側可同時放 icon', (tester) async {
+      await pump(
+        tester,
+        const USpaceChip(
+          label: 'Tag',
+          leadingIcon: Icon(Icons.star),
+          trailingIcon: Icon(Icons.close),
+        ),
+      );
+      expect(
+        find.descendant(of: find.byType(USpaceChip), matching: find.byType(Icon)),
+        findsNWidgets(2),
+      );
+    });
+
     // level 只在 filled 生效。少了這個，把 level 誤接到 outlined 的底色也不會被發現
     for (final style in [USpaceChipStyle.outlined, USpaceChipStyle.text]) {
       testWidgets('${style.name} 忽略 level', (tester) async {
