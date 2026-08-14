@@ -250,6 +250,8 @@ export const chipSpec: ComponentSpec = {
     }
   ],
   "layout": {
+    "heightRegular": 22,
+    "heightSmall": 16,
     "iconSize": 20,
     "gap": 2,
     "paddingY": 1,
