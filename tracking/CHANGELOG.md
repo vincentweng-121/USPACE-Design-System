@@ -11,6 +11,18 @@
 
 ---
 
+## v0.12.1 | 2026-08-17
+
+### 文件站 | Action Area 預覽補上按鈕文字與三格並排列
+狀態：PUBLISHED
+
+- 預覽裡的按鈕原本只是空方塊，補上 Label 文字。文字色與字體都查 `button.json`
+  與 typography token，不在這一頁寫死。
+- Configurations 的「1 button + row」拆成「1 button + 2 row」與
+  「1 button + 3 row」兩個選項，對應 Figma 實際畫的兩種。三格的間距經 node
+  1824:11666 覆核同樣是 16（106×3 + 16×2 = 350），`rowGap` 不需要改。
+- Anatomy 表補上並排列的說明。
+
 ## v0.12.0 | 2026-08-17
 
 ### action_area.dart | 新增 Action Area 元件

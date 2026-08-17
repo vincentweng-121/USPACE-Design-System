@@ -27,13 +27,14 @@ const variantOf = (background: Background, multiRow: boolean) =>
     (v) => v.background === background && v.rows === (multiRow ? 'multi' : 'single'),
   )!;
 
-/** 由 button.json 查出按鈕的底色，避免在這一頁自己寫死顏色 */
-const buttonBg = (level: string) =>
-  colorOf(
-    buttonSpec.variants.find(
-      (v) => v.level === level && v.state === 'enabled' && v.emphasis === 'none',
-    )!.bg as string,
-  );
+/** 由 button.json 查出該 level 的 token，避免在這一頁自己寫死顏色 */
+const buttonVariant = (level: string) =>
+  buttonSpec.variants.find(
+    (v) => v.level === level && v.state === 'enabled' && v.emphasis === 'none',
+  )!;
+
+/** 按鈕文字的字體同 Button 元件 */
+const buttonType = typographyStyles.flatMap((f) => f.styles).find((s) => s.name === 'displayM')!;
 
 // ── 按鈕的簡化示意 ──
 /**
@@ -41,15 +42,28 @@ const buttonBg = (level: string) =>
  * 細節看 Button 頁——重複畫一次會變成第二份會漂移的規格。
  */
 function ButtonBlock({ level = 'primary' }: { level?: string }) {
+  const v = buttonVariant(level);
   return (
     <div
       style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         height: layout.buttonHeight,
         borderRadius: 1000,
-        background: buttonBg(level),
+        background: colorOf(v.bg as string),
+        color: colorOf(v.content as string),
+        fontSize: buttonType.size,
+        lineHeight: `${buttonType.lineHeight}px`,
+        fontWeight: buttonType.weight,
+        fontFamily: '"PingFang TC", sans-serif',
         flex: 1,
+        minWidth: 0,
+        overflow: 'hidden',
       }}
-    />
+    >
+      Label
+    </div>
   );
 }
 
@@ -57,26 +71,28 @@ function ButtonBlock({ level = 'primary' }: { level?: string }) {
 function ActionAreaPreview({
   background = 'gray',
   rows = 1,
-  withRow = false,
+  rowCells = 0,
   showText = false,
 }: {
   background?: Background;
   rows?: number;
-  withRow?: boolean;
+  /** 上方那一列要並排幾格；0 表示沒有這一列 */
+  rowCells?: number;
   showText?: boolean;
 }) {
-  const multiRow = rows > 1 || withRow;
+  const multiRow = rows > 1 || rowCells > 0;
   const v = variantOf(background, multiRow);
   const gradient = v.gradient
     ? (gradients as Record<string, string>)[v.gradient as string]
     : undefined;
 
   const items: React.ReactNode[] = [];
-  if (withRow) {
+  if (rowCells > 0) {
     items.push(
       <div key="row" style={{ display: 'flex', gap: layout.rowGap }}>
-        <ButtonBlock level="tertiary" />
-        <ButtonBlock level="tertiary" />
+        {Array.from({ length: rowCells }, (_, i) => (
+          <ButtonBlock key={i} level="tertiary" />
+        ))}
       </div>,
     );
   }
@@ -134,7 +150,8 @@ const playgroundDimensions: PlaygroundDimension[] = [
       { value: '1', label: '1 button' },
       { value: '2', label: '2 button' },
       { value: '3', label: '3 button' },
-      { value: 'row', label: '1 button + row' },
+      { value: 'row2', label: '1 button + 2 row' },
+      { value: 'row3', label: '1 button + 3 row' },
     ],
   },
   {
@@ -203,15 +220,16 @@ export default function ActionAreaPage() {
               render={(v) => (
                 <ActionAreaPreview
                   background={v.background as Background}
-                  rows={v.buttons === 'row' ? 1 : Number(v.buttons)}
-                  withRow={v.buttons === 'row'}
+                  rows={v.buttons.startsWith('row') ? 1 : Number(v.buttons)}
+                  rowCells={v.buttons.startsWith('row') ? Number(v.buttons.slice(3)) : 0}
                   showText={v.text === 'shown'}
                 />
               )}
             />
             <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-              按鈕在這裡畫成方塊，只表達高度與位置。按鈕本身的規格在 Button 頁，
-              這一頁不重複一份。
+              按鈕在這裡只畫出底色、文字與高度，用來看版面關係。按鈕本身的規格
+              （尺寸、狀態、icon 位置）在 Button 頁，這一頁不重複一份。
+              上方那一列並排的格子，Figma 有兩格與三格兩種，寬度由容器平分。
             </p>
           </section>
 
@@ -229,6 +247,7 @@ export default function ActionAreaPage() {
                 ['1', '背景', '選用', 'Gray 時是由下往上的漸層；None 時不畫'],
                 ['2', '說明文字', '選用', `置中，與按鈕區間距 ${layout.textGap}px`],
                 ['3', '按鈕區', '必要', `由呼叫端傳入，每項高 ${layout.buttonHeight}px，彼此間距 ${layout.buttonGap}px`],
+                ['3a', '並排列（選用）', '選用', `一列並排兩格或三格，格子之間間距 ${layout.rowGap}px，寬度平分`],
                 ['4', 'Home indicator 留白', '選用', `底部保留 ${layout.homeIndicatorHeight}px；已被 SafeArea 包住時關掉`],
               ]}
               minWidth={560}
