@@ -11,6 +11,19 @@
 
 ---
 
+## v0.12.2 | 2026-08-17
+
+### 文件站 | Action Area 的並排列改放虛線方框 icon
+狀態：PUBLISHED
+
+- 並排列的格子放的是 icon 而不是文字。預覽改用 `IconPlaceholder`（`spec.tsx`
+  的共用虛線方框），符合既有規則：可擺放 icon 的位置一律用虛線方框，
+  文件站不指定具體圖示。
+- `action_area.json` 新增 `rowIconSize`（40）。兩格版（node 1923:17434，
+  格寬 167）與三格版（node 3389:3533，格寬 106）的 icon 都是 40×40，
+  於 48 高的格子裡置中，兩者相同。
+- Measurements 表與 Anatomy 表同步補上這個數值。
+
 ## v0.12.1 | 2026-08-17
 
 ### 文件站 | Action Area 預覽補上按鈕文字與三格並排列
