@@ -10,7 +10,7 @@
  *
  * ⚠️ 產出的檔案標有 GENERATED 標頭，請勿手改；要改 token 請改 tokens/*.json。
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -153,6 +153,16 @@ function dartColors() {
     out.push('');
     for (const line of g.doc) out.push(`  /// ${line}`);
     out.push(`  static const ${name} = LinearGradient(`, ...dartGradientBody(g), '  );');
+    // 有 dark 定義的漸層多產生一個 ...Dark；角度與停止點沿用 light，只換顏色
+    if (g.dark) {
+      out.push('');
+      out.push(`  /// ${name} 的 dark 變體：${g.dark.note}`);
+      out.push(
+        `  static const ${name}Dark = LinearGradient(`,
+        ...dartGradientBody({ ...g, colors: g.dark.colors }),
+        '  );',
+      );
+    }
   }
   for (const [alias, target] of Object.entries(gradients.aliases)) {
     out.push('', `  /// 同 [${target}]`, `  static const ${alias} = ${target};`);
@@ -522,17 +532,11 @@ function tsScalars() {
 // ─── TypeScript：元件規格（與 Flutter 測試同源）──────────────
 
 function tsComponentSpecs() {
-  const files = [
-    'button.json',
-    'toggle.json',
-    'chip.json',
-    'tab.json',
-    'text_field.json',
-    'text_area.json',
-    'list.json',
-    'modal.json',
-    'dropdown_menu.json',
-  ];
+  // 掃目錄而不是手寫清單——先前新增元件時漏掉這裡，規格檔加了卻沒產生出來。
+  // 排序是為了讓輸出穩定，否則不同機器的檔案順序會讓 check:tokens 誤報漂移。
+  const files = readdirSync(join(ROOT, 'tokens/components'))
+    .filter((f) => f.endsWith('.json'))
+    .sort();
   const out = [
     '// ⚠️ GENERATED FILE — 請勿手動編輯',
     '// 來源：tokens/components/*.json',

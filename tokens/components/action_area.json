@@ -1,0 +1,70 @@
+{
+  "$comment": "USpaceActionArea 的規格檔。頁面底部的動作區：背景、間距與 home indicator 由這個元件負責，按鈕本身由呼叫端傳入。",
+  "$drives": [
+    "test/component_token_test.dart — pump 真實 widget 斷言實際色值",
+    "website/src/tokens/componentSpecs.ts — 文件站 Develop 分頁的規格表"
+  ],
+  "$rule": "改動元件的 token 對應時，必須同時更新這裡，否則測試會失敗。",
+  "$source": "Figma node 1210:8629，2026-08-17 逐一讀取各變體的變數與子節點座標。",
+  "$naming": "Figma frame 名為 BottomBar。2026-08-17 經使用者確認：這個元件正式名稱為 Action Area，文件站原本的 Bottom Bar 項目已移除，其搜尋關鍵字併入 Action Area。",
+  "component": "USpaceActionArea",
+  "source": "styles/action_area.dart",
+  "figmaNode": "1210:8629",
+  "dimensions": {
+    "background": [
+      "gray",
+      "none"
+    ]
+  },
+  "layout": {
+    "marginX": 20,
+    "paddingTop": 20,
+    "buttonHeight": 48,
+    "buttonGap": 20,
+    "rowGap": 16,
+    "textGap": 12,
+    "homeIndicatorHeight": 20
+  },
+  "$layoutSource": "Figma node 1216:8237（text + 1 button）與 1824:11529（2 button）的子節點座標：左右邊距 20（Margine）、頂部 20、按鈕高 48、按鈕間距 20（y=0 與 y=68）、Text 與按鈕區間距 12（Text 底 36 → Button Section y=48）、home indicator 20。node 1824:11588 的 Button Row 內兩個 Graphic Button 各 167 寬、間距 16（x=0 與 x=183，167×2+16=350）。",
+  "$typography": {
+    "text": "captionS（PingFang TC 12/16）— Figma 標記 🇹🇼 輔助｜Caption/S"
+  },
+  "$buttons": "按鈕本身不是這個元件畫的，由呼叫端傳入 USpaceButton。Figma 的變體名稱（1 button／2 button／3 button／1 button + 2 row／1 button +3 row）描述的是呼叫端的組合方式，不是這個元件的參數。",
+  "$deviations": [
+    "2026-08-17 匯入時經使用者指示：略過所有 Premium Accout=True 的變體（Figma 上該屬性名稱拼字為 Accout）。這些變體在動作區下方多一條深色的權益列，這次完全不處理。",
+    "2026-08-17 經使用者確認：bottomBarGray1B / 2B 補上 dark 變體。Figma 上這兩個是 fill style 而非 variable，style 沒有明暗模式，設計稿本來就沒有 dark 版本。依漸層用途推導——它畫的是頁面次要背景色的淡出，light 用的 grey50 正是 pageSecondary 的 light 值，故 dark 取 pageSecondary 的 dark 值 grey900。",
+    "2026-08-17 經使用者確認：Figma 變體的不對稱（gray 有 row 變體無 3 button、none 有 3 button 無 row）屬於漏畫，設計稿會補齊。元件本來就不限制這些組合——children 由呼叫端自由組合，任何背景都能搭配任何列數。",
+    "2026-08-17 經使用者確認：none 背景 3 button 的第二、三顆改用實心的 secondary 與 tertiary，不做描邊版本。USpaceButton 既有的三個 level 已足夠，不需要為此新增樣式。"
+  ],
+  "$variantsNote": "背景是這個元件唯一會解出顏色的維度。gray 依按鈕列數選漸層：單列用 1B、多列用 2B，取自 Figma 兩種變體實際掛的漸層。",
+  "variants": [
+    {
+      "background": "gray",
+      "rows": "single",
+      "gradient": "bottomBarGray1B",
+      "text": "textSecondary",
+      "note": "只有一列按鈕時的漸層"
+    },
+    {
+      "background": "gray",
+      "rows": "multi",
+      "gradient": "bottomBarGray2B",
+      "text": "textSecondary",
+      "note": "兩列以上時的漸層，涵蓋範圍較高"
+    },
+    {
+      "background": "none",
+      "rows": "single",
+      "gradient": null,
+      "text": "textSecondary",
+      "note": "無背景，直接疊在頁面內容上"
+    },
+    {
+      "background": "none",
+      "rows": "multi",
+      "gradient": null,
+      "text": "textSecondary",
+      "note": "無背景，列數不影響外觀"
+    }
+  ]
+}

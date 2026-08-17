@@ -11,6 +11,62 @@
 
 ---
 
+## v0.12.0 | 2026-08-17
+
+### action_area.dart | 新增 Action Area 元件
+狀態：PUBLISHED
+
+新元件。頁面底部放關鍵行動的區塊，負責背景漸層、左右邊距、按鈕間距與底部
+留白；**按鈕本身由呼叫端傳入，這個元件不畫按鈕**。
+
+- `USpaceActionArea`：參數為 `children`（由上到下的行動）、`text`（上方說明）、
+  `background`（gray / none）、`showHomeIndicator`。Figma 變體名稱裡的
+  「1 button／2 button／1 button + 2 row」講的是呼叫端要放幾個 children，
+  不是元件的參數；要一列並排多顆時自己傳 Row。
+- gray 背景依列數選漸層：單列 `bottomBarGray1B`、多列 `bottomBarGray2B`，
+  取自 Figma 兩種變體實際掛的漸層。
+- 版面數值取自 Figma node 1216:8237 與 1824:11529 的子節點座標：
+  左右邊距 20、頂部 20、按鈕高 48、按鈕間距 20、說明文字間距 12、
+  底部 home indicator 20、同列內按鈕間距 16。
+- 新增 7 個測試：兩種漸層各自對應的列數、none 不畫背景、說明文字的色票與字體、
+  沒傳 text 時不佔空間、關掉 home indicator 的高度差、以及總高等於各段相加。
+- 文件站新增 Action Area 頁（依 Button 頁的呈現邏輯），選單移除 SOON 標記，
+  路由由 ComingSoonPage 換成實際頁面。三張說明圖待補。
+
+### 產生器 | componentSpecs 改為掃描目錄
+
+- `tools/generate-tokens.mjs` 原本手寫元件規格檔清單，新增 `action_area.json`
+  後產生器沒有納入，規格檔加了卻沒有輸出。改為掃描 `tokens/components/` 並排序，
+  以後新增元件不會再漏。排序是為了輸出穩定，否則不同機器的檔案順序會讓
+  `check:tokens` 誤報漂移。
+
+#### 匯入時一併確認的四件事（2026-08-17 使用者裁定）
+
+- **命名定案為 Action Area，Bottom Bar 移除**：Figma frame 雖名為 BottomBar，
+  正式名稱採 Action Area。文件站的 Bottom Bar 路由與選單項目已刪除，
+  原本的搜尋關鍵字（底部按鈕列、動作列、action bar 等）併入 Action Area，
+  用舊詞搜尋仍找得到。
+- **Figma 變體的不對稱屬於漏畫**，設計稿會補齊。元件本來就不限制這些組合——
+  `children` 由呼叫端自由組合，任何背景都能搭配任何列數。
+- **三顆按鈕一律用實心**：none 背景 3 button 原本畫成白底加描邊，改用實心的
+  secondary 與 tertiary。`USpaceButton` 既有的三個 level 已足夠，不新增描邊樣式。
+- **Premium 變體維持略過**：`Premium Accout=True`（設計稿上就是這個拼字）的變體
+  在動作區下方多一條深色權益列，這次完全不處理。
+
+### gradients | bottomBarGray1B / 2B 補上 dark 變體
+狀態：PUBLISHED
+
+- 這兩個漸層在 Figma 上是 **fill style 而非 variable**，而 style 沒有明暗模式，
+  所以設計稿本來就沒有 dark 版本——先前記為「待設計確認」其實等不到。
+  經使用者指示「沒有就建立」，依漸層的用途推導：它畫的是頁面次要背景色的淡出，
+  light 用的 grey50 正是 `pageSecondary` 的 light 值，因此 dark 取
+  `pageSecondary` 的 dark 值 **grey900**，角度與停止點不變。
+- 產生器新增規則：`gradients.json` 裡有 `dark` 定義的漸層，會多產生一個
+  `<名稱>Dark` 常數。目前只有這兩個需要。
+- 漸層仍是 static 常數而非 ThemeExtension 的欄位，所以 `USpaceActionArea`
+  自己讀 `Theme.of(context).brightness` 選用。新增一個測試驗證 dark 主題下
+  取到的是 dark 變體。
+
 ## v0.11.2 | 2026-08-14
 
 ### 文件站 | 換上更正後的 Dropdown Menu 量測圖

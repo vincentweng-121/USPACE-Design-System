@@ -40,6 +40,7 @@ export 'uspace_palette.dart';
 export 'uspace_theme.dart';
 
 // ─── Components ─────────────────────────────────────────
+export 'action_area.dart';
 export 'button.dart';
 export 'chip.dart';
 export 'dropdown_menu.dart';
