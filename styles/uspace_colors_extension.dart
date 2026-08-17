@@ -189,7 +189,7 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
 
   /// BottomBar Gray 1B: 180deg, grey50 @0%→100% opacity
   /// CSS: linear-gradient(180deg, rgba(248,248,248,0) 31.1%, #F8F8F8 55.84%)
-  /// dark: 同樣的角度與停止點（31.1%→55.84%），顏色改用 grey900
+  /// dark: 不是漸層，是 transparentBlack40 的純色遮罩（Figma node 3957:22476）
   static const bottomBarGray1B = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -198,18 +198,17 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     stops: [0.311, 0.558],
   );
 
-  /// bottomBarGray1B 的 dark 變體：對應 pageSecondary 的 dark 值，與 light 用 grey50 的邏輯一致
+  /// bottomBarGray1B 的 dark 變體：兩端同色，等同 transparentBlack40 的純色遮罩；Figma 的 dark 變體掛的是 Background/Surface/Mask
   static const bottomBarGray1BDark = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    // 0: grey900 @ 0%
-    colors: [Color(0x001A1A1A), USpacePalette.grey900],
+    colors: [USpacePalette.transparentBlack40, USpacePalette.transparentBlack40],
     stops: [0.311, 0.558],
   );
 
   /// BottomBar Gray 2B: 180deg, grey50 @0%→100% opacity
   /// CSS: linear-gradient(180deg, rgba(248,248,248,0) 0%, #F8F8F8 38.44%)
-  /// dark: 同樣的角度與停止點（0%→38.44%），顏色改用 grey900
+  /// dark: 不是漸層，是 transparentBlack40 的純色遮罩（Figma node 3957:22476）
   static const bottomBarGray2B = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -218,12 +217,11 @@ class USpaceColorsExtension extends ThemeExtension<USpaceColorsExtension> {
     stops: [0.0, 0.384],
   );
 
-  /// bottomBarGray2B 的 dark 變體：對應 pageSecondary 的 dark 值，與 light 用 grey50 的邏輯一致
+  /// bottomBarGray2B 的 dark 變體：兩端同色，等同 transparentBlack40 的純色遮罩；Figma 的 dark 變體掛的是 Background/Surface/Mask
   static const bottomBarGray2BDark = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    // 0: grey900 @ 0%
-    colors: [Color(0x001A1A1A), USpacePalette.grey900],
+    colors: [USpacePalette.transparentBlack40, USpacePalette.transparentBlack40],
     stops: [0.0, 0.384],
   );
 

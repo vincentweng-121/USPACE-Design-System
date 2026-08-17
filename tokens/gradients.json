@@ -1,6 +1,6 @@
 {
   "$comment": "USPACE gradient tokens。colors 元素為 palette token 名，或 {raw, note}",
-  "$warning": "bottomBarGray1B / 2B 於 2026-08-17 補上 dark 變體：Figma 上這兩個是 fill style 而非 variable，style 沒有明暗模式，所以設計稿本來就沒有 dark 版本。經使用者指示「沒有就建立」，依漸層的用途推導——它是頁面次要背景色的淡出，light 用的 grey50 正是 pageSecondary 的 light 值，因此 dark 取 pageSecondary 的 dark 值 grey900。",
+  "$warning": "bottomBarGray1B / 2B 的 dark 變體來自 Figma node 3957:22476（Action Area-variant-dark）：該 dark 變體掛的不是 BottomBar Gray 漸層，而是 Background/Surface/Mask = #00000066，即 transparentBlack40 的純色遮罩。像素取樣可以佐證：40% 黑疊在該圖背景 #141417 上得到 #0c0c0e，與圖上實際色值相符。因此 dark 變體兩端同色，視覺上是遮罩而非漸層——保留 LinearGradient 的形式只是為了讓元件兩種主題共用同一條程式路徑。⚠️ 待確認：semantic 的 pageMask 其 dark 值目前是 transparentWhite5，與這裡觀察到的 transparentBlack40 不同，兩者何者為準需要設計釐清。",
   "gradients": {
     "silverLinear": {
       "doc": [
@@ -36,7 +36,7 @@
       "doc": [
         "BottomBar Gray 1B: 180deg, grey50 @0%→100% opacity",
         "CSS: linear-gradient(180deg, rgba(248,248,248,0) 31.1%, #F8F8F8 55.84%)",
-        "dark: 同樣的角度與停止點（31.1%→55.84%），顏色改用 grey900"
+        "dark: 不是漸層，是 transparentBlack40 的純色遮罩（Figma node 3957:22476）"
       ],
       "begin": "Alignment.topCenter",
       "end": "Alignment.bottomCenter",
@@ -54,20 +54,17 @@
       "css": "linear-gradient(180deg, rgba(248,248,248,0) 31.1%, {grey50} 55.84%)",
       "dark": {
         "colors": [
-          {
-            "raw": "0x001A1A1A",
-            "note": "grey900 @ 0%"
-          },
-          "grey900"
+          "transparentBlack40",
+          "transparentBlack40"
         ],
-        "note": "對應 pageSecondary 的 dark 值，與 light 用 grey50 的邏輯一致"
+        "note": "兩端同色，等同 transparentBlack40 的純色遮罩；Figma 的 dark 變體掛的是 Background/Surface/Mask"
       }
     },
     "bottomBarGray2B": {
       "doc": [
         "BottomBar Gray 2B: 180deg, grey50 @0%→100% opacity",
         "CSS: linear-gradient(180deg, rgba(248,248,248,0) 0%, #F8F8F8 38.44%)",
-        "dark: 同樣的角度與停止點（0%→38.44%），顏色改用 grey900"
+        "dark: 不是漸層，是 transparentBlack40 的純色遮罩（Figma node 3957:22476）"
       ],
       "begin": "Alignment.topCenter",
       "end": "Alignment.bottomCenter",
@@ -85,13 +82,10 @@
       "css": "linear-gradient(180deg, rgba(248,248,248,0) 0%, {grey50} 38.44%)",
       "dark": {
         "colors": [
-          {
-            "raw": "0x001A1A1A",
-            "note": "grey900 @ 0%"
-          },
-          "grey900"
+          "transparentBlack40",
+          "transparentBlack40"
         ],
-        "note": "對應 pageSecondary 的 dark 值，與 light 用 grey50 的邏輯一致"
+        "note": "兩端同色，等同 transparentBlack40 的純色遮罩；Figma 的 dark 變體掛的是 Background/Surface/Mask"
       }
     }
   },

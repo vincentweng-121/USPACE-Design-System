@@ -4,8 +4,8 @@ import PageHero from '../../components/PageHero';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import {
+  AnatomyImage,
   IconPlaceholder,
-  NumberedCaptions,
   Playground,
   PendingImage,
   Swatch,
@@ -204,23 +204,22 @@ export default function ActionAreaPage() {
           {/* ── 1. Variants ── */}
           <section className="section">
             <SectionTitle>Variants</SectionTitle>
-            <PendingImage
-              expects="action-area-variant"
-              note="一張圖並排 Gray 與 None 兩種背景，各自搭配不同的按鈕組合。"
+            <AnatomyImage
+              image="action-area-variant"
+              alt="Gray 背景的動作區，內含主要與次要兩顆按鈕"
             />
 
-            <NumberedCaptions
-              items={[
-                {
-                  name: 'Gray',
-                  desc: '由下往上的灰色漸層，讓按鈕與底下捲動的內容分開。放在會捲動的頁面上用這個。',
-                },
-                {
-                  name: 'None',
-                  desc: '沒有背景，直接疊在頁面內容上。底下不會捲動、或頁面本身已經是純色時用這個。',
-                },
-              ]}
-            />
+            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+              <li>
+                <strong>Gray</strong>：讓按鈕與底下捲動的內容分開。淺色時是由下往上的灰色漸層，
+                深色時改為半透明的黑色遮罩——上圖示範的就是這一種，切換網站主題可以看到差異。
+                放在會捲動的頁面上用它。
+              </li>
+              <li>
+                <strong>None</strong>：沒有背景，直接疊在頁面內容上。底下不會捲動、
+                或頁面本身已經是純色時用它。
+              </li>
+            </ul>
           </section>
 
           {/* ── 2. Configurations ── */}
@@ -286,8 +285,10 @@ export default function ActionAreaPage() {
             <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
               Gray 依列數選漸層：單列用 <code>bottomBarGray1B</code>、多列用{' '}
               <code>bottomBarGray2B</code>，後者涵蓋範圍較高才蓋得住底下的內容。
-              兩個漸層都有明暗兩套：淺色用 grey50、深色用 grey900，都是{' '}
-              <code>pageSecondary</code> 對應主題的值——漸層畫的就是頁面背景色的淡出。
+              兩者都有明暗兩套，但形式不同：<strong>淺色是漸層</strong>（grey50 由透明到不透明，
+              也就是頁面背景色的淡出），<strong>深色則是半透明的黑色遮罩</strong>
+              （<code>transparentBlack40</code>），不是漸層。這是照 Figma 的 dark 變體——
+              它掛的是 Background/Surface/Mask 而不是 BottomBar Gray。
             </p>
           </section>
 
@@ -550,10 +551,17 @@ export default function ActionAreaPage() {
                 經使用者指示這次完全略過。
               </li>
               <li>
-                <strong>漸層的深色版本是建立出來的</strong>：Figma 上這兩個是 fill style
-                而非 variable，style 沒有明暗模式，設計稿本來就沒有深色版本。
-                2026-08-17 經使用者指示建立：淺色用 grey50、深色用 grey900，
-                兩者都是 <code>pageSecondary</code> 對應主題的值。
+                <strong>深色的背景不是漸層</strong>：Figma 上 BottomBar Gray 1B / 2B 是
+                fill style 而非 variable，style 沒有明暗模式。後來從 Action Area 的
+                dark 說明圖（node 3957:22476）查到，深色變體掛的是
+                Background/Surface/Mask（#00000066 = <code>transparentBlack40</code>），
+                是純色遮罩不是漸層。像素取樣可佐證：40% 黑疊在該圖背景上得到的值與圖上相符。
+              </li>
+              <li>
+                <strong>⚠️ pageMask 的深色值待釐清</strong>：semantic 的{' '}
+                <code>pageMask</code> 深色值目前是 <code>transparentWhite5</code>，
+                與這裡觀察到的 <code>transparentBlack40</code> 不同。兩者何者為準需要設計確認，
+                這次沒有動 <code>pageMask</code>。
               </li>
               <li>
                 <strong>Figma 的變體會補齊</strong>：Gray 背景原本沒畫「3 button」、

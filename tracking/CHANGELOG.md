@@ -11,6 +11,33 @@
 
 ---
 
+## v0.12.3 | 2026-08-17
+
+### 文件站 | Action Area 補上 Variants 說明圖
+狀態：PUBLISHED
+
+- 從 Figma node 3957:22108 / 3957:22475 以 scale 2 匯出明暗兩張圖。
+- 圖上**沒有編號標記**，只示範了一個 Gray 背景的例子，因此 Variants 的圖說
+  不用 `NumberedCaptions`，改為一般清單——照編號去圖上找不存在的標號，
+  正是 Chip 頁先前發生過的問題。
+
+### gradients | 更正 bottomBarGray 的 dark 定義
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- **v0.12.0 把 dark 推導為 grey900 的漸層，這是錯的。** 匯入 Action Area 的
+  dark 說明圖時查到，Figma 的 dark 變體（node 3957:22476）掛的是
+  **Background/Surface/Mask = #00000066**，即 `transparentBlack40` 的純色遮罩，
+  不是漸層。
+- 像素取樣可佐證：40% 黑疊在該圖背景 #141417 上得到 #0c0c0e，與圖上取樣到的
+  值相符；grey900(#1A1A1A) 則對不上。
+- `bottomBarGray1BDark` / `2BDark` 兩端改為同色的 `transparentBlack40`。
+  保留 `LinearGradient` 的形式只是讓元件兩種主題共用同一條程式路徑，
+  視覺上是遮罩。
+- ⚠️ **待釐清**：semantic 的 `pageMask` 其 dark 值目前是 `transparentWhite5`，
+  與這裡觀察到的 `transparentBlack40` 不同。何者為準需要設計確認，
+  這次沒有動 `pageMask`。
+
 ## v0.12.2 | 2026-08-17
 
 ### 文件站 | Action Area 的並排列改放虛線方框 icon
