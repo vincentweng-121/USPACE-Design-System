@@ -4,6 +4,7 @@ import PageHero from '../../components/PageHero';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import {
+  IconPlaceholder,
   NumberedCaptions,
   Playground,
   PendingImage,
@@ -41,8 +42,16 @@ const buttonType = typographyStyles.flatMap((f) => f.styles).find((s) => s.name 
  * 這一頁講的是版面，不是按鈕本身。按鈕只畫成正確高度與底色的方塊，
  * 細節看 Button 頁——重複畫一次會變成第二份會漂移的規格。
  */
-function ButtonBlock({ level = 'primary' }: { level?: string }) {
+function ButtonBlock({
+  level = 'primary',
+  content = 'label',
+}: {
+  level?: string;
+  /** 並排列的格子放 icon，其餘放文字 */
+  content?: 'label' | 'icon';
+}) {
   const v = buttonVariant(level);
+  const color = colorOf(v.content as string)!;
   return (
     <div
       style={{
@@ -52,7 +61,7 @@ function ButtonBlock({ level = 'primary' }: { level?: string }) {
         height: layout.buttonHeight,
         borderRadius: 1000,
         background: colorOf(v.bg as string),
-        color: colorOf(v.content as string),
+        color,
         fontSize: buttonType.size,
         lineHeight: `${buttonType.lineHeight}px`,
         fontWeight: buttonType.weight,
@@ -62,7 +71,11 @@ function ButtonBlock({ level = 'primary' }: { level?: string }) {
         overflow: 'hidden',
       }}
     >
-      Label
+      {content === 'icon' ? (
+        <IconPlaceholder color={color} size={layout.rowIconSize} />
+      ) : (
+        'Label'
+      )}
     </div>
   );
 }
@@ -91,7 +104,7 @@ function ActionAreaPreview({
     items.push(
       <div key="row" style={{ display: 'flex', gap: layout.rowGap }}>
         {Array.from({ length: rowCells }, (_, i) => (
-          <ButtonBlock key={i} level="tertiary" />
+          <ButtonBlock key={i} level="tertiary" content="icon" />
         ))}
       </div>,
     );
@@ -230,6 +243,8 @@ export default function ActionAreaPage() {
               按鈕在這裡只畫出底色、文字與高度，用來看版面關係。按鈕本身的規格
               （尺寸、狀態、icon 位置）在 Button 頁，這一頁不重複一份。
               上方那一列並排的格子，Figma 有兩格與三格兩種，寬度由容器平分。
+              格子裡放的是 icon 而不是文字，這裡用虛線方框表示可擺放 icon 的位置——
+              文件站不指定具體圖示，否則讀者會以為那個圖示是規範的一部分。
             </p>
           </section>
 
@@ -247,7 +262,7 @@ export default function ActionAreaPage() {
                 ['1', '背景', '選用', 'Gray 時是由下往上的漸層；None 時不畫'],
                 ['2', '說明文字', '選用', `置中，與按鈕區間距 ${layout.textGap}px`],
                 ['3', '按鈕區', '必要', `由呼叫端傳入，每項高 ${layout.buttonHeight}px，彼此間距 ${layout.buttonGap}px`],
-                ['3a', '並排列（選用）', '選用', `一列並排兩格或三格，格子之間間距 ${layout.rowGap}px，寬度平分`],
+                ['3a', '並排列（選用）', '選用', `一列並排兩格或三格，格子之間間距 ${layout.rowGap}px，寬度平分；格子裡放一個 ${layout.rowIconSize}px 的 icon，置中`],
                 ['4', 'Home indicator 留白', '選用', `底部保留 ${layout.homeIndicatorHeight}px；已被 SafeArea 包住時關掉`],
               ]}
               minWidth={560}
@@ -312,6 +327,7 @@ export default function ActionAreaPage() {
                   <code key="pt">USpaceSpacing.spacer{layout.paddingTop}</code>,
                 ],
                 ['按鈕高度', `${layout.buttonHeight}px`, '—（由 Button 元件決定）'],
+                ['並排列的 icon', `${layout.rowIconSize}px`, '—'],
                 [
                   '按鈕之間間距',
                   `${layout.buttonGap}px`,

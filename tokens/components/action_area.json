@@ -23,9 +23,10 @@
     "buttonGap": 20,
     "rowGap": 16,
     "textGap": 12,
-    "homeIndicatorHeight": 20
+    "homeIndicatorHeight": 20,
+    "rowIconSize": 40
   },
-  "$layoutSource": "Figma node 1216:8237（text + 1 button）與 1824:11529（2 button）的子節點座標：左右邊距 20（Margine）、頂部 20、按鈕高 48、按鈕間距 20（y=0 與 y=68）、Text 與按鈕區間距 12（Text 底 36 → Button Section y=48）、home indicator 20。node 1824:11588 的 Button Row 內兩個 Graphic Button 各 167 寬、間距 16（x=0 與 x=183，167×2+16=350）。",
+  "$layoutSource": "Figma node 1216:8237（text + 1 button）與 1824:11529（2 button）的子節點座標：左右邊距 20（Margine）、頂部 20、按鈕高 48、按鈕間距 20（y=0 與 y=68）、Text 與按鈕區間距 12（Text 底 36 → Button Section y=48）、home indicator 20。node 1824:11588 的 Button Row 內兩個 Graphic Button 各 167 寬、間距 16（x=0 與 x=183，167×2+16=350）。 並排列的格子（Figma 的 Graphic Button）內是一個 40×40 的 icon，於 48 高的格子裡置中——兩格版（node 1923:17434，格寬 167）與三格版（node 3389:3533，格寬 106）的 icon 都是 40。",
   "$typography": {
     "text": "captionS（PingFang TC 12/16）— Figma 標記 🇹🇼 輔助｜Caption/S"
   },

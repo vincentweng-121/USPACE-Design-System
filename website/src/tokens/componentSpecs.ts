@@ -62,7 +62,8 @@ export const action_areaSpec: ComponentSpec = {
     "buttonGap": 20,
     "rowGap": 16,
     "textGap": 12,
-    "homeIndicatorHeight": 20
+    "homeIndicatorHeight": 20,
+    "rowIconSize": 40
   }
 };
 
