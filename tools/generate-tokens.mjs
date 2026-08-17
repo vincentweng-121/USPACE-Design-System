@@ -153,6 +153,16 @@ function dartColors() {
     out.push('');
     for (const line of g.doc) out.push(`  /// ${line}`);
     out.push(`  static const ${name} = LinearGradient(`, ...dartGradientBody(g), '  );');
+    // 有 dark 定義的漸層多產生一個 ...Dark；角度與停止點沿用 light，只換顏色
+    if (g.dark) {
+      out.push('');
+      out.push(`  /// ${name} 的 dark 變體：${g.dark.note}`);
+      out.push(
+        `  static const ${name}Dark = LinearGradient(`,
+        ...dartGradientBody({ ...g, colors: g.dark.colors }),
+        '  );',
+      );
+    }
   }
   for (const [alias, target] of Object.entries(gradients.aliases)) {
     out.push('', `  /// 同 [${target}]`, `  static const ${alias} = ${target};`);

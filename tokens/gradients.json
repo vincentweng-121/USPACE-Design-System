@@ -1,45 +1,102 @@
 {
   "$comment": "USPACE gradient tokens。colors 元素為 palette token 名，或 {raw, note}",
-  "$warning": "bottomBarGray1B / 2B 目前寫死 grey50（亮色值），dark 模式無對應 Figma token，待設計確認後補 dark 變體",
+  "$warning": "bottomBarGray1B / 2B 於 2026-08-17 補上 dark 變體：Figma 上這兩個是 fill style 而非 variable，style 沒有明暗模式，所以設計稿本來就沒有 dark 版本。經使用者指示「沒有就建立」，依漸層的用途推導——它是頁面次要背景色的淡出，light 用的 grey50 正是 pageSecondary 的 light 值，因此 dark 取 pageSecondary 的 dark 值 grey900。",
   "gradients": {
     "silverLinear": {
-      "doc": ["Silver Linear: 90deg, grey600 → grey200", "同 actionCustomizedBorder"],
+      "doc": [
+        "Silver Linear: 90deg, grey600 → grey200",
+        "同 actionCustomizedBorder"
+      ],
       "begin": "Alignment.centerLeft",
       "end": "Alignment.centerRight",
-      "colors": ["grey600", "grey200"],
+      "colors": [
+        "grey600",
+        "grey200"
+      ],
       "css": "linear-gradient(to right, {grey600}, {grey200})"
     },
     "limeLinear": {
-      "doc": ["Lime Linear: 262deg, neonLime200 → neonLime700", "CSS: linear-gradient(261.99deg, #00EEB7 -7.69%, #B4E002 89.23%)"],
+      "doc": [
+        "Lime Linear: 262deg, neonLime200 → neonLime700",
+        "CSS: linear-gradient(261.99deg, #00EEB7 -7.69%, #B4E002 89.23%)"
+      ],
       "begin": "Alignment(0.99, -0.14)",
       "end": "Alignment(-0.99, 0.14)",
-      "colors": ["neonLime200", "neonLime700"],
-      "stops": [0, 0.89],
+      "colors": [
+        "neonLime200",
+        "neonLime700"
+      ],
+      "stops": [
+        0,
+        0.89
+      ],
       "css": "linear-gradient(261.99deg, {neonLime200} -7.69%, {neonLime700} 89.23%)"
     },
     "bottomBarGray1B": {
-      "doc": ["BottomBar Gray 1B: 180deg, grey50 @0%→100% opacity", "CSS: linear-gradient(180deg, rgba(248,248,248,0) 31.1%, #F8F8F8 55.84%)", "⚠️ TODO: dark 模式無對應 Figma token，待設計確認"],
+      "doc": [
+        "BottomBar Gray 1B: 180deg, grey50 @0%→100% opacity",
+        "CSS: linear-gradient(180deg, rgba(248,248,248,0) 31.1%, #F8F8F8 55.84%)",
+        "dark: 同樣的角度與停止點（31.1%→55.84%），顏色改用 grey900"
+      ],
       "begin": "Alignment.topCenter",
       "end": "Alignment.bottomCenter",
       "colors": [
-        { "raw": "0x00F8F8F8", "note": "grey50 @ 0%" },
+        {
+          "raw": "0x00F8F8F8",
+          "note": "grey50 @ 0%"
+        },
         "grey50"
       ],
-      "stops": [0.311, 0.558],
-      "css": "linear-gradient(180deg, rgba(248,248,248,0) 31.1%, {grey50} 55.84%)"
+      "stops": [
+        0.311,
+        0.558
+      ],
+      "css": "linear-gradient(180deg, rgba(248,248,248,0) 31.1%, {grey50} 55.84%)",
+      "dark": {
+        "colors": [
+          {
+            "raw": "0x001A1A1A",
+            "note": "grey900 @ 0%"
+          },
+          "grey900"
+        ],
+        "note": "對應 pageSecondary 的 dark 值，與 light 用 grey50 的邏輯一致"
+      }
     },
     "bottomBarGray2B": {
-      "doc": ["BottomBar Gray 2B: 180deg, grey50 @0%→100% opacity", "CSS: linear-gradient(180deg, rgba(248,248,248,0) 0%, #F8F8F8 38.44%)", "⚠️ TODO: dark 模式無對應 Figma token，待設計確認"],
+      "doc": [
+        "BottomBar Gray 2B: 180deg, grey50 @0%→100% opacity",
+        "CSS: linear-gradient(180deg, rgba(248,248,248,0) 0%, #F8F8F8 38.44%)",
+        "dark: 同樣的角度與停止點（0%→38.44%），顏色改用 grey900"
+      ],
       "begin": "Alignment.topCenter",
       "end": "Alignment.bottomCenter",
       "colors": [
-        { "raw": "0x00F8F8F8", "note": "grey50 @ 0%" },
+        {
+          "raw": "0x00F8F8F8",
+          "note": "grey50 @ 0%"
+        },
         "grey50"
       ],
-      "stops": [0, 0.384],
-      "css": "linear-gradient(180deg, rgba(248,248,248,0) 0%, {grey50} 38.44%)"
+      "stops": [
+        0,
+        0.384
+      ],
+      "css": "linear-gradient(180deg, rgba(248,248,248,0) 0%, {grey50} 38.44%)",
+      "dark": {
+        "colors": [
+          {
+            "raw": "0x001A1A1A",
+            "note": "grey900 @ 0%"
+          },
+          "grey900"
+        ],
+        "note": "對應 pageSecondary 的 dark 值，與 light 用 grey50 的邏輯一致"
+      }
     }
   },
-  "aliases": { "actionCustomizedBorder": "silverLinear" },
+  "aliases": {
+    "actionCustomizedBorder": "silverLinear"
+  },
   "$css": "css 欄位為 web 端輸出用，與上方 Dart 定義並列維護，數值取自 Figma"
 }

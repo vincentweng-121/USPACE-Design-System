@@ -597,6 +597,19 @@ void main() {
           reason: '多列的漸層涵蓋範圍較高，與單列不同');
     });
 
+    testWidgets('dark 主題用 dark 變體的漸層', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: USpaceTheme.dark,
+          home: const Scaffold(
+            body: Center(child: USpaceActionArea(children: [SizedBox(height: 48)])),
+          ),
+        ),
+      );
+      expect(gradientOf(tester), USpaceColorsExtension.bottomBarGray1BDark,
+          reason: 'dark 的漸層用 grey900，與 light 的 grey50 不同');
+    });
+
     testWidgets('none 不畫背景', (tester) async {
       await pump(
         tester,

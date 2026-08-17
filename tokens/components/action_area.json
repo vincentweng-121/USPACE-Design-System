@@ -6,12 +6,15 @@
   ],
   "$rule": "改動元件的 token 對應時，必須同時更新這裡，否則測試會失敗。",
   "$source": "Figma node 1210:8629，2026-08-17 逐一讀取各變體的變數與子節點座標。",
-  "$naming": "⚠️ 這個 Figma frame 名為 BottomBar，但使用者指定匯入為 Action Area。專案的 Components 選單同時有 Bottom Bar 與 Action Area 兩個項目，兩者是否為同一個元件尚未釐清——若是，應合併其中一個，避免工程師選錯。",
+  "$naming": "Figma frame 名為 BottomBar。2026-08-17 經使用者確認：這個元件正式名稱為 Action Area，文件站原本的 Bottom Bar 項目已移除，其搜尋關鍵字併入 Action Area。",
   "component": "USpaceActionArea",
   "source": "styles/action_area.dart",
   "figmaNode": "1210:8629",
   "dimensions": {
-    "background": ["gray", "none"]
+    "background": [
+      "gray",
+      "none"
+    ]
   },
   "layout": {
     "marginX": 20,
@@ -29,15 +32,39 @@
   "$buttons": "按鈕本身不是這個元件畫的，由呼叫端傳入 USpaceButton。Figma 的變體名稱（1 button／2 button／3 button／1 button + 2 row／1 button +3 row）描述的是呼叫端的組合方式，不是這個元件的參數。",
   "$deviations": [
     "2026-08-17 匯入時經使用者指示：略過所有 Premium Accout=True 的變體（Figma 上該屬性名稱拼字為 Accout）。這些變體在動作區下方多一條深色的權益列，這次完全不處理。",
-    "⚠️ gray 背景用的 bottomBarGray1B / bottomBarGray2B 兩個漸層，在 gradients.json 裡標記為「dark 模式無對應 Figma token，待設計確認」，目前 light / dark 同值。Action Area 是第一個實際使用它們的元件，深色模式下的表現尚未確認。",
-    "⚠️ Figma 的 gray 背景有「1 button + 2 row」「1 button + 3 row」但沒有「3 button」；none 背景有「3 button」但沒有 row 變體。這個不對稱是設計稿的現況，尚未確認是刻意還是漏畫。",
-    "⚠️ none 背景的 3 button 變體，第二、三顆按鈕是白底（pagePrimary）加 Sliver Linear 描邊、文字為 actionTertiaryContent。USpaceButton 目前沒有這種描邊樣式（button.json 只有實心的 primary / secondary / tertiary），呼叫端做不出這個組合。這是 Button 元件的缺口，不在這次範圍內。"
+    "2026-08-17 經使用者確認：bottomBarGray1B / 2B 補上 dark 變體。Figma 上這兩個是 fill style 而非 variable，style 沒有明暗模式，設計稿本來就沒有 dark 版本。依漸層用途推導——它畫的是頁面次要背景色的淡出，light 用的 grey50 正是 pageSecondary 的 light 值，故 dark 取 pageSecondary 的 dark 值 grey900。",
+    "2026-08-17 經使用者確認：Figma 變體的不對稱（gray 有 row 變體無 3 button、none 有 3 button 無 row）屬於漏畫，設計稿會補齊。元件本來就不限制這些組合——children 由呼叫端自由組合，任何背景都能搭配任何列數。",
+    "2026-08-17 經使用者確認：none 背景 3 button 的第二、三顆改用實心的 secondary 與 tertiary，不做描邊版本。USpaceButton 既有的三個 level 已足夠，不需要為此新增樣式。"
   ],
   "$variantsNote": "背景是這個元件唯一會解出顏色的維度。gray 依按鈕列數選漸層：單列用 1B、多列用 2B，取自 Figma 兩種變體實際掛的漸層。",
   "variants": [
-    { "background": "gray", "rows": "single", "gradient": "bottomBarGray1B", "text": "textSecondary", "note": "只有一列按鈕時的漸層" },
-    { "background": "gray", "rows": "multi", "gradient": "bottomBarGray2B", "text": "textSecondary", "note": "兩列以上時的漸層，涵蓋範圍較高" },
-    { "background": "none", "rows": "single", "gradient": null, "text": "textSecondary", "note": "無背景，直接疊在頁面內容上" },
-    { "background": "none", "rows": "multi", "gradient": null, "text": "textSecondary", "note": "無背景，列數不影響外觀" }
+    {
+      "background": "gray",
+      "rows": "single",
+      "gradient": "bottomBarGray1B",
+      "text": "textSecondary",
+      "note": "只有一列按鈕時的漸層"
+    },
+    {
+      "background": "gray",
+      "rows": "multi",
+      "gradient": "bottomBarGray2B",
+      "text": "textSecondary",
+      "note": "兩列以上時的漸層，涵蓋範圍較高"
+    },
+    {
+      "background": "none",
+      "rows": "single",
+      "gradient": null,
+      "text": "textSecondary",
+      "note": "無背景，直接疊在頁面內容上"
+    },
+    {
+      "background": "none",
+      "rows": "multi",
+      "gradient": null,
+      "text": "textSecondary",
+      "note": "無背景，列數不影響外觀"
+    }
   ]
 }

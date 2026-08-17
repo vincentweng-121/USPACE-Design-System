@@ -252,8 +252,8 @@ export default function ActionAreaPage() {
             <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
               Gray 依列數選漸層：單列用 <code>bottomBarGray1B</code>、多列用{' '}
               <code>bottomBarGray2B</code>，後者涵蓋範圍較高才蓋得住底下的內容。
-              兩個漸層目前深淺色同值，Figma 尚無深色模式的定義——這個元件是第一個實際
-              用到它們的，深色底下的表現還沒確認。
+              兩個漸層都有明暗兩套：淺色用 grey50、深色用 grey900，都是{' '}
+              <code>pageSecondary</code> 對應主題的值——漸層畫的就是頁面背景色的淡出。
             </p>
           </section>
 
@@ -351,7 +351,8 @@ export default function ActionAreaPage() {
               </li>
               <li>
                 <strong>權重要分得出來</strong>：同時放兩顆以上時，只有一顆是 primary，
-                其餘用 secondary 或 tertiary。兩顆都 primary 等於沒有主要行動。
+                其餘用 secondary 或 tertiary，三顆時依序往下降。三顆都用實心樣式，
+                沒有描邊版本。兩顆都 primary 等於沒有主要行動。
               </li>
               <li>
                 <strong>已經有 SafeArea 就關掉 home indicator 留白</strong>：兩邊都留會多出
@@ -504,9 +505,9 @@ export default function ActionAreaPage() {
             <SectionTitle>Notes</SectionTitle>
             <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
-                <strong>Figma 上這個元件叫 BottomBar</strong>：2026-08-17 依使用者指示匯入為
-                Action Area。Components 選單同時有 Bottom Bar 與 Action Area 兩個項目，
-                兩者是否為同一個元件尚未釐清——若是，應該合併其中一個，避免工程師選錯。
+                <strong>Figma 上這個元件叫 BottomBar</strong>：2026-08-17 經使用者確認，
+                正式名稱為 Action Area，文件站原本的 Bottom Bar 項目已移除，
+                原本的搜尋關鍵字（底部按鈕列、動作列、action bar 等）併入這一頁。
               </li>
               <li>
                 <strong>Premium 變體未處理</strong>：Figma 的 <code>Premium Accout</code>
@@ -514,19 +515,21 @@ export default function ActionAreaPage() {
                 經使用者指示這次完全略過。
               </li>
               <li>
-                <strong>漸層的深色模式未確認</strong>：<code>bottomBarGray1B</code> 與{' '}
-                <code>bottomBarGray2B</code> 在 <code>gradients.json</code> 標記為
-                「dark 模式無對應 Figma token，待設計確認」，目前深淺色同值。
+                <strong>漸層的深色版本是建立出來的</strong>：Figma 上這兩個是 fill style
+                而非 variable，style 沒有明暗模式，設計稿本來就沒有深色版本。
+                2026-08-17 經使用者指示建立：淺色用 grey50、深色用 grey900，
+                兩者都是 <code>pageSecondary</code> 對應主題的值。
               </li>
               <li>
-                <strong>Figma 的變體不對稱</strong>：Gray 背景有「1 button + 2 row」
-                「1 button + 3 row」但沒有「3 button」；None 背景有「3 button」卻沒有 row 變體。
-                尚未確認是刻意還是漏畫。元件本身不限制這些組合。
+                <strong>Figma 的變體會補齊</strong>：Gray 背景原本沒畫「3 button」、
+                None 背景原本沒畫 row 變體，2026-08-17 經使用者確認屬於漏畫，設計稿會補上。
+                元件本身不限制這些組合——<code>children</code> 由呼叫端自由組合，
+                任何背景都能搭配任何列數。
               </li>
               <li>
-                <strong>描邊按鈕做不出來</strong>：None 背景的 3 button 變體，第二三顆是白底加
-                Sliver Linear 描邊。<code>USpaceButton</code> 目前只有實心的 primary /
-                secondary / tertiary，沒有這種樣式。這是 Button 元件的缺口。
+                <strong>三顆按鈕一律用實心</strong>：None 背景的 3 button 變體原本畫成
+                白底加描邊，2026-08-17 經使用者確認改用實心的 secondary 與 tertiary。
+                <code>USpaceButton</code> 既有的三個 level 已經夠用，不另外新增描邊樣式。
               </li>
             </ul>
           </section>

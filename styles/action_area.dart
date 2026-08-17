@@ -37,8 +37,9 @@ enum USpaceActionAreaBackground {
 /// - none 背景：不畫背景
 /// - text：textSecondary，字體 captionS (12/16)
 ///
-/// ⚠️ 兩個漸層在 gradients.json 標記為「dark 模式無對應 Figma token，
-/// 待設計確認」，目前 light / dark 同值。
+/// 漸層有明暗兩套：light 用 grey50、dark 用 grey900，兩者都是 pageSecondary
+/// 對應主題的值——漸層畫的就是頁面背景色的淡出。Figma 上這兩個是 fill style
+/// 而非 variable，style 沒有明暗模式，dark 變體是 2026-08-17 經使用者指示建立的。
 ///
 /// ⚠️ 2026-08-17 匯入時經使用者指示，略過所有 Premium Accout=True 的變體。
 class USpaceActionArea extends StatelessWidget {
@@ -68,10 +69,18 @@ class USpaceActionArea extends StatelessWidget {
   /// 單列與多列的漸層不同——多列的涵蓋範圍較高，才蓋得住底下的內容
   bool get _isMultiRow => children.length > 1;
 
-  Gradient? get _gradient {
+  /// 漸層是 static 常數而不是 ThemeExtension 的欄位，所以這裡自己看 brightness。
+  /// 它畫的是頁面背景色的淡出，明暗兩套顏色不同
+  Gradient? _gradientFor(Brightness brightness) {
     if (background == USpaceActionAreaBackground.none) return null;
-    return _isMultiRow
-        ? USpaceColorsExtension.bottomBarGray2B
+    final isDark = brightness == Brightness.dark;
+    if (_isMultiRow) {
+      return isDark
+          ? USpaceColorsExtension.bottomBarGray2BDark
+          : USpaceColorsExtension.bottomBarGray2B;
+    }
+    return isDark
+        ? USpaceColorsExtension.bottomBarGray1BDark
         : USpaceColorsExtension.bottomBarGray1B;
   }
 
@@ -81,7 +90,9 @@ class USpaceActionArea extends StatelessWidget {
     final typo = context.typography;
 
     return DecoratedBox(
-      decoration: BoxDecoration(gradient: _gradient),
+      decoration: BoxDecoration(
+        gradient: _gradientFor(Theme.of(context).brightness),
+      ),
       child: Padding(
         padding: EdgeInsets.only(
           left: USpaceSpacing.margin,

@@ -40,20 +40,32 @@
   以後新增元件不會再漏。排序是為了輸出穩定，否則不同機器的檔案順序會讓
   `check:tokens` 誤報漂移。
 
-#### ⚠️ 這次沒有處理、需要後續確認的事
+#### 匯入時一併確認的四件事（2026-08-17 使用者裁定）
 
-- **命名衝突**：Figma 上這個 frame 名為 **BottomBar**，但依使用者指示匯入為
-  Action Area。Components 選單同時有 Bottom Bar 與 Action Area 兩個項目，
-  兩者是否為同一個元件尚未釐清。若是，應合併其中一個。
-- **Premium 變體未處理**：`Premium Accout=True`（設計稿上就是這個拼字）的變體
-  在動作區下方多一條深色權益列，經使用者指示完全略過。
-- **漸層的深色模式未確認**：`bottomBarGray1B` / `bottomBarGray2B` 在
-  `gradients.json` 標記為待設計確認，目前深淺色同值。Action Area 是第一個
-  實際用到它們的元件。
-- **Figma 變體不對稱**：gray 有「1 button + 2 row」「1 button + 3 row」但沒有
-  「3 button」；none 有「3 button」卻沒有 row 變體。
-- **描邊按鈕做不出來**：none 背景的 3 button 變體，第二三顆是白底加 Sliver Linear
-  描邊。`USpaceButton` 目前只有實心的三個 level，沒有這種樣式。
+- **命名定案為 Action Area，Bottom Bar 移除**：Figma frame 雖名為 BottomBar，
+  正式名稱採 Action Area。文件站的 Bottom Bar 路由與選單項目已刪除，
+  原本的搜尋關鍵字（底部按鈕列、動作列、action bar 等）併入 Action Area，
+  用舊詞搜尋仍找得到。
+- **Figma 變體的不對稱屬於漏畫**，設計稿會補齊。元件本來就不限制這些組合——
+  `children` 由呼叫端自由組合，任何背景都能搭配任何列數。
+- **三顆按鈕一律用實心**：none 背景 3 button 原本畫成白底加描邊，改用實心的
+  secondary 與 tertiary。`USpaceButton` 既有的三個 level 已足夠，不新增描邊樣式。
+- **Premium 變體維持略過**：`Premium Accout=True`（設計稿上就是這個拼字）的變體
+  在動作區下方多一條深色權益列，這次完全不處理。
+
+### gradients | bottomBarGray1B / 2B 補上 dark 變體
+狀態：PUBLISHED
+
+- 這兩個漸層在 Figma 上是 **fill style 而非 variable**，而 style 沒有明暗模式，
+  所以設計稿本來就沒有 dark 版本——先前記為「待設計確認」其實等不到。
+  經使用者指示「沒有就建立」，依漸層的用途推導：它畫的是頁面次要背景色的淡出，
+  light 用的 grey50 正是 `pageSecondary` 的 light 值，因此 dark 取
+  `pageSecondary` 的 dark 值 **grey900**，角度與停止點不變。
+- 產生器新增規則：`gradients.json` 裡有 `dark` 定義的漸層，會多產生一個
+  `<名稱>Dark` 常數。目前只有這兩個需要。
+- 漸層仍是 static 常數而非 ThemeExtension 的欄位，所以 `USpaceActionArea`
+  自己讀 `Theme.of(context).brightness` 選用。新增一個測試驗證 dark 主題下
+  取到的是 dark 變體。
 
 ## v0.11.2 | 2026-08-14
 

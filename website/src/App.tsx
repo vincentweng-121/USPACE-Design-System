@@ -65,7 +65,6 @@ export default function App() {
           <Route path="components/text-field" element={<TextFieldPage />} />
           <Route path="components/toggle" element={<TogglePage />} />
           <Route path="components/floating-button" element={<ComingSoonPage title="Floating Button" />} />
-          <Route path="components/bottom-bar" element={<ComingSoonPage title="Bottom Bar" />} />
           <Route path="components/divider" element={<ComingSoonPage title="Divider" />} />
           <Route path="components/action-area" element={<ActionAreaPage />} />
           <Route path="components/avatar" element={<ComingSoonPage title="Avatar" />} />
