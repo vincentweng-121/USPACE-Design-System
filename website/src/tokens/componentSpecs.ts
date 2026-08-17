@@ -15,6 +15,57 @@ export interface ComponentSpec {
   confidence?: string;
 }
 
+export const action_areaSpec: ComponentSpec = {
+  "component": "USpaceActionArea",
+  "source": "styles/action_area.dart",
+  "figmaNode": "1210:8629",
+  "dimensions": {
+    "background": [
+      "gray",
+      "none"
+    ]
+  },
+  "variants": [
+    {
+      "background": "gray",
+      "rows": "single",
+      "gradient": "bottomBarGray1B",
+      "text": "textSecondary",
+      "note": "只有一列按鈕時的漸層"
+    },
+    {
+      "background": "gray",
+      "rows": "multi",
+      "gradient": "bottomBarGray2B",
+      "text": "textSecondary",
+      "note": "兩列以上時的漸層，涵蓋範圍較高"
+    },
+    {
+      "background": "none",
+      "rows": "single",
+      "gradient": null,
+      "text": "textSecondary",
+      "note": "無背景，直接疊在頁面內容上"
+    },
+    {
+      "background": "none",
+      "rows": "multi",
+      "gradient": null,
+      "text": "textSecondary",
+      "note": "無背景，列數不影響外觀"
+    }
+  ],
+  "layout": {
+    "marginX": 20,
+    "paddingTop": 20,
+    "buttonHeight": 48,
+    "buttonGap": 20,
+    "rowGap": 16,
+    "textGap": 12,
+    "homeIndicatorHeight": 20
+  }
+};
+
 export const buttonSpec: ComponentSpec = {
   "component": "USpaceButton",
   "source": "styles/button.dart",
@@ -135,63 +186,6 @@ export const buttonSpec: ComponentSpec = {
   }
 };
 
-export const toggleSpec: ComponentSpec = {
-  "component": "USpaceToggle",
-  "source": "styles/toggle.dart",
-  "dimensions": {
-    "value": [
-      "on",
-      "off"
-    ],
-    "enabled": [
-      "enabled",
-      "disabled"
-    ]
-  },
-  "variants": [
-    {
-      "value": "on",
-      "enabled": "enabled",
-      "track": "actionPrimaryContentAccent",
-      "thumb": "contentInverse",
-      "opacity": 1
-    },
-    {
-      "value": "on",
-      "enabled": "disabled",
-      "track": "actionPrimaryContentAccent",
-      "thumb": "contentInverse",
-      "opacity": 0.25,
-      "note": "色彩同 enabled，以 Opacity 表示不可操作"
-    },
-    {
-      "value": "off",
-      "enabled": "enabled",
-      "track": "actionPrimaryContent",
-      "thumb": "contentInverse",
-      "opacity": 1
-    },
-    {
-      "value": "off",
-      "enabled": "disabled",
-      "track": "actionDisabledBg",
-      "thumb": "contentInverse",
-      "opacity": 1,
-      "note": "改換 track 色而非降透明度，以區別於 OFF+Enable"
-    }
-  ],
-  "layout": {
-    "track": {
-      "width": 64,
-      "height": 24
-    },
-    "thumb": {
-      "width": 34,
-      "height": 20
-    }
-  }
-};
-
 export const chipSpec: ComponentSpec = {
   "component": "USpaceChip",
   "source": "styles/chip.dart",
@@ -261,6 +255,126 @@ export const chipSpec: ComponentSpec = {
     "regularPaddingWithTrailingIcon": 8,
     "smallPaddingX": 8
   }
+};
+
+export const dropdown_menuSpec: ComponentSpec = {
+  "component": "USpaceDropdownMenu",
+  "source": "styles/dropdown_menu.dart",
+  "figmaNode": "2141:11030",
+  "dimensions": {
+    "status": [
+      "default",
+      "complete",
+      "selecting",
+      "incomplete",
+      "error",
+      "nonEditable"
+    ]
+  },
+  "variants": [
+    {
+      "status": "default",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextPlaceholder",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "尚未選取，顯示 placeholder"
+    },
+    {
+      "status": "complete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "已選取，顯示選取值"
+    },
+    {
+      "status": "selecting",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "選單展開中，唯一有邊框的狀態"
+    },
+    {
+      "status": "incomplete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextPlaceholder",
+      "icon": "contentTertiary",
+      "hint": "inputTextError",
+      "note": "必填未填，維持 placeholder 並顯示紅字提示"
+    },
+    {
+      "status": "error",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputText",
+      "icon": "contentTertiary",
+      "hint": "inputTextError",
+      "note": "已選取但值不合法，顯示紅字提示"
+    },
+    {
+      "status": "nonEditable",
+      "bg": "inputBgDefault",
+      "border": null,
+      "label": "inputText",
+      "content": "inputTextDisabled",
+      "icon": "contentTertiary",
+      "hint": null,
+      "note": "唯讀，不可展開"
+    }
+  ],
+  "layout": {
+    "height": 48,
+    "radius": 1000,
+    "paddingX": 20,
+    "iconSize": 16,
+    "contentIconGap": 8,
+    "labelPaddingX": 8,
+    "labelGap": 4,
+    "hintGap": 4
+  }
+};
+
+export const listSpec: ComponentSpec = {
+  "component": "USpaceListItem",
+  "source": "styles/list.dart",
+  "confidence": "skeleton",
+  "dimensions": {
+    "trailing": [
+      "none",
+      "button",
+      "toggle",
+      "value",
+      "selectable"
+    ]
+  },
+  "variants": []
+};
+
+export const modalSpec: ComponentSpec = {
+  "component": "USpaceModal",
+  "source": "styles/modal.dart",
+  "figmaNode": "2237:3211",
+  "confidence": "skeleton",
+  "dimensions": {
+    "category": [
+      "listItem",
+      "textArea",
+      "image",
+      "none"
+    ]
+  },
+  "variants": []
 };
 
 export const tabSpec: ComponentSpec = {
@@ -363,6 +477,89 @@ export const tabSpec: ComponentSpec = {
   }
 };
 
+export const text_areaSpec: ComponentSpec = {
+  "component": "USpaceTextArea",
+  "source": "styles/text_area.dart",
+  "figmaNode": "634:8456",
+  "confidence": "dart-derived",
+  "dimensions": {
+    "status": [
+      "default",
+      "active",
+      "typing",
+      "complete",
+      "incomplete",
+      "error",
+      "disabled",
+      "nonEditable"
+    ]
+  },
+  "variants": [
+    {
+      "status": "default",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "active",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "typing",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "complete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "textSecondary"
+    },
+    {
+      "status": "incomplete",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputText",
+      "hint": "inputTextError"
+    },
+    {
+      "status": "error",
+      "bg": "inputBgDefault",
+      "border": "inputBorderActive",
+      "text": "inputText",
+      "hint": "inputTextError",
+      "note": "邊框刻意仍為 inputBorderActive（綠色）而非紅色，與 TextField 不同"
+    },
+    {
+      "status": "disabled",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputTextDisabled",
+      "hint": "textDisabled"
+    },
+    {
+      "status": "nonEditable",
+      "bg": "inputBgDefault",
+      "border": null,
+      "text": "inputTextDisabled",
+      "hint": "textSecondary"
+    }
+  ],
+  "layout": {
+    "height": 144,
+    "borderWidth": 2,
+    "radius": 20
+  }
+};
+
 export const text_fieldSpec: ComponentSpec = {
   "component": "USpaceTextField",
   "source": "styles/text_field.dart",
@@ -452,207 +649,61 @@ export const text_fieldSpec: ComponentSpec = {
   }
 };
 
-export const text_areaSpec: ComponentSpec = {
-  "component": "USpaceTextArea",
-  "source": "styles/text_area.dart",
-  "figmaNode": "634:8456",
-  "confidence": "dart-derived",
+export const toggleSpec: ComponentSpec = {
+  "component": "USpaceToggle",
+  "source": "styles/toggle.dart",
   "dimensions": {
-    "status": [
-      "default",
-      "active",
-      "typing",
-      "complete",
-      "incomplete",
-      "error",
-      "disabled",
-      "nonEditable"
+    "value": [
+      "on",
+      "off"
+    ],
+    "enabled": [
+      "enabled",
+      "disabled"
     ]
   },
   "variants": [
     {
-      "status": "default",
-      "bg": "inputBgDefault",
-      "border": null,
-      "text": "inputText",
-      "hint": "textSecondary"
+      "value": "on",
+      "enabled": "enabled",
+      "track": "actionPrimaryContentAccent",
+      "thumb": "contentInverse",
+      "opacity": 1
     },
     {
-      "status": "active",
-      "bg": "inputBgDefault",
-      "border": "inputBorderActive",
-      "text": "inputText",
-      "hint": "textSecondary"
+      "value": "on",
+      "enabled": "disabled",
+      "track": "actionPrimaryContentAccent",
+      "thumb": "contentInverse",
+      "opacity": 0.25,
+      "note": "色彩同 enabled，以 Opacity 表示不可操作"
     },
     {
-      "status": "typing",
-      "bg": "inputBgDefault",
-      "border": "inputBorderActive",
-      "text": "inputText",
-      "hint": "textSecondary"
+      "value": "off",
+      "enabled": "enabled",
+      "track": "actionPrimaryContent",
+      "thumb": "contentInverse",
+      "opacity": 1
     },
     {
-      "status": "complete",
-      "bg": "inputBgDefault",
-      "border": null,
-      "text": "inputText",
-      "hint": "textSecondary"
-    },
-    {
-      "status": "incomplete",
-      "bg": "inputBgDefault",
-      "border": null,
-      "text": "inputText",
-      "hint": "inputTextError"
-    },
-    {
-      "status": "error",
-      "bg": "inputBgDefault",
-      "border": "inputBorderActive",
-      "text": "inputText",
-      "hint": "inputTextError",
-      "note": "邊框刻意仍為 inputBorderActive（綠色）而非紅色，與 TextField 不同"
-    },
-    {
-      "status": "disabled",
-      "bg": "inputBgDefault",
-      "border": null,
-      "text": "inputTextDisabled",
-      "hint": "textDisabled"
-    },
-    {
-      "status": "nonEditable",
-      "bg": "inputBgDefault",
-      "border": null,
-      "text": "inputTextDisabled",
-      "hint": "textSecondary"
+      "value": "off",
+      "enabled": "disabled",
+      "track": "actionDisabledBg",
+      "thumb": "contentInverse",
+      "opacity": 1,
+      "note": "改換 track 色而非降透明度，以區別於 OFF+Enable"
     }
   ],
   "layout": {
-    "height": 144,
-    "borderWidth": 2,
-    "radius": 20
-  }
-};
-
-export const listSpec: ComponentSpec = {
-  "component": "USpaceListItem",
-  "source": "styles/list.dart",
-  "confidence": "skeleton",
-  "dimensions": {
-    "trailing": [
-      "none",
-      "button",
-      "toggle",
-      "value",
-      "selectable"
-    ]
-  },
-  "variants": []
-};
-
-export const modalSpec: ComponentSpec = {
-  "component": "USpaceModal",
-  "source": "styles/modal.dart",
-  "figmaNode": "2237:3211",
-  "confidence": "skeleton",
-  "dimensions": {
-    "category": [
-      "listItem",
-      "textArea",
-      "image",
-      "none"
-    ]
-  },
-  "variants": []
-};
-
-export const dropdown_menuSpec: ComponentSpec = {
-  "component": "USpaceDropdownMenu",
-  "source": "styles/dropdown_menu.dart",
-  "figmaNode": "2141:11030",
-  "dimensions": {
-    "status": [
-      "default",
-      "complete",
-      "selecting",
-      "incomplete",
-      "error",
-      "nonEditable"
-    ]
-  },
-  "variants": [
-    {
-      "status": "default",
-      "bg": "inputBgDefault",
-      "border": null,
-      "label": "inputText",
-      "content": "inputTextPlaceholder",
-      "icon": "contentTertiary",
-      "hint": null,
-      "note": "尚未選取，顯示 placeholder"
+    "track": {
+      "width": 64,
+      "height": 24
     },
-    {
-      "status": "complete",
-      "bg": "inputBgDefault",
-      "border": null,
-      "label": "inputText",
-      "content": "inputText",
-      "icon": "contentTertiary",
-      "hint": null,
-      "note": "已選取，顯示選取值"
-    },
-    {
-      "status": "selecting",
-      "bg": "inputBgDefault",
-      "border": "inputBorderActive",
-      "label": "inputText",
-      "content": "inputText",
-      "icon": "contentTertiary",
-      "hint": null,
-      "note": "選單展開中，唯一有邊框的狀態"
-    },
-    {
-      "status": "incomplete",
-      "bg": "inputBgDefault",
-      "border": null,
-      "label": "inputText",
-      "content": "inputTextPlaceholder",
-      "icon": "contentTertiary",
-      "hint": "inputTextError",
-      "note": "必填未填，維持 placeholder 並顯示紅字提示"
-    },
-    {
-      "status": "error",
-      "bg": "inputBgDefault",
-      "border": null,
-      "label": "inputText",
-      "content": "inputText",
-      "icon": "contentTertiary",
-      "hint": "inputTextError",
-      "note": "已選取但值不合法，顯示紅字提示"
-    },
-    {
-      "status": "nonEditable",
-      "bg": "inputBgDefault",
-      "border": null,
-      "label": "inputText",
-      "content": "inputTextDisabled",
-      "icon": "contentTertiary",
-      "hint": null,
-      "note": "唯讀，不可展開"
+    "thumb": {
+      "width": 34,
+      "height": 20
     }
-  ],
-  "layout": {
-    "height": 48,
-    "radius": 1000,
-    "paddingX": 20,
-    "iconSize": 16,
-    "contentIconGap": 8,
-    "labelPaddingX": 8,
-    "labelGap": 4,
-    "hintGap": 4
   }
 };
 
-export const componentSpecs = { button: buttonSpec, toggle: toggleSpec, chip: chipSpec, tab: tabSpec, text_field: text_fieldSpec, text_area: text_areaSpec, list: listSpec, modal: modalSpec, dropdown_menu: dropdown_menuSpec };
+export const componentSpecs = { action_area: action_areaSpec, button: buttonSpec, chip: chipSpec, dropdown_menu: dropdown_menuSpec, list: listSpec, modal: modalSpec, tab: tabSpec, text_area: text_areaSpec, text_field: text_fieldSpec, toggle: toggleSpec };

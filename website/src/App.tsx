@@ -18,6 +18,7 @@ import GlassPage from './pages/foundations/GlassPage';
 import SpacingPage from './pages/foundations/SpacingPage';
 
 // ── Components ──
+import ActionAreaPage from './pages/components/ActionAreaPage';
 import ButtonPage from './pages/components/ButtonPage';
 import ChipPage from './pages/components/ChipPage';
 import DropdownMenuPage from './pages/components/DropdownMenuPage';
@@ -66,7 +67,7 @@ export default function App() {
           <Route path="components/floating-button" element={<ComingSoonPage title="Floating Button" />} />
           <Route path="components/bottom-bar" element={<ComingSoonPage title="Bottom Bar" />} />
           <Route path="components/divider" element={<ComingSoonPage title="Divider" />} />
-          <Route path="components/action-area" element={<ComingSoonPage title="Action Area" />} />
+          <Route path="components/action-area" element={<ActionAreaPage />} />
           <Route path="components/avatar" element={<ComingSoonPage title="Avatar" />} />
           <Route path="components/card" element={<ComingSoonPage title="Card" />} />
           <Route path="components/category" element={<ComingSoonPage title="Category" />} />

@@ -563,6 +563,118 @@ void main() {
     }
   });
 
+  // ── ActionArea ──────────────────────────────────────────
+  group('USpaceActionArea', () {
+    final layout =
+        readJson('tokens/components/action_area.json')['layout'] as Map<String, dynamic>;
+
+    Gradient? gradientOf(WidgetTester tester) => (tester
+            .widget<DecoratedBox>(find
+                .descendant(
+                  of: find.byType(USpaceActionArea),
+                  matching: find.byType(DecoratedBox),
+                )
+                .first)
+            .decoration as BoxDecoration)
+        .gradient;
+
+    testWidgets('gray + 單列用 bottomBarGray1B', (tester) async {
+      await pump(
+        tester,
+        const USpaceActionArea(children: [SizedBox(height: 48)]),
+      );
+      expect(gradientOf(tester), USpaceColorsExtension.bottomBarGray1B);
+    });
+
+    testWidgets('gray + 多列用 bottomBarGray2B', (tester) async {
+      await pump(
+        tester,
+        const USpaceActionArea(
+          children: [SizedBox(height: 48), SizedBox(height: 48)],
+        ),
+      );
+      expect(gradientOf(tester), USpaceColorsExtension.bottomBarGray2B,
+          reason: '多列的漸層涵蓋範圍較高，與單列不同');
+    });
+
+    testWidgets('none 不畫背景', (tester) async {
+      await pump(
+        tester,
+        const USpaceActionArea(
+          background: USpaceActionAreaBackground.none,
+          children: [SizedBox(height: 48)],
+        ),
+      );
+      expect(gradientOf(tester), isNull);
+    });
+
+    testWidgets('text 用 textSecondary 與 captionS', (tester) async {
+      await pump(
+        tester,
+        const USpaceActionArea(
+          text: 'Text',
+          children: [SizedBox(height: 48)],
+        ),
+      );
+      final style = tester.widget<Text>(find.text('Text')).style!;
+      expect(style.color, tokenColor('textSecondary'));
+      expect(style.fontSize, AppTypographyExtension.light.captionS.fontSize);
+    });
+
+    testWidgets('沒傳 text 時不佔空間', (tester) async {
+      await pump(
+        tester,
+        const USpaceActionArea(children: [SizedBox(height: 48)]),
+      );
+      final withoutText = tester.getSize(find.byType(USpaceActionArea)).height;
+
+      await pump(
+        tester,
+        const USpaceActionArea(text: 'Text', children: [SizedBox(height: 48)]),
+      );
+      final withText = tester.getSize(find.byType(USpaceActionArea)).height;
+
+      expect(withText, greaterThan(withoutText),
+          reason: '有 text 才該多出文字與 12 的間距');
+    });
+
+    testWidgets('關掉 home indicator 會少掉底部留白', (tester) async {
+      await pump(
+        tester,
+        const USpaceActionArea(children: [SizedBox(height: 48)]),
+      );
+      final withIndicator = tester.getSize(find.byType(USpaceActionArea)).height;
+
+      await pump(
+        tester,
+        const USpaceActionArea(
+          showHomeIndicator: false,
+          children: [SizedBox(height: 48)],
+        ),
+      );
+      final without = tester.getSize(find.byType(USpaceActionArea)).height;
+
+      expect(withIndicator - without, layout['homeIndicatorHeight'],
+          reason: '差距應正好是規格檔記的 home indicator 高度');
+    });
+
+    testWidgets('按鈕之間的間距為規格檔的 buttonGap', (tester) async {
+      const h = 48.0;
+      await pump(
+        tester,
+        const USpaceActionArea(
+          children: [SizedBox(height: h), SizedBox(height: h)],
+        ),
+      );
+      final total = tester.getSize(find.byType(USpaceActionArea)).height;
+      final expected = layout['paddingTop'] +
+          h * 2 +
+          layout['buttonGap'] +
+          layout['homeIndicatorHeight'];
+      expect(total, expected, reason: '總高應為 上內距 + 兩顆按鈕 + 間距 + home indicator');
+    });
+  });
+
   // ── 主題接線 ────────────────────────────────────────────
   group('USpaceTheme', () {
     testWidgets('light 主題提供兩個 ThemeExtension', (tester) async {

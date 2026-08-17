@@ -11,6 +11,50 @@
 
 ---
 
+## v0.12.0 | 2026-08-17
+
+### action_area.dart | 新增 Action Area 元件
+狀態：PUBLISHED
+
+新元件。頁面底部放關鍵行動的區塊，負責背景漸層、左右邊距、按鈕間距與底部
+留白；**按鈕本身由呼叫端傳入，這個元件不畫按鈕**。
+
+- `USpaceActionArea`：參數為 `children`（由上到下的行動）、`text`（上方說明）、
+  `background`（gray / none）、`showHomeIndicator`。Figma 變體名稱裡的
+  「1 button／2 button／1 button + 2 row」講的是呼叫端要放幾個 children，
+  不是元件的參數；要一列並排多顆時自己傳 Row。
+- gray 背景依列數選漸層：單列 `bottomBarGray1B`、多列 `bottomBarGray2B`，
+  取自 Figma 兩種變體實際掛的漸層。
+- 版面數值取自 Figma node 1216:8237 與 1824:11529 的子節點座標：
+  左右邊距 20、頂部 20、按鈕高 48、按鈕間距 20、說明文字間距 12、
+  底部 home indicator 20、同列內按鈕間距 16。
+- 新增 7 個測試：兩種漸層各自對應的列數、none 不畫背景、說明文字的色票與字體、
+  沒傳 text 時不佔空間、關掉 home indicator 的高度差、以及總高等於各段相加。
+- 文件站新增 Action Area 頁（依 Button 頁的呈現邏輯），選單移除 SOON 標記，
+  路由由 ComingSoonPage 換成實際頁面。三張說明圖待補。
+
+### 產生器 | componentSpecs 改為掃描目錄
+
+- `tools/generate-tokens.mjs` 原本手寫元件規格檔清單，新增 `action_area.json`
+  後產生器沒有納入，規格檔加了卻沒有輸出。改為掃描 `tokens/components/` 並排序，
+  以後新增元件不會再漏。排序是為了輸出穩定，否則不同機器的檔案順序會讓
+  `check:tokens` 誤報漂移。
+
+#### ⚠️ 這次沒有處理、需要後續確認的事
+
+- **命名衝突**：Figma 上這個 frame 名為 **BottomBar**，但依使用者指示匯入為
+  Action Area。Components 選單同時有 Bottom Bar 與 Action Area 兩個項目，
+  兩者是否為同一個元件尚未釐清。若是，應合併其中一個。
+- **Premium 變體未處理**：`Premium Accout=True`（設計稿上就是這個拼字）的變體
+  在動作區下方多一條深色權益列，經使用者指示完全略過。
+- **漸層的深色模式未確認**：`bottomBarGray1B` / `bottomBarGray2B` 在
+  `gradients.json` 標記為待設計確認，目前深淺色同值。Action Area 是第一個
+  實際用到它們的元件。
+- **Figma 變體不對稱**：gray 有「1 button + 2 row」「1 button + 3 row」但沒有
+  「3 button」；none 有「3 button」卻沒有 row 變體。
+- **描邊按鈕做不出來**：none 背景的 3 button 變體，第二三顆是白底加 Sliver Linear
+  描邊。`USpaceButton` 目前只有實心的三個 level，沒有這種樣式。
+
 ## v0.11.2 | 2026-08-14
 
 ### 文件站 | 換上更正後的 Dropdown Menu 量測圖
