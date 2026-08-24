@@ -151,9 +151,15 @@ class USpaceButton extends StatelessWidget {
                   _icon(leadingIcon!, content),
                   const SizedBox(width: USpaceSpacing.spacer8),
                 ],
-                Text(
-                  label,
-                  style: context.typography.displayM.copyWith(color: content),
+                // Flexible + ellipsis：文字過長時單行截斷，不要撐破按鈕或換行。
+                // 見 Figma 的 button-edge-case2（過長標籤）
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.typography.displayM.copyWith(color: content),
+                  ),
                 ),
                 if (trailingIcon != null) ...[
                   const SizedBox(width: USpaceSpacing.spacer8),
