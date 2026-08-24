@@ -28,11 +28,9 @@ const variantOf = (background: Background, multiRow: boolean) =>
     (v) => v.background === background && v.rows === (multiRow ? 'multi' : 'single'),
   )!;
 
-/** 由 button.json 查出該 level 的 token，避免在這一頁自己寫死顏色 */
-const buttonVariant = (level: string) =>
-  buttonSpec.variants.find(
-    (v) => v.level === level && v.state === 'enabled' && v.emphasis === 'none',
-  )!;
+/** 由 button.json 查出該 style 的 token，避免在這一頁自己寫死顏色 */
+const buttonVariant = (style: string) =>
+  buttonSpec.variants.find((v) => v.style === style && v.state === 'enabled')!;
 
 /** 按鈕文字的字體同 Button 元件 */
 const buttonType = typographyStyles.flatMap((f) => f.styles).find((s) => s.name === 'displayM')!;
@@ -43,14 +41,14 @@ const buttonType = typographyStyles.flatMap((f) => f.styles).find((s) => s.name 
  * 細節看 Button 頁——重複畫一次會變成第二份會漂移的規格。
  */
 function ButtonBlock({
-  level = 'primary',
+  style = 'filled',
   content = 'label',
 }: {
-  level?: string;
+  style?: string;
   /** 並排列的格子放 icon，其餘放文字 */
   content?: 'label' | 'icon';
 }) {
-  const v = buttonVariant(level);
+  const v = buttonVariant(style);
   const color = colorOf(v.content as string)!;
   return (
     <div
@@ -60,7 +58,10 @@ function ButtonBlock({
         justifyContent: 'center',
         height: layout.buttonHeight,
         borderRadius: 1000,
-        background: colorOf(v.bg as string),
+        background: colorOf(v.bg as string | null) ?? 'transparent',
+        // outlined 是透明底加漸層描邊，這裡用單色近似即可——完整規格在 Button 頁
+        border: v.borderGradient ? '2px solid var(--border-strong)' : undefined,
+        boxSizing: 'border-box',
         color,
         fontSize: buttonType.size,
         lineHeight: `${buttonType.lineHeight}px`,
@@ -104,13 +105,14 @@ function ActionAreaPreview({
     items.push(
       <div key="row" style={{ display: 'flex', gap: layout.rowGap }}>
         {Array.from({ length: rowCells }, (_, i) => (
-          <ButtonBlock key={i} level="tertiary" content="icon" />
+          <ButtonBlock key={i} style="outlined" content="icon" />
         ))}
       </div>,
     );
   }
   for (let i = 0; i < rows; i++) {
-    items.push(<ButtonBlock key={`b${i}`} level={i === 0 ? 'primary' : 'secondary'} />);
+    // 第一顆是主要行動用 filled，其餘用 outlined
+    items.push(<ButtonBlock key={`b${i}`} style={i === 0 ? 'filled' : 'outlined'} />);
   }
 
   return (
@@ -386,9 +388,8 @@ export default function ActionAreaPage() {
                 難以判斷該按哪一個，應該重新想這個頁面的主要行動是什麼。
               </li>
               <li>
-                <strong>權重要分得出來</strong>：同時放兩顆以上時，只有一顆是 primary，
-                其餘用 secondary 或 tertiary，三顆時依序往下降。三顆都用實心樣式，
-                沒有描邊版本。兩顆都 primary 等於沒有主要行動。
+                <strong>權重要分得出來</strong>：同時放兩顆以上時，只有一顆用 filled，
+                其餘用 outlined。兩顆都 filled 等於沒有主要行動。
               </li>
               <li>
                 <strong>已經有 SafeArea 就關掉 home indicator 留白</strong>：兩邊都留會多出
@@ -445,7 +446,7 @@ export default function ActionAreaPage() {
     USpaceButton(label: '確認送出', onPressed: onSubmit),
     USpaceButton(
       label: '再檢查一次',
-      level: USpaceButtonLevel.secondary,
+      style: USpaceButtonStyle.outlined,
       onPressed: onBack,
     ),
   ],

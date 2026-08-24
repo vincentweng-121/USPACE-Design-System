@@ -11,6 +11,45 @@
 
 ---
 
+## v0.14.0 | 2026-08-24
+
+### button.dart | 樣式收斂為 filled / outlined，移除 level 與 emphasis
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+依 2026-08-24 使用者確認的新規則全面改版。
+
+- **`USpaceButtonLevel` 與 `USpaceButtonEmphasis` 移除**，改為
+  `USpaceButtonStyle`（`filled` / `outlined`）。原本的五種組合收斂成兩種。
+  用到舊 enum 的程式碼會編譯失敗：`level: primary` → `style: filled`，
+  `secondary` / `tertiary` → `outlined`。
+- **filled**：`actionPrimaryBg` 底 + `actionPrimaryContent` 文字。
+  **outlined**：透明底 + `silverLinear` 漸層描邊 + `actionTertiaryContent` 文字。
+  描邊是漸層不是單色，Flutter 的 `Border` 只吃單色，因此自己畫 stroke。
+- **small 的尺寸改了**：高度 48 → **40**，左右內距 24 → **12**，
+  並加上最小寬度 **112**——短標籤時撐到 112，內容更長才往外長。
+  一排短標籤的按鈕不會再參差不齊。
+- **字級改了**：`displayM`(18/26) → **`labelL`(16/24)**；
+  **日文自動改用 `labelM`(14/20)**，由元件讀 App 的語系判斷，
+  呼叫端不需要傳參數，兩種 size 都適用。
+- 圓角改為直接引用 `USpaceRadius.full`，不再寫死 1000。
+- 連帶更新兩個呼叫端：`text_field.dart` 的內嵌按鈕改用 `filled`；
+  `list.dart` 的 `buttonLevel` 參數更名為 `buttonStyle`。
+
+#### 測試
+
+Button 的測試整組重寫：style × state × size 的色票比對、漸層描邊的有無、
+small 的高度與最小寬度、長標籤仍會往外長、預設值、disabled 不可點擊，
+以及三個字級測試（預設 labelL、日文 labelM、其他語系不受影響）。
+
+漸層描邊的斷言比對 painter 的型別名稱而不是「有沒有 foregroundPainter」——
+Material 與 InkWell 內部本來就有自己的 CustomPaint，用後者會每次都判定為有描邊。
+
+#### ⚠️ 待確認
+
+`outlined` 的 disabled 在 Figma 尚無對應變體。目前暫定維持透明底與漸層描邊，
+只把文字改為 `actionDisabledContent`，待設計補上後校對。
+
 ## v0.13.0 | 2026-08-24
 
 ### button.dart | 過長標籤單行截斷

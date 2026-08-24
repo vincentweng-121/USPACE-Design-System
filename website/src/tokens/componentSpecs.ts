@@ -70,17 +70,11 @@ export const action_areaSpec: ComponentSpec = {
 export const buttonSpec: ComponentSpec = {
   "component": "USpaceButton",
   "source": "styles/button.dart",
-  "figmaNode": "3611:8842 / 3611:8861",
+  "figmaNode": "3998:7788 / 3998:7793",
   "dimensions": {
-    "level": [
-      "primary",
-      "secondary",
-      "tertiary"
-    ],
-    "emphasis": [
-      "none",
-      "accent",
-      "charging"
+    "style": [
+      "filled",
+      "outlined"
     ],
     "size": [
       "regular",
@@ -93,97 +87,47 @@ export const buttonSpec: ComponentSpec = {
   },
   "variants": [
     {
-      "level": "primary",
-      "emphasis": "none",
+      "style": "filled",
       "state": "enabled",
       "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContent",
-      "border": null
-    },
-    {
-      "level": "primary",
-      "emphasis": "accent",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentAccent",
       "border": null,
-      "note": "螢光綠文字，同一畫面最多一顆"
+      "borderGradient": null,
+      "content": "actionPrimaryContent"
     },
     {
-      "level": "primary",
-      "emphasis": "charging",
-      "state": "enabled",
-      "bg": "actionPrimaryBg",
-      "content": "actionPrimaryContentCharging",
-      "border": null,
-      "note": "充電流程專用的螢光綠"
-    },
-    {
-      "level": "primary",
-      "emphasis": "none",
+      "style": "filled",
       "state": "disabled",
       "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
-      "border": null
-    },
-    {
-      "level": "primary",
-      "emphasis": "accent",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
       "border": null,
-      "note": "disabled 時 emphasis 不生效"
+      "borderGradient": null,
+      "content": "actionDisabledContent"
     },
     {
-      "level": "primary",
-      "emphasis": "charging",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
-      "border": null,
-      "note": "disabled 時 emphasis 不生效"
-    },
-    {
-      "level": "secondary",
-      "emphasis": "none",
+      "style": "outlined",
       "state": "enabled",
-      "bg": "actionSecondaryBg",
-      "content": "actionSecondaryContent",
+      "bg": null,
       "border": null,
-      "note": "實心中灰底，無描邊"
-    },
-    {
-      "level": "secondary",
-      "emphasis": "none",
-      "state": "disabled",
-      "bg": "actionDisabledBg",
-      "content": "actionDisabledContent",
-      "border": null
-    },
-    {
-      "level": "tertiary",
-      "emphasis": "none",
-      "state": "enabled",
-      "bg": "actionTertiaryBg",
+      "borderGradient": "silverLinear",
       "content": "actionTertiaryContent",
-      "border": null,
-      "note": "實心淺灰底，無描邊"
+      "note": "透明底，描邊為漸層"
     },
     {
-      "level": "tertiary",
-      "emphasis": "none",
+      "style": "outlined",
       "state": "disabled",
-      "bg": "actionDisabledBg",
+      "bg": null,
+      "border": null,
+      "borderGradient": "silverLinear",
       "content": "actionDisabledContent",
-      "border": null
+      "note": "Figma 尚無此變體，暫定只改文字色"
     }
   ],
   "layout": {
     "height": 48,
+    "smallHeight": 40,
+    "smallMinWidth": 112,
+    "smallPaddingX": 12,
     "iconSize": 24,
-    "gap": 8,
-    "smallPaddingX": 24
+    "gap": 8
   }
 };
 
