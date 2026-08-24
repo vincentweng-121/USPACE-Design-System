@@ -4,6 +4,13 @@ analyzer:
   exclude:
     - website/**
     - rules/**   # SKILL_TEMPLATE.dart 是範本，不是交付程式碼
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   errors:
     # token 檔為產生檔，排版由產生器決定
     lines_longer_than_80_chars: ignore

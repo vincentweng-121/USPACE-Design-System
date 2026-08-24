@@ -11,6 +11,32 @@
 
 ---
 
+## v0.13.0 | 2026-08-24
+
+### button.dart | 過長標籤單行截斷
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- 標籤原本沒有任何截斷處理：`Text` 沒包 `Flexible`，也沒設 `maxLines` 與
+  `overflow`，長文字會撐破按鈕或造成 overflow。設計稿的
+  `button-edge-case2` 明確定義了要單行截斷加刪節號。
+- 改為 `Flexible` + `maxLines: 1` + `TextOverflow.ellipsis`。既有的短標籤
+  外觀不變，長標籤從溢出改為截斷。
+- 新增測試：在 200px 寬的容器裡放長標籤，斷言不丟 overflow 例外，
+  且 `maxLines` 與 `overflow` 設定正確。
+
+### 文件站 | Button 說明圖全數更新，新增 Edge cases 區塊
+狀態：PUBLISHED
+
+- 從 Figma section 3726:8888（Button-MCPimages）重新匯出全部 12 組、24 張圖。
+  **既有 10 組全部有變動**，設計稿確實更新過。
+- 新增兩組 `button-edge-case1` / `button-edge-case2`，Button 頁隨之新增
+  Edge cases 區塊（接在 Accessibility 之後，屬本頁專屬區塊）：
+  - **同一份列表裡混著可按與不可按**：不可選的項目整列淡化，不是只把按鈕
+    改成 disabled。
+  - **標籤過長**：單行截斷加刪節號。文件同時說明，會被截斷代表文案要重寫，
+    不是靠截斷解決。
+
 ## v0.12.3 | 2026-08-17
 
 ### 文件站 | Action Area 補上 Variants 說明圖

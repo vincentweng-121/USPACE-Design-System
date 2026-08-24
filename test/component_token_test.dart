@@ -203,6 +203,26 @@ void main() {
     });
   });
 
+  // 過長的標籤要單行截斷，不能撐破按鈕——見 Figma 的 button-edge-case2
+  group('USpaceButton 長標籤', () {
+    testWidgets('文字過長時單行截斷且不溢出', (tester) async {
+      await pump(
+        tester,
+        const SizedBox(
+          width: 200,
+          child: USpaceButton(label: '結束停車結束停車結束停車結束停車結束停車結束停車'),
+        ),
+      );
+      expect(tester.takeException(), isNull, reason: '長標籤不該造成 overflow');
+
+      final text = tester.widget<Text>(
+        find.descendant(of: find.byType(USpaceButton), matching: find.byType(Text)),
+      );
+      expect(text.maxLines, 1);
+      expect(text.overflow, TextOverflow.ellipsis);
+    });
+  });
+
   // ── Toggle ──────────────────────────────────────────────
   group('USpaceToggle', () {
     final layout = readJson('tokens/components/toggle.json')['layout'] as Map<String, dynamic>;

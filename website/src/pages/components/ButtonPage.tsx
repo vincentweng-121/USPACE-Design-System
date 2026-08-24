@@ -461,6 +461,39 @@ export default function ButtonPage() {
               <li>tertiary 的淺灰底與頁面背景相近，放在深淺不一的背景上時需自行確認邊界是否可辨。</li>
             </ul>
           </section>
+
+          {/* ── 11. Edge cases（本頁專屬，接在必要區塊之後）── */}
+          <section className="section">
+            <SectionTitle>Edge cases</SectionTitle>
+            <p className="text-md text-muted" style={{ margin: '0 0 24px' }}>
+              實際畫面上比較容易踩到的兩種情況，設計稿已經定義了處理方式。
+            </p>
+
+            <h3 className="heading-md" style={{ margin: '0 0 12px' }}>
+              同一份列表裡混著可按與不可按
+            </h3>
+            <AnatomyImage
+              image="button-edge-case1"
+              alt="停車位列表中，已被預約的那一列整列淡化且按鈕為 disabled，可預約的那一列維持深色可按"
+            />
+            <p className="text-md text-muted" style={{ margin: '0 0 32px' }}>
+              不可選的項目，整列連同按鈕一起淡化，不是只把按鈕改成 disabled。
+              使用者掃過去時判斷的是「這一整列不能選」，而不是「這顆按鈕壞了」。
+            </p>
+
+            <h3 className="heading-md" style={{ margin: '0 0 12px' }}>
+              標籤過長
+            </h3>
+            <AnatomyImage
+              image="button-edge-case2"
+              alt="標籤文字過長的按鈕，文字在單行內截斷並以刪節號結尾"
+            />
+            <p className="text-md text-muted" style={{ margin: 0 }}>
+              過長的標籤<strong>單行截斷並加刪節號</strong>，不換行、也不把按鈕撐高。
+              元件已經內建這個行為，呼叫端不需要自己截字。不過截掉的字讀者就看不到了，
+              按鈕文字本來就該短——會被截斷代表文案需要重寫，而不是靠截斷解決。
+            </p>
+          </section>
         </div>
       )}
 
