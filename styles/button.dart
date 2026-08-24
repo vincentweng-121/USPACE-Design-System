@@ -9,36 +9,18 @@ import 'radius_extension.dart';
 import 'spacing_extension.dart';
 
 // ── Button Style ─────────────────────────────────────────────
-/// 行動權重，由重到輕三個層級。
-enum USpaceButtonLevel {
-  /// 實心深底（actionPrimaryBg），最高行動權重
-  primary,
+/// 按鈕的外觀樣式。2026-08-24 改版：由原本的 level（primary / secondary /
+/// tertiary）收斂為兩種。
+enum USpaceButtonStyle {
+  /// 實心深底（actionPrimaryBg），文字為 actionPrimaryContent
+  filled,
 
-  /// 實心中灰底（actionSecondaryBg）
-  secondary,
-
-  /// 實心淺灰底（actionTertiaryBg），最低權重
-  tertiary,
-}
-
-// ── Button Emphasis ───────────────────────────────────────────
-/// primary 的文字色變化，用來讓同為 primary 的按鈕再拉開強調程度。
-///
-/// 只對 [USpaceButtonLevel.primary] 的 enabled 狀態生效；
-/// secondary / tertiary 與所有 disabled 狀態都會忽略這個值。
-enum USpaceButtonEmphasis {
-  /// 一般文字色（actionPrimaryContent）
-  none,
-
-  /// 螢光綠文字（actionPrimaryContentAccent），最強調
-  accent,
-
-  /// 充電流程專用的螢光綠（actionPrimaryContentCharging）
-  charging,
+  /// 透明底 + silverLinear 漸層描邊，文字為 actionTertiaryContent
+  outlined,
 }
 
 // ── Button Size ───────────────────────────────────────────────
-/// Regular 滿寬、Small 貼合內容。兩者高度皆為 48。
+/// Regular 滿寬、高 48；Small 貼合內容、高 40，並有最小寬度 112。
 enum USpaceButtonSize { regular, small }
 
 // ── Button State ──────────────────────────────────────────────
@@ -48,44 +30,35 @@ enum USpaceButtonState { enabled, disabled }
 // ── Button ───────────────────────────────────────────────────
 /// USPACE Design System Button。
 ///
-/// 來源：Figma node 3611:8842（Size: Regular）/ 3611:8861（Size: Small）
+/// 來源：Figma node 3998:7788（filled）/ 3998:7793（outlined）
 ///
-/// 四個維度：level × emphasis × size × state，文字左右兩側皆可放 icon。
-///
-/// level 是行動權重（primary / secondary / tertiary）；
-/// emphasis 只改 primary 的文字色，不改變權重層級。
+/// 三個維度：style × size × state，文字左右兩側皆可放 icon。
 ///
 /// Token mapping（顏色不隨 size 改變）：
-///   ┌───────────┬──────────────────────┬──────────────────────────┐
-///   │ level     │ enabled              │ disabled                 │
-///   ├───────────┼──────────────────────┼──────────────────────────┤
-///   │ primary   │ bg actionPrimaryBg   │ bg actionDisabledBg      │
-///   │           │ emphasis.none        │ actionDisabledContent    │
-///   │           │   actionPrimary-     │ （emphasis 不生效）      │
-///   │           │   Content            │                          │
-///   │           │ emphasis.accent      │                          │
-///   │           │   ...ContentAccent   │                          │
-///   │           │ emphasis.charging    │                          │
-///   │           │   ...ContentCharging │                          │
-///   │ secondary │ bg actionSecondaryBg │ bg actionDisabledBg      │
-///   │           │ actionSecondary-     │ actionDisabledContent    │
-///   │           │ Content              │                          │
-///   │ tertiary  │ bg actionTertiaryBg  │ bg actionDisabledBg      │
-///   │           │ actionTertiaryContent│ actionDisabledContent    │
-///   └───────────┴──────────────────────┴──────────────────────────┘
-///
-/// 三個層級都是實心底色，皆無描邊。
+///   ┌──────────┬────────────────────────┬────────────────────────┐
+///   │ style    │ enabled                │ disabled               │
+///   ├──────────┼────────────────────────┼────────────────────────┤
+///   │ filled   │ bg actionPrimaryBg     │ bg actionDisabledBg    │
+///   │          │ actionPrimaryContent   │ actionDisabledContent  │
+///   │ outlined │ 透明底 + silverLinear  │ 同左，文字改為         │
+///   │          │ 描邊                   │ actionDisabledContent  │
+///   │          │ actionTertiaryContent  │                        │
+///   └──────────┴────────────────────────┴────────────────────────┘
 ///
 /// Layout：
-///   高度 48（固定）、圓角 full、icon 24px、icon 與文字間距 8
-///   Regular：滿寬
-///   Small：水平 padding 24、貼合內容
+///   圓角 USpaceRadius.full、icon 24px、icon 與文字間距 8
+///   Regular：高 48、滿寬
+///   Small：高 40、水平 padding 12、最小寬度 112，在此之上貼合內容
+///
+/// 文字：labelL（16/24）；**日文自動改用 labelM（14/20）**，
+/// 由元件讀 App 的語系判斷，呼叫端不需要傳參數。
+///
+/// 2026-08-24 經使用者確認改版：移除 level 與 emphasis 兩個維度。
 class USpaceButton extends StatelessWidget {
   const USpaceButton({
     super.key,
     required this.label,
-    this.level = USpaceButtonLevel.primary,
-    this.emphasis = USpaceButtonEmphasis.none,
+    this.style = USpaceButtonStyle.filled,
     this.size = USpaceButtonSize.regular,
     this.state = USpaceButtonState.enabled,
     this.leadingIcon,
@@ -96,11 +69,8 @@ class USpaceButton extends StatelessWidget {
   /// 按鈕文字
   final String label;
 
-  /// 行動權重
-  final USpaceButtonLevel level;
-
-  /// primary 的文字色變化。只對 primary 的 enabled 狀態生效。
-  final USpaceButtonEmphasis emphasis;
+  /// 外觀樣式
+  final USpaceButtonStyle style;
 
   /// 尺寸
   final USpaceButtonSize size;
@@ -120,28 +90,38 @@ class USpaceButton extends StatelessWidget {
   bool get _isDisabled =>
       state == USpaceButtonState.disabled || onPressed == null;
 
-  /// Figma 固定高度。文字為 displayM（行高 26），因此以固定高度置中，
-  /// 而非用垂直 padding 推算，否則會變成 50。
+  /// 高度固定，以置中而非垂直 padding 推算——文字行高改變時高度才不會跟著跑
   static const double _height = 48;
+  static const double _smallHeight = 40;
+
+  /// small 貼合內容，但不小於這個寬度，否則一整排短標籤的按鈕會參差不齊
+  static const double _smallMinWidth = 112;
+  static const double _smallPaddingX = USpaceSpacing.spacer12;
   static const double _iconSize = 24;
+
+  /// outlined 的描邊寬度。量自 Figma node 3734:15680 的 2 倍匯出圖
+  static const double _borderWidth = 3;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.uColors;
     final content = _contentColor(colors);
     final isSmall = size == USpaceButtonSize.small;
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(USpaceRadius.full),
+    );
 
     final button = Material(
       color: _backgroundColor(colors),
-      shape: const StadiumBorder(),
+      shape: shape,
       child: InkWell(
         onTap: _isDisabled ? null : onPressed,
-        customBorder: const StadiumBorder(),
+        customBorder: shape,
         child: SizedBox(
-          height: _height,
+          height: isSmall ? _smallHeight : _height,
           child: Padding(
             padding: isSmall
-                ? const EdgeInsets.symmetric(horizontal: USpaceSpacing.spacer24)
+                ? const EdgeInsets.symmetric(horizontal: _smallPaddingX)
                 : EdgeInsets.zero,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -158,7 +138,7 @@ class USpaceButton extends StatelessWidget {
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: context.typography.displayM.copyWith(color: content),
+                    style: _labelStyle(context).copyWith(color: content),
                   ),
                 ),
                 if (trailingIcon != null) ...[
@@ -172,8 +152,33 @@ class USpaceButton extends StatelessWidget {
       ),
     );
 
-    if (isSmall) return button;
-    return SizedBox(width: double.infinity, child: button);
+    // outlined 的描邊是漸層，Flutter 的 Border 只吃單色，所以自己畫
+    final framed = style == USpaceButtonStyle.outlined
+        ? CustomPaint(
+            foregroundPainter: _GradientBorderPainter(
+              gradient: USpaceColorsExtension.silverLinear,
+              width: _borderWidth,
+            ),
+            child: button,
+          )
+        : button;
+
+    if (isSmall) {
+      return ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: _smallMinWidth),
+        child: framed,
+      );
+    }
+    return SizedBox(width: double.infinity, child: framed);
+  }
+
+  /// 日文用小一階的字級。讀 App 的語系，呼叫端不需要傳參數；
+  /// 沒有 Localizations 時（例如單元測試直接 pump）退回預設字級。
+  TextStyle _labelStyle(BuildContext context) {
+    final typo = context.typography;
+    final isJapanese =
+        Localizations.maybeLocaleOf(context)?.languageCode == 'ja';
+    return isJapanese ? typo.labelM : typo.labelL;
   }
 
   Widget _icon(Widget icon, Color color) => IconTheme(
@@ -181,29 +186,51 @@ class USpaceButton extends StatelessWidget {
         child: icon,
       );
 
-  /// 三個層級都是實心底色，disabled 時一律收斂為 actionDisabledBg。
-  Color _backgroundColor(USpaceColorsExtension colors) {
-    if (_isDisabled) return colors.actionDisabledBg;
-    return switch (level) {
-      USpaceButtonLevel.primary => colors.actionPrimaryBg,
-      USpaceButtonLevel.secondary => colors.actionSecondaryBg,
-      USpaceButtonLevel.tertiary => colors.actionTertiaryBg,
-    };
+  /// filled 才有底色；outlined 是透明底，靠描邊界定範圍
+  Color? _backgroundColor(USpaceColorsExtension colors) {
+    if (style == USpaceButtonStyle.outlined) return Colors.transparent;
+    return _isDisabled ? colors.actionDisabledBg : colors.actionPrimaryBg;
   }
 
   Color _contentColor(USpaceColorsExtension colors) {
     if (_isDisabled) return colors.actionDisabledContent;
-    return switch (level) {
-      // emphasis 只改 primary 的文字色，不影響其他兩個層級
-      USpaceButtonLevel.primary => switch (emphasis) {
-          USpaceButtonEmphasis.none => colors.actionPrimaryContent,
-          USpaceButtonEmphasis.accent => colors.actionPrimaryContentAccent,
-          USpaceButtonEmphasis.charging => colors.actionPrimaryContentCharging,
-        },
-      USpaceButtonLevel.secondary => colors.actionSecondaryContent,
-      USpaceButtonLevel.tertiary => colors.actionTertiaryContent,
+    return switch (style) {
+      USpaceButtonStyle.filled => colors.actionPrimaryContent,
+      USpaceButtonStyle.outlined => colors.actionTertiaryContent,
     };
   }
+}
+
+// ── 漸層描邊 ──────────────────────────────────────────────────
+/// 沿著 stadium 外框畫一圈漸層線。
+///
+/// Flutter 的 BoxDecoration.border 只接受單色，而 outlined 的描邊是
+/// silverLinear；用「外層漸層底 + 內層填色遮住中間」的做法會讓底色不再透明，
+/// 所以這裡直接畫 stroke。
+class _GradientBorderPainter extends CustomPainter {
+  const _GradientBorderPainter({required this.gradient, required this.width});
+
+  final Gradient gradient;
+  final double width;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // stroke 以路徑為中心線，往內縮半個線寬才不會被裁掉一半
+    final rect = Offset.zero & size;
+    final inset = rect.deflate(width / 2);
+    final radius = Radius.circular(size.height / 2);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(inset, radius),
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = width
+        ..shader = gradient.createShader(rect),
+    );
+  }
+
+  @override
+  bool shouldRepaint(_GradientBorderPainter old) =>
+      old.gradient != gradient || old.width != width;
 }
 
 // ══════════════════════════════════════════════════════════════

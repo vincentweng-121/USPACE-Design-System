@@ -14,55 +14,50 @@ import {
 import { typographyStyles } from '../../tokens/typography';
 import { buttonSpec } from '../../tokens/componentSpecs';
 import { touch } from '../../tokens/scalars';
+import { gradients } from '../../tokens/colors';
 import { colorOf, cap } from '../../utils';
 
-type Level = 'primary' | 'secondary' | 'tertiary';
-type Emphasis = 'none' | 'accent' | 'charging';
+type Style = 'filled' | 'outlined';
 type Size = 'regular' | 'small';
 type State = 'enabled' | 'disabled';
 
-const levels = buttonSpec.dimensions.level as Level[];
-const emphases = buttonSpec.dimensions.emphasis as Emphasis[];
+const styles = buttonSpec.dimensions.style as Style[];
 const states = buttonSpec.dimensions.state as State[];
 const layout = buttonSpec.layout! as Record<string, number>;
 
-/** 按鈕文字使用的字體 token */
-const labelType = typographyStyles
-  .flatMap((f) => f.styles.map((s) => ({ ...s, family: f.family })))
-  .find((s) => s.name === 'displayM')!;
+const typeOf = (name: string) =>
+  typographyStyles.flatMap((f) => f.styles).find((s) => s.name === name)!;
+/** 一般字級；日文小一階 */
+const labelType = typeOf('labelL');
+const japaneseType = typeOf('labelM');
 
-/** 由 tokens/components/button.json 查出該 level × emphasis × state 的 token 名稱 */
-function variantOf(level: Level, state: State, emphasis: Emphasis = 'none') {
-  return buttonSpec.variants.find(
-    (v) => v.level === level && v.state === state && v.emphasis === emphasis,
-  )!;
-}
-
-/** emphasis 只對 primary 生效，其餘層級一律用 none 那筆 */
-const emphasisOf = (level: Level, emphasis: Emphasis) =>
-  level === 'primary' ? emphasis : 'none';
+/** 由 tokens/components/button.json 查出該 style × state 的 token 名稱 */
+const variantOf = (style: Style, state: State) =>
+  buttonSpec.variants.find((v) => v.style === style && v.state === state)!;
 
 // ── 依 token 渲染的按鈕 ──
 function ButtonPreview({
   label,
-  level,
+  style,
   size,
   state,
-  emphasis = 'none',
+  japanese = false,
   leading = false,
   trailing = false,
 }: {
   label: string;
-  level: Level;
+  style: Style;
   size: Size;
   state: State;
-  emphasis?: Emphasis;
+  /** 日文用小一階的字級 */
+  japanese?: boolean;
   leading?: boolean;
   trailing?: boolean;
 }) {
-  const v = variantOf(level, state, emphasisOf(level, emphasis));
+  const v = variantOf(style, state);
   const content = colorOf(v.content as string)!;
-  const border = colorOf(v.border as string | null);
+  const isSmall = size === 'small';
+  const type = japanese ? japaneseType : labelType;
 
   return (
     <button
@@ -72,20 +67,26 @@ function ButtonPreview({
         alignItems: 'center',
         justifyContent: 'center',
         gap: layout.gap,
-        height: layout.height,
-        width: size === 'regular' ? '100%' : undefined,
-        maxWidth: size === 'regular' ? 350 : undefined,
-        padding: size === 'small' ? `0 ${layout.smallPaddingX}px` : 0,
+        height: isSmall ? layout.smallHeight : layout.height,
+        width: isSmall ? undefined : '100%',
+        minWidth: isSmall ? layout.smallMinWidth : undefined,
+        maxWidth: isSmall ? undefined : 350,
+        padding: isSmall ? `0 ${layout.smallPaddingX}px` : 0,
         borderRadius: 1000,
         background: colorOf(v.bg as string | null) ?? 'transparent',
-        border: border ? `2px solid ${border}` : '2px solid transparent',
+        // 描邊是 silverLinear 漸層，用 border-image 才畫得出來
+        border: v.borderGradient ? '3px solid transparent' : '3px solid transparent',
+        borderImage: v.borderGradient
+          ? `${(gradients as Record<string, string>)[v.borderGradient as string]} 1`
+          : undefined,
         color: content,
-        fontSize: labelType.size,
-        lineHeight: `${labelType.lineHeight}px`,
-        fontWeight: labelType.weight,
+        fontSize: type.size,
+        lineHeight: `${type.lineHeight}px`,
+        fontWeight: type.weight,
         fontFamily: '"PingFang TC", sans-serif',
         whiteSpace: 'nowrap',
         cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
+        boxSizing: 'border-box',
       }}
     >
       {leading && <IconPlaceholder color={content} size={layout.iconSize} />}
@@ -96,9 +97,14 @@ function ButtonPreview({
 }
 
 // ── Playground 的維度 ──
-// icon 不是 token 維度（token 只管顏色），所以手寫；
-// emphasis 只改文字色、不改變權重，放進來會讓人以為是第四個層級，故不列入。
+// icon 不是 token 維度（token 只管顏色），所以手寫。
+// style 兩種解出來都是灰階，沒有非中性色，可以放進 Configurations。
 const playgroundDimensions: PlaygroundDimension[] = [
+  {
+    key: 'style',
+    label: 'Style',
+    options: styles.map((s) => ({ value: s, label: cap(s) })),
+  },
   {
     key: 'size',
     label: 'Size',
@@ -106,11 +112,6 @@ const playgroundDimensions: PlaygroundDimension[] = [
       { value: 'regular', label: 'Regular' },
       { value: 'small', label: 'Small' },
     ],
-  },
-  {
-    key: 'level',
-    label: 'Level',
-    options: levels.map((lv) => ({ value: lv, label: cap(lv) })),
   },
   {
     key: 'icon',
@@ -151,7 +152,7 @@ export default function ButtonPage() {
     <div>
       <PageHero
         title="Button"
-        lead="按鈕觸發單一明確的行動。權重由 level 決定，共 primary、secondary、tertiary 三級；primary 可再用 emphasis 切換文字色做更強的強調。加上 size 與 state 共四個維度，icon 可放在文字左側或右側，擇一。"
+        lead="按鈕觸發單一明確的行動。樣式只有 filled 與 outlined 兩種：一個畫面上最主要的行動用 filled，其餘用 outlined。加上 size 與 state 共三個維度，icon 可放在文字左側或右側，擇一。文字為 16/24，日文自動改用小一階的 14/20。"
         meta={
           <>
             <span>
@@ -173,14 +174,13 @@ export default function ButtonPage() {
             <SectionTitle>Variants</SectionTitle>
             <AnatomyImage
               image="button-variant"
-              alt="三種按鈕權重由重到輕：深底的 Primary、中灰底的 Secondary、淺灰底的 Tertiary"
+              alt="兩種按鈕樣式：實心深底的 Filled 與透明底加漸層描邊的 Outlined"
             />
 
             <NumberedCaptions
               items={[
-                { name: 'Primary', desc: '最高權重。畫面上最主要的那一個行動，實心深底。' },
-                { name: 'Secondary', desc: '次要操作。實心中灰底，存在感低於 Primary。' },
-                { name: 'Tertiary', desc: '最低權重。實心淺灰底，適合取消、略過這類動作。' },
+                { name: 'Filled', desc: '實心深底。畫面上最主要的那一個行動用它，一個畫面只給一顆。' },
+                { name: 'Outlined', desc: '透明底加一圈漸層描邊。其餘的行動用它，底下的內容仍看得見。' },
               ]}
             />
           </section>
@@ -195,7 +195,7 @@ export default function ButtonPage() {
               render={(v) => (
                 <ButtonPreview
                   label="Label"
-                  level={v.level as Level}
+                  style={v.style as Style}
                   size={v.size as Size}
                   state="enabled"
                   leading={v.icon === 'leading'}
@@ -229,51 +229,23 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Color</SectionTitle>
 
-            {levels.map((lv) => (
-              <div key={lv} style={{ marginBottom: 48 }}>
-                <h3 className="heading-md" style={{ marginBottom: 16 }}>
-                  {cap(lv)}
-                </h3>
-                <SpecTable
-                  headers={['元素', 'Enabled', 'Disabled']}
-                  rows={[
-                    [
-                      '容器底色',
-                      <Swatch key="e" token={variantOf(lv, 'enabled').bg as string | null} />,
-                      <Swatch key="d" token={variantOf(lv, 'disabled').bg as string | null} />,
-                    ],
-                    // primary 的文字色隨 emphasis 變化，逐列展開；其餘層級只有一列
-                    ...(lv === 'primary'
-                      ? emphases.map((em) => [
-                          `文字與 icon（emphasis: ${em}）`,
-                          <Swatch key="e" token={variantOf(lv, 'enabled', em).content as string} />,
-                          <Swatch key="d" token={variantOf(lv, 'disabled', em).content as string} />,
-                        ])
-                      : [
-                          [
-                            '文字與 icon',
-                            <Swatch key="e" token={variantOf(lv, 'enabled').content as string} />,
-                            <Swatch key="d" token={variantOf(lv, 'disabled').content as string} />,
-                          ],
-                        ]),
-                  ]}
-                  minWidth={560}
-                />
-                {lv === 'primary' ? (
-                  <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-                    三種 emphasis 的容器底色完全相同，差別只在文字色。
-                    accent 用於畫面上最主要的那一個行動，charging 為充電流程專用，
-                    兩者都不改變 primary 的權重層級。disabled 時 emphasis 不生效。
-                  </p>
-                ) : (
-                  variantOf(lv, 'enabled').note && (
-                    <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
-                      {String(variantOf(lv, 'enabled').note)}
-                    </p>
-                  )
-                )}
-              </div>
-            ))}
+            <SpecTable
+              headers={['Style', 'State', '容器底色', '描邊', '文字與 icon']}
+              rows={buttonSpec.variants.map((v) => [
+                cap(String(v.style)),
+                String(v.state),
+                <Swatch key="bg" token={v.bg as string | null} />,
+                v.borderGradient ? <code>{String(v.borderGradient)}</code> : <span>—</span>,
+                <Swatch key="ct" token={v.content as string | null} />,
+              ])}
+              minWidth={620}
+            />
+            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+              Filled 用底色區分狀態，Outlined 一律是透明底加{' '}
+              <code>silverLinear</code> 漸層描邊，disabled 時只改文字色。
+              描邊是漸層而非單色，所以記在規格檔的 <code>borderGradient</code> 欄位。
+              Outlined 的 disabled 在 Figma 尚無對應變體，目前是暫定值。
+            </p>
           </section>
 
           {/* ── 6. States ── */}
@@ -304,15 +276,15 @@ export default function ButtonPage() {
                     style={{ color: 'var(--text-tertiary)', marginBottom: 16 }}
                   >
                     {stt === 'enabled'
-                      ? '可點擊，各 level 呈現自身配色'
-                      : '不可點擊，所有 level 收斂為同一組 disabled 配色，emphasis 不生效'}
+                      ? '可點擊，兩種樣式呈現自身配色'
+                      : '不可點擊。Filled 換成 disabled 底色，Outlined 只改文字色'}
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-                    {levels.map((lv) => (
+                    {styles.map((s) => (
                       <ButtonPreview
-                        key={lv}
-                        label={cap(lv)}
-                        level={lv}
+                        key={s}
+                        label={cap(s)}
+                        style={s}
                         size="small"
                         state={stt}
                       />
@@ -324,10 +296,10 @@ export default function ButtonPage() {
             <SpecTable
               headers={['狀態', '外觀', '互動']}
               rows={[
-                ['Enabled', '依 level 呈現對應的底色與文字色；primary 另受 emphasis 影響文字色', '可點擊，觸發 onPressed'],
+                ['Enabled', 'Filled 為 actionPrimaryBg 底；Outlined 為透明底加漸層描邊', '可點擊，觸發 onPressed'],
                 [
                   'Disabled',
-                  '三個層級一律改為 actionDisabledBg 底、actionDisabledContent 文字，emphasis 不生效',
+                  'Filled 換成 actionDisabledBg 底；Outlined 維持透明底與描邊，只把文字改為 actionDisabledContent',
                   '不可點擊，onPressed 不會被呼叫',
                 ],
                 ['Pressed', '尚未定義', '—'],
@@ -351,8 +323,8 @@ export default function ButtonPage() {
             <SpecTable
               headers={['項目', 'Regular', 'Small', 'Token']}
               rows={[
-                ['高度', `${layout.height}px`, `${layout.height}px`, '—'],
-                ['寬度', '滿版', '貼合內容', '—'],
+                ['高度', `${layout.height}px`, `${layout.smallHeight}px`, '—'],
+                ['寬度', '滿版', `貼合內容，最小 ${layout.smallMinWidth}px`, '—'],
                 [
                   '水平內距',
                   '0',
@@ -366,21 +338,28 @@ export default function ButtonPage() {
                   <code key="g">USpaceSpacing.spacer{layout.gap}</code>,
                 ],
                 ['icon 尺寸', `${layout.iconSize}px`, `${layout.iconSize}px`, '—'],
-                ['圓角', '1000px', '1000px', <code key="r">USpaceRadius.full</code>],
+                ['圓角', 'full', 'full', <code key="r">USpaceRadius.full</code>],
+                ['描邊（僅 outlined）', '3px', '3px', '—'],
                 [
                   '文字',
-                  `${labelType.family} ${labelType.size}px / ${labelType.lineHeight}px Medium`,
-                  `${labelType.family} ${labelType.size}px / ${labelType.lineHeight}px Medium`,
+                  `${labelType.size}px / ${labelType.lineHeight}px`,
+                  `${labelType.size}px / ${labelType.lineHeight}px`,
                   <code key="t">{labelType.name}</code>,
+                ],
+                [
+                  '文字（日文）',
+                  `${japaneseType.size}px / ${japaneseType.lineHeight}px`,
+                  `${japaneseType.size}px / ${japaneseType.lineHeight}px`,
+                  <code key="tj">{japaneseType.name}</code>,
                 ],
               ]}
               minWidth={620}
             />
             <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-              Figma 標示文字為 16px / 24px Medium 並帶 0.6px 字距。經確認採用既有的{' '}
-              <code>{labelType.name}</code> token，因此實作為 {labelType.size}px /{' '}
-              {labelType.lineHeight}px 且無字距。也因為行高變為 {labelType.lineHeight}，
-              高度改以固定 {layout.height}px 置中，而非由垂直內距推算。
+              Small 的寬度貼合內容，但不會小於 {layout.smallMinWidth}px——一排短標籤的按鈕
+              才不會參差不齊；內容比這個寬時就往外長。日文的字級小一階，由元件讀 App 的語系
+              自動切換，兩種 size 都適用。Outlined 的描邊是{' '}
+              <code>silverLinear</code> 漸層，寬度量自 Figma 的 2 倍匯出圖。
             </p>
           </section>
 
@@ -402,14 +381,14 @@ export default function ButtonPage() {
                   {
                     kind: 'do',
                     image: 'button-do-case1',
-                    alt: '主要行動用 primary、次要行動用 secondary 的按鈕組合範例',
-                    caption: '主要行動用 primary（此處搭配 emphasis accent），次要行動用 secondary，權重一眼可辨。',
+                    alt: '主要行動用 filled、次要行動用 outlined 的按鈕組合範例',
+                    caption: '主要行動用 filled，次要行動用 outlined，權重一眼可辨。',
                   },
                   {
                     kind: 'dont',
                     image: 'button-dont-case1',
-                    alt: '兩個按鈕都使用 primary 樣式的錯誤範例',
-                    caption: '兩個按鈕都用 primary，權重無法區分，使用者不知道哪一個才是主要行動。',
+                    alt: '兩個按鈕都使用 filled 樣式的錯誤範例',
+                    caption: '兩個按鈕都用 filled，權重無法區分，使用者不知道哪一個才是主要行動。',
                   },
                 ]}
               />
@@ -505,7 +484,7 @@ export default function ButtonPage() {
               <CodeBlock
                 code={`USpaceButton(
   label: '確認送出',
-  level: USpaceButtonLevel.primary,
+  style: USpaceButtonStyle.filled,
   size: USpaceButtonSize.regular,
   leadingIcon: const Icon(Icons.directions_car),
   onPressed: () {},
@@ -514,11 +493,10 @@ export default function ButtonPage() {
             </div>
             <div style={{ marginTop: 24 }}>
               <CodeBlock
-                title="用 emphasis 讓 primary 更醒目"
+                title="次要行動用 outlined"
                 code={`USpaceButton(
-  label: '確認',
-  level: USpaceButtonLevel.primary,
-  emphasis: USpaceButtonEmphasis.accent,
+  label: '再看看',
+  style: USpaceButtonStyle.outlined,
   onPressed: () {},
 )`}
               />
@@ -528,7 +506,7 @@ export default function ButtonPage() {
                 title="單側 icon + 明確 disabled"
                 code={`USpaceButton(
   label: '前往付款',
-  level: USpaceButtonLevel.secondary,
+  style: USpaceButtonStyle.outlined,
   size: USpaceButtonSize.small,
   state: USpaceButtonState.disabled,
   trailingIcon: const Icon(Icons.chevron_right),
@@ -545,18 +523,17 @@ export default function ButtonPage() {
                 headers={['參數', '型別', '預設', '說明']}
                 rows={[
                   [<code key="a">label</code>, 'String', '必填', '按鈕文字'],
-                  [<code key="b">level</code>, 'USpaceButtonLevel', 'primary', '3 種行動權重'],
                   [
-                    <code key="b2">emphasis</code>,
-                    'USpaceButtonEmphasis',
-                    'none',
-                    'primary 的文字色變化，對 secondary / tertiary 無效',
+                    <code key="b">style</code>,
+                    'USpaceButtonStyle',
+                    'filled',
+                    'filled 實心 / outlined 透明底加漸層描邊',
                   ],
                   [
                     <code key="c">size</code>,
                     'USpaceButtonSize',
                     'regular',
-                    'regular 滿寬 / small 貼合內容',
+                    `regular 滿寬高 ${layout.height} / small 高 ${layout.smallHeight}、貼合內容但不小於 ${layout.smallMinWidth}`,
                   ],
                   [<code key="d">state</code>, 'USpaceButtonState', 'enabled', 'disabled 時不可點擊'],
                   [<code key="e">leadingIcon</code>, 'Widget?', 'null', '文字左側 icon'],
@@ -565,6 +542,12 @@ export default function ButtonPage() {
                 ]}
                 minWidth={560}
               />
+              <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+                沒有語系參數。文字為 <code>{labelType.name}</code>（{labelType.size}/
+                {labelType.lineHeight}），元件自己讀 App 的語系，是日文就換成小一階的{' '}
+                <code>{japaneseType.name}</code>（{japaneseType.size}/{japaneseType.lineHeight}），
+                呼叫端不需要處理。
+              </p>
             </div>
           </section>
 
@@ -575,13 +558,12 @@ export default function ButtonPage() {
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
             <SpecTable
-              headers={['Level', 'Emphasis', 'State', 'Background', 'Border', 'Content']}
+              headers={['Style', 'State', 'Background', 'Border', 'Content']}
               rows={buttonSpec.variants.map((row) => [
-                String(row.level),
-                String(row.emphasis),
+                String(row.style),
                 String(row.state),
                 row.bg ? <code>{String(row.bg)}</code> : <span>transparent</span>,
-                row.border ? <code>{String(row.border)}</code> : <span>—</span>,
+                row.borderGradient ? <code>{String(row.borderGradient)}</code> : <span>—</span>,
                 <code key="c">{String(row.content)}</code>,
               ])}
               minWidth={720}

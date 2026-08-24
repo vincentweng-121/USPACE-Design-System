@@ -54,33 +54,27 @@ void main() {
 
   // ── Button ──────────────────────────────────────────────
   group('USpaceButton', () {
-    const levels = {
-      'primary': USpaceButtonLevel.primary,
-      'secondary': USpaceButtonLevel.secondary,
-      'tertiary': USpaceButtonLevel.tertiary,
-    };
-    const emphases = {
-      'none': USpaceButtonEmphasis.none,
-      'accent': USpaceButtonEmphasis.accent,
-      'charging': USpaceButtonEmphasis.charging,
+    const styles = {
+      'filled': USpaceButtonStyle.filled,
+      'outlined': USpaceButtonStyle.outlined,
     };
     const sizes = {
       'regular': USpaceButtonSize.regular,
       'small': USpaceButtonSize.small,
     };
-    final layout = readJson('tokens/components/button.json')['layout'] as Map<String, dynamic>;
+    final layout =
+        readJson('tokens/components/button.json')['layout'] as Map<String, dynamic>;
 
-    // 顏色不隨 size 改變，因此每個 style × emphasis × state 都在兩種 size 各驗一次
+    // 顏色不隨 size 改變，因此每個 style × state 都在兩種 size 各驗一次
     for (final v in variantsOf('button.json')) {
       for (final sizeKey in sizes.keys) {
-        final label = '${v['level']} / ${v['emphasis']} / $sizeKey / ${v['state']}';
+        final label = '${v['style']} / $sizeKey / ${v['state']}';
         testWidgets(label, (tester) async {
           await pump(
             tester,
             USpaceButton(
               label: 'Label',
-              level: levels[v['level']]!,
-              emphasis: emphases[v['emphasis']]!,
+              style: styles[v['style']]!,
               size: sizes[sizeKey]!,
               state: v['state'] == 'enabled'
                   ? USpaceButtonState.enabled
@@ -97,49 +91,149 @@ void main() {
                 .first,
           );
 
-          // 底色：null 代表透明
           expect(
             material.color,
             v['bg'] == null ? Colors.transparent : tokenColor(v['bg'] as String),
             reason: '$label 的底色應為 ${v['bg'] ?? '透明'}',
           );
 
-          // 描邊：只有 secondary 有
-          final shape = material.shape as StadiumBorder;
-          if (v['border'] == null) {
-            expect(shape.side.style, BorderStyle.none, reason: '$label 不應有描邊');
-          } else {
-            expect(
-              shape.side.color,
-              tokenColor(v['border'] as String),
-              reason: '$label 的描邊應為 ${v['border']}',
-            );
-          }
-
           final text = tester.widget<Text>(find.text('Label'));
           expect(
             text.style?.color,
             tokenColor(v['content'] as String),
-            reason: '$label 的文字色應為 ${v['content']}',
+            reason: '$label 的文字應為 ${v['content']}',
           );
 
-          // 高度固定 48，兩種 size 相同
+          // 漸層描邊由自訂的 painter 畫，不是 Material 的 shape。
+          // 比對型別名稱而不是「有沒有 foregroundPainter」——Material 與 InkWell
+          // 內部本來就會放自己的 CustomPaint，那樣會每次都判定為有描邊。
+          final hasGradientBorder = tester
+              .widgetList<CustomPaint>(find.descendant(
+                of: find.byType(USpaceButton),
+                matching: find.byType(CustomPaint),
+              ))
+              .any((p) =>
+                  p.foregroundPainter?.runtimeType.toString() ==
+                  '_GradientBorderPainter');
           expect(
-            tester.getSize(find.text('Label')).height <= (layout['height'] as num),
-            isTrue,
-            reason: '$label 的內容不應超過固定高度',
+            hasGradientBorder,
+            v['borderGradient'] != null,
+            reason: v['borderGradient'] == null
+                ? '$label 不應有漸層描邊'
+                : '$label 應有漸層描邊',
           );
         });
       }
     }
 
-    testWidgets('左右 icon 可各自省略', (tester) async {
+    // ── 尺寸 ──
+    testWidgets('regular 高度為規格檔的 height', (tester) async {
+      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
+      final size = tester.getSize(find.byType(USpaceButton));
+      expect(size.height, layout['height']);
+    });
+
+    testWidgets('small 高度為規格檔的 smallHeight', (tester) async {
       await pump(
         tester,
-        const USpaceButton(label: 'Label', leadingIcon: Icon(Icons.add)),
+        USpaceButton(
+          label: 'Label',
+          size: USpaceButtonSize.small,
+          onPressed: () {},
+        ),
       );
-      expect(find.byIcon(Icons.add), findsOneWidget);
-      expect(find.byType(Icon), findsOneWidget);
+      expect(
+        tester.getSize(find.byType(USpaceButton)).height,
+        layout['smallHeight'],
+        reason: 'small 由 48 改為 40',
+      );
+    });
+
+    testWidgets('small 短標籤仍不小於 smallMinWidth', (tester) async {
+      await pump(
+        tester,
+        USpaceButton(
+          label: 'OK',
+          size: USpaceButtonSize.small,
+          onPressed: () {},
+        ),
+      );
+      expect(
+        tester.getSize(find.byType(USpaceButton)).width,
+        greaterThanOrEqualTo((layout['smallMinWidth'] as num).toDouble()),
+        reason: '短標籤時撐到最小寬度，一排按鈕才不會參差不齊',
+      );
+    });
+
+    testWidgets('small 長標籤會超過最小寬度並貼合內容', (tester) async {
+      await pump(
+        tester,
+        USpaceButton(
+          label: '這是一個比較長的按鈕標籤',
+          size: USpaceButtonSize.small,
+          onPressed: () {},
+        ),
+      );
+      expect(
+        tester.getSize(find.byType(USpaceButton)).width,
+        greaterThan((layout['smallMinWidth'] as num).toDouble()),
+        reason: '內容比最小寬度長時要 hug，不是固定 112',
+      );
+    });
+
+    // ── 字級 ──
+    testWidgets('預設使用 labelL', (tester) async {
+      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
+      expect(
+        tester.widget<Text>(find.text('Label')).style?.fontSize,
+        AppTypographyExtension.light.labelL.fontSize,
+      );
+    });
+
+    // 只包最小的 Localizations 提供語系。用 MaterialApp 的 locale 會要求
+    // 對應的 MaterialLocalizations delegate，而預設那個只支援 en。
+    Future<void> pumpWithLocale(WidgetTester tester, String code) =>
+        tester.pumpWidget(
+          MaterialApp(
+            theme: USpaceTheme.light,
+            home: Localizations(
+              locale: Locale(code),
+              delegates: const [DefaultWidgetsLocalizations.delegate],
+              child: Center(child: USpaceButton(label: 'Label', onPressed: () {})),
+            ),
+          ),
+        );
+
+    testWidgets('日文改用小一階的 labelM', (tester) async {
+      await pumpWithLocale(tester, 'ja');
+      expect(
+        tester.widget<Text>(find.text('Label')).style?.fontSize,
+        AppTypographyExtension.light.labelM.fontSize,
+        reason: '日文字級小一階',
+      );
+    });
+
+    testWidgets('中文維持 labelL', (tester) async {
+      await pumpWithLocale(tester, 'zh');
+      expect(
+        tester.widget<Text>(find.text('Label')).style?.fontSize,
+        AppTypographyExtension.light.labelL.fontSize,
+        reason: '只有日文縮小，其他語系不受影響',
+      );
+    });
+
+    testWidgets('預設為 filled', (tester) async {
+      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
+      final material = tester.widget<Material>(
+        find
+            .descendant(of: find.byType(USpaceButton), matching: find.byType(Material))
+            .first,
+      );
+      expect(material.color, tokenColor('actionPrimaryBg'));
+      expect(
+        tester.widget<Text>(find.text('Label')).style?.color,
+        tokenColor('actionPrimaryContent'),
+      );
     });
 
     testWidgets('state=disabled 時不可點擊', (tester) async {
@@ -152,54 +246,8 @@ void main() {
           onPressed: () => taps++,
         ),
       );
-      await tester.tap(find.text('Label'));
+      await tester.tap(find.byType(USpaceButton));
       expect(taps, 0);
-    });
-
-    testWidgets('文字使用 displayM', (tester) async {
-      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
-      final text = tester.widget<Text>(find.text('Label'));
-      expect(text.style?.fontSize, AppTypographyExtension.light.displayM.fontSize);
-      expect(text.style?.fontWeight, AppTypographyExtension.medium);
-    });
-
-    // emphasis 是 primary 專用的文字色變化，不應外溢到其他層級
-    for (final level in [USpaceButtonLevel.secondary, USpaceButtonLevel.tertiary]) {
-      testWidgets('${level.name} 忽略 emphasis', (tester) async {
-        for (final e in USpaceButtonEmphasis.values) {
-          await pump(
-            tester,
-            USpaceButton(
-              label: 'Label',
-              level: level,
-              emphasis: e,
-              onPressed: () {},
-            ),
-          );
-          final text = tester.widget<Text>(find.text('Label'));
-          expect(
-            text.style?.color,
-            tokenColor(
-              level == USpaceButtonLevel.secondary
-                  ? 'actionSecondaryContent'
-                  : 'actionTertiaryContent',
-            ),
-            reason: '${level.name} 的文字色不應隨 emphasis=${e.name} 改變',
-          );
-        }
-      });
-    }
-
-    testWidgets('預設為 primary / emphasis none', (tester) async {
-      await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
-      final material = tester.widget<Material>(
-        find
-            .descendant(of: find.byType(USpaceButton), matching: find.byType(Material))
-            .first,
-      );
-      expect(material.color, tokenColor('actionPrimaryBg'));
-      final text = tester.widget<Text>(find.text('Label'));
-      expect(text.style?.color, tokenColor('actionPrimaryContent'));
     });
   });
 
