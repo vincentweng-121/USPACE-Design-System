@@ -579,3 +579,31 @@ code {
   font-size: 12px;
   opacity: 0.7;
 }
+
+/* ── 圓角的漸層描邊 ────────────────────────────────────────
+   border-image 會讓 border-radius 失效（畫出方角），而「外層漸層 +
+   內層填色」的做法會讓底色不再透明。這裡用 mask 挖掉中間，
+   描邊有圓角、內部維持透明。
+
+   用法：元素自己設 border-radius 與 --gradient-border 兩個變數。 */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--gradient-border-width, 3px);
+  background: var(--gradient-border);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}

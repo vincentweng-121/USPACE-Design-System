@@ -4,7 +4,7 @@
  *
  *   node tools/check-pages.mjs
  *
- * 擋四類會讓文件站前後不一致的問題：
+ * 擋五類會讓文件站前後不一致的問題：
  *
  * 1. 缺少必要區塊 / 順序不符
  *    每個元件頁都要有同樣的九個區塊。少一塊時讀者無從判斷是「還沒做」
@@ -22,6 +22,11 @@
  * 4. 頁面自己畫「可擺放 icon 的位置」
  *    這個佔位框只能有一份，來源是 spec.tsx 的 IconPlaceholder。各頁自己複製
  *    一份的話，尺寸與虛線間隔會慢慢走鐘；Button 與 Chip 就各有過一份。
+ *
+ * 5. 已知會畫錯的 CSS 寫法
+ *    這一類是「看起來會動、實際渲染錯」的陷阱，型別檢查與 lint 都抓不到，
+ *    只有人眼看得出來。目前收錄 border-image：它會讓 border-radius 失效，
+ *    圓角按鈕會變成方角——Button 的 outlined 就這樣上線過一次。
  *
  * 中性 = palette 名稱為 grey / white / black / transparent 開頭。
  */
@@ -43,6 +48,22 @@ const REQUIRED = [
   'Touch areas',
   'Usage',
   'Accessibility',
+];
+
+/**
+ * 已知會畫錯的 CSS 寫法。
+ *
+ * 收錄標準：型別檢查與 lint 都不會報錯、程式看起來合理，但渲染出來是錯的。
+ * 每一條都對應一次實際踩過的坑，不是預防性的猜測。
+ */
+const CSS_TRAPS = [
+  {
+    re: /borderImage\s*:/,
+    hint: '使用了 borderImage',
+    why:
+      'border-image 會讓 border-radius 失效，圓角變方角。\n' +
+      '    要畫圓角的漸層描邊請用 global.css 的 .gradient-border（以 mask 挖空，內部維持透明）',
+  },
 ];
 
 /** Configurations 區塊裡不該直接出現的顏色寫法 */
@@ -163,7 +184,15 @@ for (const file of files) {
     }
   }
 
-  // 3. 自己畫的 icon 佔位框
+  // 3. 已知會畫錯的 CSS 寫法
+  for (const { re, hint, why } of CSS_TRAPS) {
+    const hit = text.match(re);
+    if (hit) {
+      problems.push(`${file}\n    ${hint}：${hit[0]}\n    ${why}`);
+    }
+  }
+
+  // 4. 自己畫的 icon 佔位框
   //    虛線描邊是這個框的特徵；元件固定部件（關閉鈕、勾、箭頭）都是實線，不會誤判。
   if (/strokeDasharray/.test(text)) {
     problems.push(
@@ -172,7 +201,7 @@ for (const file of files) {
     );
   }
 
-  // 4. Configurations 的維度會不會渲染出非中性色
+  // 5. Configurations 的維度會不會渲染出非中性色
   const specName = SPEC_OF[file.replace('.tsx', '')];
   const spec = specName && specs.get(specName);
   if (spec) {
