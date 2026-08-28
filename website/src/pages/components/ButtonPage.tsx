@@ -62,6 +62,9 @@ function ButtonPreview({
   return (
     <button
       disabled={state === 'disabled'}
+      // 漸層描邊交給 .gradient-border 的 ::before 用 mask 畫。
+      // 不能用 border-image——它會讓 border-radius 失效，按鈕會變成方角。
+      className={v.borderGradient ? 'gradient-border' : undefined}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -74,11 +77,15 @@ function ButtonPreview({
         padding: isSmall ? `0 ${layout.smallPaddingX}px` : 0,
         borderRadius: 1000,
         background: colorOf(v.bg as string | null) ?? 'transparent',
-        // 描邊是 silverLinear 漸層，用 border-image 才畫得出來
-        border: v.borderGradient ? '3px solid transparent' : '3px solid transparent',
-        borderImage: v.borderGradient
-          ? `${(gradients as Record<string, string>)[v.borderGradient as string]} 1`
-          : undefined,
+        border: 'none',
+        ...(v.borderGradient
+          ? ({
+              '--gradient-border': (gradients as Record<string, string>)[
+                v.borderGradient as string
+              ],
+              '--gradient-border-width': '3px',
+            } as React.CSSProperties)
+          : {}),
         color: content,
         fontSize: type.size,
         lineHeight: `${type.lineHeight}px`,

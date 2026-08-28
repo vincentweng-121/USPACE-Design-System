@@ -11,6 +11,7 @@
 - **觸控目標最小尺寸統一為 `USpaceTouchTarget.minTarget`**（來源 `tokens/scalars.json` 的 `touch.minTarget`，2026-08-14 由 44 改為 40）。全元件通用，不要在元件裡各寫一個數字，也不要在文件裡寫死 px 值。視覺高度小於它的可點擊元件要外擴熱區補足。
 - **Chip 的 Small 只作為內容標籤，慣例上不可點擊**；Regular 兩種用法都支援。Small 同時也不支援兩側 icon。
 - **Chip 與 Tab(filter) 的分界**（2026-08-14 使用者確認）：`USpaceChip` 傳 `onTap` 後可點擊，用於**同一個頁面內的篩選條件，可以複選**；`USpaceTab` 的 `filter` type 是**點擊後切換分頁，因此只能單選**。判準是「選完之後還在不在同一頁」。兩者外觀相近，寫文件或選元件時先問這一句。
+- **不要用 `border-image` 畫描邊**：它會讓 `border-radius` 失效，圓角元件會變成方角——Button 的 outlined 就這樣上線過一次，型別檢查與 lint 都沒報錯。要畫圓角的漸層描邊用 `global.css` 的 `.gradient-border`（以 mask 挖空，內部維持透明）。`npm run check:pages` 會擋下。**這一類「看起來會動、實際渲染錯」的寫法，發現一個就往 `check-pages.mjs` 的 `CSS_TRAPS` 加一條**，否則下次還是靠人眼。
 - **可擺放 icon 的位置一律用虛線方框**：預覽裡凡是由使用者自行傳入、可替換的 icon 或圖形位置（Button 的 leading / trailing icon、Chip 的 leading icon、Tab 的 icon 與 graphic、Modal 的標題 icon 與提示 icon），一律用 `spec.tsx` 的 `<IconPlaceholder size={n} color={c} />`，**不畫任何具體圖示**——畫了星星或驚嘆號，讀者會以為那個圖示是規範的一部分。相對的，元件行為固定的圖示（關閉鈕的 ×、選取的勾、收合的箭頭）要照實畫，那是元件規範本身。頁面不得自行複製一份虛線方框，`npm run check:pages` 會擋下。
 - **說明圖一律明暗成對**：Figma artboard 以 `scale: 2` 匯出（960×700），檔名為 `<基底>-light.png` 與 `<基底>-dark.png`，**不做去背**，整張圖直接用。頁面只給基底名稱：`<AnatomyImage image="button-anatomy" />`。少補一版 `npm run check:assets` 會擋下。
 - **Sidebar 子項目規則**：Component 頁面若包含多種分類（例如 List Menu / Order History / Payment），**必須**拆成獨立子頁面，在 sidebar 以 `_ExpandableSubGroup` 呈現子項（同 Button 的做法）。路由 ID 格式：`<component>-<variant>`（例如 `list-menu`、`list-order`）。**禁止**將多種分類塞進同一頁。

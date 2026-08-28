@@ -11,6 +11,21 @@
 
 ---
 
+## v0.14.1 | 2026-08-25
+
+### 文件站 | 修正 outlined 按鈕變成方角
+狀態：PUBLISHED
+
+- v0.14.0 的預覽用 `border-image` 畫漸層描邊，而 **`border-image` 會讓
+  `border-radius` 失效**，outlined 按鈕在文件站上顯示成方角。
+  Flutter 元件本身沒有這個問題——它是自己畫 stroke 的，只有文件站的預覽受影響。
+- 改用 `global.css` 新增的 `.gradient-border`：以 `mask` 挖掉中間，
+  描邊有圓角、內部維持透明。「外層漸層 + 內層填色」的常見做法會讓底色不再透明，
+  而 outlined 的底確實是透明的，所以不採用。
+- **`check:pages` 新增第五類檢查 `CSS_TRAPS`**：收錄「型別檢查與 lint 都不會報錯、
+  但渲染出來是錯的」寫法，目前第一條就是 `border-image`。實際塞一個進去確認會被擋下。
+- 教訓寫進 `rules/LESSONS_LEARNED.md`，並註明往後發現同類寫法就往 `CSS_TRAPS` 加一條。
+
 ## v0.14.0 | 2026-08-24
 
 ### button.dart | 樣式收斂為 filled / outlined，移除 level 與 emphasis
