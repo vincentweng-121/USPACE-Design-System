@@ -129,7 +129,8 @@ export default function Markdown({ source }: { source: string }) {
           style={{
             margin: '12px 0',
             paddingLeft: 14,
-            borderLeft: '3px solid var(--border-divider)',
+            background: 'var(--surface-sunken)',
+            borderRadius: 8,
             color: 'var(--text-tertiary)',
           }}
         >

@@ -15,7 +15,7 @@ export default function TokenPipelinePage() {
         <SectionTitle>流程</SectionTitle>
         <div
           style={{
-            border: '1px solid var(--border-divider)',
+            boxShadow: 'var(--shadow-card)',
             borderRadius: 10,
             padding: '20px 24px',
             background: 'var(--page-secondary)',

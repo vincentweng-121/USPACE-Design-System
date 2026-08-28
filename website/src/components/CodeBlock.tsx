@@ -24,7 +24,7 @@ export default function CodeBlock({
   return (
     <div
       style={{
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         borderRadius: 10,
         overflow: 'hidden',
         background: 'var(--codeblock-bg)',

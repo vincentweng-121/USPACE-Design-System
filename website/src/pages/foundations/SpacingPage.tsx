@@ -15,7 +15,7 @@ export default function SpacingPage() {
         <SectionTitle>Margin</SectionTitle>
         <div style={{
           padding: '24px 20px', borderRadius: 16,
-          background: 'var(--page-secondary)', border: '1px solid var(--border-divider)' }}>
+          background: 'var(--page-secondary)', boxShadow: 'var(--shadow-card)', }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <div style={{
               width: margin.value, height: 60, borderRadius: 4,
@@ -36,7 +36,7 @@ export default function SpacingPage() {
         <SectionTitle>Spacer Scale</SectionTitle>
         <div style={{
           padding: '24px 20px', borderRadius: 16,
-          background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
+          background: 'var(--page-secondary)', boxShadow: 'var(--shadow-card)',
           display: 'flex', flexDirection: 'column', gap: 12 }}>
           {spacers.map(s => (
             <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -98,7 +98,7 @@ export default function SpacingPage() {
           {radii.map(r => (
             <div key={r.name} style={{
               padding: 20, borderRadius: 12,
-              background: 'var(--page-secondary)', border: '1px solid var(--border-divider)' }}>
+              background: 'var(--page-secondary)', boxShadow: 'var(--shadow-card)', }}>
               <div style={{
                 width: 64, height: 64, borderRadius: Math.min(r.value, 32),
                 border: '2px solid var(--accent-bg)',

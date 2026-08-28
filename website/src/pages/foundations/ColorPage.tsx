@@ -23,7 +23,7 @@ function ColorSwatch({ name, hex }: { name: string; hex: string }) {
     >
       <div style={{
         width: '100%', aspectRatio: '1', borderRadius: 10, background: hex,
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 11, color: isLight ? palette.grey800 : palette.white }}>
         {copied ? 'Copied!' : ''}
@@ -39,14 +39,14 @@ function SemanticRow({ name, light, dark }: { name: string; light: string; dark:
     <div style={{
       display: 'flex', flexWrap: 'wrap', alignItems: 'center',
       gap: '8px 16px', padding: '10px 0',
-      borderBottom: '1px solid var(--border-divider)' }}>
+ }}>
       <span style={{ fontSize: 14, minWidth: 160, flex: '1 0 160px' }}>{name}</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ width: 28, height: 28, borderRadius: 6, background: light, border: '1px solid var(--border-divider)', flexShrink: 0 }} />
+        <div style={{ width: 28, height: 28, borderRadius: 6, background: light, boxShadow: 'var(--shadow-card-sm)', flexShrink: 0 }} />
         <span style={{ fontSize: 11, color: 'var(--text-tertiary)', minWidth: 70 }}>Light</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ width: 28, height: 28, borderRadius: 6, background: dark, border: '1px solid var(--border-divider)', flexShrink: 0 }} />
+        <div style={{ width: 28, height: 28, borderRadius: 6, background: dark, boxShadow: 'var(--shadow-card-sm)', flexShrink: 0 }} />
         <span style={{ fontSize: 11, color: 'var(--text-tertiary)', minWidth: 70 }}>Dark</span>
       </div>
     </div>

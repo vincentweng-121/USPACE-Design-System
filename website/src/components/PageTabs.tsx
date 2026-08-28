@@ -71,9 +71,12 @@ export default function PageTabs({
           padding: mix(8, 5, p),
           borderRadius: 1000,
           background: 'var(--surface-sunken)',
-          border: '1px solid var(--border-divider)',
-          // 收縮後浮在內容上方，需要陰影把層級分開
-          boxShadow: p > 0.02 ? `0 4px 16px rgba(0, 0, 0, ${0.08 * p})` : 'none',
+          // 平時用淡陰影界定範圍（取代原本的外框），
+          // 收縮後浮在內容上方時再加強
+          boxShadow:
+            p > 0.02
+              ? `0 4px 16px rgba(0, 0, 0, ${0.08 * p})`
+              : 'var(--shadow-card-sm)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
         }}

@@ -40,11 +40,8 @@ export default function OverviewPage() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-            gap: 1,
-            background: 'var(--border-divider)',
-            border: '1px solid var(--border-divider)',
+            gap: 12,
             borderRadius: 10,
-            overflow: 'hidden',
           }}
         >
           <Stat value={paletteCount} label="基底色票" />
@@ -71,7 +68,7 @@ export default function OverviewPage() {
               key={b.title}
               style={{
                 padding: '20px 22px',
-                border: '1px solid var(--border-divider)',
+                boxShadow: 'var(--shadow-card)',
                 borderRadius: 10,
               }}
             >
@@ -91,7 +88,7 @@ export default function OverviewPage() {
         <h2 className="heading-lg" style={{ marginBottom: 24 }}>
           快速前往
         </h2>
-        <div style={{ display: 'grid', gap: 1, background: 'var(--border-divider)', border: '1px solid var(--border-divider)', borderRadius: 10, overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gap: 12, borderRadius: 10 }}>
           <Row to="/styles/color" title="Color" desc={`${paletteCount} 個基底色票、${semanticCount} 個語意 token`} />
           <Row to="/styles/typography" title="Typography" desc="PingFang TC 與 SF Pro 共兩套字體樣式" />
           <Row to="/components/button" title="Components" desc="10 個已完成元件，含用法準則與 API" />

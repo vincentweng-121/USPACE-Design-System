@@ -272,7 +272,7 @@ export default function DropdownMenuPage() {
                 padding: 'clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px)',
                 borderRadius: 12,
                 background: 'var(--page-secondary)',
-                border: '1px solid var(--border-divider)',
+                boxShadow: 'var(--shadow-card)',
                 marginBottom: 32,
               }}
             >

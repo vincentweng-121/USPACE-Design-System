@@ -18,7 +18,7 @@ export function Badge({ n }: { n: number }) {
         width: 26,
         height: 26,
         borderRadius: '50%',
-        border: '1px solid var(--border-strong)',
+        boxShadow: 'var(--shadow-card)',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -40,7 +40,7 @@ export function SpecBox({ children }: { children: React.ReactNode }) {
         padding: 'clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px)',
         borderRadius: 12,
         background: 'var(--page-secondary)',
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
       }}
     >
       {children}
@@ -120,7 +120,7 @@ export function Swatch({ token }: { token: string | null | undefined }) {
           borderRadius: 4,
           flexShrink: 0,
           background: colorOf(token),
-          border: '1px solid var(--border-divider)',
+          boxShadow: 'var(--shadow-card-sm)',
         }}
       />
       <code>{token}</code>
@@ -138,7 +138,7 @@ export function AnatomyFigure({ children }: { children: React.ReactNode }) {
         padding: 'clamp(32px, 6vw, 64px) 24px',
         borderRadius: 12,
         background: 'var(--page-secondary)',
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         marginBottom: 32,
       }}
     >
@@ -202,7 +202,7 @@ export function ConfidenceNote({ confidence, source }: { confidence?: string; so
         padding: '12px 16px',
         borderRadius: 8,
         background: 'var(--surface-sunken)',
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         marginBottom: 32,
       }}
     >
@@ -325,7 +325,7 @@ export function AnatomyImage({ image, alt }: { image: string; alt: string }) {
         padding: 24,
         borderRadius: 12,
         background: 'var(--page-secondary)',
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         marginBottom: 32,
         overflow: 'hidden',
       }}

@@ -26,7 +26,7 @@ function List({ kind, title, items }: { kind: 'do' | 'dont'; title: string; item
   return (
     <section
       style={{
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         borderRadius: 10,
         overflow: 'hidden',
         background: 'var(--page-secondary)',
