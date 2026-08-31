@@ -22,7 +22,7 @@ export default function GlassPage() {
           ].map(spec => (
             <div key={spec.label} style={{
               padding: 20, borderRadius: 12,
-              background: 'var(--page-secondary)', border: '1px solid var(--border-divider)' }}>
+              background: 'var(--page-secondary)', boxShadow: 'var(--shadow-card)', }}>
               <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>{spec.label}</div>
               <div style={{ fontSize: 16, color: 'var(--text-primary)', marginBottom: 8 }}>{spec.value}</div>
               <code>{spec.code}</code>

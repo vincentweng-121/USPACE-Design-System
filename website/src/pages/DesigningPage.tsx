@@ -81,7 +81,7 @@ function Stat({ value, label }: { value: number; label: string }) {
     <div
       style={{
         padding: '20px 20px 18px',
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         borderRadius: 10,
         background: 'var(--page-secondary)',
       }}
@@ -101,16 +101,16 @@ function Card({ to, title, desc }: { to: string; title: string; desc: string }) 
       style={{
         display: 'block',
         padding: '18px 20px',
-        border: '1px solid var(--border-divider)',
+        boxShadow: 'var(--shadow-card)',
         borderRadius: 10,
-        transition: 'border-color 0.12s, background 0.12s',
+        transition: 'box-shadow 0.12s, background 0.12s',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--border-strong)';
+        e.currentTarget.style.boxShadow = 'var(--shadow-overlay)';
         e.currentTarget.style.background = 'var(--page-secondary)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'var(--border-divider)';
+        e.currentTarget.style.boxShadow = 'var(--shadow-card)';
         e.currentTarget.style.background = 'transparent';
       }}
     >

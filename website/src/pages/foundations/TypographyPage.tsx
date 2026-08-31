@@ -19,7 +19,7 @@ export default function TypographyPage() {
                 key={s.name}
                 style={{
                   display: 'flex', flexWrap: 'wrap', alignItems: 'baseline',
-                  padding: '16px 0', borderBottom: '1px solid var(--border-divider)',
+                  padding: '16px 0',
                   gap: '8px 24px' }}
               >
                 <div style={{ minWidth: 140, flexShrink: 0 }}>

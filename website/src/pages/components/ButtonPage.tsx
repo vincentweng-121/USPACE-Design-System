@@ -144,7 +144,7 @@ function Swatch({ token }: { token: string | null }) {
           borderRadius: 4,
           flexShrink: 0,
           background: colorOf(token),
-          border: '1px solid var(--border-divider)',
+          boxShadow: 'var(--shadow-card)',
         }}
       />
       <code>{token}</code>
@@ -264,7 +264,7 @@ export default function ButtonPage() {
                 padding: 'clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px)',
                 borderRadius: 12,
                 background: 'var(--page-secondary)',
-                border: '1px solid var(--border-divider)',
+                boxShadow: 'var(--shadow-card)',
                 marginBottom: 32,
               }}
             >

@@ -77,6 +77,9 @@
   --toggle-bg: #F4F4F5;
 
   --shadow-overlay: 0 16px 48px rgba(14, 14, 16, 0.16);
+  /* 區塊用的柔和陰影。取代原本的 1px 外框——用浮起感分區，而不是畫線 */
+  --shadow-card: 0 1px 2px rgba(14, 14, 16, 0.04), 0 8px 28px rgba(14, 14, 16, 0.06);
+  --shadow-card-sm: 0 1px 2px rgba(14, 14, 16, 0.05), 0 2px 8px rgba(14, 14, 16, 0.05);
 }
 
 [data-theme='dark'] {
@@ -125,6 +128,8 @@
   --toggle-bg: #1F1F24;
 
   --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 28px rgba(0, 0, 0, 0.35);
+  --shadow-card-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 html,
@@ -207,7 +212,6 @@ code {
   font-size: 0.875em;
   color: var(--code-fg);
   background: var(--code-bg);
-  border: 1px solid var(--code-border);
   border-radius: 4px;
   padding: 1px 5px;
   white-space: nowrap;
@@ -229,9 +233,10 @@ code {
    ───────────────────────────────────────────────────────── */
 
 .spec-table {
-  border: 1px solid var(--border-divider);
   border-radius: 16px;
   overflow: hidden;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .spec-table > div {
@@ -250,7 +255,6 @@ code {
   font-weight: 400;
   color: var(--text-secondary);
   background: var(--surface-sunken);
-  border-bottom: 1px solid var(--border-divider);
   white-space: nowrap;
 }
 
@@ -258,7 +262,6 @@ code {
   padding: 16px 20px;
   vertical-align: top;
   color: var(--text-secondary);
-  border-bottom: 1px solid var(--border-divider);
 }
 
 /* 第一欄為主要內容 */
@@ -266,15 +269,9 @@ code {
   color: var(--text-primary);
 }
 
-/* 欄與欄之間的分隔線，最後一欄不畫 */
-.spec-table th:not(:last-child),
-.spec-table td:not(:last-child) {
-  border-right: 1px solid var(--border-divider);
-}
-
-/* 最後一列不畫底線，交給外框圓角收邊 */
-.spec-table tbody tr:last-child td {
-  border-bottom: none;
+/* 列與列改用極淡的交替底色區分，不畫線 */
+.spec-table tbody tr:nth-child(even) td {
+  background: var(--surface-sunken);
 }
 
 /* ── 明暗雙版圖片 ───────────────────────────────────────────
@@ -340,9 +337,9 @@ code {
   gap: 16px;
   padding: 16px;
   min-height: 480px;
-  border: 1px solid var(--border-divider);
   border-radius: 16px;
-  background: var(--page-secondary);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .playground-preview {
@@ -452,9 +449,10 @@ code {
    ───────────────────────────────────────────────────────── */
 
 .gantt {
-  border: 1px solid var(--border-divider);
   border-radius: 16px;
   overflow-x: auto;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .gantt-head,
@@ -463,11 +461,10 @@ code {
   grid-template-columns: 200px minmax(560px, 1fr);
   align-items: center;
   min-width: 760px;
-  border-bottom: 1px solid var(--border-divider);
 }
 
-.gantt-row:last-child {
-  border-bottom: none;
+.gantt-row:nth-child(even) {
+  background: var(--surface-sunken);
 }
 
 .gantt-head {
@@ -483,7 +480,6 @@ code {
   padding: 12px 16px;
   font-size: 14px;
   color: var(--text-primary);
-  border-right: 1px solid var(--border-divider);
 }
 
 .gantt-head .gantt-name {
@@ -510,11 +506,11 @@ code {
   padding: 12px 4px;
   text-align: center;
   font-size: 12px;
-  border-left: 1px solid var(--border-divider);
 }
 
-.gantt-week:first-child {
-  border-left: none;
+/* 週次改用交替底色分辨，不畫直線 */
+.gantt-week:nth-child(even) {
+  background: var(--surface-sunken);
 }
 
 /* 今天所在的那一週 */
@@ -526,18 +522,16 @@ code {
 
 .gantt-cell {
   height: 100%;
-  border-left: 1px solid var(--border-divider);
 }
 
-.gantt-cell:first-child {
-  border-left: none;
+.gantt-cell:nth-child(even) {
+  background: var(--surface-sunken);
 }
 
 .gantt-bar {
   grid-row: 1;
   margin: 0 4px;
   padding: 5px 10px;
-  border: 1px solid;
   border-radius: 999px;
   font-size: 12px;
   white-space: nowrap;
@@ -560,9 +554,10 @@ code {
   align-items: center;
   gap: 8px;
   padding: 7px 14px;
-  border: 1px solid var(--border-divider);
+  border: none;
   border-radius: 999px;
   background: var(--page-primary);
+  box-shadow: var(--shadow-card-sm);
   color: var(--text-secondary);
   font-family: inherit;
   font-size: 13px;
@@ -571,7 +566,6 @@ code {
 
 .gantt-filter[data-active='true'] {
   background: var(--text-primary);
-  border-color: var(--text-primary);
   color: var(--page-primary);
 }
 

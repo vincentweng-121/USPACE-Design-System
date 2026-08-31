@@ -19,7 +19,7 @@ function HeaderPreview({ type }: { type: (typeof types)[number] }) {
         style={{
           background: isFull ? semanticDark.pagePrimary : semanticDark.pageSecondary,
           borderRadius: isFull ? 12 : type === 'Floating' ? '24px 24px 12px 12px' : '20px 20px 12px 12px',
-          border: '1px solid var(--border-divider)',
+          boxShadow: 'var(--shadow-card)',
           overflow: 'hidden',
         }}
       >

@@ -49,7 +49,7 @@ export default function ListPage() {
             <SectionTitle>Configurations</SectionTitle>
             <div style={{
               padding: 'clamp(16px, 4vw, 32px)', borderRadius: 16, width: '100%',
-              background: 'var(--page-secondary)', border: '1px solid var(--border-divider)',
+              background: 'var(--page-secondary)', boxShadow: 'var(--shadow-card)',
               display: 'flex', flexDirection: 'column' as const, alignItems: 'center' }}>
               <div style={{ width: '100%', maxWidth: 400 }}>
               {/* Heading */}
