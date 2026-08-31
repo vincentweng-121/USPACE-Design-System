@@ -97,64 +97,52 @@ export function DoDontExamples({ items }: { items: DoDontExample[] }) {
 function ExampleCard({ kind, image, alt, caption }: DoDontExample) {
   const isDo = kind === 'do';
   const color = isDo ? 'var(--positive)' : 'var(--negative)';
-  const bg = isDo ? 'var(--positive-bg)' : 'var(--negative-bg)';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div
         style={{
-          border: `1px solid ${color}`,
+          position: 'relative',
           borderRadius: 12,
           overflow: 'hidden',
           background: 'var(--page-secondary)',
+          boxShadow: 'var(--shadow-card)',
         }}
       >
         {/* display 交給 .theme-*-only 決定，這裡不設，否則會蓋掉主題切換 */}
         <ThemedImage image={image} alt={alt} style={{ width: '100%', height: 'auto' }} />
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: 10,
-          padding: '12px 16px',
-          borderRadius: 10,
-          background: bg,
-        }}
-      >
+        {/* 是 Do 還是 Don't 由圖上的記號表達，不再另外開一個說明區塊 */}
         <span
           aria-hidden
           style={{
+            position: 'absolute',
+            right: 12,
+            bottom: 12,
             color,
-            flexShrink: 0,
-            width: 16,
-            height: 24,
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
           }}
         >
-          {isDo ? <CheckIcon /> : <CrossIcon />}
+          {isDo ? <CheckIcon size={32} /> : <CrossIcon size={32} />}
         </span>
-        <p className="text-sm" style={{ margin: 0, fontSize: 15, lineHeight: '24px', color }}>
-          <strong>{isDo ? 'Do' : "Don't"}</strong>　{caption}
-        </p>
       </div>
+      <p className="text-md text-muted" style={{ margin: 0 }}>
+        {caption}
+      </p>
     </div>
   );
 }
 
-function CheckIcon() {
+function CheckIcon({ size = 16 }: { size?: number }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
       <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" />
       <path d="M5 8.2l2.1 2.1L11 6.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
-function CrossIcon() {
+function CrossIcon({ size = 16 }: { size?: number }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
       <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" />
       <path d="M5.6 5.6l4.8 4.8M10.4 5.6l-4.8 4.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
