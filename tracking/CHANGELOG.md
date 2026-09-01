@@ -11,6 +11,20 @@
 
 ---
 
+## v0.16.2 | 2026-09-01
+
+### 文件網站 | States 區塊的示範改為橫向並排並置中
+狀態：PUBLISHED
+
+- Button 頁的 States：Enabled 在左、Disabled 在右，整組在容器內水平置中。
+  原本是上下堆疊且靠左。窄螢幕時仍會自動換行。
+- Dropdown Menu 頁的 States 沿用同一套邏輯，六個狀態橫向排列並置中。
+- Chip 頁的 States 表格移除重複的「Hover / Pressed」列——原本有兩列同名且
+  說法互相矛盾（一列寫「尚未定義」、一列寫「不適用」），保留「尚未定義」。
+- 僅為文件網站的呈現調整，元件程式碼與 token 未變動。
+
+---
+
 ## v0.16.1 | 2026-09-01
 
 ### button.dart | 修正 outlined disabled 的文字色

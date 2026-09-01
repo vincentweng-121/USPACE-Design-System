@@ -258,7 +258,6 @@ export default function ChipPage() {
                 ['可點擊（傳 onTap）', '外觀與純展示完全相同', `可點擊，觸控熱區垂直外擴至 ${touch.minTarget}px`],
                 ['選中 / 未選中', '目前用 style 與 level 表達，沒有獨立的選中狀態', '由呼叫端切換'],
                 ['Hover / Pressed', '尚未定義', '—'],
-                ['Hover / Pressed', '不適用', '—'],
                 ['Disabled', '不適用', '—'],
               ]}
               minWidth={620}
