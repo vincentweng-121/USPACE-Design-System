@@ -211,7 +211,7 @@ export default function ActionAreaPage() {
               alt="Gray 背景的動作區，內含主要與次要兩顆按鈕"
             />
 
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 <strong>Gray</strong>：讓按鈕與底下捲動的內容分開。淺色時是由下往上的灰色漸層，
                 深色時改為半透明的黑色遮罩——上圖示範的就是這一種，切換網站主題可以看到差異。
@@ -240,7 +240,7 @@ export default function ActionAreaPage() {
                 />
               )}
             />
-            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 10}}>
               按鈕在這裡只畫出底色、文字與高度，用來看版面關係。按鈕本身的規格
               （尺寸、狀態、icon 位置）在 Button 頁，這一頁不重複一份。
               上方那一列並排的格子，Figma 有兩格與三格兩種，寬度由容器平分。
@@ -284,7 +284,7 @@ export default function ActionAreaPage() {
               ])}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 10}}>
               Gray 依列數選漸層：單列用 <code>bottomBarGray1B</code>、多列用{' '}
               <code>bottomBarGray2B</code>，後者涵蓋範圍較高才蓋得住底下的內容。
               兩者都有明暗兩套，但形式不同：<strong>淺色是漸層</strong>（grey50 由透明到不透明，
@@ -306,7 +306,7 @@ export default function ActionAreaPage() {
               ]}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 16}}>
               Action Area 不接受點擊，也沒有 enabled / disabled。要停用某個行動時，
               停用那顆按鈕，不要停用整個區塊。
             </p>
@@ -364,7 +364,7 @@ export default function ActionAreaPage() {
           {/* ── 7. Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <p className="text-md text-muted" style={{ margin: 0 }}>
+            <p className="note" style={{ margin: 0 }}>
               Action Area 本身不可點擊，沒有觸控熱區。區塊裡每顆按鈕高{' '}
               {layout.buttonHeight}px，各自符合觸控目標建議值。按鈕之間留{' '}
               {layout.buttonGap}px，是為了避免手指誤觸隔壁那顆。
@@ -374,7 +374,7 @@ export default function ActionAreaPage() {
           {/* ── 8. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 <strong>放頁面最關鍵的那一兩個行動</strong>：這個位置是拇指最好按到的地方，
                 留給主要行動。次要的操作放在頁面內容裡。
@@ -401,7 +401,7 @@ export default function ActionAreaPage() {
           {/* ── 9. Accessibility ── */}
           <section className="section">
             <SectionTitle>Accessibility</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 區塊本身不是可操作的元素，讀屏軟體會直接讀到裡面的按鈕，不會多讀一層。
               </li>
@@ -512,7 +512,7 @@ export default function ActionAreaPage() {
                 ]}
                 minWidth={620}
               />
-              <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              <p className="note" style={{marginTop: 16}}>
                 沒有「按鈕數量」這個參數。Figma 變體名稱裡的 1 button／2 button／
                 1 button + 2 row 講的是你要放幾個 <code>children</code>，不是元件的設定。
               </p>
@@ -521,7 +521,7 @@ export default function ActionAreaPage() {
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="text-sm text-muted" style={{ margin: '0 0 16px' }}>
+            <p className="note" style={{ margin: '0 0 16px' }}>
               此表由 <code>tokens/components/action_area.json</code> 產生，
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
@@ -540,7 +540,7 @@ export default function ActionAreaPage() {
 
           <section className="section">
             <SectionTitle>Notes</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 <strong>Figma 上這個元件叫 BottomBar</strong>：2026-08-17 經使用者確認，
                 正式名稱為 Action Area，文件站原本的 Bottom Bar 項目已移除，

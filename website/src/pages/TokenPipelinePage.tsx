@@ -60,7 +60,7 @@ export default function TokenPipelinePage() {
         <h3 className="heading-md" style={{ marginTop: 8, marginBottom: 12 }}>
           改一個色票的值
         </h3>
-        <p className="text-md text-muted" style={{ marginBottom: 16 }}>
+        <p className="note" style={{ marginBottom: 16 }}>
           只改 <code>palette.json</code> 對應的 <code>value</code>。
           所有引用該色票的語意色、Flutter 端與本站會一起更新。
         </p>
@@ -73,7 +73,7 @@ export default function TokenPipelinePage() {
         <h3 className="heading-md" style={{ marginTop: 32, marginBottom: 12 }}>
           新增一個語意色 token
         </h3>
-        <p className="text-md text-muted" style={{ marginBottom: 16 }}>
+        <p className="note" style={{ marginBottom: 16 }}>
           在 <code>semantic-colors.json</code> 對應的群組加一行。建構子、欄位、
           <code>copyWith</code>、<code>lerp</code> 都會自動補齊。
         </p>
@@ -82,7 +82,7 @@ export default function TokenPipelinePage() {
           title="tokens/semantic-colors.json"
           code={`"shadowDefault": { "light": "transparentBlack10", "dark": "transparentBlack10" }`}
         />
-        <p className="text-sm" style={{ marginTop: 12, color: 'var(--text-tertiary)' }}>
+        <p className="note" style={{marginTop: 12}}>
           <code>light</code> 與 <code>dark</code> 的值必須是 <code>palette.json</code> 裡
           存在的色票名稱，不存在時產生器會直接報錯。
         </p>
@@ -90,7 +90,7 @@ export default function TokenPipelinePage() {
 
       <section className="section">
         <SectionTitle>防止漂移</SectionTitle>
-        <p className="text-md text-muted">
+        <p className="note">
           產出的檔案檔頭都有 <code>⚠️ GENERATED FILE</code> 標記。
           CI 每次都會執行 <code>npm run check:tokens</code> 比對，
           有人手改產生檔就會擋下部署。

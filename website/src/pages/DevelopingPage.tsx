@@ -13,7 +13,7 @@ export default function DevelopingPage() {
 
       <section className="section">
         <SectionTitle>交付方式</SectionTitle>
-        <p className="text-md text-muted">
+        <p className="note">
           所有程式碼放在 repo 的 <code>styles/</code> 目錄，直接取用即可。
           目前不透過 pub.dev 發佈；repo 根目錄的 <code>pubspec.yaml</code> 只是為了讓
           CI 能執行靜態分析與測試。
@@ -35,7 +35,7 @@ export default function DevelopingPage() {
             ]}
           />
         </div>
-        <p className="text-sm" style={{ marginTop: 12, color: 'var(--text-tertiary)' }}>
+        <p className="note" style={{marginTop: 12}}>
           標示「否」的檔案由 <code>tokens/*.json</code> 產生，檔頭有 GENERATED 標記。
           手改會在下次產生時被覆蓋，CI 也會擋下。
         </p>
@@ -49,7 +49,7 @@ export default function DevelopingPage() {
           code={`git clone https://github.com/vincentweng-121/USPACE-Design-System.git
 cp -R USPACE-Design-System/styles your_app/lib/styles`}
         />
-        <p className="text-sm" style={{ marginTop: 12, color: 'var(--text-tertiary)' }}>
+        <p className="note" style={{marginTop: 12}}>
           字體檔（PingFang TC / SF Pro）為系統字體，iOS 與 macOS 內建；
           Android 與 Web 需另行提供對應字體，否則會回退到系統預設。
         </p>

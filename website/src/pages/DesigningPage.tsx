@@ -55,7 +55,7 @@ export default function DesigningPage() {
 
       <section className="section">
         <SectionTitle>變更設計時</SectionTitle>
-        <div className="text-md text-muted" style={{ display: 'grid', gap: 12 }}>
+        <div className="note-list" style={{ display: 'grid', gap: 12 }}>
           <p>
             所有色票與字級都來自 Figma Variables，經由{' '}
             <code>tokens/*.json</code> 產生給 Flutter 與這個網站使用。

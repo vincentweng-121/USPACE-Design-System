@@ -237,7 +237,7 @@ export default function ChipPage() {
               ])}
               minWidth={560}
             />
-            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 10}}>
               文字與 icon 一律是 <code>{String(variantOf('filled', 'accent').content)}</code>，
               不隨 style 或 level 改變。顏色差異只在容器：filled 依 level 上底色，
               outlined 改為透明底加一圈 <code>{String(variantOf('outlined', 'accent').border)}</code>{' '}
@@ -263,7 +263,7 @@ export default function ChipPage() {
               ]}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 16}}>
               可點擊與純展示的外觀完全一樣，差別只在有沒有傳 <code>onTap</code>。
               目前沒有獨立的「選中」狀態——篩選條件被選取時，由呼叫端切換 style 或 level
               來表達（例如未選用 outlined、選中改 filled）。Figma 尚未畫選中狀態，
@@ -330,7 +330,7 @@ export default function ChipPage() {
               ]}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 16}}>
               Small 兩側都不支援 icon，因此沒有「有 icon」的內距——widget 收到也會忽略。
               Trailing 側的內距 {layout.regularPaddingWithTrailingIcon} 是 leading 規則的鏡像推導，
               Figma 尚未畫 trailing 版本，待設計稿產出後校對。垂直內距 {layout.paddingY}px 是 Figma 的元件特定值，spacing token 沒有
@@ -342,7 +342,7 @@ export default function ChipPage() {
           {/* ── 7. Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <p className="text-md text-muted" style={{ margin: 0 }}>
+            <p className="note" style={{ margin: 0 }}>
               純展示的 Chip 沒有觸控熱區。傳了 <code>onTap</code> 之後，熱區會垂直外擴到{' '}
               {touch.minTarget}px——Regular 視覺上只有 {layout.heightRegular}px、Small
               只有 {layout.heightSmall}px，遠低於觸控目標建議值，不外擴會很難點。
@@ -354,7 +354,7 @@ export default function ChipPage() {
           {/* ── 8. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 <strong>什麼時候用 Chip、什麼時候用 Tab</strong>：Chip 是
                 <strong>同一個頁面內的篩選條件，可以複選</strong>——選了之後畫面上的內容被篩選，
@@ -391,7 +391,7 @@ export default function ChipPage() {
           {/* ── 9. Accessibility ── */}
           <section className="section">
             <SectionTitle>Accessibility</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 純展示的 Chip 讀屏軟體只會讀到文字，不會被當成按鈕朗讀；傳了{' '}
                 <code>onTap</code> 之後才是可操作的元素。
@@ -526,7 +526,7 @@ USpaceChip(
                 ]}
                 minWidth={560}
               />
-              <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              <p className="note" style={{marginTop: 16}}>
                 不傳 <code>onTap</code> 時完全不包 GestureDetector，維持純展示標籤的行為；
                 版面上也不會佔用外擴的 {touch.minTarget}px。
               </p>
@@ -535,7 +535,7 @@ USpaceChip(
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="text-sm text-muted" style={{ margin: '0 0 16px' }}>
+            <p className="note" style={{ margin: '0 0 16px' }}>
               此表由 <code>tokens/components/chip.json</code> 產生，
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
@@ -555,7 +555,7 @@ USpaceChip(
 
           <section className="section">
             <SectionTitle>Notes</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 <strong>small 沒有 leading icon</strong>：Figma 的元件只畫了 regular 的 icon 版本。
                 widget 收到 <code>leadingIcon</code> 但 size 為 small 時會直接忽略，

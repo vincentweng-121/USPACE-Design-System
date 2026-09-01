@@ -14,7 +14,7 @@ export default function FlutterSetupPage() {
 
       <section className="section">
         <SectionTitle>一行 import</SectionTitle>
-        <p className="text-md text-muted">
+        <p className="note">
           barrel file 匯出所有 token 與元件，不需要逐一 import。
         </p>
         <div style={{ marginTop: 16 }}>
@@ -24,7 +24,7 @@ export default function FlutterSetupPage() {
 
       <section className="section">
         <SectionTitle>接上主題</SectionTitle>
-        <p className="text-md text-muted">
+        <p className="note">
           最簡單的做法是直接使用 <code>USpaceTheme</code>：
         </p>
         <div style={{ marginTop: 16 }}>
@@ -39,7 +39,7 @@ export default function FlutterSetupPage() {
           />
         </div>
 
-        <p className="text-md text-muted" style={{ marginTop: 24 }}>
+        <p className="note" style={{ marginTop: 24 }}>
           App 已經有自己的 <code>ThemeData</code> 時，改用{' '}
           <code>extensionsFor</code> 只併入需要的部分：
         </p>
@@ -55,7 +55,7 @@ export default function FlutterSetupPage() {
 
       <section className="section">
         <SectionTitle>取用 token</SectionTitle>
-        <p className="text-md text-muted">
+        <p className="note">
           主題接上後，透過 <code>BuildContext</code> 取得色票與字體：
         </p>
         <div style={{ marginTop: 16 }}>

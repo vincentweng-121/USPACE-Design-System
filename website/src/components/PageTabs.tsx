@@ -71,12 +71,7 @@ export default function PageTabs({
           padding: mix(8, 5, p),
           borderRadius: 1000,
           background: 'var(--surface-sunken)',
-          // 平時用淡陰影界定範圍（取代原本的外框），
-          // 收縮後浮在內容上方時再加強
-          boxShadow:
-            p > 0.02
-              ? `0 4px 16px rgba(0, 0, 0, ${0.08 * p})`
-              : 'var(--shadow-card-sm)',
+          boxShadow: 'var(--shadow-tabs)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
         }}
@@ -96,7 +91,7 @@ export default function PageTabs({
                 border: 'none',
                 borderRadius: 1000,
                 background: isActive ? 'var(--page-primary)' : 'transparent',
-                boxShadow: isActive ? '0 1px 3px rgba(0, 0, 0, 0.08)' : 'none',
+                boxShadow: isActive ? 'var(--shadow-tabs)' : 'none',
                 color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
                 font: 'inherit',
                 fontSize: mix(17, 14, p),

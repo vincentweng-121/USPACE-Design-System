@@ -192,7 +192,7 @@ export default function DropdownMenuPage() {
                 { name: '帶提示文字', desc: '下方多一行 Hint。必填未填與驗證失敗時一定會出現，此時是紅字。' },
               ]}
             />
-            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 10}}>
               這張圖講的是<strong>組成</strong>——哪些部位會出現。六種 status 各自的顏色與行為
               在下方的 States 區塊。
             </p>
@@ -253,7 +253,7 @@ export default function DropdownMenuPage() {
               ])}
               minWidth={860}
             />
-            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 10}}>
               底色、Label 與 Chevron 六種狀態都相同，真正變動的只有內容文字色、描邊與 hint。
               描邊只有 selecting 有，hint 只有 incomplete 與 error 有——「—」代表該狀態沒有這個部位，
               不是還沒填。
@@ -298,7 +298,7 @@ export default function DropdownMenuPage() {
               ]}
               minWidth={720}
             />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 16}}>
               incomplete、error 與 nonEditable 點擊不會展開，這是元件內建的行為，
               呼叫端不需要另外擋。狀態由呼叫端依表單的驗證結果指定，元件本身不會自己
               從 default 變成 complete。
@@ -362,7 +362,7 @@ export default function DropdownMenuPage() {
               ]}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 16}}>
               展開後的選單面板（圓角 20、內距 16 / 20、項目間距 8）不在這次比對的 Figma
               node 內，該 node 只畫了六個收合狀態。面板數值沿用既有實作，尚未比對 Figma。
             </p>
@@ -375,7 +375,7 @@ export default function DropdownMenuPage() {
               expects="dropdown-menu-toucharea"
               note={`標出觸控熱區範圍，並確認展開後的選項列是否達到 ${touch.minTarget}px 最小建議值。`}
             />
-            <p className="text-md text-muted" style={{ margin: 0 }}>
+            <p className="note" style={{ margin: 0 }}>
               輸入列高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。整條輸入列都是
               熱區，不只 Chevron。
             </p>
@@ -384,7 +384,7 @@ export default function DropdownMenuPage() {
           {/* ── 8. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 <strong>與 TextField 共用視覺語言</strong>：同樣的高度 {layout.height}px 與
                 Stadium 圓角，同一張表單裡兩者並排時對得齊。
@@ -411,7 +411,7 @@ export default function DropdownMenuPage() {
           {/* ── 9. Accessibility ── */}
           <section className="section">
             <SectionTitle>Accessibility</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>輸入列高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。</li>
               <li>
                 nonEditable、incomplete 與 error 同時關閉展開行為，不會出現「看起來能點卻沒反應」
@@ -515,7 +515,7 @@ export default function DropdownMenuPage() {
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="text-sm text-muted" style={{ margin: '0 0 16px' }}>
+            <p className="note" style={{ margin: '0 0 16px' }}>
               此表由 <code>tokens/components/dropdown_menu.json</code> 產生，
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
@@ -536,7 +536,7 @@ export default function DropdownMenuPage() {
 
           <section className="section">
             <SectionTitle>Notes</SectionTitle>
-            <ul className="text-md text-muted" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
                 <strong>2026-08-14 導入時修正六處</strong>：補上 nonEditable 狀態；chevron 由
                 contentSecondary 改為 contentTertiary；selecting 補上 inputBorderActive 邊框；

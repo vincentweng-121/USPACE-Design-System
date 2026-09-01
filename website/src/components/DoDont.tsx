@@ -84,7 +84,9 @@ export function DoDontExamples({ items }: { items: DoDontExample[] }) {
       style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: 16,
+        // 卡片之間留寬一點；圖片跟著欄寬等比縮小，
+        // 整組的左右邊界仍對齊頁面內容的邊界
+        gap: 32,
       }}
     >
       {items.map((item, i) => (
@@ -99,7 +101,7 @@ function ExampleCard({ kind, image, alt, caption }: DoDontExample) {
   const color = isDo ? 'var(--positive)' : 'var(--negative)';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div
         style={{
           position: 'relative',
@@ -125,26 +127,39 @@ function ExampleCard({ kind, image, alt, caption }: DoDontExample) {
           {isDo ? <CheckIcon size={32} /> : <CrossIcon size={32} />}
         </span>
       </div>
-      <p className="text-md text-muted" style={{ margin: 0 }}>
+      {/* 置中、字級與色階都在 .note 裡，不在這裡重複 */}
+      <p className="note" style={{ margin: 0 }}>
         {caption}
       </p>
     </div>
   );
 }
 
+/* 實心：整個圓填滿，符號留白挖出來——疊在圖片上時比線稿清楚 */
 function CheckIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M5 8.2l2.1 2.1L11 6.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="8" cy="8" r="8" fill="currentColor" />
+      <path
+        d="M4.6 8.2l2.3 2.3L11.4 6"
+        stroke="var(--page-primary)"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 function CrossIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M5.6 5.6l4.8 4.8M10.4 5.6l-4.8 4.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="8" cy="8" r="8" fill="currentColor" />
+      <path
+        d="M5.4 5.4l5.2 5.2M10.6 5.4l-5.2 5.2"
+        stroke="var(--page-primary)"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

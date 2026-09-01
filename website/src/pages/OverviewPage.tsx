@@ -75,7 +75,7 @@ export default function OverviewPage() {
               <div className="heading-sm" style={{ marginBottom: 8 }}>
                 {b.title}
               </div>
-              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+              <p className="note" style={{color: 'var(--text-secondary)'}}>
                 {b.desc}
               </p>
             </div>

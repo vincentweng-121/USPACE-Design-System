@@ -247,7 +247,7 @@ export default function ButtonPage() {
               ])}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 10, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 10}}>
               Filled 用底色區分狀態，Outlined 一律是透明底加{' '}
               <code>silverLinear</code> 漸層描邊，disabled 時只改文字色。
               描邊是漸層而非單色，所以記在規格檔的 <code>borderGradient</code> 欄位。
@@ -278,15 +278,7 @@ export default function ButtonPage() {
                   <div className="heading-sm" style={{ marginBottom: 2 }}>
                     {cap(stt)}
                   </div>
-                  <div
-                    className="text-sm"
-                    style={{ color: 'var(--text-tertiary)', marginBottom: 16 }}
-                  >
-                    {stt === 'enabled'
-                      ? '可點擊，兩種樣式呈現自身配色'
-                      : '不可點擊。Filled 換成 disabled 底色，Outlined 只改文字色'}
-                  </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 16 }}>
                     {styles.map((s) => (
                       <ButtonPreview
                         key={s}
@@ -313,10 +305,6 @@ export default function ButtonPage() {
               ]}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
-              傳入 <code>onPressed: null</code> 也會進入 disabled，與明確設定 <code>state</code>{' '}
-              效果相同，兩者取聯集。
-            </p>
           </section>
 
           {/* ── 7. Measurements ── */}
@@ -362,7 +350,7 @@ export default function ButtonPage() {
               ]}
               minWidth={620}
             />
-            <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{marginTop: 16}}>
               Small 的寬度貼合內容，但不會小於 {layout.smallMinWidth}px——一排短標籤的按鈕
               才不會參差不齊；內容比這個寬時就往外長。日文的字級小一階，由元件讀 App 的語系
               自動切換，兩種 size 都適用。Outlined 的描邊是{' '}
@@ -382,7 +370,8 @@ export default function ButtonPage() {
           {/* ── 9. Usage ── */}
           <section className="section">
             <SectionTitle>Usage</SectionTitle>
-            <div style={{ display: 'grid', gap: 32 }}>
+            {/* 組與組之間也拉開一倍，免得三組 Do/Don't 黏成一片 */}
+            <div style={{ display: 'grid', gap: 64 }}>
               <DoDontExamples
                 items={[
                   {
@@ -437,10 +426,7 @@ export default function ButtonPage() {
           {/* ── 10. Accessibility ── */}
           <section className="section">
             <SectionTitle>Accessibility</SectionTitle>
-            <ul
-              className="text-md text-muted"
-              style={{ paddingLeft: 20, display: 'grid', gap: 10 }}
-            >
+            <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>固定高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。</li>
               <li>disabled 同時移除點擊行為，不會出現「看起來不能按卻按得下去」的狀況。</li>
               <li>icon 為裝飾性元素，語意由文字承載，讀屏軟體只會讀到 label。</li>
@@ -451,34 +437,42 @@ export default function ButtonPage() {
           {/* ── 11. Edge cases（本頁專屬，接在必要區塊之後）── */}
           <section className="section">
             <SectionTitle>Edge cases</SectionTitle>
-            <p className="text-md text-muted" style={{ margin: '0 0 24px' }}>
-              實際畫面上比較容易踩到的兩種情況，設計稿已經定義了處理方式。
-            </p>
 
-            <h3 className="heading-md" style={{ margin: '0 0 12px' }}>
-              同一份列表裡混著可按與不可按
-            </h3>
-            <AnatomyImage
-              image="button-edge-case1"
-              alt="停車位列表中，已被預約的那一列整列淡化且按鈕為 disabled，可預約的那一列維持深色可按"
-            />
-            <p className="text-md text-muted" style={{ margin: '0 0 32px' }}>
-              不可選的項目，整列連同按鈕一起淡化，不是只把按鈕改成 disabled。
-              使用者掃過去時判斷的是「這一整列不能選」，而不是「這顆按鈕壞了」。
-            </p>
+            {/* 間距與圖說的處理與 Usage 的 Do/Don't 一致 */}
+            <div style={{ display: 'grid', gap: 64 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <h3 className="heading-md" style={{ margin: 0 }}>
+                  同一份列表裡混著可按與不可按
+                </h3>
+                <AnatomyImage
+                  flush
+                  image="button-edge-case1"
+                  alt="停車位列表中，已被預約的那一列整列淡化且按鈕為 disabled，可預約的那一列維持深色可按"
+                />
+                <p className="note" style={{margin: 0, textAlign: 'center'}}
+                >
+                  不可選的項目，整列連同按鈕一起淡化，不是只把按鈕改成 disabled。
+                  使用者掃過去時判斷的是「這一整列不能選」，而不是「這顆按鈕壞了」。
+                </p>
+              </div>
 
-            <h3 className="heading-md" style={{ margin: '0 0 12px' }}>
-              標籤過長
-            </h3>
-            <AnatomyImage
-              image="button-edge-case2"
-              alt="標籤文字過長的按鈕，文字在單行內截斷並以刪節號結尾"
-            />
-            <p className="text-md text-muted" style={{ margin: 0 }}>
-              過長的標籤<strong>單行截斷並加刪節號</strong>，不換行、也不把按鈕撐高。
-              元件已經內建這個行為，呼叫端不需要自己截字。不過截掉的字讀者就看不到了，
-              按鈕文字本來就該短——會被截斷代表文案需要重寫，而不是靠截斷解決。
-            </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <h3 className="heading-md" style={{ margin: 0 }}>
+                  標籤過長
+                </h3>
+                <AnatomyImage
+                  flush
+                  image="button-edge-case2"
+                  alt="標籤文字過長的按鈕，文字在單行內截斷並以刪節號結尾"
+                />
+                <p className="note" style={{margin: 0, textAlign: 'center'}}
+                >
+                  過長的標籤<strong>單行截斷並加刪節號</strong>，不換行、也不把按鈕撐高。
+                  元件已經內建這個行為，呼叫端不需要自己截字。不過截掉的字讀者就看不到了，
+                  按鈕文字本來就該短——會被截斷代表文案需要重寫，而不是靠截斷解決。
+                </p>
+              </div>
+            </div>
           </section>
         </div>
       )}
@@ -549,7 +543,7 @@ export default function ButtonPage() {
                 ]}
                 minWidth={560}
               />
-              <p className="text-sm" style={{ marginTop: 16, color: 'var(--text-tertiary)' }}>
+              <p className="note" style={{marginTop: 16}}>
                 沒有語系參數。文字為 <code>{labelType.name}</code>（{labelType.size}/
                 {labelType.lineHeight}），元件自己讀 App 的語系，是日文就換成小一階的{' '}
                 <code>{japaneseType.name}</code>（{japaneseType.size}/{japaneseType.lineHeight}），
@@ -560,7 +554,7 @@ export default function ButtonPage() {
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="text-sm text-muted" style={{ margin: '0 0 16px' }}>
+            <p className="note" style={{ margin: '0 0 16px' }}>
               此表由 <code>tokens/components/button.json</code> 產生，
               並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
             </p>
