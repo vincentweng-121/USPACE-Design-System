@@ -313,16 +313,7 @@ export function ThemedImage({
  * 容器高度固定 400，寬度隨版面延伸，圖片置中。圖片是 Figma 的
  * @2x 匯出（960×700），以一半的 CSS 尺寸呈現，在高解析度螢幕上才清晰。
  */
-export function AnatomyImage({
-  image,
-  alt,
-  flush = false,
-}: {
-  image: string;
-  alt: string;
-  /** 由外層的 gap 控制間距時設 true，否則會與內建的下留白疊加 */
-  flush?: boolean;
-}) {
+export function AnatomyImage({ image, alt }: { image: string; alt: string }) {
   return (
     <div
       style={{
@@ -335,7 +326,7 @@ export function AnatomyImage({
         borderRadius: 12,
         background: 'var(--page-secondary)',
         boxShadow: 'var(--shadow-card)',
-        marginBottom: flush ? 0 : 32,
+        marginBottom: 32,
         overflow: 'hidden',
       }}
     >

@@ -71,7 +71,8 @@ function List({ kind, title, items }: { kind: 'do' | 'dont'; title: string; item
 
 // ── Usage 區塊的 Do / Don't 圖例：截圖 + 說明 ──
 export type DoDontExample = {
-  kind: 'do' | 'dont';
+  /** 不給就不畫勾叉記號——Edge cases 這類不是對錯對照的圖例 */
+  kind?: 'do' | 'dont';
   /** 不含 -light / -dark 與副檔名的基底名稱 */
   image: string;
   alt: string;
@@ -79,6 +80,11 @@ export type DoDontExample = {
 };
 
 export function DoDontExamples({ items }: { items: DoDontExample[] }) {
+  return <ExampleGrid items={items} />;
+}
+
+/** 一排兩張圖的圖例格線。Usage 與 Edge cases 共用同一套版面與圖說樣式 */
+export function ExampleGrid({ items }: { items: DoDontExample[] }) {
   return (
     <div
       style={{
@@ -113,19 +119,22 @@ function ExampleCard({ kind, image, alt, caption }: DoDontExample) {
       >
         {/* display 交給 .theme-*-only 決定，這裡不設，否則會蓋掉主題切換 */}
         <ThemedImage image={image} alt={alt} style={{ width: '100%', height: 'auto' }} />
-        {/* 是 Do 還是 Don't 由圖上的記號表達，不再另外開一個說明區塊 */}
-        <span
-          aria-hidden
-          style={{
-            position: 'absolute',
-            right: 12,
-            bottom: 12,
-            color,
-            display: 'flex',
-          }}
-        >
-          {isDo ? <CheckIcon size={32} /> : <CrossIcon size={32} />}
-        </span>
+        {/* 是 Do 還是 Don't 由圖上的記號表達，不再另外開一個說明區塊。
+            沒有 kind 的圖例（例如 Edge cases）不畫記號 */}
+        {kind && (
+          <span
+            aria-hidden
+            style={{
+              position: 'absolute',
+              right: 12,
+              bottom: 12,
+              color,
+              display: 'flex',
+            }}
+          >
+            {isDo ? <CheckIcon size={32} /> : <CrossIcon size={32} />}
+          </span>
+        )}
       </div>
       {/* 置中、字級與色階都在 .note 裡，不在這裡重複 */}
       <p className="note" style={{ margin: 0 }}>
