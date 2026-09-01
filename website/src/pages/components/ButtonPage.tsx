@@ -1,7 +1,7 @@
 import SectionTitle from '../../components/SectionTitle';
 import PageTabs, { usePageTab } from '../../components/PageTabs';
 import PageHero from '../../components/PageHero';
-import { DoDontExamples } from '../../components/DoDont';
+import { DoDontExamples, ExampleGrid } from '../../components/DoDont';
 import CodeBlock from '../../components/CodeBlock';
 import SpecTable from '../../components/SpecTable';
 import {
@@ -438,41 +438,23 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>Edge cases</SectionTitle>
 
-            {/* 間距與圖說的處理與 Usage 的 Do/Don't 一致 */}
-            <div style={{ display: 'grid', gap: 64 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <h3 className="heading-md" style={{ margin: 0 }}>
-                  同一份列表裡混著可按與不可按
-                </h3>
-                <AnatomyImage
-                  flush
-                  image="button-edge-case1"
-                  alt="停車位列表中，已被預約的那一列整列淡化且按鈕為 disabled，可預約的那一列維持深色可按"
-                />
-                <p className="note" style={{margin: 0, textAlign: 'center'}}
-                >
-                  不可選的項目，整列連同按鈕一起淡化，不是只把按鈕改成 disabled。
-                  使用者掃過去時判斷的是「這一整列不能選」，而不是「這顆按鈕壞了」。
-                </p>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <h3 className="heading-md" style={{ margin: 0 }}>
-                  標籤過長
-                </h3>
-                <AnatomyImage
-                  flush
-                  image="button-edge-case2"
-                  alt="標籤文字過長的按鈕，文字在單行內截斷並以刪節號結尾"
-                />
-                <p className="note" style={{margin: 0, textAlign: 'center'}}
-                >
-                  過長的標籤<strong>單行截斷並加刪節號</strong>，不換行、也不把按鈕撐高。
-                  元件已經內建這個行為，呼叫端不需要自己截字。不過截掉的字讀者就看不到了，
-                  按鈕文字本來就該短——會被截斷代表文案需要重寫，而不是靠截斷解決。
-                </p>
-              </div>
-            </div>
+            {/* 版面與圖說完全沿用 Usage 的圖例格線，只是不畫勾叉記號 */}
+            <ExampleGrid
+              items={[
+                {
+                  image: 'button-edge-case1',
+                  alt: '停車位列表中，已被預約的那一列整列淡化且按鈕為 disabled，可預約的那一列維持深色可按',
+                  caption:
+                    '不可選的項目，整列連同按鈕一起淡化，不是只把按鈕改成 disabled。使用者掃過去時判斷的是「這一整列不能選」，而不是「這顆按鈕壞了」。',
+                },
+                {
+                  image: 'button-edge-case2',
+                  alt: '標籤文字過長的按鈕，文字在單行內截斷並以刪節號結尾',
+                  caption:
+                    '過長的標籤單行截斷並加刪節號，不換行、也不把按鈕撐高。元件已經內建這個行為，呼叫端不需要自己截字。會被截斷代表文案需要重寫，而不是靠截斷解決。',
+                },
+              ]}
+            />
           </section>
         </div>
       )}

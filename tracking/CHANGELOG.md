@@ -11,6 +11,33 @@
 
 ---
 
+## v0.15.4 | 2026-09-01
+
+### 文件站 | 統一視覺化區塊的底色
+狀態：PUBLISHED
+
+- Configurations 的容器（`.playground`）原本是 `surface-raised`，與 Variants
+  等其他放圖／視覺化的區塊（一律 `page-secondary`）不同。已統一為
+  `page-secondary`。
+- 稽核全站後確認：AnatomyImage、PendingImage、SpecBox、AnatomyFigure、
+  Do/Don't 的圖片容器、States 的預覽容器、foundations 各頁的示範區塊，
+  底色全部一致。
+- 仍使用 `surface-raised` 的兩處不屬於視覺化區塊，維持原樣：
+  Configurations 右側的控制卡（在容器內，要有色差才看得出是一張卡）、
+  以及搜尋面板（彈出層）。
+
+### 文件站 | Edge cases 改用 Usage 的圖例版面
+
+- Edge cases 由「上下堆疊、每項帶標題」改為與 Usage 相同的一排兩張圖，
+  版面與圖說完全共用同一份實作，不會各自漂移。
+- 兩個項目的標題（「同一份列表裡混著可按與不可按」、「標籤過長」）移除，
+  說明直接寫在圖下方。
+- `DoDontExample` 的 `kind` 改為可選，不給就不畫勾叉記號——Edge cases
+  不是對錯對照，不該出現那兩個記號。圖例格線抽成 `ExampleGrid`，
+  `DoDontExamples` 沿用它，既有呼叫方式不變。
+- 移除 `AnatomyImage` 的 `flush`：它是為上一版的 Edge cases 排版加的，
+  改版後已無人使用。
+
 ## v0.15.3 | 2026-09-01
 
 ### 文件站 | Usage 與 Edge cases 排版、表格去線去陰影、說明文字全站統一
