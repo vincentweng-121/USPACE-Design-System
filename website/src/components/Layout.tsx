@@ -7,7 +7,7 @@ import SearchPalette from './SearchPalette';
 import Toc from './Toc';
 import '../styles/layout.css';
 
-type ThemeMode = 'light' | 'dark' | 'auto';
+type ThemeMode = 'light' | 'dark';
 
 const REPO_URL = 'https://github.com/vincentweng-121/USPACE-Design-System';
 
@@ -22,9 +22,13 @@ export default function Layout() {
     return window.location.hash.replace('#', '') !== '/';
   });
   const [searchOpen, setSearchOpen] = useState(false);
-  const [mode, setMode] = useState<ThemeMode>(
-    () => (localStorage.getItem('theme') as ThemeMode) || 'auto'
-  );
+  // 只有 light 與 dark 兩種，點一下就切換。
+  // 舊版存過 'auto'，讀到非法值時改用當下的系統偏好當起始值
+  const [mode, setMode] = useState<ThemeMode>(() => {
+    const stored = localStorage.getItem('theme');
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
 
   // 使用者手動收合過的分組；沒紀錄的依目前路徑決定展開與否
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -33,17 +37,11 @@ export default function Layout() {
   const isHome = location.pathname === '/';
   const [pastHero, setPastHero] = useState(false);
 
-  // ── 主題（light / dark / auto）──
+  // ── 主題（light / dark）──
+  // 不再跟隨系統：使用者選過就固定，避免系統切換時畫面自己跳掉
   useEffect(() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const apply = () => {
-      const dark = mode === 'dark' || (mode === 'auto' && media.matches);
-      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    };
-    apply();
+    document.documentElement.setAttribute('data-theme', mode);
     localStorage.setItem('theme', mode);
-    media.addEventListener('change', apply);
-    return () => media.removeEventListener('change', apply);
   }, [mode]);
 
   // ── Cmd / Ctrl + K ──
@@ -95,11 +93,10 @@ export default function Layout() {
     [collapsed, location.pathname]
   );
 
-  const cycleTheme = () =>
-    setMode((m) => (m === 'light' ? 'dark' : m === 'dark' ? 'auto' : 'light'));
+  const toggleTheme = () => setMode((m) => (m === 'dark' ? 'light' : 'dark'));
 
-  const themeLabel =
-    mode === 'auto' ? '跟隨系統' : mode === 'dark' ? '深色' : '淺色';
+  // 標籤寫的是「點下去會變成什麼」，而不是目前狀態
+  const themeLabel = mode === 'dark' ? '切換為淺色' : '切換為深色';
 
   return (
     <>
@@ -120,21 +117,24 @@ export default function Layout() {
 
         <div className="topbar-spacer" />
 
-        <button className="search-trigger" onClick={() => setSearchOpen(true)}>
+        <button
+          className="icon-btn"
+          onClick={() => setSearchOpen(true)}
+          aria-label="搜尋"
+          title="搜尋（⌘K）"
+        >
           <SearchIcon />
-          <span className="label">搜尋</span>
-          <kbd>⌘K</kbd>
         </button>
 
         <span className="topbar-version">v{version}</span>
 
         <button
           className="icon-btn"
-          onClick={cycleTheme}
-          aria-label={`主題：${themeLabel}`}
-          title={`主題：${themeLabel}`}
+          onClick={toggleTheme}
+          aria-label={themeLabel}
+          title={themeLabel}
         >
-          {mode === 'light' ? <SunIcon /> : mode === 'dark' ? <MoonIcon /> : <AutoIcon />}
+          {mode === 'dark' ? <MoonIcon /> : <SunIcon />}
         </button>
 
         <a
@@ -250,7 +250,7 @@ function ChevronIcon() {
 }
 function SearchIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden>
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
       <circle cx="8" cy="8" r="5.25" {...stroke} />
       <path d="M12 12l3.5 3.5" {...stroke} />
     </svg>
@@ -270,14 +270,6 @@ function MoonIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
       <path d="M15.1 10.4A6.5 6.5 0 0 1 7.6 2.9 6.5 6.5 0 1 0 15.1 10.4Z" {...stroke} />
-    </svg>
-  );
-}
-function AutoIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
-      <circle cx="9" cy="9" r="6.25" {...stroke} />
-      <path d="M9 2.75v12.5a6.25 6.25 0 0 0 0-12.5Z" fill="currentColor" />
     </svg>
   );
 }
