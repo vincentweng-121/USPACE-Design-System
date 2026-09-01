@@ -258,13 +258,17 @@ export default function ButtonPage() {
           <section className="section">
             <SectionTitle>States</SectionTitle>
 
-            {/* enabled 與 disabled 左右並排，整組置中；窄螢幕才換行 */}
+            {/* enabled 與 disabled 左右並排，水平與垂直都置中；窄螢幕才換行。
+                minHeight 288 是原本自動高度（約 144）的兩倍 */}
             <div
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'center',
-                gap: 48,
+                alignItems: 'center',
+                alignContent: 'center',
+                minHeight: 288,
+                gap: 96,
                 padding: 'clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px)',
                 borderRadius: 12,
                 background: 'var(--page-secondary)',
