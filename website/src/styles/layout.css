@@ -208,7 +208,7 @@ kbd {
 .content {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 48px 40px 160px;
+  padding: 48px 80px 160px;
 }
 
 /* ── 首頁：滿版影片首屏 ──────────────────────────────────
@@ -489,7 +489,7 @@ kbd {
 /* 中等寬度：縮小內容左右留白，把空間讓給內容本身 */
 @media (max-width: 1200px) {
   .content {
-    padding: 48px 28px 160px;
+    padding: 48px 56px 160px;
   }
   .home-body {
     padding: 96px 28px 160px;
@@ -508,6 +508,6 @@ kbd {
     background: rgba(14, 14, 16, 0.4);
   }
   .content {
-    padding: 32px 20px 120px;
+    padding: 32px 40px 120px;
   }
 }

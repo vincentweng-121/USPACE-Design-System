@@ -1,6 +1,6 @@
 {
   "name": "uspace-design-system",
-  "version": "0.16.4",
+  "version": "0.16.5",
   "private": true,
   "type": "module",
   "description": "USPACE Design System — token 單一真實來源與產生器",
