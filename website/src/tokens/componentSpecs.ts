@@ -117,8 +117,8 @@ export const buttonSpec: ComponentSpec = {
       "bg": null,
       "border": null,
       "borderGradient": "silverLinear",
-      "content": "actionTertiaryContent",
-      "note": "描邊降到 30% 透明度，文字與 enabled 相同",
+      "content": "actionDisabledContent",
+      "note": "描邊降到 30% 透明度，文字同其他樣式換成停用色",
       "borderOpacity": 0.3
     }
   ],
