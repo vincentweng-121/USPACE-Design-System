@@ -2,4 +2,4 @@
 // 來源：package.json 的 version
 // 重新產生：npm run gen:tokens（專案根目錄）
 
-export const version = '0.16.1';
+export const version = '0.16.2';
