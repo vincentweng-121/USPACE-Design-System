@@ -1,0 +1,9 @@
+/* ⚠️ GENERATED FILE — 請勿手動編輯 */
+/* 來源：tokens/semantic-colors.json、tokens/scalars.json */
+/* 重新產生：npm run gen:tokens（專案根目錄） */
+
+:root {
+  /* 設計系統唯一的一組陰影：shadowDefault 的顏色 + shadowBlur 的模糊半徑。
+     位移為 0——token 沒有定義位移，不自行加。 */
+  --shadow-default: 0 0 30px rgba(0,0,0,0.10);
+}

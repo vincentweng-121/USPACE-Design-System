@@ -77,9 +77,11 @@
   --toggle-bg: #F4F4F5;
 
   --shadow-overlay: 0 16px 48px rgba(14, 14, 16, 0.16);
-  /* 區塊用的柔和陰影。取代原本的 1px 外框——用浮起感分區，而不是畫線 */
-  --shadow-card: 0 1px 2px rgba(14, 14, 16, 0.04), 0 8px 28px rgba(14, 14, 16, 0.06);
-  --shadow-card-sm: 0 1px 2px rgba(14, 14, 16, 0.05), 0 2px 8px rgba(14, 14, 16, 0.05);
+  /* 區塊分區一律用設計系統的那一組陰影（tokens.css 的 --shadow-default，
+     由 shadowDefault + shadowBlur 產生）。不要在這裡另外編數值——
+     那等於在設計系統之外多一套規範。 */
+  --shadow-card: var(--shadow-default);
+  --shadow-card-sm: var(--shadow-default);
 }
 
 [data-theme='dark'] {
@@ -128,8 +130,7 @@
   --toggle-bg: #1F1F24;
 
   --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.6);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 28px rgba(0, 0, 0, 0.35);
-  --shadow-card-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+  /* shadowDefault 明暗同值，深色主題不另外覆寫 */
 }
 
 html,

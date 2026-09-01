@@ -11,6 +11,24 @@
 
 ---
 
+## v0.15.2 | 2026-09-01
+
+### 文件站 | 陰影改由 token 產生，移除側欄的分類縱線
+狀態：PUBLISHED
+
+- **v0.15.0 的 `--shadow-card` 是自己編的數值**，與設計系統的陰影 token 無關——
+  等於在 token 之外又多一套規範，正是這個專案一直在避免的事。
+- 產生器新增 CSS 輸出 `website/src/tokens/tokens.css`，由
+  `shadowDefault`（transparentBlack10）與 `shadowBlur`（30）組出
+  `--shadow-default: 0 0 30px rgba(0,0,0,0.10)`。位移為 0——token 沒有定義位移，
+  不自行添加。
+- `--shadow-card` 與 `--shadow-card-sm` 改為指向 `--shadow-default`，全站統一。
+  `shadowDefault` 明暗同值，因此深色主題不再另外覆寫。
+- 實測確認：改 `tokens/scalars.json` 的 `shadowBlur` 後，`check:tokens` 會報
+  `tokens.css` 漂移，重新產生後 CSS 跟著變。文件站的陰影自此有單一真實來源。
+- **左側側欄展開分類後的那條縱線移除**。右側 On this page 的縱線與兩側的
+  active 標記都保留。
+
 ## v0.15.0 | 2026-08-28
 
 ### 文件站 | 移除網站的分隔線與外框，改用陰影分區
