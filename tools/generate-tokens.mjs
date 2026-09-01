@@ -529,6 +529,34 @@ function tsScalars() {
   return out.join('\n');
 }
 
+// ─── CSS：文件站直接引用的 token ───────────────────────────
+
+/**
+ * 產生 CSS 變數。
+ *
+ * 文件站的樣式表是靜態檔案，讀不到 TS 的 token，先前只能手抄數值——
+ * 陰影就是這樣變成一組與設計系統無關的自訂值。改由這裡產生後，
+ * 改 tokens/*.json 會直接反映到網站，check:tokens 也會擋下漂移。
+ */
+function cssTokens() {
+  // shadowDefault 是語意 token，先解到 palette 名稱再取 hex
+  const effect = semantic.groups.find((g) => g.name === 'Effect');
+  const shadowToken = effect.tokens.shadowDefault.light;
+  const blur = scalars.elevation.shadowBlur.value;
+  return [
+    '/* ⚠️ GENERATED FILE — 請勿手動編輯 */',
+    '/* 來源：tokens/semantic-colors.json、tokens/scalars.json */',
+    '/* 重新產生：npm run gen:tokens（專案根目錄） */',
+    '',
+    ':root {',
+    '  /* 設計系統唯一的一組陰影：shadowDefault 的顏色 + shadowBlur 的模糊半徑。',
+    '     位移為 0——token 沒有定義位移，不自行加。 */',
+    `  --shadow-default: 0 0 ${blur}px ${cssFor(shadowToken)};`,
+    '}',
+    '',
+  ].join('\n');
+}
+
 // ─── TypeScript：元件規格（與 Flutter 測試同源）──────────────
 
 function tsComponentSpecs() {
@@ -688,6 +716,7 @@ const outputs = [
       ],
     }),
   ],
+  ['website/src/tokens/tokens.css', cssTokens()],
   ['website/src/tokens/colors.ts', tsColors()],
   ['website/src/tokens/typography.ts', tsTypography()],
   ['website/src/tokens/scalars.ts', tsScalars()],

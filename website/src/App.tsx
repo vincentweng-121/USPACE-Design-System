@@ -35,6 +35,7 @@ import ChangelogPage from './pages/resources/ChangelogPage';
 import StatusPage from './pages/resources/StatusPage';
 import RoadmapPage from './pages/resources/RoadmapPage';
 
+import './tokens/tokens.css';
 import './styles/global.css';
 
 export default function App() {
