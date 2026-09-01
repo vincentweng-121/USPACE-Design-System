@@ -616,6 +616,7 @@ code {
   border-radius: inherit;
   padding: var(--gradient-border-width, 3px);
   background: var(--gradient-border);
+  opacity: var(--gradient-border-opacity, 1);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);

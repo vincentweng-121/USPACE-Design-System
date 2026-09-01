@@ -213,13 +213,10 @@ export default function ActionAreaPage() {
 
             <ul className="note-list" style={{ paddingLeft: 20, display: 'grid', gap: 10 }}>
               <li>
-                <strong>Gray</strong>：讓按鈕與底下捲動的內容分開。淺色時是由下往上的灰色漸層，
-                深色時改為半透明的黑色遮罩——上圖示範的就是這一種，切換網站主題可以看到差異。
-                放在會捲動的頁面上用它。
+                <strong>Gray</strong>：讓按鈕與捲動的內容分開，淺色是漸層、深色是半透明遮罩。
               </li>
               <li>
-                <strong>None</strong>：沒有背景，直接疊在頁面內容上。底下不會捲動、
-                或頁面本身已經是純色時用它。
+                <strong>None</strong>：沒有背景，直接疊在頁面內容上。
               </li>
             </ul>
           </section>

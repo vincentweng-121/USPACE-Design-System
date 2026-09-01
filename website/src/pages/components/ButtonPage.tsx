@@ -84,6 +84,8 @@ function ButtonPreview({
                 v.borderGradient as string
               ],
               '--gradient-border-width': '3px',
+              // disabled 時整條描邊變淡，與 widget 的 borderOpacity 一致
+              '--gradient-border-opacity': String(v.borderOpacity ?? 1),
             } as React.CSSProperties)
           : {}),
         color: content,
@@ -186,8 +188,8 @@ export default function ButtonPage() {
 
             <NumberedCaptions
               items={[
-                { name: 'Filled', desc: '實心深底。畫面上最主要的那一個行動用它，一個畫面只給一顆。' },
-                { name: 'Outlined', desc: '透明底加一圈漸層描邊。其餘的行動用它，底下的內容仍看得見。' },
+                { name: 'Filled', desc: '實心深底，一個畫面只給一顆。' },
+                { name: 'Outlined', desc: '透明底加漸層描邊，其餘行動用它。' },
               ]}
             />
           </section>
@@ -248,10 +250,7 @@ export default function ButtonPage() {
               minWidth={620}
             />
             <p className="note" style={{marginTop: 10}}>
-              Filled 用底色區分狀態，Outlined 一律是透明底加{' '}
-              <code>silverLinear</code> 漸層描邊，disabled 時只改文字色。
-              描邊是漸層而非單色，所以記在規格檔的 <code>borderGradient</code> 欄位。
-              Outlined 的 disabled 在 Figma 尚無對應變體，目前是暫定值。
+              Filled 的 disabled 換底色與文字色；Outlined 只把描邊降到 30% 透明度，文字不變。
             </p>
           </section>
 
@@ -378,13 +377,13 @@ export default function ButtonPage() {
                     kind: 'do',
                     image: 'button-do-case1',
                     alt: '主要行動用 filled、次要行動用 outlined 的按鈕組合範例',
-                    caption: '主要行動用 filled，次要行動用 outlined，權重一眼可辨。',
+                    caption: '主要行動用 filled，次要用 outlined。',
                   },
                   {
                     kind: 'dont',
                     image: 'button-dont-case1',
                     alt: '兩個按鈕都使用 filled 樣式的錯誤範例',
-                    caption: '兩個按鈕都用 filled，權重無法區分，使用者不知道哪一個才是主要行動。',
+                    caption: '兩個都用 filled，分不出主要行動。',
                   },
                 ]}
               />
@@ -394,13 +393,13 @@ export default function ButtonPage() {
                     kind: 'do',
                     image: 'button-do-case2',
                     alt: '只在文字左側放一個 icon 的按鈕',
-                    caption: 'icon 只放單側。左側 icon 補充行動的性質，視線仍然落在文字上。',
+                    caption: 'icon 只放單側，視線仍落在文字上。',
                   },
                   {
                     kind: 'dont',
                     image: 'button-dont-case2',
                     alt: '文字左右兩側都放 icon 的按鈕',
-                    caption: '不要兩側都放 icon。左右各一個會把文字夾在中間，反而看不出重點在哪。',
+                    caption: '兩側都放會把文字夾在中間，看不出重點。',
                   },
                 ]}
               />
@@ -410,13 +409,13 @@ export default function ButtonPage() {
                     kind: 'do',
                     image: 'button-do-case3',
                     alt: 'icon 搭配文字的按鈕',
-                    caption: 'icon 一律搭配文字。語意由文字承載，icon 只是輔助。',
+                    caption: 'icon 一律搭配文字，語意由文字承載。',
                   },
                   {
                     kind: 'dont',
                     image: 'button-dont-case3',
                     alt: '只有 icon 沒有文字的按鈕',
-                    caption: '不要只放 icon。這個元件的文字是必填，少了文字讀屏軟體也讀不出這顆按鈕在做什麼。',
+                    caption: '只放 icon，讀屏軟體讀不出用途。',
                   },
                 ]}
               />
@@ -444,14 +443,12 @@ export default function ButtonPage() {
                 {
                   image: 'button-edge-case1',
                   alt: '停車位列表中，已被預約的那一列整列淡化且按鈕為 disabled，可預約的那一列維持深色可按',
-                  caption:
-                    '不可選的項目，整列連同按鈕一起淡化，不是只把按鈕改成 disabled。使用者掃過去時判斷的是「這一整列不能選」，而不是「這顆按鈕壞了」。',
+                  caption: '不可選時整列一起淡化，不是只停用按鈕。',
                 },
                 {
                   image: 'button-edge-case2',
                   alt: '標籤文字過長的按鈕，文字在單行內截斷並以刪節號結尾',
-                  caption:
-                    '過長的標籤單行截斷並加刪節號，不換行、也不把按鈕撐高。元件已經內建這個行為，呼叫端不需要自己截字。會被截斷代表文案需要重寫，而不是靠截斷解決。',
+                  caption: '過長的標籤單行截斷，不換行也不撐高按鈕。',
                 },
               ]}
             />

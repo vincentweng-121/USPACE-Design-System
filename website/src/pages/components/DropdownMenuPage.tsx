@@ -187,9 +187,9 @@ export default function DropdownMenuPage() {
 
             <NumberedCaptions
               items={[
-                { name: '尚未選取', desc: '顯示 placeholder。Label 在上方，右側是收合的 chevron。' },
-                { name: '已選取', desc: '同樣的結構，內容換成選取的值，文字色也跟著變深。' },
-                { name: '帶提示文字', desc: '下方多一行 Hint。必填未填與驗證失敗時一定會出現，此時是紅字。' },
+                { name: '尚未選取', desc: '顯示 placeholder，右側是收合的 chevron。' },
+                { name: '已選取', desc: '內容換成選取的值，文字色變深。' },
+                { name: '帶提示文字', desc: '下方多一行 Hint，錯誤時為紅字。' },
               ]}
             />
             <p className="note" style={{marginTop: 10}}>
