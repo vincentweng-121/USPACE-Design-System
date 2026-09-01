@@ -126,7 +126,7 @@ export const buttonSpec: ComponentSpec = {
     "height": 48,
     "smallHeight": 40,
     "smallMinWidth": 112,
-    "smallPaddingX": 12,
+    "paddingX": 12,
     "iconSize": 24,
     "gap": 8
   }
