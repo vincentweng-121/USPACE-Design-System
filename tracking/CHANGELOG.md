@@ -11,6 +11,21 @@
 
 ---
 
+## v0.15.4 | 2026-09-01
+
+### 文件站 | 統一視覺化區塊的底色
+狀態：PUBLISHED
+
+- Configurations 的容器（`.playground`）原本是 `surface-raised`，與 Variants
+  等其他放圖／視覺化的區塊（一律 `page-secondary`）不同。已統一為
+  `page-secondary`。
+- 稽核全站後確認：AnatomyImage、PendingImage、SpecBox、AnatomyFigure、
+  Do/Don't 的圖片容器、States 的預覽容器、foundations 各頁的示範區塊，
+  底色全部一致。
+- 仍使用 `surface-raised` 的兩處不屬於視覺化區塊，維持原樣：
+  Configurations 右側的控制卡（在容器內，要有色差才看得出是一張卡）、
+  以及搜尋面板（彈出層）。
+
 ## v0.15.3 | 2026-09-01
 
 ### 文件站 | Usage 與 Edge cases 排版、表格去線去陰影、說明文字全站統一

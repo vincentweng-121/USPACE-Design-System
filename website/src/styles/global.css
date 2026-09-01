@@ -363,7 +363,8 @@ code {
   padding: 16px;
   min-height: 480px;
   border-radius: 16px;
-  background: var(--surface-raised);
+  /* 與 Variants 等其他放圖／視覺化的區塊同一個底色 */
+  background: var(--page-secondary);
   box-shadow: var(--shadow-card);
 }
 
