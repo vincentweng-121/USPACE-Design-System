@@ -11,6 +11,15 @@
 
 ---
 
+## v0.16.1 | 2026-09-01
+
+### button.dart | 修正 outlined disabled 的文字色
+狀態：PUBLISHED
+
+- v0.16.0 把 outlined 的 disabled 文字改成與 enabled 相同，那是誤解了
+  「文字不動」的意思——原意是文字維持既有的停用色處理，只調整外框。
+- 文字改回 `actionDisabledContent`，與 filled 一致；描邊維持 30% 透明度。
+
 ## v0.16.0 | 2026-09-01
 
 ### button.dart | outlined 的 disabled 改為描邊變淡

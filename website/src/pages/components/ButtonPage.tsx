@@ -250,7 +250,7 @@ export default function ButtonPage() {
               minWidth={620}
             />
             <p className="note" style={{marginTop: 10}}>
-              Filled 的 disabled 換底色與文字色；Outlined 只把描邊降到 30% 透明度，文字不變。
+              Filled 的 disabled 換底色，Outlined 把描邊降到 30% 透明度，兩者的文字都換成停用色。
             </p>
           </section>
 

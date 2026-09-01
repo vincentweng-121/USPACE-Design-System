@@ -40,7 +40,7 @@
     "2026-08-24 經使用者確認改版：樣式維度由 level（primary / secondary / tertiary）改為 style（filled / outlined），並移除 emphasis（accent / charging）。舊的五個 style 在新設計裡收斂成兩個。",
     "2026-08-24 經使用者確認：日文使用較小的字級（labelM 14/20），由元件自動讀 App 的語系判斷，呼叫端不需要傳參數。small 的日文字級與 regular 相同，不再額外縮小。",
     "outlined 的描邊是 silverLinear 漸層（Figma 的 Sliver Linear，同 actionCustomizedBorder），不是單色，因此記在 borderGradient 而不是 border。底色為透明——圖上 outlined 內部與畫布同色，不是白底。",
-    "⚠️ outlined 的 disabled 在 Figma 尚無對應變體。2026-09-01 經使用者指定暫以「描邊 30% 透明度、文字不變」呈現，設計稿補上後需回頭校對，屆時 borderOpacity 應改為 token。"
+    "⚠️ outlined 的 disabled 在 Figma 尚無對應變體。2026-09-01 經使用者指定暫以「描邊 30% 透明度」呈現，設計稿補上後需回頭校對，屆時 borderOpacity 應改為 token。"
   ],
   "variants": [
     {
@@ -74,8 +74,8 @@
       "bg": null,
       "border": null,
       "borderGradient": "silverLinear",
-      "content": "actionTertiaryContent",
-      "note": "描邊降到 30% 透明度，文字與 enabled 相同",
+      "content": "actionDisabledContent",
+      "note": "描邊降到 30% 透明度，文字同其他樣式換成停用色",
       "borderOpacity": 0.3
     }
   ]

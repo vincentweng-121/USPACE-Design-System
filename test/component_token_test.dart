@@ -222,23 +222,6 @@ void main() {
       );
     });
 
-    testWidgets('outlined 的 disabled 不改文字色', (tester) async {
-      await pump(
-        tester,
-        USpaceButton(
-          label: 'Label',
-          style: USpaceButtonStyle.outlined,
-          state: USpaceButtonState.disabled,
-          onPressed: () {},
-        ),
-      );
-      expect(
-        tester.widget<Text>(find.text('Label')).style?.color,
-        tokenColor('actionTertiaryContent'),
-        reason: 'outlined 只讓描邊變淡，文字與 enabled 相同',
-      );
-    });
-
     testWidgets('預設為 filled', (tester) async {
       await pump(tester, USpaceButton(label: 'Label', onPressed: () {}));
       final material = tester.widget<Material>(

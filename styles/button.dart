@@ -102,7 +102,7 @@ class USpaceButton extends StatelessWidget {
   /// outlined 的描邊寬度。量自 Figma node 3734:15680 的 2 倍匯出圖
   static const double _borderWidth = 3;
 
-  /// outlined 的 disabled：描邊降到 30% 透明度，文字維持不變。
+  /// outlined 的 disabled：描邊降到 30% 透明度。文字與其他樣式一樣換成停用色。
   /// ⚠️ 2026-09-01 使用者指定的暫定值，Figma 尚無這個變體。
   /// 設計稿補上後要回頭校對，屆時這個常數應該換成 token。
   static const double _outlinedDisabledBorderOpacity = 0.3;
@@ -199,10 +199,9 @@ class USpaceButton extends StatelessWidget {
   }
 
   Color _contentColor(USpaceColorsExtension colors) {
+    if (_isDisabled) return colors.actionDisabledContent;
     return switch (style) {
-      // filled 的 disabled 連文字一起換色；outlined 只讓描邊變淡，文字不動
-      USpaceButtonStyle.filled =>
-        _isDisabled ? colors.actionDisabledContent : colors.actionPrimaryContent,
+      USpaceButtonStyle.filled => colors.actionPrimaryContent,
       USpaceButtonStyle.outlined => colors.actionTertiaryContent,
     };
   }
