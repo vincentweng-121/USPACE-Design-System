@@ -117,8 +117,9 @@ export const buttonSpec: ComponentSpec = {
       "bg": null,
       "border": null,
       "borderGradient": "silverLinear",
-      "content": "actionDisabledContent",
-      "note": "Figma 尚無此變體，暫定只改文字色"
+      "content": "actionTertiaryContent",
+      "note": "描邊降到 30% 透明度，文字與 enabled 相同",
+      "borderOpacity": 0.3
     }
   ],
   "layout": {

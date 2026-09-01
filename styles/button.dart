@@ -102,6 +102,11 @@ class USpaceButton extends StatelessWidget {
   /// outlined 的描邊寬度。量自 Figma node 3734:15680 的 2 倍匯出圖
   static const double _borderWidth = 3;
 
+  /// outlined 的 disabled：描邊降到 30% 透明度，文字維持不變。
+  /// ⚠️ 2026-09-01 使用者指定的暫定值，Figma 尚無這個變體。
+  /// 設計稿補上後要回頭校對，屆時這個常數應該換成 token。
+  static const double _outlinedDisabledBorderOpacity = 0.3;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.uColors;
@@ -158,6 +163,7 @@ class USpaceButton extends StatelessWidget {
             foregroundPainter: _GradientBorderPainter(
               gradient: USpaceColorsExtension.silverLinear,
               width: _borderWidth,
+              opacity: _isDisabled ? _outlinedDisabledBorderOpacity : 1,
             ),
             child: button,
           )
@@ -193,9 +199,10 @@ class USpaceButton extends StatelessWidget {
   }
 
   Color _contentColor(USpaceColorsExtension colors) {
-    if (_isDisabled) return colors.actionDisabledContent;
     return switch (style) {
-      USpaceButtonStyle.filled => colors.actionPrimaryContent,
+      // filled 的 disabled 連文字一起換色；outlined 只讓描邊變淡，文字不動
+      USpaceButtonStyle.filled =>
+        _isDisabled ? colors.actionDisabledContent : colors.actionPrimaryContent,
       USpaceButtonStyle.outlined => colors.actionTertiaryContent,
     };
   }
@@ -208,10 +215,17 @@ class USpaceButton extends StatelessWidget {
 /// silverLinear；用「外層漸層底 + 內層填色遮住中間」的做法會讓底色不再透明，
 /// 所以這裡直接畫 stroke。
 class _GradientBorderPainter extends CustomPainter {
-  const _GradientBorderPainter({required this.gradient, required this.width});
+  const _GradientBorderPainter({
+    required this.gradient,
+    required this.width,
+    this.opacity = 1,
+  });
 
   final Gradient gradient;
   final double width;
+
+  /// 整條描邊的不透明度。disabled 時調低，讓按鈕看起來收起來
+  final double opacity;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -224,13 +238,14 @@ class _GradientBorderPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = width
-        ..shader = gradient.createShader(rect),
+        ..shader = gradient.createShader(rect)
+        ..color = Color.fromRGBO(0, 0, 0, opacity),
     );
   }
 
   @override
   bool shouldRepaint(_GradientBorderPainter old) =>
-      old.gradient != gradient || old.width != width;
+      old.gradient != gradient || old.width != width || old.opacity != opacity;
 }
 
 // ══════════════════════════════════════════════════════════════

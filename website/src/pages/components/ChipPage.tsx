@@ -175,9 +175,9 @@ export default function ChipPage() {
 
             <NumberedCaptions
               items={[
-                { name: 'Filled', desc: '實心底色，存在感最強。底色由 level 決定。' },
-                { name: 'Outlined', desc: '透明底加一圈中性色描邊。適合放在已經有底色的區塊上。' },
-                { name: 'Text', desc: '無底無框，只有文字。存在感最低，內距與 filled 相同。' },
+                { name: 'Filled', desc: '實心底色，底色由 level 決定。' },
+                { name: 'Outlined', desc: '透明底加中性色描邊，適合疊在有底色的區塊上。' },
+                { name: 'Text', desc: '無底無框，內距與 filled 相同。' },
               ]}
             />
           </section>

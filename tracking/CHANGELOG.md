@@ -11,6 +11,27 @@
 
 ---
 
+## v0.16.0 | 2026-09-01
+
+### button.dart | outlined 的 disabled 改為描邊變淡
+狀態：PUBLISHED
+⚠️ BREAKING CHANGE
+
+- `outlined` 的 disabled 由「文字換成停用色」改為
+  **描邊降到 30% 透明度、文字維持不變**（2026-09-01 使用者指定）。
+  `filled` 的 disabled 不變，仍是換底色與文字色。
+- `_GradientBorderPainter` 新增 `opacity`；`button.json` 新增 `borderOpacity`，
+  文件站的預覽同步吃這個值。
+- 新增測試：outlined 的 disabled 文字色需與 enabled 相同。
+- ⚠️ Figma 尚無這個變體，30% 是暫定值。這件事記在 `button.dart` 的常數註解與
+  `button.json` 的 `$deviations`，**文件站上不標示**——讀者看到的是目前的規範，
+  不是內部的待辦。
+
+### 文件站 | 圖說文字精簡為一行
+
+- Usage 的六個 Do/Don't 圖說、Edge cases 的兩個圖說、以及 Button / Chip /
+  Dropdown Menu / Action Area 的 Variants 圖說，全部縮短到一行講完。
+
 ## v0.15.4 | 2026-09-01
 
 ### 文件站 | 統一視覺化區塊的底色
