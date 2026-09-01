@@ -74,7 +74,7 @@ function ButtonPreview({
         width: isSmall ? undefined : '100%',
         minWidth: isSmall ? layout.smallMinWidth : undefined,
         maxWidth: isSmall ? undefined : 350,
-        padding: isSmall ? `0 ${layout.smallPaddingX}px` : 0,
+        padding: `0 ${layout.paddingX}px`,
         borderRadius: 1000,
         background: colorOf(v.bg as string | null) ?? 'transparent',
         border: 'none',
@@ -323,9 +323,9 @@ export default function ButtonPage() {
                 ['寬度', '滿版', `貼合內容，最小 ${layout.smallMinWidth}px`, '—'],
                 [
                   '水平內距',
-                  '0',
-                  `${layout.smallPaddingX}px`,
-                  <code key="p">USpaceSpacing.spacer{layout.smallPaddingX}</code>,
+                  `${layout.paddingX}px`,
+                  `${layout.paddingX}px`,
+                  <code key="p">USpaceSpacing.spacer{layout.paddingX}</code>,
                 ],
                 [
                   'icon 與文字間距',

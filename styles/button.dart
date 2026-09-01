@@ -96,7 +96,10 @@ class USpaceButton extends StatelessWidget {
 
   /// small 貼合內容，但不小於這個寬度，否則一整排短標籤的按鈕會參差不齊
   static const double _smallMinWidth = 112;
-  static const double _smallPaddingX = USpaceSpacing.spacer12;
+
+  /// 兩種 size 共用的水平內距。regular 是滿版，這個值決定內容最靠邊的位置。
+  /// 量自 Figma node 3670:3165（2026-09-01 更新，該版才補上 regular 的標示）
+  static const double _paddingX = USpaceSpacing.spacer12;
   static const double _iconSize = 24;
 
   /// outlined 的描邊寬度。量自 Figma node 3734:15680 的 2 倍匯出圖
@@ -125,9 +128,7 @@ class USpaceButton extends StatelessWidget {
         child: SizedBox(
           height: isSmall ? _smallHeight : _height,
           child: Padding(
-            padding: isSmall
-                ? const EdgeInsets.symmetric(horizontal: _smallPaddingX)
-                : EdgeInsets.zero,
+            padding: const EdgeInsets.symmetric(horizontal: _paddingX),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,

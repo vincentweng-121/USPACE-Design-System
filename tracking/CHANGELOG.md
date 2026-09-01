@@ -11,6 +11,30 @@
 
 ---
 
+## v0.16.6 | 2026-09-01
+
+### 文件站 | Button 說明圖重新匯出，8 張有變動
+狀態：PUBLISHED
+
+- 從 Figma section 3726:8888（Button-MCPimages）以 scale 2 重新匯出全部 24 張。
+  比對後只有 8 張有變動：measurements、toucharea、edge-case1、edge-case2
+  的明暗兩張。其餘 16 張與現有檔案位元組完全相同。
+- measurements 新增了 Regular（48）的量測示範，原本只畫 Small（40）。
+- toucharea 補上 40 / 48 的高度標示，以及「依 Label 文字長度貼合內容」與
+  「依父容器滿版延伸」兩段說明。
+
+### button | Regular 補上 12px 水平內距
+狀態：PUBLISHED
+
+- 新版 measurements 圖標示出 Regular 的左右內距同樣是 12，與 Small 一致。
+  先前規格表寫 Regular 為 0，程式也只對 Small 套用內距。
+- `layout.smallPaddingX` 更名為 `layout.paddingX`，兩種 size 共用。
+  `styles/button.dart` 的 `Padding` 不再判斷 size。
+- 影響範圍：Regular 是滿版按鈕、內容置中，只有在標籤長到接近容器寬度時
+  才看得出差異——現在會先留 12 再截斷，不會貼齊邊緣。
+
+---
+
 ## v0.16.5 | 2026-09-01
 
 ### 文件網站 | 內容欄左右留白加倍
