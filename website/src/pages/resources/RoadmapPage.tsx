@@ -164,7 +164,7 @@ export default function RoadmapPage() {
           ))}
 
           {shown.length === 0 && (
-            <p className="text-sm" style={{ padding: '24px 16px', color: 'var(--text-tertiary)' }}>
+            <p className="note" style={{padding: '24px 16px'}}>
               這個狀態目前沒有項目。
             </p>
           )}
@@ -209,7 +209,7 @@ export default function RoadmapPage() {
 
       <section className="section">
         <SectionTitle>怎麼更新</SectionTitle>
-        <p className="text-md text-muted">
+        <p className="note">
           告訴我哪個項目的哪一個階段完成了，我會把{' '}
           <code>website/src/data/roadmap.json</code> 對應的{' '}
           <code>done</code> 改成 <code>true</code>，狀態與統計會自動跟著變。

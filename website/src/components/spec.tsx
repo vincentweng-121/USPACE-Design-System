@@ -174,7 +174,7 @@ export function Pending({ what, why }: { what: string; why?: string }) {
       <div className="heading-sm" style={{ color: 'var(--text-primary)', marginBottom: 6 }}>
         {what} — 待補
       </div>
-      <p className="text-sm" style={{ margin: 0 }}>
+      <p className="note" style={{margin: 0}}>
         {why ?? '尚未從 Figma 確認實際規格，避免填入推測值。'}
       </p>
     </div>
@@ -207,7 +207,7 @@ export function ConfidenceNote({ confidence, source }: { confidence?: string; so
       }}
     >
       <span aria-hidden style={{ color: 'var(--text-tertiary)' }}>⚠</span>
-      <p className="text-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+      <p className="note" style={{margin: 0, color: 'var(--text-secondary)'}}>
         {text}
       </p>
     </div>
@@ -313,7 +313,16 @@ export function ThemedImage({
  * 容器高度固定 400，寬度隨版面延伸，圖片置中。圖片是 Figma 的
  * @2x 匯出（960×700），以一半的 CSS 尺寸呈現，在高解析度螢幕上才清晰。
  */
-export function AnatomyImage({ image, alt }: { image: string; alt: string }) {
+export function AnatomyImage({
+  image,
+  alt,
+  flush = false,
+}: {
+  image: string;
+  alt: string;
+  /** 由外層的 gap 控制間距時設 true，否則會與內建的下留白疊加 */
+  flush?: boolean;
+}) {
   return (
     <div
       style={{
@@ -326,7 +335,7 @@ export function AnatomyImage({ image, alt }: { image: string; alt: string }) {
         borderRadius: 12,
         background: 'var(--page-secondary)',
         boxShadow: 'var(--shadow-card)',
-        marginBottom: 32,
+        marginBottom: flush ? 0 : 32,
         overflow: 'hidden',
       }}
     >
@@ -542,13 +551,13 @@ export function PendingImage({ expects, note }: { expects: string; note?: string
       <div className="heading-sm" style={{ color: 'var(--text-primary)' }}>
         說明圖待補
       </div>
-      <p className="text-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+      <p className="note" style={{margin: 0, color: 'var(--text-secondary)'}}>
         需要 <code>{expects}-light.png</code> 與 <code>{expects}-dark.png</code>
         <br />
         Figma artboard 480×350，以 scale 2 匯出成 960×700
       </p>
       {note && (
-        <p className="text-sm" style={{ margin: 0, color: 'var(--text-tertiary)' }}>
+        <p className="note" style={{margin: 0}}>
           {note}
         </p>
       )}

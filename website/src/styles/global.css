@@ -82,6 +82,12 @@
      那等於在設計系統之外多一套規範。 */
   --shadow-card: var(--shadow-default);
   --shadow-card-sm: var(--shadow-default);
+
+  /* 分頁列專用：blur 15、透明度 5%，2026-09-01 使用者指定。
+     ⚠️ 設計系統目前只有 shadowDefault 一組陰影，這個值還沒有對應的 token。
+     若之後其他元件也要用，應該先在 Figma 定義再由產生器輸出，
+     不要再從這裡複製數值出去。 */
+  --shadow-tabs: 0 0 15px rgba(0, 0, 0, 0.05);
 }
 
 [data-theme='dark'] {
@@ -206,6 +212,23 @@ a {
   color: var(--text-secondary);
 }
 
+/* ── 區塊底下的說明文字 ──────────────────────────────────────
+   全站統一：比內文小一級、色階再淺一級（textTertiary，設計系統有定義）。
+   段落置中對齊它上方的圖或表；條列維持靠左，
+   置中會讓項目符號錯位而且難讀。 */
+.note {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.note-list {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-tertiary);
+}
+
 /* ── 行內程式碼 ── */
 
 code {
@@ -236,8 +259,9 @@ code {
 .spec-table {
   border-radius: 16px;
   overflow: hidden;
-  background: var(--surface-raised);
-  box-shadow: var(--shadow-card);
+  /* 不加陰影。兩種底色都與 body 的 --page-primary 不同，
+     靠色差就分得出表格範圍與列 */
+  background: var(--page-secondary);
 }
 
 .spec-table > div {
@@ -252,7 +276,7 @@ code {
 
 .spec-table th {
   padding: 16px 20px;
-  text-align: center;
+  text-align: left;
   font-weight: 400;
   color: var(--text-secondary);
   background: var(--surface-sunken);
@@ -452,8 +476,7 @@ code {
 .gantt {
   border-radius: 16px;
   overflow-x: auto;
-  background: var(--surface-raised);
-  box-shadow: var(--shadow-card);
+  background: var(--page-secondary);
 }
 
 .gantt-head,
