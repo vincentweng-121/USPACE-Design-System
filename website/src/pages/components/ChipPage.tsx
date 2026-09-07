@@ -237,13 +237,12 @@ export default function ChipPage() {
               ])}
               minWidth={560}
             />
-            <p className="note" style={{marginTop: 10}}>
-              文字與 icon 一律是 <code>{String(variantOf('filled', 'accent').content)}</code>，
-              不隨 style 或 level 改變。顏色差異只在容器：filled 依 level 上底色，
-              outlined 改為透明底加一圈 <code>{String(variantOf('outlined', 'accent').border)}</code>{' '}
-              描邊，text 兩者都沒有。這也是 Configurations 可以直接切換 style 的原因——
-              三種形狀本身都不帶顏色。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                文字與 icon 一律是 {String(variantOf('filled', 'accent').content)}， 不隨 style 或
+                level 改變。顏色差異只在容器：filled 依 level 上底色， outlined 改為透明底加一圈
+                {String(variantOf('outlined', 'accent').border)} 描邊，text 兩者都沒有。這也是
+                Configurations 可以直接切換 style 的原因—— 三種形狀本身都不帶顏色。
+            */}
           </section>
 
           {/* ── 5. States ── */}
@@ -262,12 +261,10 @@ export default function ChipPage() {
               ]}
               minWidth={620}
             />
-            <p className="note" style={{marginTop: 16}}>
-              可點擊與純展示的外觀完全一樣，差別只在有沒有傳 <code>onTap</code>。
-              目前沒有獨立的「選中」狀態——篩選條件被選取時，由呼叫端切換 style 或 level
-              來表達（例如未選用 outlined、選中改 filled）。Figma 尚未畫選中狀態，
-              等設計稿產出後再補成正式的維度。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                可點擊與純展示的外觀完全一樣，差別只在有沒有傳 onTap。 目前沒有獨立的「選中」狀態——篩選條件被選取時，由呼叫端切換 style 或 level
+                來表達（例如未選用 outlined、選中改 filled）。Figma 尚未畫選中狀態， 等設計稿產出後再補成正式的維度。
+            */}
           </section>
 
           {/* ── 6. Measurements ── */}
@@ -329,25 +326,24 @@ export default function ChipPage() {
               ]}
               minWidth={620}
             />
-            <p className="note" style={{marginTop: 16}}>
-              Small 兩側都不支援 icon，因此沒有「有 icon」的內距——widget 收到也會忽略。
-              Trailing 側的內距 {layout.regularPaddingWithTrailingIcon} 是 leading 規則的鏡像推導，
-              Figma 尚未畫 trailing 版本，待設計稿產出後校對。垂直內距 {layout.paddingY}px 是 Figma 的元件特定值，spacing token 沒有
-              這個級距，chip.dart 直接寫死。Small 的文字 {smallType.size}px /{' '}
-              {smallType.lineHeight}px Semibold 同樣沒有對應的 typography token。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                Small 兩側都不支援 icon，因此沒有「有 icon」的內距——widget 收到也會忽略。 Trailing 側的內距
+                {layout.regularPaddingWithTrailingIcon} 是 leading 規則的鏡像推導， Figma 尚未畫
+                trailing 版本，待設計稿產出後校對。垂直內距 {layout.paddingY}px 是 Figma 的元件特定值，spacing token
+                沒有 這個級距，chip.dart 直接寫死。Small 的文字 {smallType.size}px /
+                {smallType.lineHeight}px Semibold 同樣沒有對應的 typography token。
+            */}
           </section>
 
           {/* ── 7. Touch areas ── */}
           <section className="section">
             <SectionTitle>Touch areas</SectionTitle>
-            <p className="note" style={{ margin: 0 }}>
-              純展示的 Chip 沒有觸控熱區。傳了 <code>onTap</code> 之後，熱區會垂直外擴到{' '}
-              {touch.minTarget}px——Regular 視覺上只有 {layout.heightRegular}px、Small
-              只有 {layout.heightSmall}px，遠低於觸控目標建議值，不外擴會很難點。
-              視覺高度不變，但可點擊的 Chip 在版面上會佔 {touch.minTarget}px 高，
-              與純展示的 Chip 並排時要留意對齊。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                純展示的 Chip 沒有觸控熱區。傳了 onTap 之後，熱區會垂直外擴到 {touch.minTarget}px——Regular 視覺上只有
+                {layout.heightRegular}px、Small 只有
+                {layout.heightSmall}px，遠低於觸控目標建議值，不外擴會很難點。 視覺高度不變，但可點擊的 Chip 在版面上會佔
+                {touch.minTarget}px 高， 與純展示的 Chip 並排時要留意對齊。
+            */}
           </section>
 
           {/* ── 8. Usage ── */}
@@ -525,19 +521,18 @@ USpaceChip(
                 ]}
                 minWidth={560}
               />
-              <p className="note" style={{marginTop: 16}}>
-                不傳 <code>onTap</code> 時完全不包 GestureDetector，維持純展示標籤的行為；
-                版面上也不會佔用外擴的 {touch.minTarget}px。
-              </p>
+              {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                  不傳 onTap 時完全不包 GestureDetector，維持純展示標籤的行為； 版面上也不會佔用外擴的 {touch.minTarget}px。
+              */}
             </div>
           </section>
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="note" style={{ margin: '0 0 16px' }}>
-              此表由 <code>tokens/components/chip.json</code> 產生，
-              並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                此表由 tokens/components/chip.json 產生， 並由 Flutter widget test
+                逐項驗證：改了對應卻沒改實作，CI 會擋下。
+            */}
             <SpecTable
               headers={['Style', 'Level', 'Background', 'Border', 'Content', '備註']}
               rows={chipSpec.variants.map((row) => [
