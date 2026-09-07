@@ -225,7 +225,7 @@ export default function ButtonPage() {
             <SpecTable
               headers={['', '部件', '必要性', '說明']}
               rows={[
-                ['1', '容器 Container', '必要', '底色與圓角由 level 決定；三個層級皆無描邊，高度固定 48'],
+                ['1', '容器 Container', '必要', `底色由 style 決定；filled 無描邊，outlined 有 3px 漸層描邊，高度 ${layout.height}（small ${layout.smallHeight}）`],
                 ['2', 'Leading icon', '選用', `${layout.iconSize}px，顏色與文字相同`],
                 ['3', '文字 Label', '必要', '按鈕語意的唯一承載者，不可省略'],
                 ['4', 'Trailing icon', '選用', `${layout.iconSize}px，顏色與文字相同；與 Leading 擇一，不同時出現`],
@@ -411,7 +411,7 @@ export default function ButtonPage() {
                     kind: 'do',
                     image: 'button-do-case3',
                     alt: 'icon 搭配文字的按鈕',
-                    caption: 'icon 一律搭配文字，語意由文字承載。',
+                    caption: '按鈕一定要有文字，用途靠文字說明。',
                   },
                   {
                     kind: 'dont',
