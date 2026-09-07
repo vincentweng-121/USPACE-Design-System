@@ -51,10 +51,10 @@
   --codeblock-muted: #8A8A93;
 
   /* Do / Don't 的勾與叉。使用者指定，兩者都是 palette 既有的值：
-     #A7D100 = neonLime800、#F40000 = red500。目前產生器只輸出 shadow，
+     #C3F400 = neonLime600、#F40000 = red500。目前產生器只輸出 shadow，
      沒有 palette 的 CSS 變數可以引用，之後補上時改為引用。明暗模式同色 */
-  --positive: #A7D100;
-  --positive-bg: rgba(167, 209, 0, 0.10);
+  --positive: #C3F400;
+  --positive-bg: rgba(195, 244, 0, 0.10);
   --negative: #F40000;
   --negative-bg: rgba(244, 0, 0, 0.08);
 
@@ -116,8 +116,8 @@
 
   /* 勾與叉在深色模式維持同一組值——它們是記號而不是文字，
      對比在深底上仍然足夠 */
-  --positive: #A7D100;
-  --positive-bg: rgba(167, 209, 0, 0.14);
+  --positive: #C3F400;
+  --positive-bg: rgba(195, 244, 0, 0.14);
   --negative: #F40000;
   --negative-bg: rgba(244, 0, 0, 0.14);
 

@@ -192,10 +192,9 @@ export default function DropdownMenuPage() {
                 { name: '帶提示文字', desc: '下方多一行 Hint，錯誤時為紅字。' },
               ]}
             />
-            <p className="note" style={{marginTop: 10}}>
-              這張圖講的是<strong>組成</strong>——哪些部位會出現。六種 status 各自的顏色與行為
-              在下方的 States 區塊。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                這張圖講的是組成——哪些部位會出現。六種 status 各自的顏色與行為 在下方的 States 區塊。
+            */}
           </section>
 
           {/* ── 2. Configurations ── */}
@@ -253,11 +252,10 @@ export default function DropdownMenuPage() {
               ])}
               minWidth={860}
             />
-            <p className="note" style={{marginTop: 10}}>
-              底色、Label 與 Chevron 六種狀態都相同，真正變動的只有內容文字色、描邊與 hint。
-              描邊只有 selecting 有，hint 只有 incomplete 與 error 有——「—」代表該狀態沒有這個部位，
-              不是還沒填。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                底色、Label 與 Chevron 六種狀態都相同，真正變動的只有內容文字色、描邊與 hint。 描邊只有 selecting 有，hint 只有
+                incomplete 與 error 有——「—」代表該狀態沒有這個部位， 不是還沒填。
+            */}
           </section>
 
           {/* ── 5. States ── */}
@@ -299,11 +297,10 @@ export default function DropdownMenuPage() {
               ]}
               minWidth={720}
             />
-            <p className="note" style={{marginTop: 16}}>
-              incomplete、error 與 nonEditable 點擊不會展開，這是元件內建的行為，
-              呼叫端不需要另外擋。狀態由呼叫端依表單的驗證結果指定，元件本身不會自己
-              從 default 變成 complete。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                incomplete、error 與 nonEditable 點擊不會展開，這是元件內建的行為，
+                呼叫端不需要另外擋。狀態由呼叫端依表單的驗證結果指定，元件本身不會自己 從 default 變成 complete。
+            */}
           </section>
 
           {/* ── 6. Measurements ── */}
@@ -363,10 +360,10 @@ export default function DropdownMenuPage() {
               ]}
               minWidth={620}
             />
-            <p className="note" style={{marginTop: 16}}>
-              展開後的選單面板（圓角 20、內距 16 / 20、項目間距 8）不在這次比對的 Figma
-              node 內，該 node 只畫了六個收合狀態。面板數值沿用既有實作，尚未比對 Figma。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                展開後的選單面板（圓角 20、內距 16 / 20、項目間距 8）不在這次比對的 Figma node 內，該 node
+                只畫了六個收合狀態。面板數值沿用既有實作，尚未比對 Figma。
+            */}
           </section>
 
           {/* ── 7. Touch areas ── */}
@@ -376,10 +373,10 @@ export default function DropdownMenuPage() {
               expects="dropdown-menu-toucharea"
               note={`標出觸控熱區範圍，並確認展開後的選項列是否達到 ${touch.minTarget}px 最小建議值。`}
             />
-            <p className="note" style={{ margin: 0 }}>
-              輸入列高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。整條輸入列都是
-              熱區，不只 Chevron。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                輸入列高度 {layout.height}px，超過觸控目標最小 {touch.minTarget}px 的建議值。整條輸入列都是 熱區，不只
+                Chevron。
+            */}
           </section>
 
           {/* ── 8. Usage ── */}
@@ -516,10 +513,10 @@ export default function DropdownMenuPage() {
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="note" style={{ margin: '0 0 16px' }}>
-              此表由 <code>tokens/components/dropdown_menu.json</code> 產生，
-              並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                此表由 tokens/components/dropdown_menu.json 產生， 並由 Flutter widget test
+                逐項驗證：改了對應卻沒改實作，CI 會擋下。
+            */}
             <SpecTable
               headers={['Status', 'Background', 'Border', 'Label', 'Content', 'Icon', 'Hint']}
               rows={spec.variants.map((row) => [

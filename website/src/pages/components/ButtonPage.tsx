@@ -249,9 +249,9 @@ export default function ButtonPage() {
               ])}
               minWidth={620}
             />
-            <p className="note" style={{marginTop: 10}}>
-              Filled 的 disabled 換底色，Outlined 把描邊降到 30% 透明度，兩者的文字都換成停用色。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                Filled 的 disabled 換底色，Outlined 把描邊降到 30% 透明度，兩者的文字都換成停用色。
+            */}
           </section>
 
           {/* ── 6. States ── */}
@@ -351,12 +351,11 @@ export default function ButtonPage() {
               ]}
               minWidth={620}
             />
-            <p className="note" style={{marginTop: 16}}>
-              Small 的寬度貼合內容，但不會小於 {layout.smallMinWidth}px——一排短標籤的按鈕
-              才不會參差不齊；內容比這個寬時就往外長。日文的字級小一階，由元件讀 App 的語系
-              自動切換，兩種 size 都適用。Outlined 的描邊是{' '}
-              <code>silverLinear</code> 漸層，寬度量自 Figma 的 2 倍匯出圖。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                Small 的寬度貼合內容，但不會小於 {layout.smallMinWidth}px——一排短標籤的按鈕
+                才不會參差不齊；內容比這個寬時就往外長。日文的字級小一階，由元件讀 App 的語系 自動切換，兩種 size 都適用。Outlined 的描邊是
+                silverLinear 漸層，寬度量自 Figma 的 2 倍匯出圖。
+            */}
           </section>
 
           {/* ── 8. Touch areas ── */}
@@ -524,21 +523,21 @@ export default function ButtonPage() {
                 ]}
                 minWidth={560}
               />
-              <p className="note" style={{marginTop: 16}}>
-                沒有語系參數。文字為 <code>{labelType.name}</code>（{labelType.size}/
-                {labelType.lineHeight}），元件自己讀 App 的語系，是日文就換成小一階的{' '}
-                <code>{japaneseType.name}</code>（{japaneseType.size}/{japaneseType.lineHeight}），
-                呼叫端不需要處理。
-              </p>
+              {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                  沒有語系參數。文字為 {labelType.name}（{labelType.size}/ {labelType.lineHeight}），元件自己讀
+                  App 的語系，是日文就換成小一階的
+                  {japaneseType.name}（{japaneseType.size}/{japaneseType.lineHeight}），
+                  呼叫端不需要處理。
+              */}
             </div>
           </section>
 
           <section className="section">
             <SectionTitle>Baseline tokens</SectionTitle>
-            <p className="note" style={{ margin: '0 0 16px' }}>
-              此表由 <code>tokens/components/button.json</code> 產生，
-              並由 Flutter widget test 逐項驗證：改了對應卻沒改實作，CI 會擋下。
-            </p>
+            {/* 說明（依使用者指示不顯示在頁面上，保留為註解）：
+                此表由 tokens/components/button.json 產生， 並由 Flutter widget test
+                逐項驗證：改了對應卻沒改實作，CI 會擋下。
+            */}
             <SpecTable
               headers={['Style', 'State', 'Background', 'Border', 'Content']}
               rows={buttonSpec.variants.map((row) => [

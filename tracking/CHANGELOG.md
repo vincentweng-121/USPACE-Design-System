@@ -11,6 +11,37 @@
 
 ---
 
+## v0.16.9 | 2026-09-07
+
+### 文件站 | Button 淺色說明圖重新匯出
+狀態：PUBLISHED
+
+- 依使用者指示只重抓 light 版，12 張全部有變動，dark 版維持不動。
+- 量測數值沒有改變：高度 48 / 40、icon 24、間距 8、水平內距 12、
+  Small 最小寬 112。
+- edge-case1 換成日文標籤的示範，訊息不變（同一份列表裡混著可按與不可按），
+  圖說沿用。
+
+### 網站樣式 | 勾勾改為 C3F400
+狀態：PUBLISHED
+
+- `--positive` 由 #A7D100（neonLime800）改為 **#C3F400**（neonLime600）。
+  叉叉維持 #F40000（red500）。明暗模式同色。
+
+### 文件站 | 移除各區塊的補充說明段落
+狀態：PUBLISHED
+
+- 四個元件頁（Button、Chip、Action Area、Dropdown Menu）共移除 22 段
+  `<p className="note">` 補充說明，內容原地改寫為 JSX 註解保留在程式碼裡，
+  網站上不再顯示。
+- Button 頁實際有 4 段，不是 2 段：Color、Measurements 之外，
+  Accessibility 的 API 表格下方與 Baseline tokens 表格上方也各有一段，
+  一併移除。
+- 保留的部分：`note-list`（Accessibility 的條列要求，屬於內容而非補充說明）、
+  Do / Don't 的圖說、`spec.tsx` 內建的元件層說明。
+
+---
+
 ## v0.16.8 | 2026-09-07
 
 ### 文件站 | Do / Don't 圖例改為圖片、標題、說明由上而下排列
