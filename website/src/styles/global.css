@@ -50,11 +50,13 @@
   --codeblock-fg: #E7E7EA;
   --codeblock-muted: #8A8A93;
 
-  /* Do / Don't */
-  --positive: #17803D;
-  --positive-bg: rgba(23, 128, 61, 0.08);
-  --negative: #C22B2B;
-  --negative-bg: rgba(194, 43, 43, 0.08);
+  /* Do / Don't 的勾與叉。使用者指定，兩者都是 palette 既有的值：
+     #A7D100 = neonLime800、#F40000 = red500。目前產生器只輸出 shadow，
+     沒有 palette 的 CSS 變數可以引用，之後補上時改為引用。明暗模式同色 */
+  --positive: #A7D100;
+  --positive-bg: rgba(167, 209, 0, 0.10);
+  --negative: #F40000;
+  --negative-bg: rgba(244, 0, 0, 0.08);
 
   /* 品牌色：僅供展示區塊使用 */
   --accent: #A7D100;
@@ -112,10 +114,12 @@
   --code-bg: #1F1F24;
   --code-border: #2C2C33;
 
-  --positive: #4ADE80;
-  --positive-bg: rgba(74, 222, 128, 0.10);
-  --negative: #F87171;
-  --negative-bg: rgba(248, 113, 113, 0.10);
+  /* 勾與叉在深色模式維持同一組值——它們是記號而不是文字，
+     對比在深底上仍然足夠 */
+  --positive: #A7D100;
+  --positive-bg: rgba(167, 209, 0, 0.14);
+  --negative: #F40000;
+  --negative-bg: rgba(244, 0, 0, 0.14);
 
   --accent: #C3F400;
   --accent-bg: #C3F400;
