@@ -110,7 +110,6 @@ function ExampleCard({ kind, image, alt, caption }: DoDontExample) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div
         style={{
-          position: 'relative',
           borderRadius: 12,
           overflow: 'hidden',
           background: 'var(--page-secondary)',
@@ -119,27 +118,24 @@ function ExampleCard({ kind, image, alt, caption }: DoDontExample) {
       >
         {/* display 交給 .theme-*-only 決定，這裡不設，否則會蓋掉主題切換 */}
         <ThemedImage image={image} alt={alt} style={{ width: '100%', height: 'auto' }} />
-        {/* 是 Do 還是 Don't 由圖上的記號表達，不再另外開一個說明區塊。
-            沒有 kind 的圖例（例如 Edge cases）不畫記號 */}
-        {kind && (
-          <span
-            aria-hidden
-            style={{
-              position: 'absolute',
-              right: 12,
-              bottom: 12,
-              color,
-              display: 'flex',
-            }}
-          >
-            {isDo ? <CheckIcon size={32} /> : <CrossIcon size={32} />}
-          </span>
-        )}
       </div>
-      {/* 置中、字級與色階都在 .note 裡，不在這裡重複 */}
-      <p className="note" style={{ margin: 0 }}>
-        {caption}
-      </p>
+
+      {/* 記號與 Do / Don't 標題排在圖片下方，說明文字再接在標題下方，整組靠左。
+          沒有 kind 的圖例（例如 Edge cases）只有說明文字 */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {kind && (
+          <h4 className="heading-sm" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span aria-hidden style={{ color, display: 'flex' }}>
+              {isDo ? <CheckIcon size={20} /> : <CrossIcon size={20} />}
+            </span>
+            {isDo ? 'Do' : "Don't"}
+          </h4>
+        )}
+        {/* .note 本身置中，這裡改為靠左 */}
+        <p className="note" style={{ margin: 0, textAlign: 'left' }}>
+          {caption}
+        </p>
+      </div>
     </div>
   );
 }
